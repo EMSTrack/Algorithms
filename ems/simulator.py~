@@ -1,8 +1,0 @@
-# from models.ambulance import Ambulance
-# import models.Ambulance
-from models.ambulance import Ambulance 
-
-class Simulator():
-
-    def __init__(self, settings):
-        pass
