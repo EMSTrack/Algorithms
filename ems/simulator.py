@@ -1,6 +1,4 @@
-# from models.ambulance import Ambulance
-# import models.Ambulance
-import Algorithms.models.ambulance
+from models.ambulance import Ambulance 
 
 class Simulator():
 
