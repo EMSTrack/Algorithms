@@ -42,12 +42,12 @@ class Data ():
         return raw[desired_info]
 
 
-    def file_to_cases (self):
+    def file_to_cases (self, file):
         # TODO
         return
 
 
-    def file_to_traveltimes (self):
+    def file_to_traveltimes (self, file):
         # TODO
         return
 

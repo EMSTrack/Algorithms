@@ -3,9 +3,10 @@
 class Settings: 
 
     def __init__ (self, debug=False, demands_file=None, bases_file=None, cases_file=None):
-        assert demands_file is None or demands_file is str
-        assert bases_file is None or bases_file is str
-        assert cases_file is None or cases_file is str
+        print (demands_file)
+        assert demands_file is None or isinstance(demands_file, str)
+        assert bases_file is None   or isinstance(bases_file, str)
+        assert cases_file is None   or isinstance(cases_file, str)
 
         self.data_filename = None
         self.debug = debug
