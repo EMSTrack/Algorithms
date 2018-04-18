@@ -1,3 +1,5 @@
+# Runs the simulation.
+
 from models.ambulance import Ambulance 
 
 class Simulator():

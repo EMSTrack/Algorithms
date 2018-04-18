@@ -1,13 +1,25 @@
+# Model the data by their types.
+
 from geopy import Point
 
 class Data ():
 
     def __init__ (self):
-        self.traveltimes = []
-        self.cases = []
-        self.bases = []
-        self.demands = []
-        self.clustered_demands = []
+        self.traveltimes = file_to_traveltimes()
+        self.cases = file_to_cases()
+        self.bases = file_to_locations()
+        self.demands = file_to_locations()
+        self.clustered_demands = [] # TODO algorithm.init_bases() ?
+
+    def file_to_locations (self):
+        pass
+
+    def file_to_cases (self):
+        pass
+
+    def file_to_traveltimes (self):
+        pass
+
 
 
 class Case ():

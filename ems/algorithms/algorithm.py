@@ -1,3 +1,5 @@
+# Framework for using algorithms and allowing for replacement
+
 def kmeans_init_bases (data):
     print("Kmeans init bases")
 
@@ -7,7 +9,7 @@ def random_ambulance_placements (data):
 def fastest_traveltime (data):
     print("Fastest Traveltime")
 
-class DispatcherAlgorithm():
+class DispatcherAlgorithm ():
 
     def __init__ (self, 
         init_bases=kmeans_init_bases, 
