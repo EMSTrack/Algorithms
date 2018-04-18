@@ -8,6 +8,7 @@ A library to do ambulance dispatch simulation and analysis.
 
 - Read from files -- CSV files in the first line should contain the name of the data.
 	- If the name deviates, throw an exception. e.g. base is a list of (lattitude, logitude)
+		- GOT UP TO HERE. -HY
 	- In choosing the bases, use class Algorithm's instance variable base_init pointing to the 
 	base chooser function.
 
