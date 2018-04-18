@@ -8,7 +8,8 @@ To run, take a look at `test.py`. Notice the filepaths there. You will need to e
 You'll notice that an exception will be thrown. This is because the datasets will require
 labels in the CSV files. Add a newline above the datasets, naming the latitudes and longitudes.
 
-When it is correct, the test program will end up asking you to proceed when ready. (Press Enter.) 
+To see this, you may need to uncomment `printData()`. The test program will end up asking you 
+to proceed when ready. (Press Enter.) 
 
 # TODO 
 
