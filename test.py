@@ -44,20 +44,32 @@ def testData(settings):
 
 	return data
 
+def printData(data):
+	input ("\nWhen ready, press Enter to print the data: demands\n")
+	print (data.demands)
+
+	input ("\nWhen ready, press Enter to print the data: bases\n")
+	print (data.bases)
+	return
+
+
+def testAlgorithms():
+	da = DispatcherAlgorithm()
+
+	da.init_bases(None)
+	da.init_ambulance_placements(None)
+	da.select_ambulance(None)
 
 
 
 
 def main():
 	settings     = testSettings()
-	data         = testData(settings)
-
-	input ("\nWhen ready, press Enter to print the data: demands\n")
-	print (data.demands)
-
-	input ("\nWhen ready, press Enter to print the data: bases\n")
-	print (data.bases)
-
+	data         = testData (settings)
+	
+	printData (data)
+	testAlgorithms ()
+	
 	print("\nFinished test.py \n")
 
 
