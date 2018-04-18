@@ -7,8 +7,10 @@ A library to do ambulance dispatch simulation and analysis.
 - Define what algorithms are used by passing function pointers to the Algorithms class. 
 
 - Read from files -- CSV files in the first line should contain the name of the data.
+
 	- If the name deviates, throw an exception. e.g. base is a list of (lattitude, logitude)
-		- GOT UP TO HERE. -HY
+		- GOT UP TO HERE. Reading demand points and base points from CSV now implemented.
+
 	- In choosing the bases, use class Algorithm's instance variable base_init pointing to the 
 	base chooser function.
 
