@@ -17,11 +17,11 @@ def kmeans_init_bases (data):
     # Read the travel times. This does not necessarily need to be here.
     import pandas as pd 
     times = pd.read_csv("/Users/vectflux/Documents/Data/times.csv", header = None)
-    # times[col][row] (different from before)
-    # times[demand point][base]
+    # times[demand point][base] if using the pandas way
     chosen_bases, demands_covered =  pick_starting_bases (times, 12, 600)
     converted_bases = [Base(data.bases.iloc[chosen_base]) for chosen_base in chosen_bases]
-    return converted_bases
+    data.chosen_bases = converted_bases
+    # return converted_bases
     # import IPython; IPython.embed()
 
 # Refactor TODO. I can't believe I just shoved this in and it worked.
@@ -29,28 +29,28 @@ def pick_starting_bases(traveltimes, num_bases, required_traveltime):
 
     assert isinstance(required_traveltime, int)
 
-    traveltimes = copy.deepcopy (traveltimes)
-    traveltimes = np.array (traveltimes)
-    chosen_bases = []
-    demands_covered = 0
+    traveltimes         = copy.deepcopy (traveltimes)
+    traveltimes         = np.array (traveltimes)
+    chosen_bases        = []
+    demands_covered     = 0
 
     for _ in range(num_bases):
 
         # Make a True/False table of the times and then count how many covered. 
-        covered = [[t<required_traveltime for t in row] for row in traveltimes]
-        count_covered = [(index, covered[index].count(True)) for index in range(len(covered))]
-        d = [('index', int), ('covered', int)]
-        count_covered = np.array(count_covered, d)
+        covered         = [[t<required_traveltime for t in row] for row in traveltimes]
+        count_covered   = [(index, covered[index].count(True)) for index in range(len(covered))]
+        d               = [('index', int), ('covered', int)]
+        count_covered   = np.array(count_covered, d)
 
         # Sort the table by row and grab the last element (the base with the most coverage)
-        (best_base, count) = np.sort(count_covered, order='covered', kind='mergesort')[-1]
+        (best_base, count)  = np.sort(count_covered, order='covered', kind='mergesort')[-1]
         chosen_bases.append(best_base)
-        demands_covered += count
-        demand_coverage = covered[best_base]
+        demands_covered     += count
+        demand_coverage     = covered[best_base]
 
         # Delete the covered columns 
-        delete_cols = [d for d in range(len(demand_coverage)) if demand_coverage[d]]
-        traveltimes = np.delete(traveltimes, delete_cols, axis=1)
+        delete_cols     = [d for d in range(len(demand_coverage)) if demand_coverage[d]]
+        traveltimes     = np.delete(traveltimes, delete_cols, axis=1)
 
     return chosen_bases, demands_covered
 
@@ -65,6 +65,7 @@ def fastest_traveltime (data):
 # This class is used by the sim to run.
 class DispatcherAlgorithm ():
 
+    # To instantiate this object, three function pointers must have been passed in.
     def __init__ (self, 
         init_bases                 = kmeans_init_bases, 
         init_ambulance_placements  = random_ambulance_placements, 
@@ -74,14 +75,27 @@ class DispatcherAlgorithm ():
         assert callable(init_ambulance_placements)
         assert callable(select_ambulance)
 
-        # TODO type checking
         self.init_bases                  = init_bases
         self.init_ambulance_placements   = init_ambulance_placements
         self.select_ambulance            = select_ambulance
 
     def init_bases_typecheck(self, data):
-        """ Runs init_bases, but makes sure the return type is correct """
-        output = self.init_bases (data)
-        assert isinstance (output, list)
-        for element in output:
+        """ Runs init_bases, but makes sure the resulting data.chosen_bases is right type """
+        self.init_bases (data)
+        assert isinstance (data.chosen_bases, list)
+        for element in data.chosen_bases:
             assert isinstance (element, Base)
+
+
+    def init_ambulance_placements_typecheck(self, data):
+        """ Runs init_ambulance_placements, but makes sure the resulting ___ is right type or state"""
+        pass 
+
+    def select_ambulance_typecheck(self, data):
+        """ Runs select_ambulance, but makes sure the resulting ___ is right type or state"""
+        pass
+
+
+
+
+

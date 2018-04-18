@@ -11,7 +11,7 @@ labels in the CSV files. Add a newline above the datasets, naming the latitudes 
 To see this, you may need to uncomment `printData()`. The test program will end up asking you 
 to proceed when ready. (Press Enter.) 
 
-# TODO 
+## TODO 
 
 - Define what algorithms are used by passing function pointers to the Algorithms class. 
 
@@ -28,3 +28,22 @@ to proceed when ready. (Press Enter.)
 - Run the simulation. It should return a list of lists (or the PANDAS 2D Array) of information.
 
 - Run each column of data (list of a certain metric) into the each function in a list of analysis functions.
+
+## Comments
+
+- It may be too much to define both the default algos and the algos class in one file. 
+
+- Need more thought about separation/combination of settings and data. 
+
+- See order.pdf
+
+- The travel times metric may or may not be a part of this simulation at all. Right now,
+it's simply a way to pick the ambulance and determine how long cases take. 
+
+- Started the Ambulance model. 
+
+- Possible to soon finish porting v2 into this library interface with defaults
+
+- Need the simulation part of this library implemented (the while loop)
+
+

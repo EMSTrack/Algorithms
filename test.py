@@ -65,7 +65,7 @@ def main():
 	settings     = testSettings()
 	data         = testData (settings)
 	
-	printData (data) # Uncomment this to print out the data.
+	# printData (data) # Uncomment this to print out the data.
 
 	testAlgorithms (data)
 	
