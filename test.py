@@ -3,10 +3,18 @@ from ems.algorithms.algorithm import DispatcherAlgorithm
 from ems.settings import Settings
 from ems.data import Data 
 
+import matplotlib.pyplot as plt
+
+
 # Hans Yuan
 
-demands_filepath = str("/Users/vectflux/Documents/research/data-cruz-roja/demand_points.csv")
-bases_filepath = str("/Users/vectflux/Documents/research/data-cruz-roja/bases.csv")
+
+file_path = "/Users/vectflux/Documents/Data/"
+demands_filepath = file_path + "demand_points.csv"
+bases_filepath = file_path + "/bases.csv"
+
+
+
 
 def testSettings():
 	set1 = Settings (debug=False)
@@ -24,16 +32,36 @@ def testSettings():
 	return set3
 
 
-def testData(settings):
 
+
+def testData(settings):
 	assert isinstance (settings, Settings)
+
 	data = Data(settings)
+	assert data.demands is not None
+	assert data.bases   is not None
+
+
+	return data
+
+
+
+
 
 def main():
-	settings = testSettings()
-	# from IPython import embed; embed()
-	data = testData(settings)
+	settings     = testSettings()
+	data         = testData(settings)
+
+	input ("\nWhen ready, press Enter to print the data: demands\n")
+	print (data.demands)
+
+	input ("\nWhen ready, press Enter to print the data: bases\n")
+	print (data.bases)
 
 	print("\nFinished test.py \n")
 
+
+
+
 if __name__ == "__main__": main()
+

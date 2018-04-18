@@ -6,6 +6,7 @@ from ems.settings import Settings
 
 class Data ():
 
+
     def __init__ (self, settings):
         assert isinstance (settings, Settings)
 
@@ -15,27 +16,38 @@ class Data ():
         self.demands = self.file_to_locations(settings.demands_file)
         self.clustered_demands = [] # TODO algorithm.init_bases() ?
 
+
     def file_to_locations (self, file):
+        """
+            Reads locations from CSV file which must have the first line labelled with
+            latitude, longitude. See the Data as an example.
+        """
         assert file is not None
         assert file is not ""
         assert isinstance (file, str)
+
+        desired_info = ['latitude', 'longitude']
 
         raw = pd.read_csv (file)
 
         keys_read = raw.keys()
 
-        for key in ('latitude', 'longitude'):
+        for key in desired_info:
             if key not in keys_read:
                 raise Exception("{} was not found in keys of file {}".format(key, file))
         
+        return raw[desired_info]
+
 
     def file_to_cases (self):
+        # TODO
         return
+
 
     def file_to_traveltimes (self):
+        # TODO
         return
 
-    
 
 
 class Case ():
