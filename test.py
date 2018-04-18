@@ -32,8 +32,6 @@ def testSettings():
 	return set3
 
 
-
-
 def testData(settings):
 	assert isinstance (settings, Settings)
 
@@ -41,8 +39,8 @@ def testData(settings):
 	assert data.demands is not None
 	assert data.bases   is not None
 
-
 	return data
+
 
 def printData(data):
 	input ("\nWhen ready, press Enter to print the data: demands\n")
@@ -53,12 +51,12 @@ def printData(data):
 	return
 
 
-def testAlgorithms():
+def testAlgorithms(data):
 	da = DispatcherAlgorithm()
 
-	da.init_bases(None)
-	da.init_ambulance_placements(None)
-	da.select_ambulance(None)
+	da.init_bases_typecheck (data)
+	da.init_ambulance_placements(data)
+	da.select_ambulance(data)
 
 
 
@@ -67,8 +65,8 @@ def main():
 	settings     = testSettings()
 	data         = testData (settings)
 	
-	printData (data)
-	testAlgorithms ()
+	# printData (data)
+	testAlgorithms (data)
 	
 	print("\nFinished test.py \n")
 

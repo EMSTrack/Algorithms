@@ -18,7 +18,7 @@ class Data ():
         self.cases   = self.file_to_cases(settings.cases_file) # TODO Read case info
         self.bases   = self.file_to_locations(settings.bases_file)
         self.demands = self.file_to_locations(settings.demands_file)
-        self.clustered_demands = [] # TODO algorithm.init_bases() ?
+        self.chosen_bases = [] # TODO algorithm.init_bases() ?
 
 
     def file_to_locations (self, file):

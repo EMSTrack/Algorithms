@@ -17,6 +17,9 @@ class Settings:
         self.demands_file    = demands_file
         self.bases_file      = bases_file
         self.cases_file      = cases_file
+        self.num_ambulances  = 12 # TODO
+        self.num_bases       = 12 # TODO
+
 
     def set_demands_fd (self, filename):
         assert isinstance (filename, str)

@@ -22,6 +22,8 @@ When it is correct, the test program will end up asking you to proceed when read
 	- In choosing the bases, use class Algorithm's instance variable base_init pointing to the 
 	base chooser function.
 
+		- Got this to work. KMeans base selector as default algorithm ported over. Two more to go.
+
 - Run the simulation. It should return a list of lists (or the PANDAS 2D Array) of information.
 
 - Run each column of data (list of a certain metric) into the each function in a list of analysis functions.
