@@ -10,8 +10,11 @@ class Data ():
     def __init__ (self, settings):
         assert isinstance (settings, Settings)
 
-        self.traveltimes = self.file_to_traveltimes()
-        self.cases = self.file_to_cases()
+        # TODO -- I actually think traveltimes should go in the ambulance class.
+        #self.traveltimes = self.file_to_traveltimes() 
+
+
+        self.cases = self.file_to_cases(settings.cases_file) # TODO Read case info
         self.bases = self.file_to_locations(settings.bases_file)
         self.demands = self.file_to_locations(settings.demands_file)
         self.clustered_demands = [] # TODO algorithm.init_bases() ?

@@ -13,7 +13,7 @@ file_path = "/Users/vectflux/Documents/Data/"
 demands_filepath = file_path + "demand_points.csv"
 bases_filepath = file_path + "/bases.csv"
 
-
+# TODO cases_filepath
 
 
 def testSettings():
