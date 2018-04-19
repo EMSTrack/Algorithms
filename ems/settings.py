@@ -25,5 +25,10 @@ class Settings:
         assert isinstance (filename, str)
         self.demands_file = filename
 
-    # TODO set_bases_fd
-    # TODO set_cases_fd
+    def set_bases_fd (self, filename):
+        assert isinstance (filename, str)
+        self.bases_file = filename
+
+    def set_cases_fd (self, filename):
+        assert isinstance (filename, str)
+        self.cases_file = filename

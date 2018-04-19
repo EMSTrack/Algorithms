@@ -14,43 +14,42 @@ class Data ():
         # TODO -- I actually think traveltimes should go in the ambulance class.
         # self.traveltimes = self.file_to_traveltimes() 
 
+        self.cases     = self.read_cases(settings.cases_file)
+        self.bases     = self.read_bases(settings.bases_file)
+        self.demands   = self.read_demands(settings.demands_file)
 
-        self.cases   = self.file_to_cases(settings.cases_file) # TODO Read case info
-        self.bases   = self.file_to_locations(settings.bases_file)
-        self.demands = self.file_to_locations(settings.demands_file)
-        self.chosen_bases = [] # TODO algorithm.init_bases() ?
+        self.chosen_bases = [] # TODO algorithm.init_bases()?
 
 
-    def file_to_locations (self, file):
-        """
-            Reads locations from CSV file which must have the first line labelled with
-            latitude, longitude. See the Data as an example.
-        """
+    def read_cases(self, file):
+        case_headers = ["id", "lat", "long", "date", "weekday", "time", "priority"]
+        cases_raw = self.parse_csv(file, case_headers)
+
+    def read_bases(self, file):
+        base_headers = ["lat", "long"]
+        bases_raw = self.parse_csv(file, base_headers)
+
+    def read_demands(self, file):
+        demand_headers = ["lat", "long"]
+        demands_raw = self.parse_csv(file, demand_headers)
+
+    def parse_csv (self, file, desired_keys):
+
         assert file is not None
         assert file is not ""
         assert isinstance (file, str)
-
-        desired_info = ['latitude', 'longitude']
+        assert isinstance (desired_keys, list)
+        assert all(isinstance(ele, str) for ele in desired_keys)
 
         raw = pd.read_csv (file)
 
         keys_read = raw.keys()
 
-        for key in desired_info:
+        for key in desired_keys:
             if key not in keys_read:
                 raise Exception("{} was not found in keys of file {}".format(key, file))
-        
-        return raw[desired_info]
 
-
-    def file_to_cases (self, file):
-        # TODO
-        return
-
-
-    def file_to_traveltimes (self, file):
-        # TODO
-        return
+        return raw[desired_keys]
 
 
 
