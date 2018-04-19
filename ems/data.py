@@ -1,7 +1,7 @@
 # Model the data by their types.
 
 from geopy import Point
-from ems.utils import parse_csv
+from ems.utils import parse_headered_csv, parse_unheadered_csv
 from ems.settings import Settings
 
 import pandas as pd 
@@ -21,29 +21,31 @@ class CSVTijuanaData ():
         self.bases     = self.read_bases(settings.bases_file)
         self.demands   = self.read_demands(settings.demands_file)
 
-        self.chosen_bases = [] # TODO algorithm.init_bases()?
+        # I don't think this goes here
+        # self.chosen_bases = [] # TODO algorithm.init_bases()?
 
     def read_cases(self, file):
         case_headers = ["id", "lat", "long", "date", "weekday", "time", "priority"]
-        cases_raw = parse_csv(file, case_headers)
+        cases_raw = parse_headered_csv(file, case_headers)
 
         # SLOW OPERATION - find a better way to parse to datetime
         cases_raw["datetime"] = pd.to_datetime(cases_raw.date + ' ' + cases_raw.time)
         return cases_raw
 
     def read_bases(self, file):
+        base_col_positions = [4, 5]
         base_headers = ["lat", "long"]
-        bases_raw = parse_csv(file, base_headers)
+        bases_raw = parse_unheadered_csv(file, base_col_positions, base_headers)
         return bases_raw
 
     def read_demands(self, file):
+        demand_col_positions = [0, 1]
         demand_headers = ["lat", "long"]
-        demands_raw = parse_csv(file, demand_headers)
+        demands_raw = parse_unheadered_csv(file, demand_col_positions, demand_headers)
         return demands_raw
 
 class Case:
 
-    # TODO brainstorm optional params
     def __init__ (self, id, x, y, dt, weekday, priority=None):
 
         assert isinstance(id, int)
