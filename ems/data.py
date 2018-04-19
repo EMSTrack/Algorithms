@@ -1,10 +1,13 @@
 # Model the data by their types.
 
 from geopy import Point
-import pandas as pd 
+from ems.utils import parse_csv
 from ems.settings import Settings
 
-class Data ():
+import pandas as pd 
+import datetime
+
+class CSVTijuanaData ():
 
     def __init__ (self, 
         settings):
@@ -20,68 +23,43 @@ class Data ():
 
         self.chosen_bases = [] # TODO algorithm.init_bases()?
 
-
     def read_cases(self, file):
         case_headers = ["id", "lat", "long", "date", "weekday", "time", "priority"]
-        cases_raw = self.parse_csv(file, case_headers)
-        # TODO parse into object
+        cases_raw = parse_csv(file, case_headers)
+
+        # SLOW OPERATION - find a better way to parse to datetime
+        cases_raw["datetime"] = pd.to_datetime(cases_raw.date + ' ' + cases_raw.time)
         return cases_raw
 
     def read_bases(self, file):
         base_headers = ["lat", "long"]
-        bases_raw = self.parse_csv(file, base_headers)
-        # TODO parse into object
+        bases_raw = parse_csv(file, base_headers)
         return bases_raw
 
     def read_demands(self, file):
         demand_headers = ["lat", "long"]
-        demands_raw = self.parse_csv(file, demand_headers)
-        # TODO parse into object
+        demands_raw = parse_csv(file, demand_headers)
         return demands_raw
 
-    def parse_csv (self, file, desired_keys):
-
-        assert file is not None
-        assert file is not ""
-        assert isinstance (file, str)
-        assert isinstance (desired_keys, list)
-        assert all(isinstance(ele, str) for ele in desired_keys)
-
-        raw = pd.read_csv (file)
-
-        keys_read = raw.keys()
-
-        for key in desired_keys:
-            if key not in keys_read:
-                raise Exception("{} was not found in keys of file {}".format(key, file))
-
-        return raw[desired_keys]
-
-
-
-class Case ():
+class Case:
 
     # TODO brainstorm optional params
-    def __init__ (self, id, x, y, date, weekday, time, priority):
+    def __init__ (self, id, x, y, dt, weekday, priority=None):
 
         assert isinstance(id, int)
         assert isinstance(x, float)
         assert isinstance(y, float)
-        # TODO finish asserts
-        # assert isinstance(date, )
-        # assert isinstance(weekday, )
-        # assert isinstance(time, )
-        # assert isinstance(priority, )
+        assert isinstance(dt, datetime)
+        assert isinstance(weekday, str)
+        assert isinstance(priority, float)
 
         self.id         = id
         self.location   = Point (x,y)
-        self.date       = date
         self.weekday    = weekday
-        self.time       = time
+        self.datetime   = dt
         self.priority   = priority
 
-
-class Base ():
+class Base:
 
     def __init__ (self, x, y):
         
@@ -90,8 +68,7 @@ class Base ():
 
         self.location = Point (x,y)
 
-
-class Demand ():
+class Demand:
 
     def __init__ (self, x, y):
 
@@ -100,12 +77,11 @@ class Demand ():
 
         self.location = Point (x,y)
 
-
-class TravelTime ():
+class TravelTime:
 
     def __init__(self):
         pass
 
-
     def getTime (base, demand):
         pass
+

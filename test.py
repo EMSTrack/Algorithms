@@ -1,19 +1,19 @@
 from ems.algorithms.algorithm import DispatcherAlgorithm
 
 from ems.settings import Settings
-from ems.data import Data 
+from ems.data import CSVTijuanaData
 
 import matplotlib.pyplot as plt
 
 
 # Hans Yuan
 
-
 file_path = "/Users/vectflux/Documents/Data/"
 demands_filepath = file_path + "demand_points.csv"
 bases_filepath = file_path + "/bases.csv"
 
 # Tim - we need to get started on the settings file pls
+
 file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
 bases_filepath = file_path + 'bases.csv'
 demands_filepath = file_path + 'demand_points.csv'
@@ -48,7 +48,7 @@ def testSettings():
 def testData(settings):
     assert isinstance (settings, Settings)
 
-    data = Data(settings)
+    data = CSVTijuanaData(settings)
     assert data.demands is not None
     assert data.bases   is not None
     assert data.cases   is not None
