@@ -14,15 +14,10 @@ def kmeans_init_bases (data):
 
     print("Default init_bases(): Kmeans init bases")
 
-    # Read the travel times. This does not necessarily need to be here.
-    import pandas as pd 
-    times = pd.read_csv("/Users/vectflux/Documents/Data/times.csv", header = None)
     # times[demand point][base] if using the pandas way
-    chosen_bases, demands_covered =  pick_starting_bases (times, 12, 600)
-    converted_bases = [Base(data.bases.iloc[chosen_base]) for chosen_base in chosen_bases]
-    data.chosen_bases = converted_bases
-    # return converted_bases
-    # import IPython; IPython.embed()
+    chosen_base_indices, demands_covered =  pick_starting_bases (data.traveltimes, 12, 600)
+    chosen_bases = data.bases.iloc[chosen_base_indices]
+    return chosen_bases
 
 # Refactor TODO. I can't believe I just shoved this in and it worked.
 def pick_starting_bases(traveltimes, num_bases, required_traveltime):

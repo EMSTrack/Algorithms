@@ -14,35 +14,39 @@ class CSVTijuanaData ():
 
         assert isinstance (settings, Settings)
 
-        # TODO -- I actually think traveltimes should go in the ambulance class.
-        # self.traveltimes = self.file_to_traveltimes() 
+        self.cases       = self.read_cases(settings.cases_file)
+        self.bases       = self.read_bases(settings.bases_file)
+        self.demands     = self.read_demands(settings.demands_file)
+        self.traveltimes = self.read_times(settings.traveltimes_file)
 
-        self.cases     = self.read_cases(settings.cases_file)
-        self.bases     = self.read_bases(settings.bases_file)
-        self.demands   = self.read_demands(settings.demands_file)
-
-        # I don't think this goes here
-        # self.chosen_bases = [] # TODO algorithm.init_bases()?
+        # I don't think this should be a field for data - instead since it is a byproduct
+        # of some processing done with kmeans, we can store it in some "results" class
+        # self.chosen_bases = []
 
     def read_cases(self, file):
         case_headers = ["id", "lat", "long", "date", "weekday", "time", "priority"]
-        cases_raw = parse_headered_csv(file, case_headers)
+        cases_df = parse_headered_csv(file, case_headers)
 
         # SLOW OPERATION - find a better way to parse to datetime
-        cases_raw["datetime"] = pd.to_datetime(cases_raw.date + ' ' + cases_raw.time)
-        return cases_raw
+        cases_df.datetime = pd.to_datetime(cases_df.date + ' ' + cases_df.time)
+
+        return cases_df
 
     def read_bases(self, file):
         base_col_positions = [4, 5]
         base_headers = ["lat", "long"]
-        bases_raw = parse_unheadered_csv(file, base_col_positions, base_headers)
-        return bases_raw
+        bases_df = parse_unheadered_csv(file, base_col_positions, base_headers)
+        return bases_df
 
     def read_demands(self, file):
         demand_col_positions = [0, 1]
         demand_headers = ["lat", "long"]
-        demands_raw = parse_unheadered_csv(file, demand_col_positions, demand_headers)
-        return demands_raw
+        demands_df = parse_unheadered_csv(file, demand_col_positions, demand_headers)
+        return demands_df
+
+    def read_times(self, file):
+        times_df = pd.read_csv (file)
+        return times_df
 
 class Case:
 
