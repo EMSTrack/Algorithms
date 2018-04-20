@@ -25,7 +25,7 @@ class CSVTijuanaDataset ():
 
         # Maybe since this is a byproduct of some algorithmic processing done with kmeans
         # we can store it in the results object?
-        # self.chosen_bases = []
+        self.chosen_bases = []
 
     def read_cases(self, file):
         # Read cases from CSV into a pandas dataframe

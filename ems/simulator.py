@@ -21,11 +21,12 @@ class DispatcherSimulator():
         # Select bases from dataset
         chosen_bases = self.algorithm.init_bases(self.dataset)
 
+        # Maybe not necessary
+        self.dataset.chosen_bases = chosen_bases
+
         # Assign ambulances to bases chosen
         ambulance_bases = self.algorithm.init_ambulance_placements(chosen_bases, 
         														  self.settings.num_ambulances)
-
-        print([base.location for base in ambulance_bases])
 
         # TODO generate ambulance objects?
         

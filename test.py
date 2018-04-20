@@ -1,7 +1,7 @@
 from ems.algorithms.algorithm import DispatcherAlgorithm
 
 from ems.settings import Settings
-from ems.data import CSVTijuanaDataset
+from ems.data.dataset import CSVTijuanaDataset
 
 import matplotlib.pyplot as plt
 
@@ -12,13 +12,13 @@ file_path = "/Users/vectflux/Documents/Data/"
 demands_filepath = file_path + "demand_points.csv"
 bases_filepath = file_path + "/bases.csv"
 
-# Tim - we need to get started on the settings file pls
+# Tim
 
 file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
 bases_filepath = file_path + 'bases.csv'
 demands_filepath = file_path + 'demand_points.csv'
 cases_filepath = file_path + 'calls.csv'
-times_filepath = file_path + 'times.csv'
+traveltimes_filepath = file_path + 'times.csv'
 
 # TODO cases_filepath
 
@@ -39,9 +39,11 @@ def testSettings():
     set4 = Settings(debug=False, cases_file=cases_filepath)
     set4.set_demands_fd (str(demands_filepath))
     set4.set_bases_fd (str(bases_filepath))
+    set4.set_traveltimes_fd (str(traveltimes_filepath))
     assert set4.cases_file is cases_filepath
     assert set4.demands_file is set3.demands_file
     assert set4.bases_file is set3.bases_file
+    assert set4.traveltimes_file is traveltimes_filepath
 
     return set4
 
@@ -69,12 +71,12 @@ def printData(data):
     return
 
 
-def testAlgorithms(data):
+def testAlgorithms(data, settings):
     da = DispatcherAlgorithm()
 
     da.init_bases_typecheck (data)
-    da.init_ambulance_placements(data)
-    da.select_ambulance(data)
+    # da.init_ambulance_placements()
+    # da.select_ambulance(data)
 
 
 
@@ -85,7 +87,7 @@ def main():
     
     # printData (data) # Uncomment this to print out the data.
 
-    testAlgorithms (data)
+    testAlgorithms (data, settings)
     
     print("\nFinished test.py \n")
 

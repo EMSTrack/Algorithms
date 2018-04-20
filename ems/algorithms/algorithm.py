@@ -54,7 +54,7 @@ def pick_starting_bases(traveltimes, num_bases, required_traveltime):
     return chosen_bases, demands_covered
 
 
-# Bases here represents the chosen bases from init_bases
+# "Bases" represents the chosen bases from init_bases
 def random_ambulance_placements (bases, num_ambulances):
 
     print("Default init_ambulance_placements(): Random Ambulance Placements")
