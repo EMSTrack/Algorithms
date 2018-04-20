@@ -14,7 +14,7 @@ def kmeans_init_bases (dataset):
 
     # times[demand point][base] if using the pandas way
     chosen_base_indices, demands_covered =  pick_starting_bases (dataset.traveltimes, 12, 600)
-    chosen_bases = dataset.bases.iloc[chosen_base_indices]
+    chosen_bases = dataset.bases_df.iloc[chosen_base_indices]
     return chosen_bases
 
 # Refactor TODO. I can't believe I just shoved this in and it worked.

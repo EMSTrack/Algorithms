@@ -1,7 +1,18 @@
 
 # Define the Ambulance model. 
+
 class Ambulance():
-    def __init__(self):
+    def __init__(self, 
+    			id, 
+    			base, 
+    			unit="XXX-XXXX",
+    			deployed=False,
+    			location=None,
+    			deployed_time=None,
+    			end_time=None):
+
+    	# TODO tyoe checking
+
     	self.id               	= None
     	self.unit				= "XXX-XXXX"
     	self.deployed         	= False
