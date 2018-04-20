@@ -14,7 +14,13 @@ def kmeans_init_bases (dataset):
 
     # times[demand point][base] if using the pandas way
     chosen_base_indices, demands_covered =  pick_starting_bases (dataset.traveltimes, 12, 600)
-    chosen_bases = dataset.bases_df.iloc[chosen_base_indices]
+    
+    # Returns pandas dataframe
+    # chosen_bases = dataset.bases_df.iloc[chosen_base_indices]
+
+    # Returns object list
+    chosen_bases = [dataset.bases[index] for index in chosen_base_indices]
+
     return chosen_bases
 
 # Refactor TODO. I can't believe I just shoved this in and it worked.
@@ -48,8 +54,20 @@ def pick_starting_bases(traveltimes, num_bases, required_traveltime):
     return chosen_bases, demands_covered
 
 
-def random_ambulance_placements (dataset):
+# Bases here represents the chosen bases from init_bases
+def random_ambulance_placements (bases, num_ambulances):
+
     print("Default init_ambulance_placements(): Random Ambulance Placements")
+
+    assert isinstance(num_ambulances, int)
+
+    ambulance_bases = []
+
+    for index in range(num_ambulances):
+        ambulance_bases.append(bases[index % len(bases)])
+
+    return ambulance_bases
+
 
 def fastest_traveltime (dataset):
     print("Default select_ambulance(): Fastest Traveltime")

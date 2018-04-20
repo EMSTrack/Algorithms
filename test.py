@@ -1,7 +1,7 @@
 from ems.algorithms.algorithm import DispatcherAlgorithm
 
 from ems.settings import Settings
-from ems.data import CSVTijuanaData
+from ems.data import CSVTijuanaDataset
 
 import matplotlib.pyplot as plt
 
@@ -49,7 +49,7 @@ def testSettings():
 def testData(settings):
     assert isinstance (settings, Settings)
 
-    data = CSVTijuanaData(settings)
+    data = CSVTijuanaDataset(settings)
     assert data.demands is not None
     assert data.bases   is not None
     assert data.cases   is not None

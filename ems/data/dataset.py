@@ -7,12 +7,10 @@ from ems.settings import Settings
 import pandas as pd 
 import datetime
 
-# Abstraction for the dataset; may need to enforce that fields for "cases", "bases", and 
-# "demands" must be populated
-class Dataset:
-    pass
+# class Dataset:
+#     pass
 
-class CSVTijuanaDataset (Dataset):
+class CSVTijuanaDataset ():
 
     def __init__ (self, 
         settings):
@@ -25,8 +23,8 @@ class CSVTijuanaDataset (Dataset):
         self.demands_df, self.demands   = self.read_demands(settings.demands_file)
         self.traveltimes                = self.read_times(settings.traveltimes_file)
 
-        # I don't think this should be a field for data - instead since it is a byproduct
-        # of some processing done with kmeans, we can store it in some "results" class
+        # Maybe since this is a byproduct of some algorithmic processing done with kmeans
+        # we can store it in the results object?
         # self.chosen_bases = []
 
     def read_cases(self, file):
