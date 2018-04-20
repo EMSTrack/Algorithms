@@ -1,7 +1,8 @@
+from ems.simulator import DispatcherSimulator
 from ems.algorithms.algorithm import DispatcherAlgorithm
-
 from ems.settings import Settings
 from ems.data import CSVTijuanaData
+from ems.simulator import DispatcherSimulator
 
 file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
 bases_filepath = file_path + 'bases.csv'
@@ -17,9 +18,9 @@ settings = Settings (debug=False,
 
 data = CSVTijuanaData(settings)
 
-da = DispatcherAlgorithm()
+alg = DispatcherAlgorithm()
 
-b = da.init_bases(data)
-print(b)
+sim = DispatcherSimulator(settings, data, alg)
+sim.run()
 
 # Call simulator
