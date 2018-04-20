@@ -7,7 +7,10 @@ from ems.settings import Settings
 import pandas as pd 
 import datetime
 
-class CSVTijuanaData ():
+class Data:
+    pass
+
+class CSVTijuanaData (Data):
 
     def __init__ (self, 
         settings):
