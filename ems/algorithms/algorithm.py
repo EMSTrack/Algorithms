@@ -1,7 +1,5 @@
 # Framework for using algorithms and allowing for replacement
 
-from ems.data import Base # Only for type checking
-
 # from datetime import timedelta
 import copy
 import numpy as np

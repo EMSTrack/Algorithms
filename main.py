@@ -1,9 +1,10 @@
 from ems.simulator import DispatcherSimulator
 from ems.algorithms.algorithm import DispatcherAlgorithm
 from ems.settings import Settings
-from ems.data import CSVTijuanaData
+from ems.data.dataset import CSVTijuanaDataset
 from ems.simulator import DispatcherSimulator
 
+# TODO read from settings file
 file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
 bases_filepath = file_path + 'bases.csv'
 demands_filepath = file_path + 'demand_points.csv'
@@ -16,11 +17,11 @@ settings = Settings (debug=False,
                 cases_file=cases_filepath,
                 traveltimes_file=traveltimes_filepath)
 
-data = CSVTijuanaData(settings)
+dataset = CSVTijuanaDataset(settings)
 
 alg = DispatcherAlgorithm()
 
-sim = DispatcherSimulator(settings, data, alg)
+sim = DispatcherSimulator(settings, dataset, alg)
 sim.run()
 
 # Call simulator
