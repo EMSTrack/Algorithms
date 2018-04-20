@@ -5,7 +5,7 @@ import copy
 import numpy as np
 
 # The following functions define default algorithms for the DispatchAlgorithm class.
-def kmeans_init_bases (data):
+def kmeans_init_bases (dataset):
     
     # This function happens to require the original Cruz Roja dataset. It doesn't necessarily need to. 
     # For example, we could randomly choose bases.
@@ -13,8 +13,8 @@ def kmeans_init_bases (data):
     print("Default init_bases(): Kmeans init bases")
 
     # times[demand point][base] if using the pandas way
-    chosen_base_indices, demands_covered =  pick_starting_bases (data.traveltimes, 12, 600)
-    chosen_bases = data.bases.iloc[chosen_base_indices]
+    chosen_base_indices, demands_covered =  pick_starting_bases (dataset.traveltimes, 12, 600)
+    chosen_bases = dataset.bases.iloc[chosen_base_indices]
     return chosen_bases
 
 # Refactor TODO. I can't believe I just shoved this in and it worked.
@@ -48,10 +48,10 @@ def pick_starting_bases(traveltimes, num_bases, required_traveltime):
     return chosen_bases, demands_covered
 
 
-def random_ambulance_placements (data):
+def random_ambulance_placements (dataset):
     print("Default init_ambulance_placements(): Random Ambulance Placements")
 
-def fastest_traveltime (data):
+def fastest_traveltime (dataset):
     print("Default select_ambulance(): Fastest Traveltime")
 
 
@@ -72,19 +72,19 @@ class DispatcherAlgorithm ():
         self.init_ambulance_placements   = init_ambulance_placements
         self.select_ambulance            = select_ambulance
 
-    def init_bases_typecheck(self, data):
+    def init_bases_typecheck(self, dataset):
         """ Runs init_bases, but makes sure the resulting data.chosen_bases is right type """
-        self.init_bases (data)
-        assert isinstance (data.chosen_bases, list)
-        for element in data.chosen_bases:
+        self.init_bases (dataset)
+        assert isinstance (dataset.chosen_bases, list)
+        for element in dataset.chosen_bases:
             assert isinstance (element, Base)
 
 
-    def init_ambulance_placements_typecheck(self, data):
+    def init_ambulance_placements_typecheck(self, dataset):
         """ Runs init_ambulance_placements, but makes sure the resulting ___ is right type or state"""
         pass 
 
-    def select_ambulance_typecheck(self, data):
+    def select_ambulance_typecheck(self, dataset):
         """ Runs select_ambulance, but makes sure the resulting ___ is right type or state"""
         pass
 
