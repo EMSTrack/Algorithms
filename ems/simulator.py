@@ -7,6 +7,8 @@ from ems.data.dataset import CSVTijuanaDataset
 from colorama import Fore
 from colorama import Style
 
+import datetime
+
 class DispatcherSimulator():
 
     def __init__ (self, settings, dataset, algorithm):
@@ -84,7 +86,7 @@ class DispatcherSimulator():
                     # TODO If the deployment was successful, then recalculate the city coverage
 
                 else:
-                    self.check_ambulances_finished(ambulances_in_motion, ambulance_release_time)
+                    self.check_finished_ambulances(ambulances_in_motion, ambulance_release_time)
 
                 # TODO traveltime coverage
 
@@ -94,8 +96,58 @@ class DispatcherSimulator():
         # TODO return "results" object with more potential information
         return finished_cases
 
+    def start_case(finished_cases, working_cases, ambulances, ambulances_in_motion, start_time):
+        """
+        Actual code to attempt running the case.
+        :param finished_cases:
+        :param working_cases:
+        :param ambulances:
+        :param ambulances_in_motion:
+        :param start_time:
+        :return: True if case starts successfully, false if no ambulances available.
+        (This may not actually be necessary since I don't use this boolean in the preceding fn)
+        """
 
-    def check_ambulances_finished(ambulances_in_motion, current_datetime):
+        case = working_cases[0]
+        if debug: print(case.id)
+
+        # Checks if the previously dispatched ambulances are done. If so, mark as done.
+        self.check_finished_ambulances(ambulances_in_motion, start_time)
+
+        target_point = case.location
+        case_id = case.id
+
+        closest_location = None
+
+        # TODO access amortized case->demand mappings
+        # TODO compute traveltime closest distance
+
+        if debug: print ('chosen_ambulance:', chosen_ambulance)
+        if debug: print ('travel time duration:', ambulance_travel_time)
+
+        # Dispatch an ambulance as returned by fine_available. It only works if deployed
+        if chosen_ambulance is not None:
+            # TODO I assume that each case will take 2x travel time + 20 minutes
+            case_time = ambulance_travel_time * 2 + datetime.timedelta(minutes=20)
+
+            ambulance = ambulances[chosen_ambulance]
+
+            # TODO -- destination?
+            ambulance.deploy(start_time, None, case_time)
+            ambulances_in_motion.append(ambulance)
+
+            finished_cases.append(case)
+            working_cases.remove(case)
+
+            return True
+
+        else:
+            case.delayed = datetime.timedelta(minutes=1, seconds=case.delayed.total_seconds())
+            # working_cases.insert(0, case)
+            return False
+
+
+    def check_finished_ambulances(ambulances_in_motion, current_datetime):
         """
         Given the list of ambulances in motion, check the current time.
         Mark ambulances that have finished as non-deployed.
