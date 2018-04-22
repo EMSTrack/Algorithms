@@ -26,7 +26,16 @@ class DispatcherSimulator():
 
         # Assign ambulances to bases chosen
         ambulance_bases = self.algorithm.init_ambulance_placements(chosen_bases, 
-        														  self.settings.num_ambulances)
+                                                                  self.settings.num_ambulances)
 
-        # TODO generate ambulance objects?
+        # Generate ambulances; Does not have to be here
+        ambulances = []
+        for index in range(self.settings.num_ambulances):
+            ambulance = Ambulance(id=index,
+                                  base=ambulance_bases[index])
+            ambulances.append(ambulance)
+
+        # TODO - Amortized file
+
+        working_cases = deepcopy(self.dataset.bases)
         

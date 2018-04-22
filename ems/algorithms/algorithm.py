@@ -91,7 +91,7 @@ class DispatcherAlgorithm ():
         self.select_ambulance            = select_ambulance
 
     def init_bases_typecheck(self, dataset):
-        """ Runs init_bases, but makes sure the resulting data.chosen_bases is right type """
+        """ Runs init_bases, but makes sure the resulting dataset.chosen_bases is right type """
         self.init_bases (dataset)
         assert isinstance (dataset.chosen_bases, list)
         for element in dataset.chosen_bases:
