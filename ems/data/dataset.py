@@ -89,7 +89,8 @@ class CSVTijuanaDataset ():
 
 class Case:
 
-    def __init__ (self, id, x, y, dt, weekday, priority=None):
+    def __init__ (self, id, x, y, dt, weekday, 
+                  priority=None, delayed=datetime.timedelta(minutes = 0)):
 
         assert isinstance(id, int)
         assert isinstance(x, float)
@@ -97,12 +98,14 @@ class Case:
         assert isinstance(dt, datetime.datetime)
         assert isinstance(weekday, str)
         assert isinstance(priority, float)
+        assert isinstance(delayed, datetime.timedelta)
 
         self.id         = id
         self.location   = Point (x,y)
         self.weekday    = weekday
         self.datetime   = dt
         self.priority   = priority
+        self.delayed    = delayed
 
 class Base:
 
