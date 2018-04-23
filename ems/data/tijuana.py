@@ -1,23 +1,27 @@
 # Model the data by their types.
 
-from ems.utils import parse_headered_csv, parse_unheadered_csv
-from ems.settings import Settings
-
-import datetime
 from datetime import timedelta
-from geopy import Point
-import pandas as pd 
+
+import pandas as pd
+
+from ems.data.dataset import Dataset
+from ems.data.traveltimes import TravelTime
+from ems.models.base import Base
+from ems.models.case import Case
+from ems.models.demand import Demand
+from ems.settings import Settings
+from ems.utils import parse_headered_csv, parse_unheadered_csv
 
 
 class CSVTijuanaDataset(Dataset):
 
-    def __init__ (self, settings: Settings):
+    def __init__(self, settings: Settings):
 
         # Read files into pandas dataframes and lists of objects
-        self.cases, self.cases_df                = self.read_cases(settings.cases_file)
-        self.bases, self.bases_df                = self.read_bases(settings.bases_file)
-        self.demands, self.demands_df            = self.read_demands(settings.demands_file)
-        self.traveltimes, self.traveltimes_df    = self.read_times(settings.traveltimes_file)
+        self.cases, self.cases_df = self.read_cases(settings.cases_file)
+        self.bases, self.bases_df = self.read_bases(settings.bases_file)
+        self.demands, self.demands_df = self.read_demands(settings.demands_file)
+        self.traveltimes, self.traveltimes_df = self.read_times(settings.traveltimes_file)
 
         # Maybe since this is a byproduct of some algorithmic processing done with kmeans
         # we can store it in the results object?
@@ -93,7 +97,7 @@ class CSVTijuanaDataset(Dataset):
 
     def read_times(self, file):
         # Read travel times from CSV file into a pandas dataframe
-        traveltimes_df = pd.read_csv (file)
+        traveltimes_df = pd.read_csv(file)
 
         # Traveltimes currently stored with keys as tuples
         # e.g. traveltimes[(1, 2)]
@@ -103,7 +107,6 @@ class CSVTijuanaDataset(Dataset):
         # Each row represents travel times from one base to all demand points
         for base_index, row in traveltimes_df.iterrows():
             for demand_index, time in enumerate(row):
-
                 # Convert the file number into a timedelta object
                 delta = timedelta(seconds=int(time))
 

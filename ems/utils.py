@@ -1,7 +1,7 @@
 # Maybe move back into dataset file;
 
-import pandas as pd 
-from operator import itemgetter
+import pandas as pd
+
 
 def parse_headered_csv (file: str, desired_keys: list):
     """

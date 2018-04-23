@@ -1,28 +1,29 @@
-from . import Base
-
 import datetime
 
-# Define the Ambulance model. 
+from ems.models.base import Base
 
-class Ambulance():
 
-    def __init__(self, 
-                id: int, 
-                base: Base, 
-                unit: str = "XXX-XXXX",
-                deployed: bool = False,
-                # TODO location never used; unknown type
-                location = None,
-                deployed_time: datetime.datetime = None,
-                end_time: datetime.datetime = None):
+# Define the Ambulance model.
 
-        self.id                 = id
-        self.base               = base
-        self.unit               = unit
-        self.deployed           = deployed
-        self.location           = location
-        self.deployed_time      = deployed_time
-        self.end_time           = end_time
+class Ambulance:
+
+    def __init__(self,
+                 id: int,
+                 base: Base,
+                 unit: str = "XXX-XXXX",
+                 deployed: bool = False,
+                 # TODO location never used; unknown type
+                 location=None,
+                 deployed_time: datetime.datetime = None,
+                 end_time: datetime.datetime = None):
+
+        self.id = id
+        self.base = base
+        self.unit = unit
+        self.deployed = deployed
+        self.location = location
+        self.deployed_time = deployed_time
+        self.end_time = end_time
 
     def __eq__(self, other):
         """
@@ -35,7 +36,6 @@ class Ambulance():
 
         return False
 
-
     def finish(self, current_datetime):
         """
         Resets the ambulance.
@@ -44,10 +44,9 @@ class Ambulance():
 
         # TODO raise exception if ambulance is not deployed?
 
-        self.deployed       = False
-        self.location       = None
-        self.deployed_time  = None
-
+        self.deployed = False
+        self.location = None
+        self.deployed_time = None
 
     def deploy(self, datetime, destination, ambulance_delta):
         """
@@ -60,10 +59,10 @@ class Ambulance():
 
         if self.deployed: raise Exception("Ambulance {} already deployed".format(self.id))
 
-        self.deployed           = True
-        self.deployed_time      = datetime
-        self.end_time           = datetime + ambulance_delta
-        self.location           = destination
+        self.deployed = True
+        self.deployed_time = datetime
+        self.end_time = datetime + ambulance_delta
+        self.location = destination
 
         if not datetime:
             raise Exception("Cannot set a deployed ambulance's deploy time as None")

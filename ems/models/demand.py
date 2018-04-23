@@ -1,6 +1,8 @@
+from geopy import Point
+
+
 class Demand:
 
-    def __init__ (self, id: int, x: float, y: float):
-
+    def __init__(self, id: int, x: float, y: float):
         self.id = id
-        self.location = Point (x,y)
+        self.location = Point(x, y)

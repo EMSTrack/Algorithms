@@ -1,34 +1,34 @@
 # Runs the simulation.
 
-from ems.algorithms.algorithm import DispatcherAlgorithm
-from ems.settings import Settings
-from ems.data.ambulance import Ambulance 
-from ems.data.dataset import CSVTijuanaDataset
+import datetime
+from copy import deepcopy
 
 from colorama import Fore
 from colorama import Style
 
-from copy import deepcopy
+from ems.algorithms.algorithm import DispatcherAlgorithm
+from ems.data.tijuana import CSVTijuanaDataset
+from ems.models.ambulance import Ambulance
+from ems.settings import Settings
 
-import datetime
 
-class DispatcherSimulator():
+class DispatcherSimulator:
 
-    def __init__ (self, settings: Settings, 
-                  dataset: CSVTijuanaDataset, 
-                  algorithm: DispatcherAlgorithm):
+    def __init__(self, settings: Settings,
+                 dataset: CSVTijuanaDataset,
+                 algorithm: DispatcherAlgorithm):
 
         self.settings = settings
         self.dataset = dataset
         self.algorithm = algorithm
 
-    def run (self):
+    def run(self):
         """
         Initialize chosen bases and ambulances.
         Starting at the beginning of the cases, attend to each case.
         :return: Finished cases
         """
-        
+
         # Select bases from dataset
         chosen_bases = self.algorithm.init_bases(self.dataset)
 
@@ -36,8 +36,8 @@ class DispatcherSimulator():
         self.dataset.chosen_bases = chosen_bases
 
         # Assign ambulances to bases chosen
-        ambulance_bases = self.algorithm.init_ambulance_placements(chosen_bases, 
-                                                                  self.settings.num_ambulances)
+        ambulance_bases = self.algorithm.init_ambulance_placements(chosen_bases,
+                                                                   self.settings.num_ambulances)
 
         # Generate ambulances; Does not have to be here
         ambulances = []
@@ -91,7 +91,8 @@ class DispatcherSimulator():
 
                 if case_start_time + delta < ambulance_release_time:
                     # Deploy
-                    self.start_case(finished_cases, working_cases, ambulances, ambulances_in_motion, case_start_time + delta)
+                    self.start_case(finished_cases, working_cases, ambulances, ambulances_in_motion,
+                                    case_start_time + delta)
 
                     # TODO If the deployment was successful, then recalculate the city coverage
 
@@ -137,8 +138,8 @@ class DispatcherSimulator():
         chosen_ambulance, ambulance_travel_time = \
             self.algorithm.select_ambulance(self.dataset, ambulances, case)
 
-        if self.settings.debug: print ('chosen_ambulance:', chosen_ambulance)
-        if self.settings.debug: print ('travel time duration:', ambulance_travel_time)
+        if self.settings.debug: print('chosen_ambulance:', chosen_ambulance)
+        if self.settings.debug: print('travel time duration:', ambulance_travel_time)
 
         # Dispatch an ambulance as returned by fine_available. It only works if deployed
         if chosen_ambulance is not None:
@@ -148,7 +149,8 @@ class DispatcherSimulator():
             ambulance = ambulances[chosen_ambulance]
 
             # TODO -- fill in destination?
-            if self.settings.debug: print(f"{Fore.GREEN}Deploying ambulance", ambulance.id, 'at time', case_time, f'{Style.RESET_ALL}')
+            if self.settings.debug: print(f"{Fore.GREEN}Deploying ambulance", ambulance.id, 'at time', case_time,
+                                          f'{Style.RESET_ALL}')
 
             ambulance.deploy(start_time, None, case_time)
             ambulances_in_motion.append(ambulance)
@@ -159,11 +161,11 @@ class DispatcherSimulator():
             return True
 
         else:
-            if self.settings.debug: print(f"{Fore.RED}***** THIS CASE HAS BEEN DELAYED BY ONE MINUTE. *****\n{Style.RESET_ALL}")
+            if self.settings.debug: print(
+                f"{Fore.RED}***** THIS CASE HAS BEEN DELAYED BY ONE MINUTE. *****\n{Style.RESET_ALL}")
             case.delayed = datetime.timedelta(minutes=1, seconds=case.delayed.total_seconds())
             # working_cases.insert(0, case)
             return False
-
 
     def check_finished_ambulances(self, ambulances_in_motion, current_datetime):
         """
@@ -175,16 +177,18 @@ class DispatcherSimulator():
         :return: None. It just changes state.
         """
 
-        if self.settings.debug: print(f"Busy ambulances:", sorted([amb.id for amb in ambulances_in_motion]),f"{Style.RESET_ALL}")
+        if self.settings.debug: print(f"Busy ambulances:", sorted([amb.id for amb in ambulances_in_motion]),
+                                      f"{Style.RESET_ALL}")
 
         # Watch out, never remove from list while iterating through it
         for ambulance in ambulances_in_motion:
-            if (ambulance.end_time) <= current_datetime: #TODO
+            if (ambulance.end_time) <= current_datetime:  # TODO
 
                 ambulances_in_motion.remove(ambulance)
 
-                if self.settings.debug: print(f'{Fore.CYAN}Retiring ambulance ', ambulance.id, 'at time', current_datetime,
-                    f"{Style.RESET_ALL}")
+                if self.settings.debug: print(f'{Fore.CYAN}Retiring ambulance ', ambulance.id, 'at time',
+                                              current_datetime,
+                                              f"{Style.RESET_ALL}")
 
                 ambulance.finish(current_datetime)
 
@@ -195,7 +199,6 @@ class DispatcherSimulator():
     #     # Then, return the percentage of Tijuana covered.
     #     # Parameters: ambulances, bases, demands, traveltimes, r1.
 
-        
     #     # print("Recalculate the city coverage. ")
 
     #     # As long as amb['deployed'] in ambulances is false, the base can have coverage effect.
@@ -217,7 +220,7 @@ class DispatcherSimulator():
     #         # for amb in ambulances:
     #             # if base == amb['base'] and amb['deployed'] == False and base not in nonempty_bases:
     #                 # nonempty_bases.append(base)
-        
+
     #     # print("Calculate coverage rating... ", len(nonempty_bases)*len(demands))
     #     for active_base in nonempty_bases:
     #         for d in range(len(demands)):
