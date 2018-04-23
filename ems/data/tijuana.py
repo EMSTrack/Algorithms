@@ -14,15 +14,26 @@ class CSVTijuanaDataset(Dataset):
     def __init__ (self, settings: Settings):
 
         # Read files into pandas dataframes and lists of objects
-        self.cases_df, self.cases                = self.read_cases(settings.cases_file)
-        self.bases_df, self.bases                = self.read_bases(settings.bases_file)
-        self.demands_df, self.demands            = self.read_demands(settings.demands_file)
-        self.traveltimes_df, self.traveltimes    = self.read_times(settings.traveltimes_file)
+        self.cases, self.cases_df                = self.read_cases(settings.cases_file)
+        self.bases, self.bases_df                = self.read_bases(settings.bases_file)
+        self.demands, self.demands_df            = self.read_demands(settings.demands_file)
+        self.traveltimes, self.traveltimes_df    = self.read_times(settings.traveltimes_file)
 
         # Maybe since this is a byproduct of some algorithmic processing done with kmeans
         # we can store it in the results object?
         self.chosen_bases = []
 
+    # Inherited functions
+    def get_bases(self):
+        return self.bases
+
+    def get_cases(self):
+        return self.cases
+
+    def get_demands(self):
+        return self.demands
+
+    # Helper functions
     def read_cases(self, file):
         # Read cases from CSV into a pandas dataframe
         case_headers = ["id", "lat", "long", "date", "weekday", "time", "priority"]
@@ -44,7 +55,7 @@ class CSVTijuanaDataset(Dataset):
                 priority=row["priority"])
             cases.append(case)
 
-        return cases_df, cases
+        return cases, cases_df
 
     def read_bases(self, file):
         # Read bases from an unheadered CSV into a pandas dataframe
@@ -61,7 +72,7 @@ class CSVTijuanaDataset(Dataset):
                 y=row["long"])
             bases.append(base)
 
-        return bases_df, bases
+        return bases, bases_df
 
     def read_demands(self, file):
         # Read demands from an unheadered CSV into a pandas dataframe
@@ -78,7 +89,7 @@ class CSVTijuanaDataset(Dataset):
                 y=row["long"])
             demands.append(demand)
 
-        return demands_df, demands
+        return demands, demands_df
 
     def read_times(self, file):
         # Read travel times from CSV file into a pandas dataframe
@@ -103,15 +114,4 @@ class CSVTijuanaDataset(Dataset):
 
                 traveltimes[(base_index, demand_index)] = traveltime
 
-        return traveltimes_df, traveltimes
-
-
-class TravelTime:
-
-    def __init__(self, base_id: int, demand_id: int, traveltime: timedelta):
-
-        self.base_id = base_id
-        self.demand_id = demand_id
-        self.traveltime = traveltime
-        
-
+        return traveltimes, traveltimes_df
