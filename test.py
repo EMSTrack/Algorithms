@@ -32,14 +32,14 @@ def testSettings():
     assert set2.demands_file == demands_filepath
 
     set3 = Settings (debug=False, bases_file=bases_filepath)
-    set3.set_demands_fd (str(demands_filepath))
+    set3.demands_file = str(demands_filepath)
     assert set3.demands_file == set2.demands_file
     assert set3.demands_file is set2.demands_file
 
     set4 = Settings(debug=False, cases_file=cases_filepath)
-    set4.set_demands_fd (str(demands_filepath))
-    set4.set_bases_fd (str(bases_filepath))
-    set4.set_traveltimes_fd (str(traveltimes_filepath))
+    set4.demands_file = str(demands_filepath)
+    set4.bases_file = str(bases_filepath)
+    set4.traveltimes_file = str(traveltimes_filepath)
     assert set4.cases_file is cases_filepath
     assert set4.demands_file is set3.demands_file
     assert set4.bases_file is set3.bases_file

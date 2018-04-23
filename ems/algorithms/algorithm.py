@@ -1,8 +1,10 @@
 # Framework for using algorithms and allowing for replacement
 
-# from datetime import timedelta
+from datetime import timedelta
 import copy
 import numpy as np
+import geopy.distance
+import geopy
 
 # The following functions define default algorithms for the DispatchAlgorithm class.
 def kmeans_init_bases (dataset):
@@ -13,10 +15,8 @@ def kmeans_init_bases (dataset):
     print("Default init_bases(): Kmeans init bases")
 
     # times[demand point][base] if using the pandas way
-    chosen_base_indices, demands_covered =  pick_starting_bases (dataset.traveltimes, 12, 600)
-    
-    # Returns pandas dataframe
-    # chosen_bases = dataset.bases_df.iloc[chosen_base_indices]
+    # Using pandas dataframe
+    chosen_base_indices, demands_covered =  pick_starting_bases (dataset.traveltimes_df, 12, 600)
 
     # Returns object list
     chosen_bases = [dataset.bases[index] for index in chosen_base_indices]
@@ -69,8 +69,111 @@ def random_ambulance_placements (bases, num_ambulances):
     return ambulance_bases
 
 
-def fastest_traveltime (dataset):
+def fastest_traveltime (dataset, ambulances, case):
+
     print("Default select_ambulance(): Fastest Traveltime")
+
+    closest_demand = closest_distance(dataset.demands, case.location)
+
+    chosen_ambulance, ambulance_travel_time = find_available_ambulance(
+        ambulances, dataset.traveltimes, closest_demand)
+
+    return chosen_ambulance, ambulance_travel_time
+
+
+def closest_distance(list_type, target_point):
+    """
+    Finds the closest point in the corresponding generic list.
+    For example, find the closest base given a GPS location.
+    :param list_type:
+    :param target_point:
+    :return: the position in that list
+    """
+    shortest_difference = 999999999
+    position = -1
+
+    for index in range(len(list_type)):
+        # print(list_type)
+        if list_type[index] is not None:
+
+            difference = geopy.distance.vincenty(target_point, list_type[index].location).km
+            if shortest_difference > difference:
+                shortest_difference = difference
+                position = index
+                # print (type(difference), shortest_difference)
+                if shortest_difference < 0.5:
+                    return list_type[position]
+
+    return list_type[position]
+
+
+def find_available_ambulance(ambulances, traveltimes, demand):
+    """
+    Find an available ambulance if possible.
+    :param ambulances: of type dictionary.
+    :return: type int the ID of the ambulance, or None if all ambulances are busy.
+    """
+    amb_id = -1
+    shortest_distance = 99999999999
+
+    total_ambulances = len(ambulances)
+
+    ambulance_bases = [a.base if not a.deployed else None for a in ambulances]
+    # print('Length of ambulance locations:', len(ambulance_locations))
+    # print('FA:', ambulance_locations)
+    result, case_time = closest_time(ambulance_bases, traveltimes, demand)
+    # print('Position:',result)
+    if result > -1:
+        return result, case_time
+
+    # for amb in ambulances:
+    #     if amb['deployed'] == False:
+    #         distance =
+
+    return None, None
+
+
+def closest_time(list_type, traveltimes, demand):
+    """
+    Finds the ambulance, given a list of ambulances, that will reach the
+    demand point the closest. The demand point must be in the list of demands.
+    IF it is not, then use the above function `closest_distance` to find the
+    closest demand point given a GPS coordinate.
+    The parameter names are bad and the code needs to be refactored, probably
+    :param list_type:
+    :param bases:
+    :param demands:
+    :param traveltimes:
+    :param target_point:
+    :return:
+    """
+    shortest_difference = timedelta(hours=999999999)
+    position = -1
+    for index in range(len(list_type)):
+
+        if list_type[index] is not None:
+
+            difference = traveltime(traveltimes, list_type[index], demand)
+            if shortest_difference > difference:
+                shortest_difference = difference
+                position = index
+
+    return position, shortest_difference
+
+
+# TODO Takes the travel time mapping, starting base, and ending demand to find time.
+def traveltime(times, base, demand):
+    # TODO if base is not type Point then exception
+    # TODO if demand is not type Point then exception
+    # if type(b) == geopy.Point:
+    #     b = bases.index(b)
+    # if type(d) == geopy.Point:
+    #     d = demands.index(d)
+
+    # base should be a base object
+    # demand should be a demand object
+
+    return times[(base.id, demand.id)].traveltime
 
 
 # This class is used by the sim to run.
@@ -78,13 +181,9 @@ class DispatcherAlgorithm ():
 
     # To instantiate this object, three function pointers must have been passed in.
     def __init__ (self, 
-        init_bases                 = kmeans_init_bases, 
-        init_ambulance_placements  = random_ambulance_placements, 
-        select_ambulance           = fastest_traveltime ):
-
-        assert callable(init_bases)
-        assert callable(init_ambulance_placements)
-        assert callable(select_ambulance)
+        init_bases: callable                 = kmeans_init_bases, 
+        init_ambulance_placements: callable  = random_ambulance_placements, 
+        select_ambulance: callable           = fastest_traveltime ):
 
         self.init_bases                  = init_bases
         self.init_ambulance_placements   = init_ambulance_placements

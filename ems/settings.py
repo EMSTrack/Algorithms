@@ -4,18 +4,12 @@ class Settings:
 
     # TODO - read from config to generate settings
     def __init__ (self, 
-        debug            = False, 
-        demands_file     = None, 
-        bases_file       = None, 
-        cases_file       = None,
-        traveltimes_file = None,
-        amortized_file   = None):
-
-        assert demands_file is None  or isinstance (demands_file, str)
-        assert bases_file   is None  or isinstance (bases_file, str)
-        assert cases_file   is None  or isinstance (cases_file, str)
-        assert traveltimes_file is None or isinstance (traveltimes_file, str)
-        assert amortized_file is None or isinstance (amortized_file, str)
+        debug: str            = False, 
+        demands_file: str     = None, 
+        bases_file: str       = None, 
+        cases_file: str       = None,
+        traveltimes_file: str = None,
+        amortized_file: str   = None):
 
         self.data_filename      = None
         self.debug              = debug
@@ -26,24 +20,3 @@ class Settings:
         self.amortized_file     = amortized_file
         self.num_ambulances     = 12 # TODO
         self.num_bases          = 12 # TODO
-
-
-    def set_demands_fd (self, filename):
-        assert isinstance (filename, str)
-        self.demands_file = filename
-
-    def set_bases_fd (self, filename):
-        assert isinstance (filename, str)
-        self.bases_file = filename
-
-    def set_cases_fd (self, filename):
-        assert isinstance (filename, str)
-        self.cases_file = filename
-
-    def set_traveltimes_fd (self, filename):
-        assert isinstance (filename, str)
-        self.traveltimes_file = filename
-
-    def set_amortized_fd (self, filename):
-        assert isinsntance(filename, str)
-        self.amortized_file = filename

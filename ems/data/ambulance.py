@@ -15,13 +15,20 @@ class Ambulance():
 
         # TODO tyoe checking
 
-        self.id                 = None
-        self.unit               = "XXX-XXXX"
-        self.deployed           = False
-        self.base               = None
-        self.location           = None
-        self.deployed_time      = None
-        self.end_time           = None
+        self.id                 = id
+        self.base               = base
+        self.unit               = unit
+        self.deployed           = deployed
+        self.location           = location
+        self.deployed_time      = deployed_time
+        self.end_time           = end_time
+
+    def __eq__(self, other):
+
+        if self.id == other.id:
+            return True
+
+        return False
 
 
     def finish(self, current_datetime):
@@ -36,9 +43,6 @@ class Ambulance():
         self.location       = None
         self.deployed_time  = None
 
-        if debug: print(f'{Fore.CYAN}Retiring ambulance ', self.id, 'at time', current_datetime,
-                    f"{Style.RESET_ALL}")
-
 
     def deploy(self, datetime, destination, ambulance_delta):
         """
@@ -48,9 +52,8 @@ class Ambulance():
         :param ambulance_delta:
         :return: Nothing. This function only changes state.
         """
-        if debug: print(f"{Fore.GREEN}Deploying ambulance", self.id, 'at time', datetime, f'{Style.RESET_ALL}')
 
-        if ambulance.deployed: raise Exception("Ambulance {} already deployed".format(self.id))
+        if self.deployed: raise Exception("Ambulance {} already deployed".format(self.id))
 
         self.deployed           = True
         self.deployed_time      = datetime

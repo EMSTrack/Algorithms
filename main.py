@@ -11,7 +11,7 @@ demands_filepath = file_path + 'demand_points.csv'
 cases_filepath = file_path + 'calls.csv'
 traveltimes_filepath = file_path + 'times.csv'
 
-settings = Settings (debug=False, 
+settings = Settings (debug=True, 
                 demands_file=demands_filepath,
                 bases_file=bases_filepath,
                 cases_file=cases_filepath,
@@ -22,6 +22,4 @@ dataset = CSVTijuanaDataset(settings)
 alg = DispatcherAlgorithm()
 
 sim = DispatcherSimulator(settings, dataset, alg)
-sim.run()
-
-# Call simulator
+finished_cases = sim.run()

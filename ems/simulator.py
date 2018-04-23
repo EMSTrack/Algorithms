@@ -7,15 +7,15 @@ from ems.data.dataset import CSVTijuanaDataset
 from colorama import Fore
 from colorama import Style
 
+from copy import deepcopy
+
 import datetime
 
 class DispatcherSimulator():
 
-    def __init__ (self, settings, dataset, algorithm):
-
-        assert isinstance (settings, Settings)
-        assert isinstance (dataset, CSVTijuanaDataset)
-        assert isinstance (algorithm, DispatcherAlgorithm)
+    def __init__ (self, settings: Settings, 
+                  dataset: CSVTijuanaDataset, 
+                  algorithm: DispatcherAlgorithm):
 
         self.settings = settings
         self.dataset = dataset
@@ -42,13 +42,13 @@ class DispatcherSimulator():
 
         # TODO - Amortized file
 
-        working_cases = deepcopy(self.dataset.bases)
+        working_cases = deepcopy(self.dataset.cases)
         finished_cases = []
         ambulances_in_motion = []
 
         # TODO. This may become a while-loop, "while there are still start times and end times..."
         while working_cases or ambulances_in_motion:
-            if debug: print()
+            if self.settings.debug: print()
 
             # What is the next timestep?
             # If no more cases to start, then there should only be ambulances left.
@@ -62,12 +62,14 @@ class DispatcherSimulator():
 
                 # TODO -- save amortized file
 
-
                 return finished_cases
 
-            elif not not ambulances_in_motion and working_cases:
+            elif not ambulances_in_motion and working_cases:
                 start_time = working_cases[0].datetime
-                # TODO -- Deploy
+
+                # Deploy
+                self.start_case(finished_cases, working_cases, ambulances, ambulances_in_motion, start_time)
+
                 # TODO If the deployment was successful, then recalculate the city coverage
 
             elif ambulances_in_motion and working_cases:
@@ -82,13 +84,17 @@ class DispatcherSimulator():
                 # print ("case_time     ", case_start_time + delta)
 
                 if case_start_time + delta < ambulance_release_time:
-                    # TODO -- Deploy
+                    # Deploy
+                    self.start_case(finished_cases, working_cases, ambulances, ambulances_in_motion, case_start_time + delta)
+
                     # TODO If the deployment was successful, then recalculate the city coverage
 
                 else:
                     self.check_finished_ambulances(ambulances_in_motion, ambulance_release_time)
 
-                # TODO traveltime coverage
+                # Compute coverage
+                # coverage (ambulances, self.dataset.traveltimes, self.dataset.bases, \
+                #     self.dataset.demands, required_r1)
 
             else:
                 raise Exception("This shouldn't happen... ")
@@ -96,7 +102,7 @@ class DispatcherSimulator():
         # TODO return "results" object with more potential information
         return finished_cases
 
-    def start_case(finished_cases, working_cases, ambulances, ambulances_in_motion, start_time):
+    def start_case(self, finished_cases, working_cases, ambulances, ambulances_in_motion, start_time):
         """
         Actual code to attempt running the case.
         :param finished_cases:
@@ -109,7 +115,7 @@ class DispatcherSimulator():
         """
 
         case = working_cases[0]
-        if debug: print(case.id)
+        if self.settings.debug: print(case.id)
 
         # Checks if the previously dispatched ambulances are done. If so, mark as done.
         self.check_finished_ambulances(ambulances_in_motion, start_time)
@@ -120,10 +126,13 @@ class DispatcherSimulator():
         closest_location = None
 
         # TODO access amortized case->demand mappings
-        # TODO compute traveltime closest distance
 
-        if debug: print ('chosen_ambulance:', chosen_ambulance)
-        if debug: print ('travel time duration:', ambulance_travel_time)
+        # Select ambulance
+        chosen_ambulance, ambulance_travel_time = \
+            self.algorithm.select_ambulance(self.dataset, ambulances, case)
+
+        if self.settings.debug: print ('chosen_ambulance:', chosen_ambulance)
+        if self.settings.debug: print ('travel time duration:', ambulance_travel_time)
 
         # Dispatch an ambulance as returned by fine_available. It only works if deployed
         if chosen_ambulance is not None:
@@ -132,7 +141,9 @@ class DispatcherSimulator():
 
             ambulance = ambulances[chosen_ambulance]
 
-            # TODO -- destination?
+            # TODO -- fill in destination?
+            if self.settings.debug: print(f"{Fore.GREEN}Deploying ambulance", ambulance.id, 'at time', case_time, f'{Style.RESET_ALL}')
+
             ambulance.deploy(start_time, None, case_time)
             ambulances_in_motion.append(ambulance)
 
@@ -142,12 +153,13 @@ class DispatcherSimulator():
             return True
 
         else:
+            if self.settings.debug: print(f"{Fore.RED}***** THIS CASE HAS BEEN DELAYED BY ONE MINUTE. *****\n{Style.RESET_ALL}")
             case.delayed = datetime.timedelta(minutes=1, seconds=case.delayed.total_seconds())
             # working_cases.insert(0, case)
             return False
 
 
-    def check_finished_ambulances(ambulances_in_motion, current_datetime):
+    def check_finished_ambulances(self, ambulances_in_motion, current_datetime):
         """
         Given the list of ambulances in motion, check the current time.
         Mark ambulances that have finished as non-deployed.
@@ -157,10 +169,56 @@ class DispatcherSimulator():
         :return: None. It just changes state.
         """
 
-        if debug: print(f"Busy ambulances:", sorted([amb.id for amb in ambulances_in_motion]),f"{Style.RESET_ALL}")
+        if self.settings.debug: print(f"Busy ambulances:", sorted([amb.id for amb in ambulances_in_motion]),f"{Style.RESET_ALL}")
 
-        for ambulance in ambulances:
+        # Watch out, never remove from list while iterating through it
+        for ambulance in ambulances_in_motion:
             if (ambulance.end_time) <= current_datetime: #TODO
 
                 ambulances_in_motion.remove(ambulance)
+
+                if self.settings.debug: print(f'{Fore.CYAN}Retiring ambulance ', ambulance.id, 'at time', current_datetime,
+                    f"{Style.RESET_ALL}")
+
                 ambulance.finish(current_datetime)
+
+    # def coverage(ambulances, times, bases, demands,  required_r1):
+    #     # Mark all demands which has a base less than r1 traveltime away as covered. 
+    #     # In the future, r1 travelttime of ambulance.
+
+    #     # Then, return the percentage of Tijuana covered.
+    #     # Parameters: ambulances, bases, demands, traveltimes, r1.
+
+        
+    #     # print("Recalculate the city coverage. ")
+
+    #     # As long as amb['deployed'] in ambulances is false, the base can have coverage effect.
+    #     # print("Bases:", len (bases))
+    #     # print("Demands:", len (demands))
+    #     # print("r1:", required_r1)
+
+    #     # Which bases cast a coverage effect over a part of the city?
+    #     # amb['base'] == base in bases
+    #     # print(ambulances[0])
+
+    #     # from IPython import embed; embed()
+
+    #     uncovered_demands = [0 for d in demands]
+
+    #     # print("Find nonempty bases...")
+    #     nonempty_bases = [amb.base for amb in ambulances if amb.deployed == False]
+    #     # for base in bases:
+    #         # for amb in ambulances:
+    #             # if base == amb['base'] and amb['deployed'] == False and base not in nonempty_bases:
+    #                 # nonempty_bases.append(base)
+        
+    #     # print("Calculate coverage rating... ", len(nonempty_bases)*len(demands))
+    #     for active_base in nonempty_bases:
+    #         for d in range(len(demands)):
+    #             if uncovered_demands [d] == 0:
+    #                 if traveltime(times, bases, demands, active_base, demands [d]).total_seconds() < required_r1:
+    #                     uncovered_demands[d] = 1
+
+    #     # from IPython import embed; embed ()
+    #     print(f"{Fore.RED}Coverage Rating:", sum(uncovered_demands), "/100.",  f'{Style.RESET_ALL}')
+    #     return sum (uncovered_demands)

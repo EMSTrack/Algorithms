@@ -1,27 +1,24 @@
 # Model the data by their types.
 
-from geopy import Point
 from ems.utils import parse_headered_csv, parse_unheadered_csv
 from ems.settings import Settings
+
+from datetime import timedelta
+from geopy import Point
 
 import pandas as pd 
 import datetime
 
-# class Dataset:
-#     pass
 
 class CSVTijuanaDataset ():
 
-    def __init__ (self, 
-        settings):
-
-        assert isinstance (settings, Settings)
+    def __init__ (self, settings: Settings):
 
         # Read files into pandas dataframes and lists of objects
-        self.cases_df, self.cases       = self.read_cases(settings.cases_file)
-        self.bases_df, self.bases       = self.read_bases(settings.bases_file)
-        self.demands_df, self.demands   = self.read_demands(settings.demands_file)
-        self.traveltimes                = self.read_times(settings.traveltimes_file)
+        self.cases_df, self.cases                = self.read_cases(settings.cases_file)
+        self.bases_df, self.bases                = self.read_bases(settings.bases_file)
+        self.demands_df, self.demands            = self.read_demands(settings.demands_file)
+        self.traveltimes_df, self.traveltimes    = self.read_times(settings.traveltimes_file)
 
         # Maybe since this is a byproduct of some algorithmic processing done with kmeans
         # we can store it in the results object?
@@ -60,6 +57,7 @@ class CSVTijuanaDataset ():
         bases = []
         for index, row in bases_df.iterrows():
             base = Base(
+                id=index,
                 x=row["lat"],
                 y=row["long"])
             bases.append(base)
@@ -76,6 +74,7 @@ class CSVTijuanaDataset ():
         demands = []
         for index, row in demands_df.iterrows():
             demand = Demand(
+                id=index,
                 x=row["lat"],
                 y=row["long"])
             demands.append(demand)
@@ -84,21 +83,34 @@ class CSVTijuanaDataset ():
 
     def read_times(self, file):
         # Read travel times from CSV file into a pandas dataframe
-        times_df = pd.read_csv (file)
-        return times_df
+        traveltimes_df = pd.read_csv (file)
+
+        # Traveltimes currently stored with keys as tuples
+        # e.g. traveltimes[(1, 2)]
+        # Obtains the travel time object from base 1 to demand point 2
+        traveltimes = {}
+
+        # Each row represents travel times from one base to all demand points
+        for base_index, row in traveltimes_df.iterrows():
+            for demand_index, time in enumerate(row):
+
+                delta = timedelta(seconds=int(time))
+
+                traveltime = TravelTime(
+                    base_id=base_index,
+                    demand_id=demand_index,
+                    traveltime=delta)
+
+                traveltimes[(base_index, demand_index)] = traveltime
+
+        return traveltimes_df, traveltimes
+
 
 class Case:
 
-    def __init__ (self, id, x, y, dt, weekday, 
-                  priority=None, delayed=datetime.timedelta(minutes = 0)):
-
-        assert isinstance(id, int)
-        assert isinstance(x, float)
-        assert isinstance(y, float)
-        assert isinstance(dt, datetime.datetime)
-        assert isinstance(weekday, str)
-        assert isinstance(priority, float)
-        assert isinstance(delayed, datetime.timedelta)
+    def __init__ (self, id: int, x: float, y: float, dt: datetime.datetime, 
+                  weekday: str, priority: float = None, 
+                  delayed: datetime = datetime.timedelta(minutes = 0)):
 
         self.id         = id
         self.location   = Point (x,y)
@@ -107,29 +119,29 @@ class Case:
         self.priority   = priority
         self.delayed    = delayed
 
+
 class Base:
 
-    def __init__ (self, x, y):
-        
-        assert isinstance(x, float)
-        assert isinstance(y, float)
+    def __init__ (self, id: int, x: float, y: float):
 
+        self.id = id
         self.location = Point (x,y)
+
 
 class Demand:
 
-    def __init__ (self, x, y):
+    def __init__ (self, id: int, x: float, y: float):
 
-        assert isinstance(x, float)
-        assert isinstance(y, float)
-
+        self.id = id
         self.location = Point (x,y)
+
 
 class TravelTime:
 
-    def __init__(self):
-        pass
+    def __init__(self, base_id: int, demand_id: int, traveltime: timedelta):
 
-    def getTime (base, demand):
-        pass
+        self.base_id = base_id
+        self.demand_id = demand_id
+        self.traveltime = traveltime
+        
 
