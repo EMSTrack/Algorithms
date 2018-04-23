@@ -61,5 +61,7 @@ to proceed when ready. (Press Enter.)
 - TravelTime class -> TravelTimeSet (or similarly named) class
 
 	- Because we are manipulating a table of information, should instead have a class that contains all travel times and performs lookups
+	
+- Keep track of a "current time" while simulating
 
 
