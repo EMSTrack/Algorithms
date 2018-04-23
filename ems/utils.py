@@ -1,13 +1,18 @@
+# Maybe move back into dataset file;
+
 import pandas as pd 
 from operator import itemgetter
 
-def parse_headered_csv (file, desired_keys):
+def parse_headered_csv (file: str, desired_keys: list):
+    """
+    Takes a headered CSV file and extracts the columns with the desired keys
+    :param file: CSV filename
+    :param desired_keys: Names of columns to extract
+    :return: pandas dataframe
+    """
 
-    assert file is not None
-    assert file is not ""
-    assert isinstance (file, str)
-    assert isinstance (desired_keys, list)
-    assert all(isinstance(ele, str) for ele in desired_keys)
+    if file is None:
+        return None
 
     raw = pd.read_csv (file)
 
@@ -20,14 +25,19 @@ def parse_headered_csv (file, desired_keys):
     return raw[desired_keys]
 
 
-def parse_unheadered_csv (file, positions, header_names):
+def parse_unheadered_csv (file: str, positions: list, header_names: list):
 
-    assert file is not None
-    assert positions is not None
-    assert all(isinstance(ele, int) for ele in positions)
-    assert header_names is not None
-    assert all(isinstance(ele, str) for ele in header_names)
-    assert len(positions) == len(header_names)
+    """
+    Takes an unheadered CSV file, extracts the columns based on given positions,
+    and provides them headers for the pandas dataframe
+    :param file: CSV filename
+    :param positions: Indices of the columns to extract
+    :param header_names: Header names for the extracted columns
+    :return: pandas dataframe
+    """
+
+    if file is None:
+        return None
 
     raw = pd.read_csv (file)
     headered_df = pd.DataFrame()

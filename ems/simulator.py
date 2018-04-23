@@ -1,4 +1,5 @@
 # Runs the simulation.
+
 from ems.algorithms.algorithm import DispatcherAlgorithm
 from ems.settings import Settings
 from ems.data.ambulance import Ambulance 
@@ -22,6 +23,11 @@ class DispatcherSimulator():
         self.algorithm = algorithm
 
     def run (self):
+        """
+        Initialize chosen bases and ambulances.
+        Starting at the beginning of the cases, attend to each case.
+        :return: Finished cases
+        """
         
         # Select bases from dataset
         chosen_bases = self.algorithm.init_bases(self.dataset)

@@ -3,11 +3,10 @@
 from ems.utils import parse_headered_csv, parse_unheadered_csv
 from ems.settings import Settings
 
+import datetime
 from datetime import timedelta
 from geopy import Point
-
 import pandas as pd 
-import datetime
 
 
 class CSVTijuanaDataset ():
@@ -94,6 +93,7 @@ class CSVTijuanaDataset ():
         for base_index, row in traveltimes_df.iterrows():
             for demand_index, time in enumerate(row):
 
+                # Convert the file number into a timedelta object
                 delta = timedelta(seconds=int(time))
 
                 traveltime = TravelTime(

@@ -1,19 +1,22 @@
+from ems.data.dataset import Base
+
+import datetime
 from colorama import Fore
 from colorama import Style
 
 # Define the Ambulance model. 
 
 class Ambulance():
-    def __init__(self, 
-                id, 
-                base, 
-                unit="XXX-XXXX",
-                deployed=False,
-                location=None,
-                deployed_time=None,
-                end_time=None):
 
-        # TODO tyoe checking
+    def __init__(self, 
+                id: int, 
+                base: Base, 
+                unit: str = "XXX-XXXX",
+                deployed: bool = False,
+                # TODO location never used; unknown type
+                location = None,
+                deployed_time: datetime.datetime = None,
+                end_time: datetime.datetime = None):
 
         self.id                 = id
         self.base               = base
@@ -24,8 +27,12 @@ class Ambulance():
         self.end_time           = end_time
 
     def __eq__(self, other):
+        """
+        Checks for equality between 
+        :return: True if objects are equal; else False
+        """
 
-        if self.id == other.id:
+        if type(other) is Ambulance and self.id == other.id:
             return True
 
         return False

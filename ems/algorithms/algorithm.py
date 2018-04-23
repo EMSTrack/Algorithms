@@ -26,8 +26,6 @@ def kmeans_init_bases (dataset):
 # Refactor TODO. I can't believe I just shoved this in and it worked.
 def pick_starting_bases(traveltimes, num_bases, required_traveltime):
 
-    assert isinstance(required_traveltime, int)
-
     traveltimes         = copy.deepcopy (traveltimes)
     traveltimes         = np.array (traveltimes)
     chosen_bases        = []
@@ -59,10 +57,9 @@ def random_ambulance_placements (bases, num_ambulances):
 
     print("Default init_ambulance_placements(): Random Ambulance Placements")
 
-    assert isinstance(num_ambulances, int)
-
     ambulance_bases = []
 
+    # Assign ambulances to bases
     for index in range(num_ambulances):
         ambulance_bases.append(bases[index % len(bases)])
 
@@ -73,8 +70,10 @@ def fastest_traveltime (dataset, ambulances, case):
 
     print("Default select_ambulance(): Fastest Traveltime")
 
+    # Find the closest demand point to the given case
     closest_demand = closest_distance(dataset.demands, case.location)
 
+    # Select an ambulance to attend to the given case and obtain the its duration of travel
     chosen_ambulance, ambulance_travel_time = find_available_ambulance(
         ambulances, dataset.traveltimes, closest_demand)
 
@@ -161,14 +160,14 @@ def closest_time(list_type, traveltimes, demand):
     return position, shortest_difference
 
 
-# TODO Takes the travel time mapping, starting base, and ending demand to find time.
 def traveltime(times, base, demand):
-    # TODO if base is not type Point then exception
-    # TODO if demand is not type Point then exception
-    # if type(b) == geopy.Point:
-    #     b = bases.index(b)
-    # if type(d) == geopy.Point:
-    #     d = demands.index(d)
+    
+    """
+    Takes the travel time mapping, starting base, and ending demand to find time.
+    :param base:
+    :param demand:
+    :return travel time: 
+    """
 
     # base should be a base object
     # demand should be a demand object
@@ -189,6 +188,7 @@ class DispatcherAlgorithm ():
         self.init_ambulance_placements   = init_ambulance_placements
         self.select_ambulance            = select_ambulance
 
+    # TODO -- maybe move assertions to tests.py
     def init_bases_typecheck(self, dataset):
         """ Runs init_bases, but makes sure the resulting dataset.chosen_bases is right type """
         self.init_bases (dataset)
@@ -197,10 +197,12 @@ class DispatcherAlgorithm ():
             assert isinstance (element, Base)
 
 
+    # TODO
     def init_ambulance_placements_typecheck(self, dataset):
         """ Runs init_ambulance_placements, but makes sure the resulting ___ is right type or state"""
         pass 
 
+    # TODO
     def select_ambulance_typecheck(self, dataset):
         """ Runs select_ambulance, but makes sure the resulting ___ is right type or state"""
         pass
