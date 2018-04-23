@@ -2,7 +2,10 @@
 
 A library to do ambulance dispatch simulation and analysis. 
 
-To run, take a look at `test.py`. Notice the filepaths there. You will need to edit 
+To run the simulation, take a look at `main.py`. Notice the filepaths there. You will need to edit 
+`file_path`, `demands_filepath`, and `bases_filepath` to point at the Cruz Roja datasets. 
+
+To test, take a look at `test.py`. Similar to main.py, you will need to edit 
 `file_path`, `demands_filepath`, and `bases_filepath` to point at the Cruz Roja datasets. 
 
 You'll notice that an exception will be thrown. This is because the datasets will require
@@ -13,21 +16,19 @@ to proceed when ready. (Press Enter.)
 
 ## TODO 
 
-- Define what algorithms are used by passing function pointers to the Algorithms class. 
+- Incorporate the amortized file to speed up the process of finding the closest demand point to a case
 
-- Read from files -- CSV files in the first line should contain the name of the data.
+- Port over the "coverage" function from the old repo
 
-	- If the name deviates, throw an exception. e.g. base is a list of (lattitude, logitude)
-		- GOT UP TO HERE. Reading demand points and base points from CSV now implemented.
+- Define a format for a configuration file and read it into Settings
 
-	- In choosing the bases, use class Algorithm's instance variable base_init pointing to the 
-	base chooser function.
+- For kmeans_init_bases, remove dependency on the pandas dataframe and instead rely on list of objects
 
-		- Got this to work. KMeans base selector as default algorithm ported over. Two more to go.
+- Write tests for the datasets, algorithms, and settings
 
-- Run the simulation. It should return a list of lists (or the PANDAS 2D Array) of information.
-
-- Run each column of data (list of a certain metric) into the each function in a list of analysis functions.
+	- Move type checks in DispatcherAlgorithm to testing file
+	
+- Finish typing in function signatures for many functions
 
 ## Comments
 
@@ -36,14 +37,5 @@ to proceed when ready. (Press Enter.)
 - Need more thought about separation/combination of settings and data. 
 
 - See order.pdf
-
-- The travel times metric may or may not be a part of this simulation at all. Right now,
-it's simply a way to pick the ambulance and determine how long cases take. 
-
-- Started the Ambulance model. 
-
-- Possible to soon finish porting v2 into this library interface with defaults
-
-- Need the simulation part of this library implemented (the while loop)
 
 
