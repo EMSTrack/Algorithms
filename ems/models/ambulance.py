@@ -1,8 +1,6 @@
-from ems.data.dataset import Base
+from . import Base
 
 import datetime
-from colorama import Fore
-from colorama import Style
 
 # Define the Ambulance model. 
 
