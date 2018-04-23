@@ -27,7 +27,7 @@ class CSVTijuanaDataset(Dataset):
         # we can store it in the results object?
         self.chosen_bases = []
 
-    # Inherited functions
+    # Implementation
     def get_bases(self):
         return self.bases
 

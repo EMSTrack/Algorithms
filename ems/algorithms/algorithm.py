@@ -13,7 +13,7 @@ from ems.models.base import Base
 # The following functions define default algorithms for the DispatchAlgorithm class.
 
 
-def kmeans_init_bases(dataset):
+def kmeans_init_bases(bases, traveltimes_df):
     # This function happens to require the original Cruz Roja dataset. It doesn't necessarily need to.
     # For example, we could randomly choose bases.
 
@@ -21,10 +21,10 @@ def kmeans_init_bases(dataset):
 
     # times[demand point][base] if using the pandas way
     # Using pandas dataframe
-    chosen_base_indices, demands_covered = pick_starting_bases(dataset.traveltimes_df, 12, 600)
+    chosen_base_indices, demands_covered = pick_starting_bases(traveltimes_df, 12, 600)
 
     # Returns object list
-    chosen_bases = [dataset.bases[index] for index in chosen_base_indices]
+    chosen_bases = [bases[index] for index in chosen_base_indices]
 
     return chosen_bases
 
@@ -69,15 +69,15 @@ def random_ambulance_placements(bases, num_ambulances):
     return ambulance_bases
 
 
-def fastest_traveltime(dataset, ambulances, case):
+def fastest_traveltime(ambulances, case, demands, traveltimes):
     print("Default select_ambulance(): Fastest Traveltime")
 
     # Find the closest demand point to the given case
-    closest_demand = closest_distance(dataset.demands, case.location)
+    closest_demand = closest_distance(demands, case.location)
 
     # Select an ambulance to attend to the given case and obtain the its duration of travel
     chosen_ambulance, ambulance_travel_time = find_available_ambulance(
-        ambulances, dataset.traveltimes, closest_demand)
+        ambulances, traveltimes, closest_demand)
 
     return chosen_ambulance, ambulance_travel_time
 

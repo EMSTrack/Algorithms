@@ -36,7 +36,7 @@ class Ambulance:
 
         return False
 
-    def finish(self, current_datetime):
+    def finish(self):
         """
         Resets the ambulance.
         :return: None. This just changes state.

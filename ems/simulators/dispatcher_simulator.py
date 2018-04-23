@@ -2,66 +2,50 @@
 
 import datetime
 from copy import deepcopy
-
-from colorama import Fore
-from colorama import Style
+from typing import List
 
 from ems.algorithms.algorithm import DispatcherAlgorithm
-from ems.data.tijuana import CSVTijuanaDataset
 from ems.models.ambulance import Ambulance
-from ems.settings import Settings
+from ems.models.base import Base
+from ems.models.case import Case
+from ems.models.demand import Demand
+from ems.simulators.simulator import Simulator
 
 
 class DispatcherSimulator(Simulator):
 
-    def __init__(self, settings: Settings,
-                 dataset: CSVTijuanaDataset,
-                 algorithm: DispatcherAlgorithm):
+    # Traveltimes may be unique to this simulator?
+    def __init__(self,
+                 ambulances: List[Ambulance],
+                 bases: List[Base],
+                 cases: List[Case],
+                 demands: List[Demand],
+                 algorithm: DispatcherAlgorithm,
+                 traveltimes):
 
-        self.settings = settings
-        self.dataset = dataset
-        self.algorithm = algorithm
+        self.traveltimes = traveltimes
+        super(DispatcherSimulator, self).__init__(ambulances, bases, cases, demands, algorithm)
 
     def run(self):
-        """
-        Initialize chosen bases and ambulances.
-        Starting at the beginning of the cases, attend to each case.
-        :return: Finished cases
-        """
 
-        # Select bases from dataset
-        chosen_bases = self.algorithm.init_bases(self.dataset)
+        # initialize time
+        time = 0
 
-        # Maybe not necessary
-        self.dataset.chosen_bases = chosen_bases
-
-        # Assign ambulances to bases chosen
-        ambulance_bases = self.algorithm.init_ambulance_placements(chosen_bases,
-                                                                   self.settings.num_ambulances)
-
-        # Generate ambulances; Does not have to be here
-        ambulances = []
-        for index in range(self.settings.num_ambulances):
-            ambulance = Ambulance(id=index,
-                                  base=ambulance_bases[index])
-            ambulances.append(ambulance)
-
-        # TODO - Amortized file
-
-        working_cases = deepcopy(self.dataset.cases)
+        working_cases = deepcopy(self.cases)
         finished_cases = []
         ambulances_in_motion = []
 
         # TODO. This may become a while-loop, "while there are still start times and end times..."
         while working_cases or ambulances_in_motion:
-            if self.settings.debug: print()
+
+            # if self.settings.debug: print()
 
             # What is the next timestep?
             # If no more cases to start, then there should only be ambulances left.
 
             if not working_cases:
                 for amb in ambulances_in_motion:
-                    amb.finish(amb.end_time)
+                    amb.finish()
 
                 # TODO Find the city coverage. Is it useful to check the coverage within the loop? This would be
                 # TODO the only place where such a granular measurement is present.
@@ -74,7 +58,7 @@ class DispatcherSimulator(Simulator):
                 start_time = working_cases[0].datetime
 
                 # Deploy
-                self.start_case(finished_cases, working_cases, ambulances, ambulances_in_motion, start_time)
+                self.start_case(finished_cases, working_cases, self.ambulances, ambulances_in_motion, start_time)
 
                 # TODO If the deployment was successful, then recalculate the city coverage
 
@@ -91,7 +75,7 @@ class DispatcherSimulator(Simulator):
 
                 if case_start_time + delta < ambulance_release_time:
                     # Deploy
-                    self.start_case(finished_cases, working_cases, ambulances, ambulances_in_motion,
+                    self.start_case(finished_cases, working_cases, self.ambulances, ambulances_in_motion,
                                     case_start_time + delta)
 
                     # TODO If the deployment was successful, then recalculate the city coverage
@@ -100,8 +84,7 @@ class DispatcherSimulator(Simulator):
                     self.check_finished_ambulances(ambulances_in_motion, ambulance_release_time)
 
                 # Compute coverage
-                # coverage (ambulances, self.dataset.traveltimes, self.dataset.bases, \
-                #     self.dataset.demands, required_r1)
+                # self.coverage (ambulances, self.traveltimes, self.bases, self.demands, required_r1)
 
             else:
                 raise Exception("This shouldn't happen... ")
@@ -122,7 +105,7 @@ class DispatcherSimulator(Simulator):
         """
 
         case = working_cases[0]
-        if self.settings.debug: print(case.id)
+        # if self.settings.debug: print(case.id)
 
         # Checks if the previously dispatched ambulances are done. If so, mark as done.
         self.check_finished_ambulances(ambulances_in_motion, start_time)
@@ -136,10 +119,10 @@ class DispatcherSimulator(Simulator):
 
         # Select ambulance
         chosen_ambulance, ambulance_travel_time = \
-            self.algorithm.select_ambulance(self.dataset, ambulances, case)
+            self.algorithm.select_ambulance(ambulances, case, self.demands, self.traveltimes)
 
-        if self.settings.debug: print('chosen_ambulance:', chosen_ambulance)
-        if self.settings.debug: print('travel time duration:', ambulance_travel_time)
+        # if self.settings.debug: print('chosen_ambulance:', chosen_ambulance)
+        # if self.settings.debug: print('travel time duration:', ambulance_travel_time)
 
         # Dispatch an ambulance as returned by fine_available. It only works if deployed
         if chosen_ambulance is not None:
@@ -182,7 +165,7 @@ class DispatcherSimulator(Simulator):
 
         # Watch out, never remove from list while iterating through it
         for ambulance in ambulances_in_motion:
-            if (ambulance.end_time) <= current_datetime:  # TODO
+            if ambulance.end_time <= current_datetime:  # TODO
 
                 ambulances_in_motion.remove(ambulance)
 
@@ -190,7 +173,7 @@ class DispatcherSimulator(Simulator):
                 #                              current_datetime,
                 #                              f"{Style.RESET_ALL}")
 
-                ambulance.finish(current_datetime)
+                ambulance.finish()
 
     # def coverage(ambulances, times, bases, demands,  required_r1):
     #     # Mark all demands which has a base less than r1 traveltime away as covered. 
