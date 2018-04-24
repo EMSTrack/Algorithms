@@ -110,11 +110,6 @@ class DispatcherSimulator(Simulator):
         # Checks if the previously dispatched ambulances are done. If so, mark as done.
         self.check_finished_ambulances(ambulances_in_motion, start_time)
 
-        target_point = case.location
-        case_id = case.id
-
-        closest_location = None
-
         # TODO access amortized case->demand mappings
 
         # Select ambulance
