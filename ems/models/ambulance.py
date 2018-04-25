@@ -27,7 +27,7 @@ class Ambulance:
 
     def __eq__(self, other):
         """
-        Checks for equality between 
+        Checks for equality
         :return: True if objects are equal; else False
         """
 

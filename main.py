@@ -2,10 +2,10 @@ from ems.algorithms.algorithm import DispatcherAlgorithm
 from ems.data.tijuana import CSVTijuanaDataset
 from ems.models.ambulance import Ambulance
 from ems.settings import Settings
-
-# TODO read from settings file
 from ems.simulators.dispatcher_simulator import DispatcherSimulator
 
+
+# TODO read from settings file
 file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
 # file_path = '~/tmp/data-cruz-roja/'
 bases_filepath = file_path + 'bases.csv'
@@ -24,10 +24,10 @@ settings = Settings(debug=True,
 dataset = CSVTijuanaDataset(settings)
 
 # Initialize algorithm
-alg = DispatcherAlgorithm()
+alg = DispatcherAlgorithm(traveltimes=dataset.traveltimes)
 
 # Select bases
-chosen_bases = alg.init_bases(dataset.bases, dataset.traveltimes_df)
+chosen_bases = alg.init_bases(dataset.bases, dataset.traveltimes)
 
 # Generate ambulances
 ambulances = []
@@ -41,6 +41,5 @@ sim = DispatcherSimulator(ambulances=ambulances,
                           bases=chosen_bases,
                           cases=dataset.cases,
                           demands=dataset.demands,
-                          algorithm=alg,
-                          traveltimes=dataset.traveltimes)
+                          algorithm=alg)
 finished_cases = sim.run()

@@ -5,7 +5,7 @@ from datetime import timedelta
 import pandas as pd
 
 from ems.data.dataset import Dataset
-from ems.data.traveltimes import TravelTime
+from ems.data.traveltimes import TravelTimes
 from ems.models.base import Base
 from ems.models.case import Case
 from ems.models.demand import Demand
@@ -21,7 +21,7 @@ class CSVTijuanaDataset(Dataset):
         self.cases, self.cases_df = self.read_cases(settings.cases_file)
         self.bases, self.bases_df = self.read_bases(settings.bases_file)
         self.demands, self.demands_df = self.read_demands(settings.demands_file)
-        self.traveltimes, self.traveltimes_df = self.read_times(settings.traveltimes_file)
+        self.traveltimes = self.read_times(settings.traveltimes_file)
 
         # Maybe since this is a byproduct of some algorithmic processing done with kmeans
         # we can store it in the results object?
@@ -99,22 +99,6 @@ class CSVTijuanaDataset(Dataset):
         # Read travel times from CSV file into a pandas dataframe
         traveltimes_df = pd.read_csv(file)
 
-        # Traveltimes currently stored with keys as tuples
-        # e.g. traveltimes[(1, 2)]
-        # Obtains the travel time object from base 1 to demand point 2
-        traveltimes = {}
+        traveltimes = TravelTimes(traveltimes_df)
 
-        # Each row represents travel times from one base to all demand points
-        for base_index, row in traveltimes_df.iterrows():
-            for demand_index, time in enumerate(row):
-                # Convert the file number into a timedelta object
-                delta = timedelta(seconds=int(time))
-
-                traveltime = TravelTime(
-                    base_id=base_index,
-                    demand_id=demand_index,
-                    traveltime=delta)
-
-                traveltimes[(base_index, demand_index)] = traveltime
-
-        return traveltimes, traveltimes_df
+        return traveltimes

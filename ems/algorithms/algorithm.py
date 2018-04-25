@@ -7,13 +7,14 @@ import geopy
 import geopy.distance
 import numpy as np
 
+from ems.data.traveltimes import TravelTimes
 from ems.models.base import Base
 
 
 # The following functions define default algorithms for the DispatchAlgorithm class.
 
 
-def kmeans_init_bases(bases, traveltimes_df):
+def kmeans_init_bases(bases, traveltimes):
     # This function happens to require the original Cruz Roja dataset. It doesn't necessarily need to.
     # For example, we could randomly choose bases.
 
@@ -21,7 +22,7 @@ def kmeans_init_bases(bases, traveltimes_df):
 
     # times[demand point][base] if using the pandas way
     # Using pandas dataframe
-    chosen_base_indices, demands_covered = pick_starting_bases(traveltimes_df, 12, 600)
+    chosen_base_indices, demands_covered = pick_starting_bases(traveltimes, 12, 600)
 
     # Returns object list
     chosen_bases = [bases[index] for index in chosen_base_indices]
@@ -31,14 +32,13 @@ def kmeans_init_bases(bases, traveltimes_df):
 
 # Refactor TODO. I can't believe I just shoved this in and it worked.
 def pick_starting_bases(traveltimes, num_bases, required_traveltime):
-    traveltimes = copy.deepcopy(traveltimes)
-    traveltimes = np.array(traveltimes)
+    np_traveltimes = np.array(traveltimes.times)
     chosen_bases = []
     demands_covered = 0
 
     for _ in range(num_bases):
         # Make a True/False table of the times and then count how many covered.
-        covered = [[t < required_traveltime for t in row] for row in traveltimes]
+        covered = [[t < required_traveltime for t in row] for row in np_traveltimes]
         count_covered = [(index, covered[index].count(True)) for index in range(len(covered))]
         d = [('index', int), ('covered', int)]
         count_covered = np.array(count_covered, d)
@@ -51,7 +51,7 @@ def pick_starting_bases(traveltimes, num_bases, required_traveltime):
 
         # Delete the covered columns 
         delete_cols = [d for d in range(len(demand_coverage)) if demand_coverage[d]]
-        traveltimes = np.delete(traveltimes, delete_cols, axis=1)
+        np_traveltimes = np.delete(np_traveltimes, delete_cols, axis=1)
 
     return chosen_bases, demands_covered
 
@@ -112,12 +112,10 @@ def find_available_ambulance(ambulances, traveltimes, demand):
     """
     Find an available ambulance if possible.
     :param ambulances: of type dictionary.
+    :param traveltimes:
+    :param demand:
     :return: type int the ID of the ambulance, or None if all ambulances are busy.
     """
-    amb_id = -1
-    shortest_distance = 99999999999
-
-    total_ambulances = len(ambulances)
 
     ambulance_bases = [a.base if not a.deployed else None for a in ambulances]
     # print('Length of ambulance locations:', len(ambulance_locations))
@@ -142,10 +140,8 @@ def closest_time(list_type, traveltimes, demand):
     closest demand point given a GPS coordinate.
     The parameter names are bad and the code needs to be refactored, probably
     :param list_type:
-    :param bases:
-    :param demands:
     :param traveltimes:
-    :param target_point:
+    :param demand:
     :return:
     """
     shortest_difference = timedelta(hours=999999999)
@@ -162,7 +158,7 @@ def closest_time(list_type, traveltimes, demand):
     return position, shortest_difference
 
 
-def traveltime(times, base, demand):
+def traveltime(traveltimes, base, demand):
     """
     Takes the travel time mapping, starting base, and ending demand to find time.
     :param base:
@@ -173,7 +169,7 @@ def traveltime(times, base, demand):
     # base should be a base object
     # demand should be a demand object
 
-    return times[(base.id, demand.id)].traveltime
+    return traveltimes.get_time(base, demand)
 
 
 # This class is used by the sim to run.
@@ -183,12 +179,14 @@ class DispatcherAlgorithm():
     def __init__(self,
                  init_bases: callable = kmeans_init_bases,
                  init_ambulance_placements: callable = random_ambulance_placements,
-                 select_ambulance: callable = fastest_traveltime):
+                 select_ambulance: callable = fastest_traveltime,
+                 traveltimes: TravelTimes = None):
         self.init_bases = init_bases
         self.init_ambulance_placements = init_ambulance_placements
         self.select_ambulance = select_ambulance
+        self.traveltimes = traveltimes
 
-    # TODO -- maybe move assertions to tests.py
+    # TODO -- move assertions to tests.py
     def init_bases_typecheck(self, dataset):
         """ Runs init_bases, but makes sure the resulting dataset.chosen_bases is right type """
         self.init_bases(dataset)

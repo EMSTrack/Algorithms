@@ -14,16 +14,13 @@ from ems.simulators.simulator import Simulator
 
 class DispatcherSimulator(Simulator):
 
-    # Traveltimes may be unique to this simulator?
     def __init__(self,
                  ambulances: List[Ambulance],
                  bases: List[Base],
                  cases: List[Case],
                  demands: List[Demand],
-                 algorithm: DispatcherAlgorithm,
-                 traveltimes):
+                 algorithm: DispatcherAlgorithm):
 
-        self.traveltimes = traveltimes
         super(DispatcherSimulator, self).__init__(ambulances, bases, cases, demands, algorithm)
 
     def run(self):
@@ -114,7 +111,7 @@ class DispatcherSimulator(Simulator):
 
         # Select ambulance
         chosen_ambulance, ambulance_travel_time = \
-            self.algorithm.select_ambulance(ambulances, case, self.demands, self.traveltimes)
+            self.algorithm.select_ambulance(ambulances, case, self.demands, self.algorithm.traveltimes)
 
         # if self.settings.debug: print('chosen_ambulance:', chosen_ambulance)
         # if self.settings.debug: print('travel time duration:', ambulance_travel_time)
