@@ -6,9 +6,6 @@ import pandas as pd
 
 class TravelTimes:
 
-
-class TravelTimeSet:
-
     def __init__(self, times: pd.DataFrame):
         """
 
