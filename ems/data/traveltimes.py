@@ -2,6 +2,7 @@ from datetime import timedelta
 
 import pandas as pd
 
+
 # Wrapper class around a travel times data frame
 
 class TravelTimes:
