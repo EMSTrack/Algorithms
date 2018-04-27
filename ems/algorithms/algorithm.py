@@ -185,22 +185,3 @@ class DispatcherAlgorithm():
         self.init_ambulance_placements = init_ambulance_placements
         self.select_ambulance = select_ambulance
         self.traveltimes = traveltimes
-
-    # TODO -- move assertions to tests.py
-    def init_bases_typecheck(self, dataset):
-        """ Runs init_bases, but makes sure the resulting dataset.chosen_bases is right type """
-        self.init_bases(dataset)
-        assert isinstance(dataset.chosen_bases, list)
-        for element in dataset.chosen_bases:
-            assert isinstance(element, Base)
-
-    # TODO
-    def init_ambulance_placements_typecheck(self, dataset):
-        """ Runs init_ambulance_placements, but makes sure the resulting ___ is right type or state"""
-        pass
-
-        # TODO
-
-    def select_ambulance_typecheck(self, dataset):
-        """ Runs select_ambulance, but makes sure the resulting ___ is right type or state"""
-        pass

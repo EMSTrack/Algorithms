@@ -1,5 +1,6 @@
 from ems.algorithms.algorithm import DispatcherAlgorithm
 from ems.data.tijuana import CSVTijuanaDataset
+from ems.models.base import Base
 from ems.settings import Settings
 
 # Hans Yuan
@@ -68,12 +69,34 @@ def printData(data):
     return
 
 
+# TODO -- move assertions to tests.py
+def init_bases_typecheck(algorithm, dataset):
+    """ Runs init_bases, but makes sure the resulting dataset.chosen_bases is right type """
+    algorithm.init_bases(dataset)
+    assert isinstance(dataset.chosen_bases, list)
+    for element in dataset.chosen_bases:
+        assert isinstance(element, Base)
+
+
+# TODO
+def init_ambulance_placements_typecheck(algorithm, dataset):
+    """ Runs init_ambulance_placements, but makes sure the resulting ___ is right type or state"""
+    pass
+
+    # TODO
+
+
+def select_ambulance_typecheck(algorithm, dataset):
+    """ Runs select_ambulance, but makes sure the resulting ___ is right type or state"""
+    pass
+
+
 def testAlgorithms(data, settings):
     da = DispatcherAlgorithm()
 
-    da.init_bases_typecheck(data)
-    # da.init_ambulance_placements()
-    # da.select_ambulance(data)
+    init_bases_typecheck(da, data)
+    init_ambulance_placements_typecheck(da, data)
+    select_ambulance_typecheck(da, data)
 
 
 def main():
