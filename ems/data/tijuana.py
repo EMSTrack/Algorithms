@@ -1,7 +1,5 @@
 # Model the data by their types.
 
-from datetime import timedelta
-
 import pandas as pd
 
 from ems.data.dataset import Dataset

@@ -48,7 +48,7 @@ class Ambulance:
         self.location = None
         self.deployed_time = None
 
-    def deploy(self, datetime, destination, ambulance_delta):
+    def deploy(self, datetime, destination, end_time):
         """
         Deploys the ambulance by setting the deployed state, start times, end time, and location.
         :param datetime:
@@ -61,7 +61,7 @@ class Ambulance:
 
         self.deployed = True
         self.deployed_time = datetime
-        self.end_time = datetime + ambulance_delta
+        self.end_time = end_time
         self.location = destination
 
         if not datetime:

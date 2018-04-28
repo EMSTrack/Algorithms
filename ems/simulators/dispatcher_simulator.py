@@ -26,7 +26,7 @@ class DispatcherSimulator(Simulator):
 
         self.finished_cases = []
         self.working_cases = deepcopy(cases)
-        self.current_time = -1
+        self.current_time = cases[0].datetime if len(cases) > 0 else -1
         super(DispatcherSimulator, self).__init__(ambulances, bases, cases, demands, algorithm)
 
     def run(self):
@@ -37,6 +37,7 @@ class DispatcherSimulator(Simulator):
         while self.working_cases or ambulances_in_motion:
 
             print()
+            print("Current time: {}".format(self.current_time))
 
             # If no more cases to start, finish all cases that are currently being handled by
             # the ambulances
@@ -58,10 +59,10 @@ class DispatcherSimulator(Simulator):
                 next_case = self.working_cases[0]
 
                 # Set the current time based on the start time of the first case
-                current_time = next_case.datetime
+                self.current_time = next_case.datetime
 
                 # Deploy an ambulance to handle the current case
-                self.start_case(next_case, ambulances_in_motion, current_time)
+                self.start_case(next_case, ambulances_in_motion, self.current_time)
 
                 # TODO If the deployment was successful, then recalculate the city coverage
 
@@ -69,27 +70,41 @@ class DispatcherSimulator(Simulator):
 
                 # Sort all ambulances by their end times
                 ambulances_in_motion = sorted(ambulances_in_motion, key=lambda k: k.end_time)
-                ambulance_release_time = ambulances_in_motion[0].end_time
 
                 # Retrieve next case
                 next_case = self.working_cases[0]
                 case_start_time = next_case.datetime
-                delay = next_case.delayed
 
-                print("Soonest release time for an ambulance: {}".format(ambulance_release_time))
-                print("Case start time: {}".format(case_start_time))
-                print("Current delay on this case: {}".format(delay))
+                # If all ambulances are taken - must fast forward time until ambulances gets released
+                if len(self.ambulances) == len(ambulances_in_motion):
 
-                # If ???????
-                if case_start_time + delay < ambulance_release_time:
-                    # Deploy an ambulance to handle current case
-                    self.start_case(next_case, ambulances_in_motion, case_start_time + delay)
+                    print("No available ambulances")
 
-                    # TODO If the deployment was successful, then recalculate the city coverage
+                    next_available_amb = ambulances_in_motion[0]
+                    ambulance_release_time = next_available_amb.end_time
 
+                    print("Soonest release time for an ambulance: Ambulance {} at {}".format(next_available_amb.id,
+                                                                                             ambulance_release_time))
+
+                    # Fast forward current time to be when the next ambulances gets released
+                    self.current_time = ambulance_release_time
+
+                    # Finish the ambulance
+                    ambulances_in_motion = self.finish_ambulances(ambulances_in_motion, self.current_time)
+
+                # Can't start case because it has not happened yet
+                elif case_start_time > self.current_time:
+
+                    # Fast forward current time to be when the next case starts
+                    self.current_time = case_start_time
+
+                    # Finish ambulances whose trips have ended during this fast forward
+                    ambulances_in_motion = self.finish_ambulances(ambulances_in_motion, self.current_time)
+
+                # Can start the next case
                 else:
-                    # Free ambulances
-                    self.check_finished_ambulances(ambulances_in_motion, ambulance_release_time)
+                    # Start the next case at current time
+                    self.start_case(next_case, ambulances_in_motion, self.current_time)
 
                 # Compute coverage
                 # self.coverage (ambulances, self.traveltimes, self.bases, self.demands, required_r1)
@@ -110,48 +125,58 @@ class DispatcherSimulator(Simulator):
         (This may not actually be necessary since I don't use this boolean in the preceding fn)
         """
 
-        print(case.id)
-
-        # Checks if the previously dispatched ambulances are done. If so, mark as done.
-        self.check_finished_ambulances(ambulances_in_motion, start_time)
+        print("Starting case {} which was recorded at {}".format(case.id, case.datetime))
 
         # TODO access amortized case->demand mappings
 
-        # Select ambulance
+        # Select ambulance to dispatch
         chosen_ambulance, ambulance_travel_time = \
             self.algorithm.select_ambulance(self.ambulances, case, self.demands)
 
-        print('chosen_ambulance:', chosen_ambulance)
-        print('travel time duration:', ambulance_travel_time)
-
-        # Dispatch an ambulance as returned by fine_available. It only works if deployed
+        # Dispatch an ambulance as returned by find_available. It only works if deployed
         if chosen_ambulance is not None:
-            # TODO I assume that each case will take 2x travel time + 20 minutes
-            case_time = ambulance_travel_time * 2 + datetime.timedelta(minutes=20)
 
+            # Obtain ambulance
             ambulance = self.ambulances[chosen_ambulance]
 
-            # TODO -- fill in destination?
-            print(f"{Fore.GREEN}Deploying ambulance", ambulance.id, 'at time', case_time, f'{Style.RESET_ALL}')
+            print('Ambulance {} chosen with travel time duration {}'.format(ambulance.id,
+                                                                            ambulance_travel_time))
 
+            # TODO I assume that each case will take 2x travel time + 20 minutes
+            # Compute duration of the trip
+            duration = ambulance_travel_time * 2 + datetime.timedelta(minutes=20)
+
+            # Compute the end timestamp of the trip
+            end_time = start_time + duration
+
+            # TODO -- fill in destination?
             # Deploy ambulance
-            ambulance.deploy(start_time, None, case_time)
+            ambulance.deploy(start_time, None, end_time)
             ambulances_in_motion.append(ambulance)
+
+            # Set case start + finish timestamps and the case delay
+            case.start_time = start_time
+            case.finish_time = end_time
+            case.delay = case.start_time - case.datetime
 
             # Add case to finished cases and remove from working cases
             self.finished_cases.append(case)
             self.working_cases.pop(0)
 
+            print(f"{Fore.GREEN}Deploying ambulance", ambulance.id, 'at time', start_time, f'{Style.RESET_ALL}')
+            print("Delay on this case: {}".format(case.delay))
+
             return True
 
         else:
-            print(f"{Fore.RED}***** THIS CASE HAS BEEN DELAYED BY ONE MINUTE. *****\n{Style.RESET_ALL}")
+            # print(f"{Fore.RED}***** THIS CASE HAS BEEN DELAYED BY ONE MINUTE. *****\n{Style.RESET_ALL}")
+            #
+            # # Delay the case by a minute
+            # case.delayed = datetime.timedelta(minutes=1, seconds=case.delayed.total_seconds())
+            # return False
+            print("No ambulance chosen - impossible situation")
 
-            # Delay the case by a minute
-            case.delayed = datetime.timedelta(minutes=1, seconds=case.delayed.total_seconds())
-            return False
-
-    def check_finished_ambulances(self, ambulances_in_motion, current_datetime):
+    def finish_ambulances(self, ambulances_in_motion, current_datetime):
         """
         Given the list of ambulances in motion, check the current time.
         Mark ambulances that have finished as non-deployed.
@@ -163,15 +188,16 @@ class DispatcherSimulator(Simulator):
 
         print(f"Busy ambulances:", sorted([amb.id for amb in ambulances_in_motion]), f"{Style.RESET_ALL}")
 
-        # Watch out, never remove from list while iterating through it
-        for ambulance in ambulances_in_motion:
-            if ambulance.end_time <= current_datetime:  # TODO
+        new_ambulance_list = []
+        for amb in ambulances_in_motion:
+            if amb.end_time <= current_datetime:
+                amb.finish()
+                print(f'{Fore.CYAN}Retiring ambulance ', amb.id, 'at time', current_datetime,
+                      f"{Style.RESET_ALL}")
+            else:
+                new_ambulance_list.append(amb)
 
-                ambulances_in_motion.remove(ambulance)
-
-                print(f'{Fore.CYAN}Retiring ambulance ', ambulance.id, 'at time', current_datetime, f"{Style.RESET_ALL}")
-
-                ambulance.finish()
+        return new_ambulance_list
 
     # def coverage(ambulances, times, bases, demands,  required_r1):
     #     # Mark all demands which has a base less than r1 traveltime away as covered. 
