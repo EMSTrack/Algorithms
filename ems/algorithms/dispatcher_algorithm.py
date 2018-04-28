@@ -1,12 +1,15 @@
 # The following functions define default algorithms for the DispatchAlgorithm class.
 from datetime import timedelta
+from typing import List
 
 import geopy
 import geopy.distance
 
 from ems.algorithms.algorithm import Algorithm
 from ems.data.traveltimes import TravelTimes
+from ems.models.ambulance import Ambulance
 from ems.models.case import Case
+from ems.models.demand import Demand
 
 
 # An implementation of a "fastest travel time" algorithm from a base to
@@ -17,9 +20,9 @@ class DispatcherAlgorithm(Algorithm):
         self.traveltimes = traveltimes
 
     def select_ambulance(self,
-                         ambulances: list,
+                         ambulances: List[Ambulance],
                          case: Case,
-                         demands: list):
+                         demands: List[Demand]):
 
         # Find the closest demand point to the given case
         closest_demand = self.closest_distance(demands, case.location)
