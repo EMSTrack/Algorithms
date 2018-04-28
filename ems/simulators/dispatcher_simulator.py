@@ -4,6 +4,9 @@ import datetime
 from copy import deepcopy
 from typing import List
 
+from colorama import Fore
+from colorama import Style
+
 from ems.algorithms.algorithm import Algorithm
 from ems.models.ambulance import Ambulance
 from ems.models.base import Base
@@ -21,26 +24,23 @@ class DispatcherSimulator(Simulator):
                  demands: List[Demand],
                  algorithm: Algorithm):
 
+        self.finished_cases = []
+        self.working_cases = deepcopy(cases)
+        self.current_time = -1
         super(DispatcherSimulator, self).__init__(ambulances, bases, cases, demands, algorithm)
 
     def run(self):
 
-        # initialize time
-        time = 0
-
-        working_cases = deepcopy(self.cases)
-        finished_cases = []
         ambulances_in_motion = []
 
         # TODO. This may become a while-loop, "while there are still start times and end times..."
-        while working_cases or ambulances_in_motion:
+        while self.working_cases or ambulances_in_motion:
 
-            # if self.settings.debug: print()
+            print()
 
-            # What is the next timestep?
-            # If no more cases to start, then there should only be ambulances left.
-
-            if not working_cases:
+            # If no more cases to start, finish all cases that are currently being handled by
+            # the ambulances
+            if not self.working_cases:
                 for amb in ambulances_in_motion:
                     amb.finish()
 
@@ -49,35 +49,46 @@ class DispatcherSimulator(Simulator):
 
                 # TODO -- save amortized file
 
-                return finished_cases
+                return self.finished_cases
 
-            elif not ambulances_in_motion and working_cases:
-                start_time = working_cases[0].datetime
+            # Start the first case
+            elif not ambulances_in_motion and self.working_cases:
 
-                # Deploy
-                self.start_case(finished_cases, working_cases, self.ambulances, ambulances_in_motion, start_time)
+                # Retrieve first case
+                next_case = self.working_cases[0]
+
+                # Set the current time based on the start time of the first case
+                current_time = next_case.datetime
+
+                # Deploy an ambulance to handle the current case
+                self.start_case(next_case, ambulances_in_motion, current_time)
 
                 # TODO If the deployment was successful, then recalculate the city coverage
 
-            elif ambulances_in_motion and working_cases:
+            elif ambulances_in_motion and self.working_cases:
 
-                # Compare the earlier case of the two
+                # Sort all ambulances by their end times
                 ambulances_in_motion = sorted(ambulances_in_motion, key=lambda k: k.end_time)
                 ambulance_release_time = ambulances_in_motion[0].end_time
-                case_start_time = working_cases[0].datetime
-                delta = working_cases[0].delayed
 
-                # print ("ambulance_time", ambulance_release_time)
-                # print ("case_time     ", case_start_time + delta)
+                # Retrieve next case
+                next_case = self.working_cases[0]
+                case_start_time = next_case.datetime
+                delay = next_case.delayed
 
-                if case_start_time + delta < ambulance_release_time:
-                    # Deploy
-                    self.start_case(finished_cases, working_cases, self.ambulances, ambulances_in_motion,
-                                    case_start_time + delta)
+                print("Soonest release time for an ambulance: {}".format(ambulance_release_time))
+                print("Case start time: {}".format(case_start_time))
+                print("Current delay on this case: {}".format(delay))
+
+                # If ???????
+                if case_start_time + delay < ambulance_release_time:
+                    # Deploy an ambulance to handle current case
+                    self.start_case(next_case, ambulances_in_motion, case_start_time + delay)
 
                     # TODO If the deployment was successful, then recalculate the city coverage
 
                 else:
+                    # Free ambulances
                     self.check_finished_ambulances(ambulances_in_motion, ambulance_release_time)
 
                 # Compute coverage
@@ -87,22 +98,19 @@ class DispatcherSimulator(Simulator):
                 raise Exception("This shouldn't happen... ")
 
         # TODO return "results" object with more potential information
-        return finished_cases
+        return self.finished_cases
 
-    def start_case(self, finished_cases, working_cases, ambulances, ambulances_in_motion, start_time):
+    def start_case(self, case, ambulances_in_motion, start_time):
         """
         Actual code to attempt running the case.
-        :param finished_cases:
-        :param working_cases:
-        :param ambulances:
+        :param case:
         :param ambulances_in_motion:
         :param start_time:
         :return: True if case starts successfully, false if no ambulances available.
         (This may not actually be necessary since I don't use this boolean in the preceding fn)
         """
 
-        case = working_cases[0]
-        # if self.settings.debug: print(case.id)
+        print(case.id)
 
         # Checks if the previously dispatched ambulances are done. If so, mark as done.
         self.check_finished_ambulances(ambulances_in_motion, start_time)
@@ -111,35 +119,36 @@ class DispatcherSimulator(Simulator):
 
         # Select ambulance
         chosen_ambulance, ambulance_travel_time = \
-            self.algorithm.select_ambulance(ambulances, case, self.demands)
+            self.algorithm.select_ambulance(self.ambulances, case, self.demands)
 
-        # if self.settings.debug: print('chosen_ambulance:', chosen_ambulance)
-        # if self.settings.debug: print('travel time duration:', ambulance_travel_time)
+        print('chosen_ambulance:', chosen_ambulance)
+        print('travel time duration:', ambulance_travel_time)
 
         # Dispatch an ambulance as returned by fine_available. It only works if deployed
         if chosen_ambulance is not None:
             # TODO I assume that each case will take 2x travel time + 20 minutes
             case_time = ambulance_travel_time * 2 + datetime.timedelta(minutes=20)
 
-            ambulance = ambulances[chosen_ambulance]
+            ambulance = self.ambulances[chosen_ambulance]
 
             # TODO -- fill in destination?
-            #if self.settings.debug: print(f"{Fore.GREEN}Deploying ambulance", ambulance.id, 'at time', case_time,
-            #                              f'{Style.RESET_ALL}')
+            print(f"{Fore.GREEN}Deploying ambulance", ambulance.id, 'at time', case_time, f'{Style.RESET_ALL}')
 
+            # Deploy ambulance
             ambulance.deploy(start_time, None, case_time)
             ambulances_in_motion.append(ambulance)
 
-            finished_cases.append(case)
-            working_cases.remove(case)
+            # Add case to finished cases and remove from working cases
+            self.finished_cases.append(case)
+            self.working_cases.pop(0)
 
             return True
 
         else:
-            #if self.settings.debug: print(
-            #    f"{Fore.RED}***** THIS CASE HAS BEEN DELAYED BY ONE MINUTE. *****\n{Style.RESET_ALL}")
+            print(f"{Fore.RED}***** THIS CASE HAS BEEN DELAYED BY ONE MINUTE. *****\n{Style.RESET_ALL}")
+
+            # Delay the case by a minute
             case.delayed = datetime.timedelta(minutes=1, seconds=case.delayed.total_seconds())
-            # working_cases.insert(0, case)
             return False
 
     def check_finished_ambulances(self, ambulances_in_motion, current_datetime):
@@ -152,8 +161,7 @@ class DispatcherSimulator(Simulator):
         :return: None. It just changes state.
         """
 
-        #if self.settings.debug: print(f"Busy ambulances:", sorted([amb.id for amb in ambulances_in_motion]),
-        #                              f"{Style.RESET_ALL}")
+        print(f"Busy ambulances:", sorted([amb.id for amb in ambulances_in_motion]), f"{Style.RESET_ALL}")
 
         # Watch out, never remove from list while iterating through it
         for ambulance in ambulances_in_motion:
@@ -161,9 +169,7 @@ class DispatcherSimulator(Simulator):
 
                 ambulances_in_motion.remove(ambulance)
 
-                #if self.settings.debug: print(f'{Fore.CYAN}Retiring ambulance ', ambulance.id, 'at time',
-                #                              current_datetime,
-                #                              f"{Style.RESET_ALL}")
+                print(f'{Fore.CYAN}Retiring ambulance ', ambulance.id, 'at time', current_datetime, f"{Style.RESET_ALL}")
 
                 ambulance.finish()
 
