@@ -2,11 +2,12 @@
 
 from typing import List
 
-from ems.algorithms.algorithm import DispatcherAlgorithm
+from ems.algorithms.algorithm import Algorithm
 from ems.models.ambulance import Ambulance
 from ems.models.base import Base
 from ems.models.case import Case
 from ems.models.demand import Demand
+
 
 class Simulator:
 
@@ -15,7 +16,7 @@ class Simulator:
                  bases: List[Base],
                  cases: List[Case],
                  demands: List[Demand],
-                 algorithm: DispatcherAlgorithm):
+                 algorithm: Algorithm):
 
         self.ambulances = ambulances
         self.bases = bases

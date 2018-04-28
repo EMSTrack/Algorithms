@@ -1,4 +1,5 @@
-from ems.algorithms.algorithm import DispatcherAlgorithm
+from ems.algorithms.dispatcher_algorithm import DispatcherAlgorithm
+from ems.data.filters import kmeans_select_bases
 from ems.data.tijuana import CSVTijuanaDataset
 from ems.models.ambulance import Ambulance
 from ems.settings import Settings
@@ -27,9 +28,9 @@ dataset = CSVTijuanaDataset(settings)
 alg = DispatcherAlgorithm(traveltimes=dataset.traveltimes)
 
 # Select bases
-chosen_bases = alg.init_bases(dataset.bases, dataset.traveltimes)
+chosen_bases = kmeans_select_bases(dataset.bases, dataset.traveltimes)
 
-# Generate ambulances
+# Generate ambulances - random base placement (may want to abstract into function)
 ambulances = []
 for index in range(settings.num_ambulances):
     ambulance = Ambulance(id=index,

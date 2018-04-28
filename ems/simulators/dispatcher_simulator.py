@@ -4,7 +4,7 @@ import datetime
 from copy import deepcopy
 from typing import List
 
-from ems.algorithms.algorithm import DispatcherAlgorithm
+from ems.algorithms.algorithm import Algorithm
 from ems.models.ambulance import Ambulance
 from ems.models.base import Base
 from ems.models.case import Case
@@ -19,7 +19,7 @@ class DispatcherSimulator(Simulator):
                  bases: List[Base],
                  cases: List[Case],
                  demands: List[Demand],
-                 algorithm: DispatcherAlgorithm):
+                 algorithm: Algorithm):
 
         super(DispatcherSimulator, self).__init__(ambulances, bases, cases, demands, algorithm)
 
@@ -111,7 +111,7 @@ class DispatcherSimulator(Simulator):
 
         # Select ambulance
         chosen_ambulance, ambulance_travel_time = \
-            self.algorithm.select_ambulance(ambulances, case, self.demands, self.algorithm.traveltimes)
+            self.algorithm.select_ambulance(ambulances, case, self.demands)
 
         # if self.settings.debug: print('chosen_ambulance:', chosen_ambulance)
         # if self.settings.debug: print('travel time duration:', ambulance_travel_time)
