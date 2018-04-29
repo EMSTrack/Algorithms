@@ -45,6 +45,9 @@ class CSVTijuanaDataset(Dataset):
         # TODO -- SLOW OPERATION - find a better way to parse date and time to datetime object
         cases_df["datetime"] = pd.to_datetime(cases_df.date + ' ' + cases_df.time)
 
+        # Sorts all cases by their datetimes (REQUIRED BY SIMULATOR)
+        cases_df = cases_df.sort_values('datetime', ascending=True)
+
         # Generate list of models from dataframe
         cases = []
         for index, row in cases_df.iterrows():

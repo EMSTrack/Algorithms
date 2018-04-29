@@ -174,7 +174,7 @@ class DispatcherSimulator(Simulator):
             # # Delay the case by a minute
             # case.delayed = datetime.timedelta(minutes=1, seconds=case.delayed.total_seconds())
             # return False
-            print("No ambulance chosen - impossible situation")
+            print("Algorithm failed to select an ambulance")
 
     def finish_ambulances(self, ambulances_in_motion, current_datetime):
         """
