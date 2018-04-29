@@ -1,6 +1,7 @@
 # Model the data by their types.
 
 import pandas as pd
+from geopy import Point
 
 from ems.data.dataset import Dataset
 from ems.data.traveltimes import TravelTimes
@@ -53,8 +54,7 @@ class CSVTijuanaDataset(Dataset):
         for index, row in cases_df.iterrows():
             case = Case(
                 id=row["id"],
-                x=row["lat"],
-                y=row["long"],
+                point=Point(row["lat"], row["long"]),
                 dt=row["datetime"],
                 weekday=row["weekday"],
                 priority=row["priority"])
@@ -73,8 +73,8 @@ class CSVTijuanaDataset(Dataset):
         for index, row in bases_df.iterrows():
             base = Base(
                 id=index,
-                x=row["lat"],
-                y=row["long"])
+                point=Point(row["lat"], row["long"])
+            )
             bases.append(base)
 
         return bases, bases_df
@@ -90,8 +90,7 @@ class CSVTijuanaDataset(Dataset):
         for index, row in demands_df.iterrows():
             demand = Demand(
                 id=index,
-                x=row["lat"],
-                y=row["long"])
+                point=Point(row["lat"], row["long"])
             demands.append(demand)
 
         return demands, demands_df
