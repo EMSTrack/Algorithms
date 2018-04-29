@@ -9,7 +9,7 @@ from ems.models.base import Base
 from ems.models.case import Case
 from ems.models.demand import Demand
 from ems.settings import Settings
-from ems.utils import parse_headered_csv, parse_unheadered_csv
+from ems.utils import parse_headered_csv, parse_unheadered_csv, closest_distance
 
 
 class CSVTijuanaDataset(Dataset):
@@ -17,26 +17,20 @@ class CSVTijuanaDataset(Dataset):
     def __init__(self, settings: Settings):
 
         # Read files into pandas dataframes and lists of objects
-        self.cases, self.cases_df = self.read_cases(settings.cases_file)
-        self.bases, self.bases_df = self.read_bases(settings.bases_file)
         self.demands, self.demands_df = self.read_demands(settings.demands_file)
+        self.bases, self.bases_df = self.read_bases(settings.bases_file)
+        self.cases, self.cases_df = self.read_cases(settings.cases_file)
         self.traveltimes = self.read_times(settings.traveltimes_file)
 
-        # Maybe since this is a byproduct of some algorithmic processing done with kmeans
-        # we can store it in the results object?
-        self.chosen_bases = []
-
-    # Implementation
-    def get_bases(self):
-        return self.bases
-
-    def get_cases(self):
-        return self.cases
-
-    def get_demands(self):
-        return self.demands
+        # Pre-compute case -> demand point mappings
+        self.set_closest_demand_points(self.cases, self.demands)
 
     # Helper functions
+    def set_closest_demand_points(self, cases, demands):
+        for case in cases:
+            closest_demand = closest_distance(demands, case.location)
+            case.closest_demand = closest_demand
+
     def read_cases(self, file):
         # Read cases from CSV into a pandas dataframe
         case_headers = ["id", "lat", "long", "date", "weekday", "time", "priority"]
@@ -103,3 +97,13 @@ class CSVTijuanaDataset(Dataset):
         traveltimes = TravelTimes(traveltimes_df)
 
         return traveltimes
+
+    # Implementation
+    def get_bases(self):
+        return self.bases
+
+    def get_cases(self):
+        return self.cases
+
+    def get_demands(self):
+        return self.demands

@@ -48,8 +48,6 @@ class DispatcherSimulator(Simulator):
                 # TODO Find the city coverage. Is it useful to check the coverage within the loop? This would be
                 # TODO the only place where such a granular measurement is present.
 
-                # TODO -- save amortized file
-
                 return self.finished_cases
 
             else:
@@ -109,8 +107,6 @@ class DispatcherSimulator(Simulator):
 
         print("Starting case {} which was recorded at {}".format(case.id, case.datetime))
 
-        # TODO access amortized case->demand mappings
-
         # Select ambulance to dispatch
         chosen_ambulance, ambulance_travel_time = \
             self.algorithm.select_ambulance(self.ambulances, case, self.demands)
@@ -124,7 +120,7 @@ class DispatcherSimulator(Simulator):
             print('Ambulance {} chosen with travel time duration {}'.format(ambulance.id,
                                                                             ambulance_travel_time))
 
-            # TODO I assume that each case will take 2x travel time + 20 minutes
+            # TODO Currently assume that each case will take 2x travel time + 20 minutes
             # Compute duration of the trip
             duration = ambulance_travel_time * 2 + datetime.timedelta(minutes=20)
 

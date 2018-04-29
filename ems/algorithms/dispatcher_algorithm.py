@@ -2,9 +2,6 @@
 from datetime import timedelta
 from typing import List
 
-import geopy
-import geopy.distance
-
 from ems.algorithms.algorithm import Algorithm
 from ems.data.traveltimes import TravelTimes
 from ems.models.ambulance import Ambulance
@@ -14,6 +11,9 @@ from ems.models.demand import Demand
 
 # An implementation of a "fastest travel time" algorithm from a base to
 # the demand point closest to a case
+from ems.utils import closest_distance
+
+
 class DispatcherAlgorithm(Algorithm):
 
     def __init__(self, traveltimes: TravelTimes = None):
@@ -25,38 +25,14 @@ class DispatcherAlgorithm(Algorithm):
                          demands: List[Demand]):
 
         # Find the closest demand point to the given case
-        closest_demand = self.closest_distance(demands, case.location)
+        if case.closest_demand is None:
+            case.closest_demand = closest_distance(demands, case.location)
 
         # Select an ambulance to attend to the given case and obtain the its duration of travel
         chosen_ambulance, ambulance_travel_time = self.find_available_ambulance(
-            ambulances, self.traveltimes, closest_demand)
+            ambulances, self.traveltimes, case.closest_demand)
 
         return chosen_ambulance, ambulance_travel_time
-
-    def closest_distance(self, list_type, target_point):
-        """
-        Finds the closest point in the corresponding generic list.
-        For example, find the closest base given a GPS location.
-        :param list_type:
-        :param target_point:
-        :return: the position in that list
-        """
-        shortest_difference = 999999999
-        position = -1
-
-        for index in range(len(list_type)):
-            # print(list_type)
-            if list_type[index] is not None:
-
-                difference = geopy.distance.vincenty(target_point, list_type[index].location).km
-                if shortest_difference > difference:
-                    shortest_difference = difference
-                    position = index
-                    # print (type(difference), shortest_difference)
-                    if shortest_difference < 0.5:
-                        return list_type[position]
-
-        return list_type[position]
 
     def find_available_ambulance(self, ambulances, traveltimes, demand):
         """

@@ -1,6 +1,34 @@
 # Maybe move back into dataset file;
 
+import geopy
+import geopy.distance
 import pandas as pd
+
+
+def closest_distance(list_type, target_point):
+    """
+    Finds the closest point in the corresponding generic list.
+    For example, find the closest base given a GPS location.
+    :param list_type:
+    :param target_point:
+    :return: the position in that list
+    """
+    shortest_difference = 999999999
+    position = -1
+
+    for index in range(len(list_type)):
+        # print(list_type)
+        if list_type[index] is not None:
+
+            difference = geopy.distance.vincenty(target_point, list_type[index].location).km
+            if shortest_difference > difference:
+                shortest_difference = difference
+                position = index
+                # print (type(difference), shortest_difference)
+                if shortest_difference < 0.5:
+                    return list_type[position]
+
+    return list_type[position]
 
 
 def parse_headered_csv (file: str, desired_keys: list):
