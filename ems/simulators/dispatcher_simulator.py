@@ -75,7 +75,7 @@ class DispatcherSimulator(Simulator):
                 next_case = self.working_cases[0]
                 case_start_time = next_case.datetime
 
-                # If all ambulances are taken - must fast forward time until ambulances gets released
+                # If all ambulances are taken - must fast forward time until next ambulance is released
                 if len(self.ambulances) == len(ambulances_in_motion):
 
                     print("No available ambulances")
