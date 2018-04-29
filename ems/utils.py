@@ -2,6 +2,7 @@
 
 import geopy
 import geopy.distance
+import numpy as np
 import pandas as pd
 
 
@@ -13,22 +14,28 @@ def closest_distance(list_type, target_point):
     :param target_point:
     :return: the position in that list
     """
-    shortest_difference = 999999999
-    position = -1
 
-    for index in range(len(list_type)):
-        # print(list_type)
-        if list_type[index] is not None:
+    # Compute differences between target point and each element's location in list type
+    differences = [geopy.distance.vincenty(target_point, element.location).km for element in list_type]
 
-            difference = geopy.distance.vincenty(target_point, list_type[index].location).km
-            if shortest_difference > difference:
-                shortest_difference = difference
-                position = index
-                # print (type(difference), shortest_difference)
-                if shortest_difference < 0.5:
-                    return list_type[position]
+    # Find the index of the minimum difference and return the element at that index
+    min_index = np.argmin(differences)
+    return list_type[min_index]
 
-    return list_type[position]
+
+    # for index in range(len(list_type)):
+    #     # print(list_type)
+    #     if list_type[index] is not None:
+    #
+    #         difference = geopy.distance.vincenty(target_point, list_type[index].location).km
+    #         if shortest_difference > difference:
+    #             shortest_difference = difference
+    #             position = index
+    #             # print (type(difference), shortest_difference)
+    #             if shortest_difference < 0.5:
+    #                 return list_type[position]
+
+    # return list_type[position]
 
 
 def parse_headered_csv (file: str, desired_keys: list):
