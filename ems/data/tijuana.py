@@ -91,6 +91,7 @@ class CSVTijuanaDataset(Dataset):
             demand = Demand(
                 id=index,
                 point=Point(row["lat"], row["long"])
+            )
             demands.append(demand)
 
         return demands, demands_df
