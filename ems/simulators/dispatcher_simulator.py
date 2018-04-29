@@ -149,6 +149,8 @@ class DispatcherSimulator(Simulator):
             # Compute the end timestamp of the trip
             end_time = start_time + duration
 
+            print('Final computed case duration: {}'.format(duration))
+
             # TODO -- fill in destination?
             # Deploy ambulance
             ambulance.deploy(start_time, None, end_time)
@@ -169,12 +171,7 @@ class DispatcherSimulator(Simulator):
             return True
 
         else:
-            # print(f"{Fore.RED}***** THIS CASE HAS BEEN DELAYED BY ONE MINUTE. *****\n{Style.RESET_ALL}")
-            #
-            # # Delay the case by a minute
-            # case.delayed = datetime.timedelta(minutes=1, seconds=case.delayed.total_seconds())
-            # return False
-            print("Algorithm failed to select an ambulance")
+            print("ERROR: Algorithm failed to select an ambulance")
 
     def finish_ambulances(self, ambulances_in_motion, current_datetime):
         """
@@ -192,7 +189,7 @@ class DispatcherSimulator(Simulator):
         for amb in ambulances_in_motion:
             if amb.end_time <= current_datetime:
                 amb.finish()
-                print(f'{Fore.CYAN}Retiring ambulance ', amb.id, 'at time', current_datetime,
+                print(f'{Fore.CYAN}Retiring ambulance ', amb.id, 'at time', amb.end_time,
                       f"{Style.RESET_ALL}")
             else:
                 new_ambulance_list.append(amb)
