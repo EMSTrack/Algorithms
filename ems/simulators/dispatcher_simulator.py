@@ -52,21 +52,7 @@ class DispatcherSimulator(Simulator):
 
                 return self.finished_cases
 
-            # Start the first case
-            elif not ambulances_in_motion and self.working_cases:
-
-                # Retrieve first case
-                next_case = self.working_cases[0]
-
-                # Set the current time based on the start time of the first case
-                self.current_time = next_case.datetime
-
-                # Deploy an ambulance to handle the current case
-                self.start_case(next_case, ambulances_in_motion, self.current_time)
-
-                # TODO If the deployment was successful, then recalculate the city coverage
-
-            elif ambulances_in_motion and self.working_cases:
+            else:
 
                 # Sort all ambulances by their end times
                 ambulances_in_motion = sorted(ambulances_in_motion, key=lambda k: k.end_time)
@@ -109,9 +95,6 @@ class DispatcherSimulator(Simulator):
                 # Compute coverage
                 # self.coverage (ambulances, self.traveltimes, self.bases, self.demands, required_r1)
 
-            else:
-                raise Exception("This shouldn't happen... ")
-
         # TODO return "results" object with more potential information
         return self.finished_cases
 
@@ -121,8 +104,7 @@ class DispatcherSimulator(Simulator):
         :param case:
         :param ambulances_in_motion:
         :param start_time:
-        :return: True if case starts successfully, false if no ambulances available.
-        (This may not actually be necessary since I don't use this boolean in the preceding fn)
+        :return: True if case starts successfully; False if algorithm fails to select an ambulance
         """
 
         print("Starting case {} which was recorded at {}".format(case.id, case.datetime))
@@ -172,6 +154,7 @@ class DispatcherSimulator(Simulator):
 
         else:
             print("ERROR: Algorithm failed to select an ambulance")
+            return False
 
     def finish_ambulances(self, ambulances_in_motion, current_datetime):
         """
@@ -179,7 +162,6 @@ class DispatcherSimulator(Simulator):
         Mark ambulances that have finished as non-deployed.
         :param ambulances_in_motion: A list of ambulances in motion. Want to see whether each has finished.
         :param current_datetime: The current time given as a python datetime.
-        :param ambulance_delta: The amount of time the case should take. Could get complicated upon CSE 199 link.
         :return: None. It just changes state.
         """
 
