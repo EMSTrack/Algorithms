@@ -4,8 +4,7 @@ import datetime
 from copy import deepcopy
 from typing import List
 
-from colorama import Fore
-from colorama import Style
+from termcolor import colored
 
 from ems.algorithms.algorithm import Algorithm
 from ems.models.ambulance import Ambulance
@@ -37,14 +36,21 @@ class DispatcherSimulator(Simulator):
         while self.working_cases or ambulances_in_motion:
 
             print()
-            print("Current time: {}".format(self.current_time))
-            print(f"Busy ambulances:", sorted([amb.id for amb in ambulances_in_motion]), f"{Style.RESET_ALL}")
+            print(colored("Current time: {}".format(self.current_time), "yellow", attrs=["bold"]))
+            print("Busy ambulances:", sorted([amb.id for amb in ambulances_in_motion]))
 
             # If no more cases to start, finish all cases that are currently being handled by
             # the ambulances
             if not self.working_cases:
-                for amb in ambulances_in_motion:
-                    amb.finish()
+
+                # Sort all ambulances by end times
+                ambulances_in_motion = sorted(ambulances_in_motion, key=lambda k: k.end_time)
+
+                # Get the latest ambulance finish time
+                self.current_time = ambulances_in_motion[-1].end_time
+
+                # Finish all ambulances
+                self.finish_ambulances(ambulances_in_motion, self.current_time)
 
                 # TODO Find the city coverage. Is it useful to check the coverage within the loop? This would be
                 # TODO the only place where such a granular measurement is present.
@@ -63,7 +69,7 @@ class DispatcherSimulator(Simulator):
                 # If all ambulances are taken - must fast forward time until next ambulance is released
                 if len(self.ambulances) == len(ambulances_in_motion):
 
-                    print("No available ambulances to deal with next case: {}".format(next_case.id))
+                    print(colored("No available ambulances to deal with next case: {}".format(next_case.id), "red"))
 
                     next_available_amb = ambulances_in_motion[0]
                     ambulance_release_time = next_available_amb.end_time
@@ -142,13 +148,13 @@ class DispatcherSimulator(Simulator):
             self.finished_cases.append(case)
             self.working_cases.pop(0)
 
-            print(f"{Fore.GREEN}Deploying ambulance", chosen_ambulance.id, 'at time', start_time, f'{Style.RESET_ALL}')
+            print(colored("Deploying ambulance {} at time {}".format(chosen_ambulance.id, start_time), "green"))
             print("Delay on this case: {}".format(case.delay))
 
             return True
 
         else:
-            print("ERROR: Algorithm failed to select an ambulance")
+            print(colored("ERROR: Algorithm failed to select an ambulance", "red"))
             return False
 
     def finish_ambulances(self, ambulances_in_motion, current_datetime):
@@ -164,8 +170,7 @@ class DispatcherSimulator(Simulator):
         for amb in ambulances_in_motion:
             if amb.end_time <= current_datetime:
                 amb.finish()
-                print(f'{Fore.CYAN}Retiring ambulance ', amb.id, 'at time', amb.end_time,
-                      f"{Style.RESET_ALL}")
+                print(colored('Retiring ambulance {} at time {}'.format(amb.id, amb.end_time), 'cyan'))
             else:
                 new_ambulance_list.append(amb)
 
