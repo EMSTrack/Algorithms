@@ -35,14 +35,17 @@ class CSVTijuanaDataset(Dataset):
 
         if filename is not None and os.path.exists(filename):
 
+            # Read case demand mappings and set the field in case
             cd_mapping = self.read_cd_mapping(filename)
-
             for case in cases:
                 for demand in demands:
                     if demand.id == cd_mapping[case.id]:
                         case.closest_demand = demand
 
         else:
+
+            # Generate the case demand mapping by computing hte closeset distance
+            # Save the mapping to a CSV file
             cd_mapping = {}
             for case in cases:
 
