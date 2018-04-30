@@ -22,3 +22,14 @@ class Case:
         self.finish_time = finish_time
         self.delay = delay
         self.closest_demand = closest_demand
+
+    def __eq__(self, other):
+        """
+        Checks for equality
+        :return: True if objects are equal; else False
+        """
+
+        if type(other) is Case and self.id == other.id:
+            return True
+
+        return False

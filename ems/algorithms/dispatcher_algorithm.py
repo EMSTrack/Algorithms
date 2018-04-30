@@ -45,17 +45,17 @@ class DispatcherAlgorithm(Algorithm):
         """
 
         shortest_time = timedelta(hours=9999999)
-        position = -1
+        fastest_amb = None
 
-        for index, amb in enumerate(ambulances):
+        for amb in ambulances:
             if not amb.deployed:
                 time = self.find_traveltime(traveltimes, amb.base, demand)
                 if shortest_time > time:
                     shortest_time = time
-                    position = index
+                    fastest_amb = amb
 
-        if position > -1:
-            return ambulances[position], shortest_time
+        if fastest_amb is not None:
+            return fastest_amb, shortest_time
 
         return None, None
 
