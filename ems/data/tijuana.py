@@ -38,8 +38,6 @@ class CSVTijuanaDataset(Dataset):
             cd_mapping = self.read_cd_mapping(filename)
 
             for case in cases:
-
-                # TODO somehow map to the actual DEMAND instead of ID
                 for demand in demands:
                     if demand.id == cd_mapping[case.id]:
                         case.closest_demand = demand
