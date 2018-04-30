@@ -1,5 +1,6 @@
 # Model the data by their types.
 
+import os
 import pandas as pd
 from geopy import Point
 
@@ -8,28 +9,37 @@ from ems.data.traveltimes import TravelTimes
 from ems.models.base import Base
 from ems.models.case import Case
 from ems.models.demand import Demand
-from ems.settings import Settings
 from ems.utils import parse_headered_csv, parse_unheadered_csv, closest_distance
 
 
 class CSVTijuanaDataset(Dataset):
 
-    def __init__(self, settings: Settings):
+    def __init__(self,
+                 demands_filepath: str,
+                 bases_filepath: str,
+                 cases_filepath: str,
+                 traveltimes_filepath: str,
+                 cd_mapping_filepath: str = None):
 
         # Read files into pandas dataframes and lists of objects
-        self.demands, self.demands_df = self.read_demands(settings.demands_file)
-        self.bases, self.bases_df = self.read_bases(settings.bases_file)
-        self.cases, self.cases_df = self.read_cases(settings.cases_file)
-        self.traveltimes = self.read_times(settings.traveltimes_file)
+        self.demands, self.demands_df = self.read_demands(demands_filepath)
+        self.bases, self.bases_df = self.read_bases(bases_filepath)
+        self.cases, self.cases_df = self.read_cases(cases_filepath)
+        self.traveltimes = self.read_times(traveltimes_filepath)
 
         # Pre-compute case -> demand point mappings
-        self.set_closest_demand_points(self.cases, self.demands)
+        self.set_closest_demand_points(cd_mapping_filepath, self.cases, self.demands)
 
     # Helper functions
-    def set_closest_demand_points(self, cases, demands):
-        for case in cases:
-            closest_demand = closest_distance(demands, case.location)
-            case.closest_demand = closest_demand
+    def set_closest_demand_points(self, file, cases, demands):
+
+        if file is not None and os.path.exists(file):
+            for case in cases:
+                pass
+        else:
+            for case in cases:
+                closest_demand = closest_distance(demands, case.location)
+                case.closest_demand = closest_demand
 
     def read_cases(self, file):
         # Read cases from CSV into a pandas dataframe
