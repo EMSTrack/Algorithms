@@ -1,5 +1,7 @@
 import datetime
 
+from geopy import Point
+
 from ems.models.base import Base
 
 
@@ -12,8 +14,7 @@ class Ambulance:
                  base: Base,
                  unit: str = "XXX-XXXX",
                  deployed: bool = False,
-                 # TODO location never used; unknown type
-                 location=None,
+                 location: Point = None,
                  deployed_time: datetime.datetime = None,
                  end_time: datetime.datetime = None):
 
@@ -53,7 +54,7 @@ class Ambulance:
         Deploys the ambulance by setting the deployed state, start times, end time, and location.
         :param datetime:
         :param destination:
-        :param ambulance_delta:
+        :param end_time: 
         :return: Nothing. This function only changes state.
         """
 

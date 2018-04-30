@@ -36,11 +36,12 @@ class DispatcherAlgorithm(Algorithm):
 
     def find_fastest_ambulance(self, ambulances, traveltimes, demand):
         """
-        Finds the ambulance
+        Finds the ambulance with the shortest one way travel time from its base to the
+        demand point
         :param ambulances:
         :param traveltimes:
         :param demand:
-        :return: type int the ID of the ambulance, or None if all ambulances are busy.
+        :return: The ambulance and the travel time
         """
 
         shortest_time = timedelta(hours=9999999)
@@ -54,7 +55,7 @@ class DispatcherAlgorithm(Algorithm):
                     position = index
 
         if position > -1:
-            return position, shortest_time
+            return ambulances[position], shortest_time
 
         return None, None
 

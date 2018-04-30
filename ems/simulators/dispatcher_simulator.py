@@ -38,6 +38,7 @@ class DispatcherSimulator(Simulator):
 
             print()
             print("Current time: {}".format(self.current_time))
+            print(f"Busy ambulances:", sorted([amb.id for amb in ambulances_in_motion]), f"{Style.RESET_ALL}")
 
             # If no more cases to start, finish all cases that are currently being handled by
             # the ambulances
@@ -98,7 +99,7 @@ class DispatcherSimulator(Simulator):
 
     def start_case(self, case, ambulances_in_motion, start_time):
         """
-        Actual code to attempt running the case.
+        Starts the case by selecting an ambulance and deploying it
         :param case:
         :param ambulances_in_motion:
         :param start_time:
@@ -114,12 +115,6 @@ class DispatcherSimulator(Simulator):
         # Dispatch an ambulance as returned by find_available. It only works if deployed
         if chosen_ambulance is not None:
 
-            # Obtain ambulance
-            ambulance = self.ambulances[chosen_ambulance]
-
-            print('Ambulance {} chosen with travel time duration {}'.format(ambulance.id,
-                                                                            ambulance_travel_time))
-
             # TODO Currently assume that each case will take 2x travel time + 20 minutes
             # Compute duration of the trip
             duration = ambulance_travel_time * 2 + datetime.timedelta(minutes=20)
@@ -127,12 +122,14 @@ class DispatcherSimulator(Simulator):
             # Compute the end timestamp of the trip
             end_time = start_time + duration
 
-            print('Final computed case duration: {}'.format(duration))
+            print('Ambulance {} chosen with one-way travel time {} (total duration: {})'.format(chosen_ambulance.id,
+                                                                                                ambulance_travel_time,
+                                                                                                duration))
 
             # TODO -- fill in destination?
             # Deploy ambulance
-            ambulance.deploy(start_time, None, end_time)
-            ambulances_in_motion.append(ambulance)
+            chosen_ambulance.deploy(start_time, None, end_time)
+            ambulances_in_motion.append(chosen_ambulance)
 
             # Set case start + finish timestamps and the case delay
             case.start_time = start_time
@@ -143,7 +140,7 @@ class DispatcherSimulator(Simulator):
             self.finished_cases.append(case)
             self.working_cases.pop(0)
 
-            print(f"{Fore.GREEN}Deploying ambulance", ambulance.id, 'at time', start_time, f'{Style.RESET_ALL}')
+            print(f"{Fore.GREEN}Deploying ambulance", chosen_ambulance.id, 'at time', start_time, f'{Style.RESET_ALL}')
             print("Delay on this case: {}".format(case.delay))
 
             return True
@@ -160,8 +157,6 @@ class DispatcherSimulator(Simulator):
         :param current_datetime: The current time given as a python datetime.
         :return: None. It just changes state.
         """
-
-        print(f"Busy ambulances:", sorted([amb.id for amb in ambulances_in_motion]), f"{Style.RESET_ALL}")
 
         new_ambulance_list = []
         for amb in ambulances_in_motion:
