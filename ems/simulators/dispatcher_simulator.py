@@ -74,6 +74,8 @@ class DispatcherSimulator(Simulator):
             # Event Retire Ambulance: If ambulances are currently handling cases and the ambulance gets back before
             #                         next case occurs
             # Event Start Case: If ambulances are available and next case occurs before any ambulance gets back
+            #
+            # Finish when no more cases and no more ambulances attending cases
 
             # Loop end condition - No more case or moving ambulances
             if not pending_cases and not working_cases and not ambulances_in_motion:
@@ -88,52 +90,62 @@ class DispatcherSimulator(Simulator):
             # If there are any cases that still have not been started
             if pending_cases or working_cases:
 
-                # If no ambulances are available; we may be adding a new case to the pending queue
-                if not ambulances_available:
-                    next_case = working_cases[0]
-
-                # If ambulances are available, we may be deploying an ambulance to a case; get the next case in order
-                else:
-                    # Get time of the next case to run (pending if exists)
-                    next_case = pending_cases[0] if pending_cases else working_cases[0]
-
-                # Retrieve time of the next case to delay/start
-                next_case_time = next_case.datetime
-
-                # If there are no deployed ambulances, get ready to start a new case
+                # If there are no ambulances attending to a case, start the next case
                 if not ambulances_in_motion:
 
+                    # If any pending cases, start those, otherwise get the next working case
+                    next_case = pending_cases[0] if pending_cases else working_cases[0]
                     event = Event.START_CASE
-                    self.current_time = next_case_time
+                    self.current_time = self.current_time if pending_cases else next_case.datetime
 
+                # Ambulances are currently attending to cases
                 else:
 
                     # Get the next time an ambulance will be available
                     next_available_amb = ambulances_in_motion[0]
                     ambulance_release_time = next_available_amb.end_time
 
-                    # If next case event happens before ambulance release time, delay/start case
-                    if ambulance_release_time > next_case_time:
+                    # No available ambulances (we will either delay the next case or release an ambulance)
+                    if not ambulances_available:
 
-                        # If no ambulances are available, we want to delay the next case
-                        if not ambulances_available:
+                        # Since we will only be delaying (not starting) we only care about the next working case
+                        next_case = working_cases[0]
+                        next_case_time = next_case.datetime
+
+                        # Delay next case if it will arrive before any ambulance will finish
+                        if ambulance_release_time > next_case_time:
 
                             event = Event.DELAY_CASE
                             self.current_time = next_case_time
 
-                        # If ambulances are available, we want to start the next case
+                        # If ambulance returns first, set the event to retire that ambulance
                         else:
 
-                            event = Event.START_CASE
-                            self.current_time = self.current_time if pending_cases else next_case_time
+                            event = Event.RETIRE_AMBULANCE
+                            self.current_time = ambulance_release_time
 
-                    # Otherwise release the ambulance
+                    # Ambulances are available for dispatch (either start case or release an ambulance)
                     else:
 
-                        event = Event.RETIRE_AMBULANCE
-                        self.current_time = ambulance_release_time
+                        # Since we may be starting a case, we want to get the earliest case in pending if pending
+                        # cases exist
+                        next_case = pending_cases[0] if pending_cases else working_cases[0]
+                        next_case_time = next_case.datetime
 
-            # No cases left; retire
+                        # Start the next case if it will arrive or has already arrived (pending)
+                        # before any ambulance will finish
+                        if ambulance_release_time > next_case_time:
+
+                            event = Event.START_CASE
+                            self.current_time = next_case_time
+
+                            # If ambulance returns first, set the event to retire that ambulance
+                        else:
+
+                            event = Event.RETIRE_AMBULANCE
+                            self.current_time = ambulance_release_time
+
+            # No cases left; retire the next ambulance that is in service
             else:
                 # Get the next time an ambulance will be available
                 next_available_amb = ambulances_in_motion[0]
