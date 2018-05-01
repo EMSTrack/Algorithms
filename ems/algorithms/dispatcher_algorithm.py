@@ -2,12 +2,17 @@
 from datetime import timedelta
 from typing import List
 
+import geopy
+import geopy.distance
+import numpy as np
+
+from scipy.spatial import KDTree
+
 from ems.algorithms.algorithm import Algorithm
 from ems.data.traveltimes import TravelTimes
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 from ems.models.demand import Demand
-from ems.utils import closest_distance
 
 
 # An implementation of a "fastest travel time" algorithm from a base to
@@ -16,10 +21,8 @@ from ems.utils import closest_distance
 class DispatcherAlgorithm(Algorithm):
 
     def __init__(self,
-                 traveltimes: TravelTimes = None,
-                 cd_mapping: dict = None):
+                 traveltimes: TravelTimes = None):
         self.traveltimes = traveltimes
-        self.cd_mapping = cd_mapping
 
     def select_ambulance(self,
                          ambulances: List[Ambulance],
@@ -27,13 +30,29 @@ class DispatcherAlgorithm(Algorithm):
                          demands: List[Demand]):
 
         # Compute the closest demand point to the case location
-        closest_demand = closest_distance(demands, case.location)
+        closest_demand = self.closest_distance(demands, case.location)
 
         # Select an ambulance to attend to the given case and obtain the its duration of travel
         chosen_ambulance, ambulance_travel_time = self.find_fastest_ambulance(
             ambulances, self.traveltimes, closest_demand)
 
         return chosen_ambulance, ambulance_travel_time
+
+    def closest_distance(self, list_type, target_point):
+        """
+        Finds the closest point in the corresponding generic list.
+        For example, find the closest base given a GPS location.
+        :param list_type:
+        :param target_point:
+        :return: the position in that list
+        """
+
+        # Compute differences between target point and each element's location in list type
+        differences = [geopy.distance.vincenty(target_point, element.location).km for element in list_type]
+
+        # Find the index of the minimum difference and return the element at that index
+        min_index = np.argmin(differences)
+        return list_type[min_index]
 
     def find_fastest_ambulance(self, ambulances, traveltimes, demand):
         """

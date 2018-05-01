@@ -1,26 +1,4 @@
-# Maybe move back into dataset file;
-
-import geopy
-import geopy.distance
-import numpy as np
 import pandas as pd
-
-
-def closest_distance(list_type, target_point):
-    """
-    Finds the closest point in the corresponding generic list.
-    For example, find the closest base given a GPS location.
-    :param list_type:
-    :param target_point:
-    :return: the position in that list
-    """
-
-    # Compute differences between target point and each element's location in list type
-    differences = [geopy.distance.vincenty(target_point, element.location).km for element in list_type]
-
-    # Find the index of the minimum difference and return the element at that index
-    min_index = np.argmin(differences)
-    return list_type[min_index]
 
 
 def parse_headered_csv (file: str, desired_keys: list):
