@@ -9,7 +9,7 @@ from ems.data.traveltimes import TravelTimes
 from ems.models.base import Base
 from ems.models.case import Case
 from ems.models.demand import Demand
-from ems.utils import parse_headered_csv, parse_unheadered_csv, closest_distance
+from ems.utils import parse_headered_csv, parse_unheadered_csv
 
 
 class CSVTijuanaDataset(Dataset):
