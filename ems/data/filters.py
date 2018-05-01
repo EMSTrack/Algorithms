@@ -7,8 +7,7 @@ def kmeans_select_bases(bases, traveltimes):
 
     print("Default init_bases(): Kmeans init bases")
 
-    # times[demand point][base] if using the pandas way
-    # Using pandas dataframe
+    # Pick initial bases with kmeans algorithm
     chosen_base_indices, demands_covered = pick_starting_bases(traveltimes, 12, 600)
 
     # Returns object list

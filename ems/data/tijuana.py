@@ -18,8 +18,7 @@ class CSVTijuanaDataset(Dataset):
                  demands_filepath: str,
                  bases_filepath: str,
                  cases_filepath: str,
-                 traveltimes_filepath: str,
-                 cd_mapping_filepath: str = None):
+                 traveltimes_filepath: str):
 
         # Read files into pandas dataframes and lists of objects
         self.demands, self.demands_df = self.read_demands(demands_filepath)
@@ -94,22 +93,6 @@ class CSVTijuanaDataset(Dataset):
         traveltimes = TravelTimes(traveltimes_df.as_matrix())
 
         return traveltimes
-
-    def write_cd_mapping(self, filename, mapping):
-        # Generate pandas dataframe and save to CSV
-        df = pd.DataFrame(list(mapping.items()), columns=["Case", "Closest Demand"])
-        df.set_index("Case", inplace=True)
-        df.to_csv(filename)
-
-    def read_cd_mapping(self, filename):
-        # Read CSV file to dataframe and convert to dictionary
-        df = pd.read_csv(filename)
-
-        cd_mapping = {}
-        for index, row in df.iterrows():
-            cd_mapping[int(row["Case"])] = int(row["Closest Demand"])
-
-        return cd_mapping
 
     # Implementation
     def get_bases(self):

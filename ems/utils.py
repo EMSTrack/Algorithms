@@ -6,23 +6,6 @@ import numpy as np
 import pandas as pd
 
 
-# Defines methods relevant to each case.
-def generate_amor_filename(data):
-    """
-    Parses the case filename and produces an amortized file name
-    by including an 'amor' extension
-    e.g. ../data-cruz-roja/tabladedatos.csv -> ../data-cruz-roja/tabladedatos.amor.csv
-    :param data: The path to tablasdedatos.csv
-    :return: The amorzited file name
-    """
-
-    dirs = data.split('/')
-    fn = dirs[-1]
-    per_idx = fn.find('.')
-    amor_fn = "/".join(dirs[:-1]) + "/" + fn[:per_idx] + '.amor' + fn[per_idx:]
-    return amor_fn
-
-
 def closest_distance(list_type, target_point):
     """
     Finds the closest point in the corresponding generic list.

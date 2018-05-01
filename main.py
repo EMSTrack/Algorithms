@@ -4,7 +4,6 @@ from ems.data.tijuana import CSVTijuanaDataset
 from ems.models.ambulance import Ambulance
 from ems.settings import Settings
 from ems.simulators.dispatcher_simulator import DispatcherSimulator
-from ems.utils import generate_amor_filename
 
 
 # TODO read from settings file
@@ -16,22 +15,18 @@ demands_filepath = file_path + 'demand_points.csv'
 cases_filepath = file_path + 'calls.csv'
 traveltimes_filepath = file_path + 'times.csv'
 
-cd_mapping_filepath = generate_amor_filename(cases_filepath)
-
 # Initialize settings
 settings = Settings(debug=True,
                     demands_file=demands_filepath,
                     bases_file=bases_filepath,
                     cases_file=cases_filepath,
-                    traveltimes_file=traveltimes_filepath,
-                    cd_mapping_file=cd_mapping_filepath)
+                    traveltimes_file=traveltimes_filepath)
 
 # Initialize dataset
 dataset = CSVTijuanaDataset(demands_filepath=settings.demands_file,
                             bases_filepath=settings.bases_file,
                             cases_filepath=settings.cases_file,
-                            traveltimes_filepath=settings.traveltimes_file,
-                            cd_mapping_filepath=settings.cd_mapping_file)
+                            traveltimes_filepath=settings.traveltimes_file)
 
 # Initialize algorithm
 alg = DispatcherAlgorithm(traveltimes=dataset.traveltimes)
