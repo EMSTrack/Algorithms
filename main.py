@@ -14,13 +14,15 @@ bases_filepath = file_path + 'bases.csv'
 demands_filepath = file_path + 'demand_points.csv'
 cases_filepath = file_path + 'calls.csv'
 traveltimes_filepath = file_path + 'times.csv'
+cd_mapping_filepath = file_path + 'calls_demand_amor.csv'
 
 # Initialize settings
 settings = Settings(debug=True,
                     demands_file=demands_filepath,
                     bases_file=bases_filepath,
                     cases_file=cases_filepath,
-                    traveltimes_file=traveltimes_filepath)
+                    traveltimes_file=traveltimes_filepath,
+                    cd_mapping_file=cd_mapping_filepath)
 
 # Initialize dataset
 dataset = CSVTijuanaDataset(demands_filepath=settings.demands_file,
