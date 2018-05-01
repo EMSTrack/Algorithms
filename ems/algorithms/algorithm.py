@@ -11,6 +11,5 @@ class Algorithm:
 
     def select_ambulance(self,
                          ambulances: List[Ambulance],
-                         case: Case,
-                         demands: List[Demand]):
+                         case: Case):
         raise NotImplementedError()

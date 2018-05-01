@@ -8,9 +8,7 @@ from termcolor import colored
 
 from ems.algorithms.algorithm import Algorithm
 from ems.models.ambulance import Ambulance
-from ems.models.base import Base
 from ems.models.case import Case
-from ems.models.demand import Demand
 from ems.simulators.simulator import Simulator
 
 
@@ -18,15 +16,12 @@ class DispatcherSimulator(Simulator):
 
     def __init__(self,
                  ambulances: List[Ambulance],
-                 bases: List[Base],
                  cases: List[Case],
-                 demands: List[Demand],
                  algorithm: Algorithm):
 
         self.finished_cases = []
-        self.cases = cases
         self.current_time = cases[0].datetime if len(cases) > 0 else -1
-        super(DispatcherSimulator, self).__init__(ambulances, bases, cases, demands, algorithm)
+        super(DispatcherSimulator, self).__init__(ambulances, cases, algorithm)
 
     def run(self):
 
@@ -177,7 +172,7 @@ class DispatcherSimulator(Simulator):
 
         # Select ambulance to dispatch
         chosen_ambulance, ambulance_travel_time = \
-            self.algorithm.select_ambulance(self.ambulances, case, self.demands)
+            self.algorithm.select_ambulance(self.ambulances, case)
 
         # Dispatch an ambulance as returned by find_available. It only works if deployed
         if chosen_ambulance is not None:

@@ -11,6 +11,7 @@ from scipy.spatial import KDTree
 from ems.algorithms.algorithm import Algorithm
 from ems.data.traveltimes import TravelTimes
 from ems.models.ambulance import Ambulance
+from ems.models.base import Base
 from ems.models.case import Case
 from ems.models.demand import Demand
 
@@ -21,16 +22,19 @@ from ems.models.demand import Demand
 class DispatcherAlgorithm(Algorithm):
 
     def __init__(self,
+                 bases: List[Base] = None,
+                 demands: List[Demand] = None,
                  traveltimes: TravelTimes = None):
+        self.bases = bases
+        self.demands = demands
         self.traveltimes = traveltimes
 
     def select_ambulance(self,
                          ambulances: List[Ambulance],
-                         case: Case,
-                         demands: List[Demand]):
+                         case: Case):
 
         # Compute the closest demand point to the case location
-        closest_demand = self.closest_distance(demands, case.location)
+        closest_demand = self.closest_distance(self.demands, case.location)
 
         # Select an ambulance to attend to the given case and obtain the its duration of travel
         chosen_ambulance, ambulance_travel_time = self.find_fastest_ambulance(

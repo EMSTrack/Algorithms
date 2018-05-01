@@ -30,7 +30,9 @@ dataset = CSVTijuanaDataset(demands_filepath=settings.demands_file,
                             traveltimes_filepath=settings.traveltimes_file)
 
 # Initialize algorithm
-alg = DispatcherAlgorithm(traveltimes=dataset.traveltimes)
+alg = DispatcherAlgorithm(bases=dataset.bases,
+                          demands=dataset.demands,
+                          traveltimes=dataset.traveltimes)
 
 # Select bases
 chosen_bases = kmeans_select_bases(dataset.bases, dataset.traveltimes)
@@ -44,8 +46,6 @@ for index in range(settings.num_ambulances):
 
 # Initialize and run the simulator
 sim = DispatcherSimulator(ambulances=ambulances,
-                          bases=chosen_bases,
                           cases=dataset.cases,
-                          demands=dataset.demands,
                           algorithm=alg)
 finished_cases = sim.run()

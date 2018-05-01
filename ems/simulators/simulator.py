@@ -4,24 +4,18 @@ from typing import List
 
 from ems.algorithms.algorithm import Algorithm
 from ems.models.ambulance import Ambulance
-from ems.models.base import Base
 from ems.models.case import Case
-from ems.models.demand import Demand
 
 
 class Simulator:
 
     def __init__(self,
                  ambulances: List[Ambulance],
-                 bases: List[Base],
                  cases: List[Case],
-                 demands: List[Demand],
                  algorithm: Algorithm):
 
         self.ambulances = ambulances
-        self.bases = bases
         self.cases = cases
-        self.demands = demands
         self.algorithm = algorithm
 
     def run(self):
