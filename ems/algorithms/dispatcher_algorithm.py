@@ -29,6 +29,8 @@ class DispatcherAlgorithm(Algorithm):
         self.demands = demands
         self.traveltimes = traveltimes
 
+        self.kd_tree = self.initialize_kd_tree(demands)
+
     def select_ambulance(self,
                          ambulances: List[Ambulance],
                          case: Case):
@@ -51,12 +53,10 @@ class DispatcherAlgorithm(Algorithm):
         :return: the position in that list
         """
 
-        # Compute differences between target point and each element's location in list type
-        differences = [geopy.distance.vincenty(target_point, element.location).km for element in list_type]
+        # Query kd tree for nearest neighbor
+        closest_point_ind = self.kd_tree.query((target_point.longitude, target_point.latitude))[1]
 
-        # Find the index of the minimum difference and return the element at that index
-        min_index = np.argmin(differences)
-        return list_type[min_index]
+        return list_type[closest_point_ind]
 
     def find_fastest_ambulance(self, ambulances, traveltimes, demand):
         """
@@ -91,7 +91,12 @@ class DispatcherAlgorithm(Algorithm):
         :return travel time:
         """
 
-        # base should be a base object
-        # demand should be a demand object
-
         return traveltimes.get_time(base, demand)
+
+    def initialize_kd_tree(self, demands):
+
+        # Form a kd-tree
+        points = [(demand.location.longitude, demand.location.latitude) for demand in demands]
+        kd_tree = KDTree(points)
+        return kd_tree
+
