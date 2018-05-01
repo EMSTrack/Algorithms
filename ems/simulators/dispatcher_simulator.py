@@ -24,83 +24,130 @@ class DispatcherSimulator(Simulator):
                  algorithm: Algorithm):
 
         self.finished_cases = []
-        self.working_cases = deepcopy(cases)
+        self.cases = cases
         self.current_time = cases[0].datetime if len(cases) > 0 else -1
         super(DispatcherSimulator, self).__init__(ambulances, bases, cases, demands, algorithm)
 
     def run(self):
 
         ambulances_in_motion = []
+        pending_cases = []
+        working_cases = deepcopy(self.cases)
+        event = Event.START_CASE
 
-        # TODO. This may become a while-loop, "while there are still start times and end times..."
-        while self.working_cases or ambulances_in_motion:
+        # Iterate while there are ambulances moving or cases to dispatch
+        while working_cases or ambulances_in_motion:
 
             print()
-            print(colored("Current time: {}".format(self.current_time), "yellow", attrs=["bold"]))
-            print("Busy ambulances:", sorted([amb.id for amb in ambulances_in_motion]))
+            print(colored("Current Time: {}".format(self.current_time), "yellow", attrs=["bold"]))
+            print(colored("Current Event: {}".format(event), "yellow", attrs=["bold"]))
 
-            # If no more cases to start, finish all cases that are currently being handled by
-            # the ambulances
-            if not self.working_cases:
+            # Stage 1: Perform event for this time step
+            if event == Event.RETIRE_AMBULANCE:
 
-                # Sort all ambulances by end times
-                ambulances_in_motion = sorted(ambulances_in_motion, key=lambda k: k.end_time)
+                # Retire ambulance
+                ambulances_in_motion = self.finish_ambulances(ambulances_in_motion, self.current_time)
 
-                # Get the latest ambulance finish time
-                self.current_time = ambulances_in_motion[-1].end_time
+            elif event == Event.DELAY_CASE:
 
-                # Finish all ambulances
-                self.finish_ambulances(ambulances_in_motion, self.current_time)
+                # Get next working case and add it to pending cases
+                case = working_cases.pop(0)
+                pending_cases.append(case)
 
-                # TODO Find the city coverage. Is it useful to check the coverage within the loop? This would be
-                # TODO the only place where such a granular measurement is present.
+                print(colored("No available ambulances to deal with incoming case: {} at {}".format(case.id,
+                                                                                                    case.datetime),
+                              "red"))
 
-                return self.finished_cases
+            elif event == Event.START_CASE:
+
+                # Get next pending case if there are any and start it
+                # If no pending cases exist, start the next working case
+                case = pending_cases.pop(0) if len(pending_cases) > 0 else working_cases.pop(0)
+                self.start_case(case, ambulances_in_motion, self.current_time)
 
             else:
+                # Should never reach this point
+                print("Invalid Event")
 
-                # Sort all ambulances by their end times
-                ambulances_in_motion = sorted(ambulances_in_motion, key=lambda k: k.end_time)
+            # Stage 2: Determine the next event
+            # Event Delay Case: If no ambulances are available and next case occurs before any ambulance gets back
+            # Event Retire Ambulance: If ambulances are currently handling cases and the ambulance gets back before
+            #                         next case occurs
+            # Event Start Case: If ambulances are available and next case occurs before any ambulance gets back
 
-                # Retrieve next case
-                next_case = self.working_cases[0]
-                case_start_time = next_case.datetime
+            # Loop end condition - No more case or moving ambulances
+            if not pending_cases and not working_cases and not ambulances_in_motion:
+                return self.finished_cases
 
-                # If all ambulances are taken - must fast forward time until next ambulance is released
-                if len(self.ambulances) == len(ambulances_in_motion):
+            # Sort all ambulances by end times
+            ambulances_in_motion = sorted(ambulances_in_motion, key=lambda k: k.end_time)
 
-                    print(colored("No available ambulances to deal with next case: {}".format(next_case.id), "red"))
+            # Boolean to determine if any ambulances are available to deploy
+            ambulances_available = False if len(self.ambulances) == len(ambulances_in_motion) else True
 
+            # If there are any cases that still have not been started
+            if pending_cases or working_cases:
+
+                # If no ambulances are available; we may be adding a new case to the pending queue
+                if not ambulances_available:
+                    next_case = working_cases[0]
+
+                # If ambulances are available, we may be deploying an ambulance to a case; get the next case in order
+                else:
+                    # Get time of the next case to run (pending if exists)
+                    next_case = pending_cases[0] if pending_cases else working_cases[0]
+
+                # Retrieve time of the next case to delay/start
+                next_case_time = next_case.datetime
+
+                # If there are no deployed ambulances, get ready to start a new case
+                if not ambulances_in_motion:
+
+                    event = Event.START_CASE
+                    self.current_time = next_case_time
+
+                else:
+
+                    # Get the next time an ambulance will be available
                     next_available_amb = ambulances_in_motion[0]
                     ambulance_release_time = next_available_amb.end_time
 
-                    print("Soonest release time for an ambulance: Ambulance {} at {}".format(next_available_amb.id,
-                                                                                             ambulance_release_time))
+                    # If next case event happens before ambulance release time, delay/start case
+                    if ambulance_release_time > next_case_time:
 
-                    # Fast forward current time to be when the next ambulances gets released
-                    self.current_time = ambulance_release_time
+                        # If no ambulances are available, we want to delay the next case
+                        if not ambulances_available:
 
-                    # Finish the ambulance
-                    ambulances_in_motion = self.finish_ambulances(ambulances_in_motion, self.current_time)
+                            event = Event.DELAY_CASE
+                            self.current_time = next_case_time
 
-                # Can't start case because it has not happened yet
-                elif case_start_time > self.current_time:
+                        # If ambulances are available, we want to start the next case
+                        else:
 
-                    print("No cases currently on queue")
+                            event = Event.START_CASE
+                            self.current_time = self.current_time if pending_cases else next_case_time
 
-                    # Fast forward current time to be when the next case starts
-                    self.current_time = case_start_time
+                    # Otherwise release the ambulance
+                    else:
 
-                    # Finish ambulances whose trips have ended during this fast forward
-                    ambulances_in_motion = self.finish_ambulances(ambulances_in_motion, self.current_time)
+                        event = Event.RETIRE_AMBULANCE
+                        self.current_time = ambulance_release_time
 
-                # Can start the next case
-                else:
-                    # Start the next case at current time
-                    self.start_case(next_case, ambulances_in_motion, self.current_time)
+            # No cases left; retire
+            else:
+                # Get the next time an ambulance will be available
+                next_available_amb = ambulances_in_motion[0]
+                ambulance_release_time = next_available_amb.end_time
 
-                # Compute coverage
-                # self.coverage (ambulances, self.traveltimes, self.bases, self.demands, required_r1)
+                # No cases left: must retire any remaining ambulances
+                event = Event.RETIRE_AMBULANCE
+                self.current_time = ambulance_release_time
+
+            print("Busy ambulances: ", sorted([amb.id for amb in ambulances_in_motion]))
+            print("Pending cases: ", [case.id for case in pending_cases])
+
+            # Compute coverage
+            # self.coverage (ambulances, self.traveltimes, self.bases, self.demands, required_r1)
 
         # TODO return "results" object with more potential information
         return self.finished_cases
@@ -146,7 +193,6 @@ class DispatcherSimulator(Simulator):
 
             # Add case to finished cases and remove from working cases
             self.finished_cases.append(case)
-            self.working_cases.pop(0)
 
             print(colored("Deploying ambulance {} at time {}".format(chosen_ambulance.id, start_time), "green"))
             print("Delay on this case: {}".format(case.delay))
@@ -215,3 +261,9 @@ class DispatcherSimulator(Simulator):
     #     # from IPython import embed; embed ()
     #     print(f"{Fore.RED}Coverage Rating:", sum(uncovered_demands), "/100.",  f'{Style.RESET_ALL}')
     #     return sum (uncovered_demands)
+
+
+class Event:
+    START_CASE = "Start Case"
+    DELAY_CASE = "Delay Case"
+    RETIRE_AMBULANCE = "Retire Ambulance"

@@ -11,8 +11,8 @@ class Settings:
                  cases_file: str = None,
                  traveltimes_file: str = None,
                  cd_mapping_file: str = None,
-                 num_ambulances: int = 2,
-                 num_bases: int = 2):
+                 num_ambulances: int = 3,
+                 num_bases: int = 3):
         self.data_filename = None
         self.debug = debug
         self.demands_file = demands_file
