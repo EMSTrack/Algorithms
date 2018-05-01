@@ -1,5 +1,4 @@
 # The following functions define default algorithms for the DispatchAlgorithm class.
-import numpy as np
 from datetime import timedelta
 from typing import List
 
@@ -16,21 +15,23 @@ from ems.utils import closest_distance
 
 class DispatcherAlgorithm(Algorithm):
 
-    def __init__(self, traveltimes: TravelTimes = None):
+    def __init__(self,
+                 traveltimes: TravelTimes = None,
+                 cd_mapping: dict = None):
         self.traveltimes = traveltimes
+        self.cd_mapping = cd_mapping
 
     def select_ambulance(self,
                          ambulances: List[Ambulance],
                          case: Case,
                          demands: List[Demand]):
 
-        # Find the closest demand point to the given case
-        if case.closest_demand is None:
-            case.closest_demand = closest_distance(demands, case.location)
+        # Compute the closest demand point to the case location
+        closest_demand = closest_distance(demands, case.location)
 
         # Select an ambulance to attend to the given case and obtain the its duration of travel
         chosen_ambulance, ambulance_travel_time = self.find_fastest_ambulance(
-            ambulances, self.traveltimes, case.closest_demand)
+            ambulances, self.traveltimes, closest_demand)
 
         return chosen_ambulance, ambulance_travel_time
 

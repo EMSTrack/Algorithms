@@ -27,36 +27,7 @@ class CSVTijuanaDataset(Dataset):
         self.cases, self.cases_df = self.read_cases(cases_filepath)
         self.traveltimes = self.read_times(traveltimes_filepath)
 
-        # Pre-compute case -> demand point mappings
-        self.set_closest_demand_points(cd_mapping_filepath, self.cases, self.demands)
-
     # Helper functions
-    def set_closest_demand_points(self, filename, cases, demands):
-
-        if filename is not None and os.path.exists(filename):
-
-            # Read case demand mappings and set the field in case
-            cd_mapping = self.read_cd_mapping(filename)
-            for case in cases:
-                for demand in demands:
-                    if demand.id == cd_mapping[case.id]:
-                        case.closest_demand = demand
-
-        else:
-
-            # Generate the case demand mapping by computing hte closeset distance
-            # Save the mapping to a CSV file
-            cd_mapping = {}
-            for case in cases:
-
-                closest_demand = closest_distance(demands, case.location)
-                case.closest_demand = closest_demand
-
-                cd_mapping[case.id] = closest_demand.id
-
-            if filename is not None:
-                self.write_cd_mapping(filename, cd_mapping)
-
     def read_cases(self, filename):
         # Read cases from CSV into a pandas dataframe
         case_headers = ["id", "lat", "long", "date", "weekday", "time", "priority"]
