@@ -120,7 +120,7 @@ class CSVTijuanaDataset(Dataset):
         # Read travel times from CSV file into a pandas dataframe
         traveltimes_df = pd.read_csv(filename)
 
-        traveltimes = TravelTimes(traveltimes_df)
+        traveltimes = TravelTimes(traveltimes_df.as_matrix())
 
         return traveltimes
 

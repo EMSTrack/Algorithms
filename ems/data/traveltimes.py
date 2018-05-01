@@ -1,13 +1,13 @@
 from datetime import timedelta
 
-import pandas as pd
+import numpy as np
 
 
 # Wrapper class around a travel times data frame
 
 class TravelTimes:
 
-    def __init__(self, times: pd.DataFrame):
+    def __init__(self, times: np.ndarray):
         """
 
         :type times: Pandas dataframe
@@ -22,7 +22,7 @@ class TravelTimes:
         :param demand:
         :return:
         """
-        time = int(self.times.iloc[base.id][demand.id])
+        time = int(self.times[base.id][demand.id])
 
         return timedelta(seconds=time)
 
