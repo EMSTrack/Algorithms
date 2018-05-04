@@ -22,6 +22,8 @@ to proceed when ready. (Press Enter.)
 
 - Expand the current testing framework to test the new project infrastructure
 
+- Read settings from file
+
 ## High-Level Overview
 
 ### Models (ems/models/*)
