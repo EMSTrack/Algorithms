@@ -2,6 +2,8 @@
 
 A library to do ambulance dispatch simulation and analysis. 
 
+Try: `time python3 main.py --ambulances 7 --bases 7`
+
 To run the simulation, take a look at `main.py`. Notice the filepaths there. You will need to edit 
 `file_path`, `demands_filepath`, and `bases_filepath` to point at the Cruz Roja datasets. 
 
