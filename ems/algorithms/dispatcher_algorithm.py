@@ -10,7 +10,7 @@ from copy import deepcopy
 
 from scipy.spatial import KDTree
 
-from ems.algorithms.algorithm import Algorithm
+from ems.algorithms.ambulance_selection import AmbulanceSelectionAlgorithm
 from ems.data.traveltimes import TravelTimes
 from ems.models.ambulance import Ambulance
 from ems.models.base import Base
@@ -21,7 +21,7 @@ from ems.models.demand import Demand
 # An implementation of a "fastest travel time" algorithm from a base to
 # the demand point closest to a case
 
-class DispatcherAlgorithm(Algorithm):
+class DispatcherAlgorithm(AmbulanceSelectionAlgorithm):
 
     def __init__(self,
                  bases: List[Base] = None,
@@ -47,7 +47,9 @@ class DispatcherAlgorithm(Algorithm):
         # Determine the overall coverage, and each ambulance's disruption to the cost. TODO 
         current_coverage = self.determine_coverage(ambulances, case)
 
-        return chosen_ambulance, ambulance_travel_time, current_coverage
+        return {'choice': chosen_ambulance,
+                'travel_time': ambulance_travel_time,
+                'coverage': current_coverage}
 
     def closest_distance(self, list_type, target_point):
         """

@@ -18,6 +18,7 @@ clargs = parser.parse_args()
 # TODO Fix this so that we can store these in a file :)
 # file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
 file_path = '../Data/'
+file_path = '~/tmp/data-cruz-roja/'
 bases_filepath = file_path + 'bases.csv'
 demands_filepath = file_path + 'demand_points.csv'
 cases_filepath = file_path + 'calls.csv'

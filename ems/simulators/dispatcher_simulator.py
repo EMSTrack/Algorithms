@@ -6,7 +6,7 @@ from typing import List
 
 from termcolor import colored
 
-from ems.algorithms.algorithm import Algorithm
+from ems.algorithms.ambulance_selection import AmbulanceSelectionAlgorithm
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 from ems.simulators.simulator import Simulator
@@ -17,7 +17,7 @@ class DispatcherSimulator(Simulator):
     def __init__(self,
                  ambulances: List[Ambulance],
                  cases: List[Case],
-                 algorithm: Algorithm):
+                 algorithm: AmbulanceSelectionAlgorithm):
 
         self.finished_cases = []
         self.current_time = cases[0].datetime if len(cases) > 0 else -1
@@ -191,8 +191,10 @@ class DispatcherSimulator(Simulator):
         # self.measured_coverage.append(current_coverage)
 
         # Select ambulance to dispatch
-        chosen_ambulance, ambulance_travel_time, current_coverage = \
-            self.algorithm.select_ambulance(self.ambulances, case)
+        selection = self.algorithm.select_ambulance(self.ambulances, case)
+        chosen_ambulance = selection.get('choice')
+        ambulance_travel_time = selection.get('travel_time', None)
+        current_coverage = selection.get('coverage', None)
 
         self.measured_coverage.append(current_coverage)
 

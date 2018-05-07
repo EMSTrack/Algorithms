@@ -7,7 +7,7 @@ from ems.models.demand import Demand
 
 
 # Used by the sim to select ambulances
-class Algorithm:
+class AmbulanceSelectionAlgorithm:
 
     def select_ambulance(self,
                          ambulances: List[Ambulance],

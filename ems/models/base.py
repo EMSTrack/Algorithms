@@ -1,11 +1,9 @@
 from geopy import Point
 
+from ems.models.location import Location
 
-class Base:
 
-    def __init__(self, id: int, point: Point):
-        self.id = id
-        self.location = point
+class Base(Location):
 
     def __eq__(self, other):
         """
