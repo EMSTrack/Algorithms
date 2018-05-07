@@ -18,7 +18,7 @@ to proceed when ready. (Press Enter.)
 
 - UML diagram for the library (at least for us) 
 
-- Make coverage more efficient
+- Make coverage more efficient. (Lesson learned, deepcopying drastically slows down runtime)
 
 - Begin brainstorming and implementing additional simulation evaluation metrics (e.g. coverage, etc.)
 

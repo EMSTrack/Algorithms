@@ -12,6 +12,9 @@ class Settings:
                  traveltimes_file: str = None,
                  num_ambulances: int = 3,
                  num_bases: int = 3):
+
+        # TODO: Look for a settings.yaml file
+        
         self.data_filename = None
         self.debug = debug
         self.demands_file = demands_file

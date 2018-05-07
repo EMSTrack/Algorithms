@@ -6,6 +6,8 @@ import geopy
 import geopy.distance
 import numpy as np
 
+from copy import deepcopy
+
 from scipy.spatial import KDTree
 
 from ems.algorithms.algorithm import Algorithm
@@ -99,4 +101,51 @@ class DispatcherAlgorithm(Algorithm):
         points = [(demand.location.longitude, demand.location.latitude) for demand in demands]
         kd_tree = KDTree(points)
         return kd_tree
+
+
+
+
+    def find_partial_coverage (self, base, demands_to_cover):
+
+        print("Length of demands: ", len(demands_to_cover))
+        # find the traveltime from the base to each demand, if it is less than 600 then it is covered
+        for i in range(len(demands_to_cover)):
+            
+            time = self.traveltimes.get_time(base, demands_to_cover[i])
+            covered = time.total_seconds() < 600
+            if covered:
+                demands_to_cover[i] = None
+                
+
+        return list(filter(None.__ne__, demands_to_cover))
+
+    def determine_coverage (self, ambulances:List[Ambulance], case):
+        # Given a set of ambulances, for each available ambulance, find its base and calculate how 
+        # many demands are covered. For each covered demand, delete it from the demand. 
+
+        # Continue until no more available ambulances, and then count remaining demand as 
+        # uncovered demands. 
+
+        checked_bases = []
+        # demands_to_cover = deepcopy(self.demands)
+        # covered = [0 for _ in demands_to_cover]
+
+        # active_bases = list([amb.base for amb in ambulances if not amb.deployed])
+
+        # print("Active bases: ", len(active_bases))
+        # for base in active_bases:
+        #     demands_to_cover = self.find_partial_coverage(base, demands_to_cover)
+
+
+
+        # print ("Coverage: " ,sum(covered))
+
+
+
+        # uncovered = sum([1 for u in demands_to_cover])
+        # print("Coverage: ", 100 - uncovered )
+        # return 100 - uncovered
+
+
+
 

@@ -64,11 +64,13 @@ class DispatcherSimulator(Simulator):
                 # Should never reach this point
                 print("Invalid Event")
 
+
+
             # Stage 2: Determine the next event
-            # Event Delay Case: If no ambulances are available and next case occurs before any ambulance gets back
-            # Event Retire Ambulance: If ambulances are currently handling cases and the ambulance gets back before
-            #                         next case occurs
-            # Event Start Case: If ambulances are available and next case occurs before any ambulance gets back
+            # Event Delay Case:         If no ambulances are available and next case occurs before any ambulance gets back
+            # Event Retire Ambulance:   If ambulances are currently handling cases and the ambulance gets back before
+            #                           next case occurs
+            # Event Start Case:         If ambulances are available and next case occurs before any ambulance gets back
             #
             # Finish when no more cases and no more ambulances attending cases
 
@@ -169,6 +171,10 @@ class DispatcherSimulator(Simulator):
         """
 
         print("Starting case {} which was recorded at {}".format(case.id, case.datetime))
+
+        # TODO Set Coverage of Tijuana here
+
+        self.algorithm.determine_coverage(self.ambulances, case)
 
         # Select ambulance to dispatch
         chosen_ambulance, ambulance_travel_time = \
