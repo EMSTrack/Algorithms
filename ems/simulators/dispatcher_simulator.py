@@ -21,6 +21,7 @@ class DispatcherSimulator(Simulator):
 
         self.finished_cases = []
         self.current_time = cases[0].datetime if len(cases) > 0 else -1
+        self.measured_coverage = []
         super(DispatcherSimulator, self).__init__(ambulances, cases, algorithm)
 
     def run(self):
@@ -76,6 +77,9 @@ class DispatcherSimulator(Simulator):
 
             # Loop end condition - No more case or moving ambulances
             if not pending_cases and not working_cases and not ambulances_in_motion:
+                total_cov = sum(self.measured_coverage)
+                avg_cov = total_cov/len(self.measured_coverage)
+                print("Average coverage: ", avg_cov)
                 return self.finished_cases
 
             # Sort all ambulances by end times
@@ -152,13 +156,21 @@ class DispatcherSimulator(Simulator):
                 event = Event.RETIRE_AMBULANCE
                 self.current_time = ambulance_release_time
 
+                
+
             print("Busy ambulances: ", sorted([amb.id for amb in ambulances_in_motion]))
             print("Pending cases: ", [case.id for case in pending_cases])
+
+            
 
             # Compute coverage
             # self.coverage (ambulances, self.traveltimes, self.bases, self.demands, required_r1)
 
         # TODO return "results" object with more potential information
+        # Compute average coverage:
+        total_cov = sum(self.measured_coverage)
+        avg_cov = total_cov/len(self.measured_coverage)
+        print("Average coverage: ", avg_cov)
         return self.finished_cases
 
     def start_case(self, case, ambulances_in_motion, start_time):
@@ -174,7 +186,7 @@ class DispatcherSimulator(Simulator):
 
         # TODO Set Coverage of Tijuana here
 
-        self.algorithm.determine_coverage(self.ambulances, case)
+        self.measured_coverage.append(self.algorithm.determine_coverage(self.ambulances, case))
 
         # Select ambulance to dispatch
         chosen_ambulance, ambulance_travel_time = \

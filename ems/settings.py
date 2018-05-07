@@ -10,10 +10,12 @@ class Settings:
                  bases_file: str = None,
                  cases_file: str = None,
                  traveltimes_file: str = None,
-                 num_ambulances: int = 3,
-                 num_bases: int = 3):
+                 num_ambulances: int = 11,
+                 num_bases: int = 11):
 
-        # TODO: Look for a settings.yaml file
+        # TODO: Look for a settings file
+
+
         
         self.data_filename = None
         self.debug = debug
