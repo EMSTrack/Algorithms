@@ -14,7 +14,9 @@ labels in the CSV files. Add a newline above the datasets, naming the latitudes 
 To see this, you may need to uncomment `printData()`. The test program will end up asking you 
 to proceed when ready. (Press Enter.) 
 
-## TODO 
+## TODO
+
+- UML diagram for the library (at least for us) 
 
 - Make coverage more efficient
 
