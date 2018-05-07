@@ -21,6 +21,8 @@ to proceed when ready. (Press Enter.)
 
 ![](packages_EMS.png)
 
+## To Install
+
 pyreverse comes with pylint, you need Graphviz: `brew install Graphiz` or `apt install Graphviz`
 
 Then run at the base folder of the repository, do
