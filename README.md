@@ -14,9 +14,23 @@ labels in the CSV files. Add a newline above the datasets, naming the latitudes 
 To see this, you may need to uncomment `printData()`. The test program will end up asking you 
 to proceed when ready. (Press Enter.) 
 
+
+# UMLs
+
+![](classes_EMS.png)
+
+![](packages_EMS.png)
+
+pyreverse comes with pylint, you need Graphviz: `brew install Graphiz` or `apt install Graphviz`
+
+Then run at the base folder of the repository, do
+
+`pyreverse -o png -p EMS ems`
+
 ## TODO
 
-- UML diagram for the library (at least for us) 
+
+
 
 - Make coverage more efficient. (Lesson learned, deepcopying drastically slows down runtime)
 
