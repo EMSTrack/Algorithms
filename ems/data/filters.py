@@ -3,12 +3,6 @@ import numpy as np
 
 def kmeans_select_bases(bases, traveltimes):
 
-    # TODO There is a problem with the lower code at pick_starting_bases() call
-    print()
-    print("HARD CODED NUMBERS, PROBLEM WHEN AMBULANCES > 12. (Not crashing today)")
-    import traceback; traceback.print_stack()
-    print()
-    input("Press enter to continue.")
 
     # This function happens to require the original Cruz Roja dataset. It doesn't necessarily need to.
     # For example, we could randomly choose bases.
@@ -16,7 +10,7 @@ def kmeans_select_bases(bases, traveltimes):
     print("Default init_bases(): Kmeans init bases")
 
     # Pick initial bases with kmeans algorithm
-    chosen_base_indices, demands_covered = pick_starting_bases(traveltimes, 12, 600)
+    chosen_base_indices, demands_covered = pick_starting_bases(traveltimes, len(bases), 600)
 
     # Returns object list
     chosen_bases = [bases[index] for index in chosen_base_indices]

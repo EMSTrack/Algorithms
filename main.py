@@ -8,7 +8,6 @@ from ems.simulators.dispatcher_simulator import DispatcherSimulator
 import argparse 
 
 # TODO allow command line arguments
-
 parser = argparse.ArgumentParser(description="Load settings, data, preprocess models, run sim.")
 parser.add_argument('--ambulances', help="Number of ambulances", type=int, required=False)
 parser.add_argument('--bases',      help='Numbre of bases',     type=int,  required=False)
@@ -16,9 +15,7 @@ parser.add_argument('--settings', help="Location of settings yaml file", type=st
 
 clargs = parser.parse_args()
 
-
-# TODO read from settings file
-
+# TODO Fix this so that we can store these in a file :)
 # file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
 file_path = '../Data/'
 bases_filepath = file_path + 'bases.csv'
