@@ -1,17 +1,14 @@
 from datetime import timedelta
 
+from ems.models.location_set import LocationSet
 import numpy as np
-
-
-
-
 
 
 # Wrapper class around a travel times data frame
 
 class TravelTimes:
 
-    def __init__(self, bases, demands, times: np.ndarray):
+    def __init__(self, bases:LocationSet, demands:LocationSet, times: np.ndarray):
         """
 
         :type times: Pandas dataframe
@@ -20,7 +17,8 @@ class TravelTimes:
         self.demands = demands
         self.times = times
 
-        self.kd_tree = self.initialize_kd_tree(demands)
+        #TODO
+        # self.kd_tree = self.initialize_kd_tree(demands)
 
     def get_time(self, base, demand):
         """

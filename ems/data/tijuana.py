@@ -9,6 +9,7 @@ from ems.data.traveltimes import TravelTimes
 from ems.models.base import Base
 from ems.models.case import Case
 from ems.models.demand import Demand
+from ems.models.location_set import LocationSet
 from ems.utils import parse_headered_csv, parse_unheadered_csv
 
 
@@ -25,6 +26,11 @@ class CSVTijuanaDataset(Dataset):
         self.bases, self.bases_df = self.read_bases(bases_filepath)
         self.cases, self.cases_df = self.read_cases(cases_filepath)
         self.traveltimes = self.read_times(traveltimes_filepath)
+
+        # TODO
+        self.basesLS = LocationSet(self.bases)
+        self.demandsLS = LocationSet(self.demands)
+
 
     # Helper functions
     def read_cases(self, filename):
@@ -90,7 +96,7 @@ class CSVTijuanaDataset(Dataset):
         # Read travel times from CSV file into a pandas dataframe
         traveltimes_df = pd.read_csv(filename)
 
-        traveltimes = TravelTimes(traveltimes_df.as_matrix())
+        traveltimes = TravelTimes(self.bases_df, self.demands_df, traveltimes_df.as_matrix())
 
         return traveltimes
 

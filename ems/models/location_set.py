@@ -1,13 +1,20 @@
-from scipy.spatial import KDTree
-
+from scipy.spatial          import KDTree
+from typing                 import List
+from ems.models.location    import Location
 
 class LocationSet:
 
-    def __init__(self, locations):
+    def __init__(self, locations:List[Location]):
         self.locations = locations
-        self.kd_tree = self._initialize_kd_tree(locations)
+        self.kd_tree = self._initialize_kd_tree()
+
 
     def _initialize_kd_tree(self):
+        """
+        Initialize the kd_tree.
+        Helper Method.
+        :return:
+        """
 
         # Form a kd-tree
         points = [(demand.location.longitude, demand.location.latitude) for demand in self.locations]
