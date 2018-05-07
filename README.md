@@ -17,6 +17,8 @@ to proceed when ready. (Press Enter.)
 
 # UMLs
 
+These images are small, so right click and open image in new tab.
+
 ![](classes_EMS.png)
 
 ![](packages_EMS.png)
@@ -32,9 +34,7 @@ Then run at the base folder of the repository, do
 ## TODO
 
 
-
-
-- Make coverage more efficient. (Lesson learned, deepcopying drastically slows down runtime)
+- Make coverage more efficient. (Done. Lesson learned, deepcopying drastically slows down runtime)
 
 - Begin brainstorming and implementing additional simulation evaluation metrics (e.g. coverage, etc.)
 
