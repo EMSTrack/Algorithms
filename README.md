@@ -17,7 +17,7 @@ to proceed when ready. (Press Enter.)
 
 # UMLs
 
-These images are small, so right click and open image in new tab.
+These images are small, either (1) zoom into the page or (2) right click and open image in new tab.
 
 ![](classes_EMS.png)
 
