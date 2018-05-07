@@ -127,6 +127,21 @@ class DispatcherAlgorithm(Algorithm):
         # uncovered demands. 
 
         checked_bases = []
+        active_bases = list([amb.base for amb in ambulances if not amb.deployed])
+        demands_covered = [0 for _ in self.demands]
+
+        for index in range(len(demands_covered)):
+            if not demands_covered[index]:
+                for base in active_bases:
+                    if self.traveltimes.get_time(base, self.demands[index]).total_seconds() < 600:
+                        demands_covered[index] = 1
+                        break
+        print("Coverage: ",sum(demands_covered))
+        return sum(demands_covered) 
+
+
+
+
         # demands_to_cover = deepcopy(self.demands)
         # covered = [0 for _ in demands_to_cover]
 
