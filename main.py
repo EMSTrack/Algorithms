@@ -8,8 +8,8 @@ from ems.simulators.dispatcher_simulator import DispatcherSimulator
 
 # TODO read from settings file
 
-# file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
-file_path = '../Data/'
+file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
+# file_path = '../Data/'
 bases_filepath = file_path + 'bases.csv'
 demands_filepath = file_path + 'demand_points.csv'
 cases_filepath = file_path + 'calls.csv'

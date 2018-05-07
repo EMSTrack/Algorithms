@@ -10,8 +10,8 @@ class Settings:
                  bases_file: str = None,
                  cases_file: str = None,
                  traveltimes_file: str = None,
-                 num_ambulances: int = 11,
-                 num_bases: int = 11):
+                 num_ambulances: int = 13,
+                 num_bases: int = 13):
 
         # TODO: Look for a settings file
 
