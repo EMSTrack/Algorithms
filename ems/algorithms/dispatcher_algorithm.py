@@ -44,7 +44,10 @@ class DispatcherAlgorithm(Algorithm):
         chosen_ambulance, ambulance_travel_time = self.find_fastest_ambulance(
             ambulances, self.traveltimes, closest_demand)
 
-        return chosen_ambulance, ambulance_travel_time
+        # Determine the overall coverage, and each ambulance's disruption to the cost. TODO 
+        current_coverage = self.determine_coverage(ambulances, case)
+
+        return chosen_ambulance, ambulance_travel_time, current_coverage
 
     def closest_distance(self, list_type, target_point):
         """

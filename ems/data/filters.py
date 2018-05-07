@@ -2,6 +2,8 @@ import numpy as np
 
 
 def kmeans_select_bases(bases, traveltimes):
+
+    # TODO There is a problem with the lower code at pick_starting_bases() call
     print()
     print("HARD CODED NUMBERS, PROBLEM WHEN AMBULANCES > 12. (Not crashing today)")
     import traceback; traceback.print_stack()

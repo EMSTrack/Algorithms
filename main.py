@@ -5,6 +5,17 @@ from ems.models.ambulance import Ambulance
 from ems.settings import Settings
 from ems.simulators.dispatcher_simulator import DispatcherSimulator
 
+import argparse 
+
+# TODO allow command line arguments
+
+parser = argparse.ArgumentParser(description="Load settings, data, preprocess models, run sim.")
+parser.add_argument('--ambulances', help="Number of ambulances", type=int, required=False)
+parser.add_argument('--bases',      help='Numbre of bases',     type=int,  required=False)
+parser.add_argument('--settings', help="Location of settings yaml file", type=str, required=False)
+
+clargs = parser.parse_args()
+
 
 # TODO read from settings file
 
@@ -21,7 +32,9 @@ settings = Settings(debug=True,
                     demands_file=demands_filepath,
                     bases_file=bases_filepath,
                     cases_file=cases_filepath,
-                    traveltimes_file=traveltimes_filepath)
+                    traveltimes_file=traveltimes_filepath,
+                    args=clargs
+                    )
 
 # Initialize dataset
 dataset = CSVTijuanaDataset(demands_filepath=settings.demands_file,

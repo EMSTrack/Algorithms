@@ -184,13 +184,17 @@ class DispatcherSimulator(Simulator):
 
         print("Starting case {} which was recorded at {}".format(case.id, case.datetime))
 
-        # TODO Set Coverage of Tijuana here
+        # Find the coverage, determine 
 
-        self.measured_coverage.append(self.algorithm.determine_coverage(self.ambulances, case))
+        # TODO porting these calls to dispatcher_algorithm.py
+        # current_coverage = self.algorithm.determine_coverage(self.ambulances, case)
+        # self.measured_coverage.append(current_coverage)
 
         # Select ambulance to dispatch
-        chosen_ambulance, ambulance_travel_time = \
+        chosen_ambulance, ambulance_travel_time, current_coverage = \
             self.algorithm.select_ambulance(self.ambulances, case)
+
+        self.measured_coverage.append(current_coverage)
 
         # Dispatch an ambulance as returned by find_available. It only works if deployed
         if chosen_ambulance is not None:
@@ -211,7 +215,7 @@ class DispatcherSimulator(Simulator):
             chosen_ambulance.deploy(start_time, None, end_time)
             ambulances_in_motion.append(chosen_ambulance)
 
-            # Set case start + finish timestamps and the case delay
+            # Update the case with information
             case.start_time = start_time
             case.finish_time = end_time
             case.delay = case.start_time - case.datetime
