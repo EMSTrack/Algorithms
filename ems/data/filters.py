@@ -6,6 +6,7 @@ def kmeans_select_bases(bases, traveltimes):
     print("HARD CODED NUMBERS, PROBLEM WHEN AMBULANCES > 12. (Not crashing today)")
     import traceback; traceback.print_stack()
     print()
+    input("Press enter to continue.")
 
     # This function happens to require the original Cruz Roja dataset. It doesn't necessarily need to.
     # For example, we could randomly choose bases.
