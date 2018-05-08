@@ -21,7 +21,11 @@ to proceed when ready. (Press Enter.)
 
 These images are small, either (1) zoom into the page or (2) right click and open image in new tab.
 
+*Class UML Diagram:*
+
 ![](classes_EMS.png)
+
+*Class UML Diagram:*
 
 ![](packages_EMS.png)
 
@@ -50,7 +54,8 @@ Then run at the base folder of the repository, do
 
 - Self Explanatory: Ambulance, Base, Case, Demand
 
-- Traveltime object (ems/data/traveltimes.py) stores a numpy array that represents the travel time from each base to each demand
+- Traveltime object (ems/data/traveltimes.py) stores a numpy array that represents the travel time from each
+ base to each demand
 
 ### Dataset (ems/data/dataset.py)
 
@@ -64,11 +69,13 @@ Then run at the base folder of the repository, do
 
 - Reads bases, cases, and demands from file
 
-- Reads traveltimes from file (note that this is not a requirement for the dataset interface, because traveltimes is only needed for the algorithm)
+- Reads traveltimes from file (note that this is not a requirement for the dataset interface, because
+traveltimes is only needed for the algorithm)
 
 ### Filters (ems/data/filters.py)
 
-- May not be necessary; just a file to store any potential filtering of information from the dataset for input into the simulator (e.g. base selection)
+- May not be necessary; just a file to store any potential filtering of information from the dataset
+for input into the simulator (e.g. base selection)
 
 ### Algorithm (ems/algorithms/algorithms.py)
 
@@ -118,9 +125,11 @@ Then run at the base folder of the repository, do
   
   - Keeps track of all ambulances that are attending cases
   
-  - _This is very much like a finite state machine with three states: "Start case", "Retire ambulance", and "Delay case"_
+  - _This is very much like a finite state machine with three states: "Start case", "Retire ambulance",
+  and "Delay case"_
 
-- Note that demands, traveltimes, and bases are __not__ initialized here because they are not essential to the simulation; instead they are just used by the algorithm for ambulance selection
+- Note that demands, traveltimes, and bases are __not__ initialized here because they are not essential
+to the simulation; instead they are just used by the algorithm for ambulance selection
   
 ### Utils (ems/utils)
 
