@@ -20,7 +20,7 @@ class CoverageAlgorithm:
                          ambulances: List[Ambulance]):
         """
         The signature for the function which runs the coverage algorithm
-        :param demands: 
+        :param demands:
         :param ambulances:
         :return:
         """
