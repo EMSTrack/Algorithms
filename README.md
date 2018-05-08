@@ -21,11 +21,11 @@ to proceed when ready. (Press Enter.)
 
 These images are small, either (1) zoom into the page or (2) right click and open image in new tab.
 
-*Class UML Diagram:*
+**Class UML Diagram:**
 
 ![](classes_EMS.png)
 
-*Class UML Diagram:*
+**Class UML Diagram:**
 
 ![](packages_EMS.png)
 
