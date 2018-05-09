@@ -21,46 +21,43 @@ to proceed when ready. (Press Enter.)
 
 Here are the UMLs for each group of programs we have.
 
-### Simulator
+## Simulator
 
 ![](classes_ems_simulators.jpg)
 
-### Models
+## Models
 
 ![](classes_ems_models.jpg)
 
-### Data
+## Data
 
 ![](classes_ems_data.jpg)
 
-### Algorithms
+## Algorithms
 
 ![](classes_ems_algorithms.jpg)
 
 
 # Package Diagrams
 
-### Simulator
+## Simulator
 
 ![](packages_ems_simulators.jpg)
 
-### Models
+## Models
 
 ![](packages_ems_models.jpg)
 
-### Data
+## Data
 
 ![](packages_ems_data.jpg)
 
-### Algorithms
+## Algorithms
 
 ![](packages_ems_algorithms.jpg)
 
 
-
-
-
-## To Install
+## How To Install auto UML Generator
 
 pyreverse comes with pylint, you need Graphviz: `brew install Graphiz` or `apt install Graphviz`
 
