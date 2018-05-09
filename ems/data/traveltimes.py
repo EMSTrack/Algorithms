@@ -1,14 +1,11 @@
 from datetime import timedelta
 
-from typing import Type
+import numpy as np
+from geopy import Point
 
-from ems.models.location_set import LocationSet
-from scipy.spatial import KDTree
 from ems.models.base import Base
 from ems.models.case import Demand
-from geopy import Point
-import numpy as np
-
+from ems.models.location_set import LocationSet
 
 
 class TravelTimes:

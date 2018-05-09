@@ -1,16 +1,14 @@
 # Framework for using algorithms and allowing for replacement
+from copy import deepcopy
+from datetime import timedelta
 from typing import List
 
-from ems.models.ambulance import Ambulance
+import numpy as np
+
 from ems.algorithms.coverage import CoverageAlgorithm
 from ems.data.traveltimes import TravelTimes
+from ems.models.ambulance import Ambulance
 
-from datetime import timedelta
-from copy import deepcopy
-
-from ems.models.demand import Demand
-
-import numpy as np
 
 # Used by the sim to select ambulances
 class DemandCoverage (CoverageAlgorithm):

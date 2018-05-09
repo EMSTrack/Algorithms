@@ -1,6 +1,5 @@
 # Model the data by their types.
 
-import os
 import pandas as pd
 from geopy import Point
 

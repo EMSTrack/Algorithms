@@ -1,23 +1,10 @@
 # The following functions define default algorithms for the DispatchAlgorithm class.
-from datetime import timedelta
+import random
 from typing import List
 
-import geopy
-import geopy.distance
-import numpy as np
-
-import random
-
-from copy import deepcopy
-
-from scipy.spatial import KDTree
-
 from ems.algorithms.ambulance_selection import AmbulanceSelectionAlgorithm
-from ems.data.traveltimes import TravelTimes
 from ems.models.ambulance import Ambulance
-from ems.models.base import Base
 from ems.models.case import Case
-from ems.models.demand import Demand
 
 
 # An implementation of a "fastest travel time" ambulance_selection from a base to

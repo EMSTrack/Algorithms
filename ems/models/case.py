@@ -1,6 +1,6 @@
-import datetime
 from datetime import datetime
 from datetime import timedelta
+
 from geopy import Point
 
 from ems.models.demand import Demand

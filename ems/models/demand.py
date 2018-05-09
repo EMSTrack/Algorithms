@@ -1,5 +1,3 @@
-from geopy import Point
-
 from ems.models.location import Location
 
 

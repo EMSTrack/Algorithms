@@ -1,6 +1,9 @@
-from scipy.spatial          import KDTree
-from typing                 import List
-from ems.models.location    import Location
+from typing import List
+
+from scipy.spatial import KDTree
+
+from ems.models.location import Location
+
 
 class LocationSet:
 

@@ -1,12 +1,12 @@
-from ems.algorithms.dispatch_fastest_ambulance import BestTravelTimeAlgorithm
+import argparse
+
 from ems.algorithms.demand_coverage import DemandCoverage
+from ems.algorithms.dispatch_fastest_ambulance import BestTravelTimeAlgorithm
 from ems.data.filters import kmeans_select_bases
 from ems.data.tijuana import CSVTijuanaDataset
 from ems.models.ambulance import Ambulance
 from ems.settings import Settings
 from ems.simulators.dispatcher_simulator import DispatcherSimulator
-
-import argparse 
 
 # TODO allow command line arguments
 parser = argparse.ArgumentParser(description="Load settings, data, preprocess models, run sim.")

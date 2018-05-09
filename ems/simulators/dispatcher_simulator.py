@@ -7,10 +7,10 @@ from typing import List
 from termcolor import colored
 
 from ems.algorithms.ambulance_selection import AmbulanceSelectionAlgorithm
+from ems.algorithms.demand_coverage import DemandCoverage
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 from ems.simulators.simulator import Simulator
-from ems.algorithms.demand_coverage import DemandCoverage
 
 
 class DispatcherSimulator(Simulator):
