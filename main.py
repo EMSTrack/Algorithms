@@ -1,4 +1,5 @@
 from ems.algorithms.dispatch_fastest_ambulance import BestTravelTimeAlgorithm
+from ems.algorithms.demand_coverage import DemandCoverage
 from ems.data.filters import kmeans_select_bases
 from ems.data.tijuana import CSVTijuanaDataset
 from ems.models.ambulance import Ambulance
@@ -41,7 +42,11 @@ dataset = CSVTijuanaDataset(demands_filepath=settings.demands_file,
                             traveltimes_filepath=settings.traveltimes_file)
 
 # Initialize ambulance_selection
-alg = BestTravelTimeAlgorithm(traveltimes=dataset.traveltimes)
+ambulance_select = BestTravelTimeAlgorithm(traveltimes=dataset.traveltimes)
+
+# Initialize demand_coverage
+determine_coverage = DemandCoverage(travel_times=dataset.traveltimes)
+
 
 # Select bases
 chosen_bases = kmeans_select_bases(dataset.bases, dataset.traveltimes)
@@ -56,5 +61,14 @@ for index in range(settings.num_ambulances):
 # Initialize and run the simulator
 sim = DispatcherSimulator(ambulances=ambulances,
                           cases=dataset.cases,
-                          ambulance_selector=alg)
+                          ambulance_selector=ambulance_select,
+                          coverage_alg=determine_coverage
+                          )
+
+
 finished_cases = sim.run()
+
+
+
+
+

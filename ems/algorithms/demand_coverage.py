@@ -8,10 +8,12 @@ from ems.data.traveltimes import TravelTimes
 from datetime import timedelta
 from copy import deepcopy
 
+from ems.models.demand import Demand
+
 import numpy as np
 
 # Used by the sim to select ambulances
-class DemandsCoveredAlgorithm (CoverageAlgorithm):
+class DemandCoverage (CoverageAlgorithm):
     """
         Barebone class. Users may subclass to implement their own ambulance_selection for
         finding coverage.
@@ -31,13 +33,15 @@ class DemandsCoveredAlgorithm (CoverageAlgorithm):
         """
 
         active_bases = list([amb.base for amb in ambulances if not amb.deployed])
-        demands = self.travel_times.demands
+        demands = self.travel_times.demands.locations
+        # import IPython; IPython.embed()
         demands_covered = [0 for _ in demands]
 
         for index in range(len(demands)):
-            if not demands[index]:
+            if demands[index]: # TODO I don't know why this ishere
                 for base in active_bases:
-                    if self.travel_times.get_time(base, demands[index]).total_seconds() < 600:
+                    dem = demands[index]
+                    if self.travel_times.get_time(base, dem).total_seconds() < 600:
                         demands_covered[index] = 1
                         break
 

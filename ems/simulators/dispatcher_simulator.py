@@ -10,6 +10,7 @@ from ems.algorithms.ambulance_selection import AmbulanceSelectionAlgorithm
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 from ems.simulators.simulator import Simulator
+from ems.algorithms.demand_coverage import DemandCoverage
 
 
 class DispatcherSimulator(Simulator):
@@ -17,11 +18,14 @@ class DispatcherSimulator(Simulator):
     def __init__(self,
                  ambulances: List[Ambulance],
                  cases: List[Case],
-                 ambulance_selector: AmbulanceSelectionAlgorithm):
+                 ambulance_selector: AmbulanceSelectionAlgorithm,
+                 coverage_alg:DemandCoverage
+
+                 ):
 
         self.finished_cases = []
         self.current_time:datetime.datetime = cases[0].datetime if len(cases) > 0 else -1
-        self.measured_coverage = []
+        self.demand_coverage:DemandCoverage = coverage_alg
         super(DispatcherSimulator, self).__init__(ambulances, cases, ambulance_selector)
 
     def run(self):
@@ -81,6 +85,10 @@ class DispatcherSimulator(Simulator):
                 # total_cov = sum(self.measured_coverage)
                 # avg_cov = total_cov/len(self.measured_coverage)
                 # print("Average coverage: ", avg_cov)
+                avg = self.demand_coverage.avgCoverage()
+                min = self.demand_coverage.minCoverage()
+                max = self.demand_coverage.maxCoverage()
+                print("Average, Min, and Max Coverages: ", avg, min, max)
                 return self.finished_cases
 
             # Sort all ambulances by end times
@@ -169,8 +177,8 @@ class DispatcherSimulator(Simulator):
 
         # TODO return "results" object with more potential information
         # Compute average coverage:
-        total_cov = sum(self.measured_coverage)
-        avg_cov = total_cov/len(self.measured_coverage)
+        # total_cov = sum(self.measured_coverage)
+        # avg_cov = total_cov/len(self.measured_coverage)
         print("Average coverage: ", avg_cov)
         return self.finished_cases
 
@@ -186,20 +194,16 @@ class DispatcherSimulator(Simulator):
         print("Starting case {} which was recorded at {}".format(case.id, case.datetime))
 
         # Find the coverage, determine 
+        self.demand_coverage.calculate_entire_coverage(self.ambulances)
+        print("Coverage: ", self.demand_coverage.get_most_recent())
 
-        # TODO porting these calls to dispatch_fastest_ambulance.py
-        # current_coverage = self.ambulance_selection.determine_coverage(self.ambulances, case)
-        # self.measured_coverage.append(current_coverage)
 
         # Select ambulance to dispatch
         selection = self.ambulance_selection.select_ambulance(self.ambulances, case)
         chosen_ambulance = selection.get('choice')
         ambulance_travel_time = selection.get('travel_time', None)
-        current_coverage = selection.get('coverage', None)
 
-        self.measured_coverage.append(current_coverage)
-
-        # Dispatch an ambulance as returned by find_available. It only works if deployed
+        # Dispatch an ambulance if one was found
         if chosen_ambulance is not None:
 
             # TODO Currently assume that each case will take 2x travel time + 20 minutes

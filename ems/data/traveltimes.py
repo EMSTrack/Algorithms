@@ -39,6 +39,8 @@ class TravelTimes:
         :param demand:
         :return:
         """
+        assert(isinstance(base, Base))
+        assert(isinstance(demand,Demand))
         time = int(self.times[base.id][demand.id])
 
         return timedelta(seconds=time)
