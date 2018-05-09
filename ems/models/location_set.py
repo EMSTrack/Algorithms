@@ -17,6 +17,7 @@ class LocationSet:
         """
 
         # Form a kd-tree
+
         points = [(demand.location.longitude, demand.location.latitude) for demand in self.locations]
         kd_tree = KDTree(points)
         return kd_tree

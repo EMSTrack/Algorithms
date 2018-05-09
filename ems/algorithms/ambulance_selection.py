@@ -3,7 +3,6 @@ from typing import List
 
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
-from ems.models.demand import Demand
 
 
 # Used by the sim to select ambulances

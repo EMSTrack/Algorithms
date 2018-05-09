@@ -41,9 +41,7 @@ dataset = CSVTijuanaDataset(demands_filepath=settings.demands_file,
                             traveltimes_filepath=settings.traveltimes_file)
 
 # Initialize ambulance_selection
-alg = BestTravelTimeAlgorithm(bases=dataset.bases,
-                              demands=dataset.demands,
-                              traveltimes=dataset.traveltimes)
+alg = BestTravelTimeAlgorithm(traveltimes=dataset.traveltimes)
 
 # Select bases
 chosen_bases = kmeans_select_bases(dataset.bases, dataset.traveltimes)

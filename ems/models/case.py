@@ -14,6 +14,8 @@ class Case:
                  finish_time: datetime = None,
                  delay: timedelta = None,
                  closest_demand: Demand = None):
+
+
         self.id = id
         self.location = point
         self.weekday = weekday
