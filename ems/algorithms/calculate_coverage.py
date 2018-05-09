@@ -13,7 +13,7 @@ import numpy as np
 # Used by the sim to select ambulances
 class DemandsCoveredAlgorithm (CoverageAlgorithm):
     """
-        Barebone class. Users may subclass to implement their own algorithm for
+        Barebone class. Users may subclass to implement their own ambulance_selection for
         finding coverage.
     """
 

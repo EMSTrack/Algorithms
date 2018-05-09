@@ -1,5 +1,6 @@
 import datetime
-
+from datetime import datetime
+from datetime import timedelta
 from geopy import Point
 
 from ems.models.demand import Demand
@@ -7,11 +8,11 @@ from ems.models.demand import Demand
 
 class Case:
 
-    def __init__(self, id: int, point: Point, dt: datetime.datetime,
+    def __init__(self, id: int, point: Point, dt: datetime,
                  weekday: str, priority: float = None,
-                 start_time: datetime.datetime = None,
-                 finish_time: datetime.datetime = None,
-                 delay: datetime.timedelta = None,
+                 start_time: datetime = None,
+                 finish_time: datetime = None,
+                 delay: timedelta = None,
                  closest_demand: Demand = None):
         self.id = id
         self.location = point

@@ -10,7 +10,7 @@ from ems.models.demand import Demand
 # Used by the sim to select ambulances
 class CoverageAlgorithm:
     """
-        Barebone class. Users may subclass to implement their own algorithm for
+        Barebone class. Users may subclass to implement their own ambulance_selection for
         finding coverage.
     """
 
@@ -19,7 +19,7 @@ class CoverageAlgorithm:
                          demands: LocationSet,
                          ambulances: List[Ambulance]):
         """
-        The signature for the function which runs the coverage algorithm
+        The signature for the function which runs the coverage ambulance_selection
         :param demands:
         :param ambulances:
         :return:

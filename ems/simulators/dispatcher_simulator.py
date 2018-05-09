@@ -17,12 +17,12 @@ class DispatcherSimulator(Simulator):
     def __init__(self,
                  ambulances: List[Ambulance],
                  cases: List[Case],
-                 algorithm: AmbulanceSelectionAlgorithm):
+                 ambulance_selector: AmbulanceSelectionAlgorithm):
 
         self.finished_cases = []
         self.current_time = cases[0].datetime if len(cases) > 0 else -1
         self.measured_coverage = []
-        super(DispatcherSimulator, self).__init__(ambulances, cases, algorithm)
+        super(DispatcherSimulator, self).__init__(ambulances, cases, ambulance_selector)
 
     def run(self):
 
@@ -77,9 +77,10 @@ class DispatcherSimulator(Simulator):
 
             # Loop end condition - No more case or moving ambulances
             if not pending_cases and not working_cases and not ambulances_in_motion:
-                total_cov = sum(self.measured_coverage)
-                avg_cov = total_cov/len(self.measured_coverage)
-                print("Average coverage: ", avg_cov)
+                # TODO The coverage calls need to be to the Coverage instance
+                # total_cov = sum(self.measured_coverage)
+                # avg_cov = total_cov/len(self.measured_coverage)
+                # print("Average coverage: ", avg_cov)
                 return self.finished_cases
 
             # Sort all ambulances by end times
@@ -179,19 +180,19 @@ class DispatcherSimulator(Simulator):
         :param case:
         :param ambulances_in_motion:
         :param start_time:
-        :return: True if case starts successfully; False if algorithm fails to select an ambulance
+        :return: True if case starts successfully; False if ambulance_selection fails to select an ambulance
         """
 
         print("Starting case {} which was recorded at {}".format(case.id, case.datetime))
 
         # Find the coverage, determine 
 
-        # TODO porting these calls to dispatcher_algorithm.py
-        # current_coverage = self.algorithm.determine_coverage(self.ambulances, case)
+        # TODO porting these calls to dispatch_fastest_ambulance.py
+        # current_coverage = self.ambulance_selection.determine_coverage(self.ambulances, case)
         # self.measured_coverage.append(current_coverage)
 
         # Select ambulance to dispatch
-        selection = self.algorithm.select_ambulance(self.ambulances, case)
+        selection = self.ambulance_selection.select_ambulance(self.ambulances, case)
         chosen_ambulance = selection.get('choice')
         ambulance_travel_time = selection.get('travel_time', None)
         current_coverage = selection.get('coverage', None)

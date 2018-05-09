@@ -9,7 +9,7 @@ from ems.models.demand import Demand
 # Used by the sim to select ambulances
 class AmbulanceSelectionAlgorithm:
     """
-        Barebone class. Users may subclass to implement their own algorithm for
+        Barebone class. Users may subclass to implement their own ambulance_selection for
         selecting an ambulance.
     """
 

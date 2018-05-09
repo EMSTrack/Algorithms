@@ -1,4 +1,4 @@
-from ems.algorithms.dispatcher_algorithm import DispatcherAlgorithm
+from ems.algorithms.dispatch_fastest_ambulance import BestTravelTimeAlgorithm
 from ems.data.filters import kmeans_select_bases
 from ems.data.tijuana import CSVTijuanaDataset
 from ems.models.ambulance import Ambulance
@@ -40,10 +40,10 @@ dataset = CSVTijuanaDataset(demands_filepath=settings.demands_file,
                             cases_filepath=settings.cases_file,
                             traveltimes_filepath=settings.traveltimes_file)
 
-# Initialize algorithm
-alg = DispatcherAlgorithm(bases=dataset.bases,
-                          demands=dataset.demands,
-                          traveltimes=dataset.traveltimes)
+# Initialize ambulance_selection
+alg = BestTravelTimeAlgorithm(bases=dataset.bases,
+                              demands=dataset.demands,
+                              traveltimes=dataset.traveltimes)
 
 # Select bases
 chosen_bases = kmeans_select_bases(dataset.bases, dataset.traveltimes)
@@ -58,5 +58,5 @@ for index in range(settings.num_ambulances):
 # Initialize and run the simulator
 sim = DispatcherSimulator(ambulances=ambulances,
                           cases=dataset.cases,
-                          algorithm=alg)
+                          ambulance_selector=alg)
 finished_cases = sim.run()

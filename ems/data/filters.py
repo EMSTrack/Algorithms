@@ -9,7 +9,7 @@ def kmeans_select_bases(bases, traveltimes):
 
     print("Default init_bases(): Kmeans init bases")
 
-    # Pick initial bases with kmeans algorithm
+    # Pick initial bases with kmeans ambulance_selection
     chosen_base_indices, demands_covered = pick_starting_bases(traveltimes, len(bases), 600)
 
     # Returns object list

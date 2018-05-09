@@ -20,7 +20,7 @@ from ems.models.case import Case
 from ems.models.demand import Demand
 
 
-# An implementation of a "fastest travel time" algorithm from a base to
+# An implementation of a "fastest travel time" ambulance_selection from a base to
 # the demand point closest to a case
 
 class RandomAmbulanceSelectionAlgorithm(AmbulanceSelectionAlgorithm):
