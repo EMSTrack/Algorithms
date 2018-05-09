@@ -21,7 +21,7 @@ from ems.models.demand import Demand
 # An implementation of a "fastest travel time" algorithm from a base to
 # the demand point closest to a case
 
-class DispatcherAlgorithm(AmbulanceSelectionAlgorithm):
+class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
 
     def __init__(self,
                  bases: List[Base] = None,
@@ -45,11 +45,10 @@ class DispatcherAlgorithm(AmbulanceSelectionAlgorithm):
             ambulances, self.traveltimes, closest_demand)
 
         # Determine the overall coverage, and each ambulance's disruption to the cost. TODO 
-        current_coverage = self.determine_coverage(ambulances, case)
+        # current_coverage = self.determine_coverage(ambulances, case)
 
         return {'choice': chosen_ambulance,
-                'travel_time': ambulance_travel_time,
-                'coverage': current_coverage}
+                'travel_time': ambulance_travel_time}
 
     def closest_distance(self, list_type, target_point):
         """
@@ -109,62 +108,6 @@ class DispatcherAlgorithm(AmbulanceSelectionAlgorithm):
 
 
 
-
-    def find_partial_coverage (self, base, demands_to_cover):
-
-        print("Length of demands: ", len(demands_to_cover))
-        # find the traveltime from the base to each demand, if it is less than 600 then it is covered
-        for i in range(len(demands_to_cover)):
-            
-            time = self.traveltimes.get_time(base, demands_to_cover[i])
-            covered = time.total_seconds() < 600
-            if covered:
-                demands_to_cover[i] = None
-                
-
-        return list(filter(None.__ne__, demands_to_cover))
-
-    def determine_coverage (self, ambulances:List[Ambulance], case):
-        # Given a set of ambulances, for each available ambulance, find its base and calculate how 
-        # many demands are covered. For each covered demand, delete it from the demand. 
-
-        # Continue until no more available ambulances, and then count remaining demand as 
-        # uncovered demands. 
-
-        checked_bases = []
-        active_bases = list([amb.base for amb in ambulances if not amb.deployed])
-        demands_covered = [0 for _ in self.demands]
-
-        for index in range(len(demands_covered)):
-            if not demands_covered[index]:
-                for base in active_bases:
-                    if self.traveltimes.get_time(base, self.demands[index]).total_seconds() < 600:
-                        demands_covered[index] = 1
-                        break
-        print("Coverage: ",sum(demands_covered))
-        return sum(demands_covered) 
-
-
-
-
-        # demands_to_cover = deepcopy(self.demands)
-        # covered = [0 for _ in demands_to_cover]
-
-        # active_bases = list([amb.base for amb in ambulances if not amb.deployed])
-
-        # print("Active bases: ", len(active_bases))
-        # for base in active_bases:
-        #     demands_to_cover = self.find_partial_coverage(base, demands_to_cover)
-
-
-
-        # print ("Coverage: " ,sum(covered))
-
-
-
-        # uncovered = sum([1 for u in demands_to_cover])
-        # print("Coverage: ", 100 - uncovered )
-        # return 100 - uncovered
 
 
 

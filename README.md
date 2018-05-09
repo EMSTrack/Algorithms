@@ -1,29 +1,32 @@
 # Ambulance Dispatch Simulation
 
-A library to do ambulance dispatch simulation and analysis. 
+A library to do ambulance dispatch simulation and analysis.
 
 Try: `time python3 main.py --ambulances 7 --bases 7`
 
-To run the simulation, take a look at `main.py`. Notice the filepaths there. You will need to edit 
-`file_path`, `demands_filepath`, and `bases_filepath` to point at the Cruz Roja datasets. 
+To run the simulation, take a look at `main.py`. Notice the filepaths there. You will need to edit
+`file_path`, `demands_filepath`, and `bases_filepath` to point at the Cruz Roja datasets.
 
-To test, take a look at `test.py`. Similar to main.py, you will need to edit 
-`file_path`, `demands_filepath`, and `bases_filepath` to point at the Cruz Roja datasets. 
+To test, take a look at `test.py`. Similar to main.py, you will need to edit
+`file_path`, `demands_filepath`, and `bases_filepath` to point at the Cruz Roja datasets.
 
 You'll notice that an exception will be thrown. This is because the datasets will require
 labels in the CSV files. Add a newline above the datasets, naming the latitudes and longitudes.
 
-To see this, you may need to uncomment `printData()`. The test program will end up asking you 
-to proceed when ready. (Press Enter.) 
+To see this, you may need to uncomment `printData()`. The test program will end up asking you
+to proceed when ready. (Press Enter.)
 
 
 # UMLs
 
 These images are small, either (1) zoom into the page or (2) right click and open image in new tab.
 
-**Class UML Diagram:**
+## Simulator
 
-![](classes_EMS.png)
+![](classes_ems_simulators.jpg)
+![](classes_ems_models.jpg)
+![](classes_ems_data.jpg)
+![](classes_ems_algorithms.jpg)
 
 **Class UML Diagram:**
 
@@ -92,13 +95,13 @@ for input into the simulator (e.g. base selection)
 - Implements ambulance selection with a "fastest ambulance" algorithm by:
 
   - Finding the closest demand point to the given case by:
-  
+
     - Building a KD-Tree from the demand points for easy KNN (k=1) computation with the case location
-  
+
   - Finding a free ambulance whose travel time from its base to that demand point is minimal by:
-  
+
     - Querying the travel time object for travel times between each free ambulance's base to the demand point
-    
+
 - TBD (just need to merge): Support for coverage computation
 
 ### Simulator (ems/simulators/simulator.py)
@@ -114,27 +117,27 @@ for input into the simulator (e.g. base selection)
 - Run loop explanation:
 
   - __Stage 1__. Performs the current iteration's "event" and logs the results
-  
+
     - Events defined at the bottom of the file
-  
+
   - __Stage 2__. Computes the next iteration's event
-  
+
   - Keeps track of a "current time" and the current event
-  
+
   - Keeps track of all "pending cases" (cases that have begun but have not been assigned an ambulance)
-  
+
   - Keeps track of all ambulances that are attending cases
-  
+
   - _This is very much like a finite state machine with three states: "Start case", "Retire ambulance",
   and "Delay case"_
 
 - Note that demands, traveltimes, and bases are __not__ initialized here because they are not essential
 to the simulation; instead they are just used by the algorithm for ambulance selection
-  
+
 ### Utils (ems/utils)
 
   - Stuff I have no clue where to put (mostly pandas file parsing)
-  
+
 ### Settings (ems/settings)
 
   - Object to contain all configuration related information (e.g. filepaths, simulation parameters, etc.)

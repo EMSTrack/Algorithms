@@ -67,13 +67,13 @@ class DispatcherSimulator(Simulator):
 
 
 
-            # Stage 2: Determine the next event
-            # Event Delay Case:         If no ambulances are available and next case occurs before any ambulance gets back
-            # Event Retire Ambulance:   If ambulances are currently handling cases and the ambulance gets back before
-            #                           next case occurs
-            # Event Start Case:         If ambulances are available and next case occurs before any ambulance gets back
-            #
-            # Finish when no more cases and no more ambulances attending cases
+    # Stage 2: Determine the next event
+    # Event Delay Case:         If no ambulances are available and next case occurs before any ambulance gets back
+    # Event Retire Ambulance:   If ambulances are currently handling cases and the ambulance gets back before
+    #                           next case occurs
+    # Event Start Case:         If ambulances are available and next case occurs before any ambulance gets back
+    #
+    # Finish when no more cases and no more ambulances attending cases
 
             # Loop end condition - No more case or moving ambulances
             if not pending_cases and not working_cases and not ambulances_in_motion:
