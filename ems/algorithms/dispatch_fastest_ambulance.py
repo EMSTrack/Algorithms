@@ -30,9 +30,6 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
         chosen_ambulance, ambulance_travel_time = self.find_fastest_ambulance(
             available_ambulances, self.travel_times, closest_demand)
 
-        # Determine the overall coverage, and each ambulance's disruption to the cost. TODO 
-        # current_coverage = self.determine_coverage(ambulances, case)
-
         return {'choice': chosen_ambulance,
                 'travel_time': ambulance_travel_time}
 

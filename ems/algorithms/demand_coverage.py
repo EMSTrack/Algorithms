@@ -52,19 +52,19 @@ class DemandCoverage(CoverageAlgorithm):
     def get_all_coverages(self):
         return deepcopy(self._recorded_coverages)
 
-    def avgCoverage(self):
+    def avg_coverage(self):
         """
         :return: The average of the coverages so far.
         """
         avg = sum(self._recorded_coverages) / len(self._recorded_coverages)
         return avg
 
-    def maxCoverage(self):
+    def max_coverage(self):
         return max(self._recorded_coverages)
 
-    def minCoverage(self):
+    def min_coverage(self):
         return min(self._recorded_coverages)
 
-    def stdDevCoverage(self):
+    def std_dev_coverage(self):
         std_dev = np.std(np.array([time for time in self._recorded_coverages]), axis=0)
         return (std_dev.item())
