@@ -25,8 +25,6 @@ class CSVTijuanaDataset(Dataset):
         self.bases, self.bases_df = self.read_bases(bases_filepath)
         self.cases, self.cases_df = self.read_cases(cases_filepath)
 
-
-
         # TODO
         self.basesLS = LocationSet(self.bases)
         self.demandsLS = LocationSet(self.demands)

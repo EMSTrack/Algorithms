@@ -1,4 +1,4 @@
-import datetime
+import datetime.datetime
 
 from geopy import Point
 
@@ -15,16 +15,15 @@ class Ambulance:
                  unit: str = "XXX-XXXX",
                  deployed: bool = False,
                  location: Point = None,
-                 deployed_time: datetime.datetime = None,
-                 end_time: datetime.datetime = None):
-
-        self.id:int = id
-        self.base:Base = base
-        self.unit:str = unit
-        self.deployed:bool = deployed
-        self.location:Point = location
-        self.deployed_time:datetime.datetime = deployed_time
-        self.end_time:datetime.datetime = end_time
+                 deployed_time: datetime = None,
+                 end_time: datetime = None):
+        self.id = id
+        self.base = base
+        self.unit = unit
+        self.deployed = deployed
+        self.location = location
+        self.deployed_time = deployed_time
+        self.end_time = end_time
 
     def __eq__(self, other):
         """
@@ -51,10 +50,10 @@ class Ambulance:
         self.location = None
         self.deployed_time = None
 
-    def deploy(self, datetime, destination, end_time):
+    def deploy(self, deploy_datetime, destination, end_time):
         """
         Deploys the ambulance by setting the deployed state, start times, end time, and location.
-        :param datetime:
+        :param deploy_datetime:
         :param destination:
         :param end_time:
         :return: Nothing. This function only changes state.
@@ -71,6 +70,6 @@ class Ambulance:
             raise Exception("Cannot set a deployed ambulance's end time to None")
 
         self.deployed = True
-        self.deployed_time = datetime
+        self.deployed_time = deploy_datetime
         self.end_time = end_time
         self.location = destination

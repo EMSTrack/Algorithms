@@ -7,9 +7,9 @@ from ems.models.location import Location
 
 class LocationSet:
 
-    def __init__(self, locations:List[Location]):
+    def __init__(self, locations: List[Location]):
 
-        self.locations:List[Location] = locations
+        self.locations = locations
         self.kd_tree = self._initialize_kd_tree()
 
 
@@ -30,9 +30,8 @@ class LocationSet:
         """
         Finds the closest point in the corresponding generic list.
         For example, find the closest base given a GPS location.
-        :param list_type:
-        :param target_point:
-        :return: the position in that list
+        :param point:
+        :return: The closest point and its index
         """
 
         # Query kd tree for nearest neighbor

@@ -8,14 +8,16 @@ from ems.models.demand import Demand
 
 class Case:
 
-    def __init__(self, id: int, point: Point, dt: datetime,
-                 weekday: str, priority: float = None,
+    def __init__(self,
+                 id: int,
+                 point: Point,
+                 dt: datetime,
+                 weekday: str,
+                 priority: float = None,
                  start_time: datetime = None,
                  finish_time: datetime = None,
                  delay: timedelta = None,
                  closest_demand: Demand = None):
-
-
         self.id = id
         self.location = point
         self.weekday = weekday

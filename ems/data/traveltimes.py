@@ -13,20 +13,15 @@ class TravelTimes:
 
     """
 
-    def __init__(self, bases:LocationSet, demands:LocationSet, times: np.ndarray):
+    def __init__(self, bases: LocationSet, demands: LocationSet, times: np.ndarray):
         """
-
         :param bases:
         :param demands:
         :param times:
         """
-
-        # import IPython; IPython.embed()
-        self.bases:LocationSet = bases
-        self.demands:LocationSet = demands
+        self.bases: LocationSet = bases
+        self.demands: LocationSet = demands
         self.times:np.ndarray = times
-
-
 
     def get_time(self, base:Base, demand:Demand):
         """
@@ -41,7 +36,6 @@ class TravelTimes:
         time = int(self.times[base.id][demand.id])
 
         return timedelta(seconds=time)
-
 
     def find_nearest_base(self, target_point:Point):
         return self.bases.closest(target_point)[0]
