@@ -11,7 +11,7 @@ from ems.simulators.dispatcher_simulator import DispatcherSimulator
 # TODO allow command line arguments
 parser = argparse.ArgumentParser(description="Load settings, data, preprocess models, run sim.")
 parser.add_argument('--ambulances', help="Number of ambulances", type=int, required=False)
-parser.add_argument('--bases',      help='Numbre of bases',     type=int,  required=False)
+parser.add_argument('--bases',      help='Number of bases',     type=int,  required=False)
 parser.add_argument('--settings', help="Location of settings yaml file", type=str, required=False)
 
 clargs = parser.parse_args()
@@ -23,7 +23,7 @@ file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
 bases_filepath = file_path + 'bases.csv'
 demands_filepath = file_path + 'demand_points.csv'
 cases_filepath = file_path + 'calls.csv'
-traveltimes_filepath = file_path + 'times.csv'
+travel_times_filepath = file_path + 'times.csv'
 cd_mapping_filepath = file_path + 'calls_demand_amor.csv'
 
 # Initialize settings
@@ -31,24 +31,24 @@ settings = Settings(debug=True,
                     demands_file=demands_filepath,
                     bases_file=bases_filepath,
                     cases_file=cases_filepath,
-                    traveltimes_file=traveltimes_filepath,
+                    travel_times_file=travel_times_filepath,
                     args=clargs)
 
 # Initialize dataset
 dataset = CSVTijuanaDataset(demands_filepath=settings.demands_file,
                             bases_filepath=settings.bases_file,
                             cases_filepath=settings.cases_file,
-                            traveltimes_filepath=settings.traveltimes_file)
+                            travel_times_filepath=settings.travel_times_file)
 
 # Initialize ambulance_selection
-ambulance_select = BestTravelTimeAlgorithm(traveltimes=dataset.traveltimes)
+ambulance_select = BestTravelTimeAlgorithm(travel_times=dataset.travel_times)
 
 # Initialize demand_coverage
-determine_coverage = DemandCoverage(travel_times=dataset.traveltimes)
+determine_coverage = DemandCoverage(travel_times=dataset.travel_times)
 
 
 # Select bases
-chosen_bases = kmeans_select_bases(dataset.bases, dataset.traveltimes)
+chosen_bases = kmeans_select_bases(dataset.bases, dataset.travel_times)
 
 # Generate ambulances - random base placement (may want to abstract into function)
 ambulances = []
@@ -61,8 +61,7 @@ for index in range(settings.num_ambulances):
 sim = DispatcherSimulator(ambulances=ambulances,
                           cases=dataset.cases,
                           ambulance_selector=ambulance_select,
-                          coverage_alg=determine_coverage
-                          )
+                          coverage_alg=determine_coverage)
 
 
 finished_cases = sim.run()

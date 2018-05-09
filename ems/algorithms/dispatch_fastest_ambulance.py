@@ -15,8 +15,8 @@ from ems.models.case import Case
 class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
 
     def __init__(self,
-                 traveltimes: TravelTimes = None):
-        self.traveltimes = traveltimes
+                 travel_times: TravelTimes = None):
+        self.travel_times = travel_times
 
     def select_ambulance(self,
                          available_ambulances: List[Ambulance],
@@ -24,12 +24,11 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
                          current_time: datetime):
 
         # Compute the closest demand point to the case location
-        # import IPython; IPython.embed()
-        closest_demand = self.traveltimes.find_nearest_demand(case.location)
+        closest_demand = self.travel_times.find_nearest_demand(case.location)
 
         # Select an ambulance to attend to the given case and obtain the its duration of travel
         chosen_ambulance, ambulance_travel_time = self.find_fastest_ambulance(
-            available_ambulances, self.traveltimes, closest_demand)
+            available_ambulances, self.travel_times, closest_demand)
 
         # Determine the overall coverage, and each ambulance's disruption to the cost. TODO 
         # current_coverage = self.determine_coverage(ambulances, case)
@@ -37,12 +36,12 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
         return {'choice': chosen_ambulance,
                 'travel_time': ambulance_travel_time}
 
-    def find_fastest_ambulance(self, ambulances, traveltimes, demand):
+    def find_fastest_ambulance(self, ambulances, travel_times, demand):
         """
         Finds the ambulance with the shortest one way travel time from its base to the
         demand point
         :param ambulances:
-        :param traveltimes:
+        :param travel_times:
         :param demand:
         :return: The ambulance and the travel time
         """
@@ -51,8 +50,7 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
         fastest_amb = None
 
         for amb in ambulances:
-            # import IPython; IPython.embed()
-            time = traveltimes.get_time(amb.base, demand)
+            time = travel_times.get_time(amb.base, demand)
             if shortest_time > time:
                 shortest_time = time
                 fastest_amb = amb

@@ -250,46 +250,6 @@ class DispatcherSimulator(Simulator):
 
         return new_ambulance_list
 
-    # def coverage(ambulances, times, bases, demands,  required_r1):
-    #     # Mark all demands which has a base less than r1 traveltime away as covered. 
-    #     # In the future, r1 travelttime of ambulance.
-
-    #     # Then, return the percentage of Tijuana covered.
-    #     # Parameters: ambulances, bases, demands, traveltimes, r1.
-
-    #     # print("Recalculate the city coverage. ")
-
-    #     # As long as amb['deployed'] in ambulances is false, the base can have coverage effect.
-    #     # print("Bases:", len (bases))
-    #     # print("Demands:", len (demands))
-    #     # print("r1:", required_r1)
-
-    #     # Which bases cast a coverage effect over a part of the city?
-    #     # amb['base'] == base in bases
-    #     # print(ambulances[0])
-
-    #     # from IPython import embed; embed()
-
-    #     uncovered_demands = [0 for d in demands]
-
-    #     # print("Find nonempty bases...")
-    #     nonempty_bases = [amb.base for amb in ambulances if amb.deployed == False]
-    #     # for base in bases:
-    #         # for amb in ambulances:
-    #             # if base == amb['base'] and amb['deployed'] == False and base not in nonempty_bases:
-    #                 # nonempty_bases.append(base)
-
-    #     # print("Calculate coverage rating... ", len(nonempty_bases)*len(demands))
-    #     for active_base in nonempty_bases:
-    #         for d in range(len(demands)):
-    #             if uncovered_demands [d] == 0:
-    #                 if traveltime(times, bases, demands, active_base, demands [d]).total_seconds() < required_r1:
-    #                     uncovered_demands[d] = 1
-
-    #     # from IPython import embed; embed ()
-    #     print(f"{Fore.RED}Coverage Rating:", sum(uncovered_demands), "/100.",  f'{Style.RESET_ALL}')
-    #     return sum (uncovered_demands)
-
 
 class Event:
     START_CASE = "Start Case"

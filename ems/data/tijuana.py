@@ -18,7 +18,7 @@ class CSVTijuanaDataset(Dataset):
                  demands_filepath: str,
                  bases_filepath: str,
                  cases_filepath: str,
-                 traveltimes_filepath: str):
+                 travel_times_filepath: str):
 
         # Read files into pandas dataframes and lists of objects
         self.demands, self.demands_df = self.read_demands(demands_filepath)
@@ -29,10 +29,9 @@ class CSVTijuanaDataset(Dataset):
         self.basesLS = LocationSet(self.bases)
         self.demandsLS = LocationSet(self.demands)
 
-        self.traveltimes, self.traveltimes_df = self.read_times(traveltimes_filepath)
+        self.travel_times, self.travel_times_df = self.read_times(travel_times_filepath)
 
-        # self.traveltimes = TravelTimes(self.basesLS, self.demandsLS, )
-
+        # self.travel_times = TravelTimes(self.basesLS, self.demandsLS, )
 
     # Helper functions
     def read_cases(self, filename):
@@ -96,13 +95,11 @@ class CSVTijuanaDataset(Dataset):
 
     def read_times(self, filename):
         # Read travel times from CSV file into a pandas dataframe
-        traveltimes_df = pd.read_csv(filename)
-        # import IPython; IPython.embed()
+        travel_times_df = pd.read_csv(filename)
 
+        travel_times = TravelTimes(self.basesLS, self.demandsLS, travel_times_df.as_matrix())
 
-        traveltimes = TravelTimes(self.basesLS, self.demandsLS, traveltimes_df.as_matrix())
-
-        return traveltimes, traveltimes_df
+        return travel_times, travel_times_df
 
     # Implementation
     def get_bases(self):

@@ -13,7 +13,7 @@ class CoverageAlgorithm:
     """
 
     # TODO This may not even be the right signature.
-    def calculateCoverage(self,
+    def calculate_coverage(self,
                           demands: LocationSet,
                           ambulances: List[Ambulance]):
         """

@@ -12,11 +12,11 @@ class Simulator:
     def __init__(self,
                  ambulances: List[Ambulance],
                  cases: List[Case],
-                 ambulance_selector:  AmbulanceSelectionAlgorithm):
+                 ambulance_selector: AmbulanceSelectionAlgorithm):
 
-        self.ambulances:List[Ambulance] = ambulances
-        self.cases:List[Case] = cases
-        self.ambulance_selection:AmbulanceSelectionAlgorithm = ambulance_selector
+        self.ambulances = ambulances
+        self.cases = cases
+        self.ambulance_selection = ambulance_selector
 
     def run(self):
         raise NotImplementedError()

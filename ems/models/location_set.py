@@ -12,7 +12,6 @@ class LocationSet:
         self.locations = locations
         self.kd_tree = self._initialize_kd_tree()
 
-
     def _initialize_kd_tree(self):
         """
         Initialize the kd_tree.
@@ -21,8 +20,7 @@ class LocationSet:
         """
 
         # Form a kd-tree
-
-        points = [(demand.location.longitude, demand.location.latitude) for demand in self.locations]
+        points = [(loc.location.longitude, loc.location.latitude) for loc in self.locations]
         kd_tree = KDTree(points)
         return kd_tree
 
