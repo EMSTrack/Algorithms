@@ -8,7 +8,6 @@ from ems.models.location import Location
 class LocationSet:
 
     def __init__(self, locations: List[Location]):
-
         self.locations = locations
         self.kd_tree = self._initialize_kd_tree()
 

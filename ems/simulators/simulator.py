@@ -13,7 +13,6 @@ class Simulator:
                  ambulances: List[Ambulance],
                  cases: List[Case],
                  ambulance_selector: AmbulanceSelectionAlgorithm):
-
         self.ambulances = ambulances
         self.cases = cases
         self.ambulance_selection = ambulance_selector

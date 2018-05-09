@@ -17,7 +17,8 @@ class Settings:
                  args: Namespace = None):
 
         # TODO: Look for a settings file
-        if args.settings: print("TODO, import settings")
+        if args.settings:
+            print("TODO, import settings")
 
         # Assign the command line arguments into the parameter arguments
         if args.ambulances:
