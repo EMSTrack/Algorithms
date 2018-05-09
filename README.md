@@ -17,20 +17,48 @@ To see this, you may need to uncomment `printData()`. The test program will end 
 to proceed when ready. (Press Enter.)
 
 
-# UMLs
+# Class diagrams
 
-These images are small, either (1) zoom into the page or (2) right click and open image in new tab.
+Here are the UMLs for each group of programs we have.
 
-## Simulator
+### Simulator
 
 ![](classes_ems_simulators.jpg)
+
+### Models
+
 ![](classes_ems_models.jpg)
+
+### Data
+
 ![](classes_ems_data.jpg)
+
+### Algorithms
+
 ![](classes_ems_algorithms.jpg)
 
-**Class UML Diagram:**
 
-![](packages_EMS.png)
+# Package Diagrams
+
+### Simulator
+
+![](packages_ems_simulators.jpg)
+
+### Models
+
+![](packages_ems_models.jpg)
+
+### Data
+
+![](packages_ems_data.jpg)
+
+### Algorithms
+
+![](packages_ems_algorithms.jpg)
+
+
+
+
 
 ## To Install
 
