@@ -20,7 +20,7 @@ class DispatcherSimulator(Simulator):
                  ambulance_selector: AmbulanceSelectionAlgorithm):
 
         self.finished_cases = []
-        self.current_time = cases[0].datetime if len(cases) > 0 else -1
+        self.current_time:datetime.datetime = cases[0].datetime if len(cases) > 0 else -1
         self.measured_coverage = []
         super(DispatcherSimulator, self).__init__(ambulances, cases, ambulance_selector)
 

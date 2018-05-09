@@ -18,13 +18,13 @@ class Ambulance:
                  deployed_time: datetime.datetime = None,
                  end_time: datetime.datetime = None):
 
-        self.id = id
-        self.base = base
-        self.unit = unit
-        self.deployed = deployed
-        self.location = location
-        self.deployed_time = deployed_time
-        self.end_time = end_time
+        self.id:int = id
+        self.base:Base = base
+        self.unit:str = unit
+        self.deployed:bool = deployed
+        self.location:Point = location
+        self.deployed_time:datetime.datetime = deployed_time
+        self.end_time:datetime.datetime = end_time
 
     def __eq__(self, other):
         """

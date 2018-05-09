@@ -18,7 +18,7 @@ class DemandsCoveredAlgorithm (CoverageAlgorithm):
     """
 
     def __init__(self, travel_times:TravelTimes):
-        self.travel_times = travel_times
+        self.travel_times:TravelTimes = travel_times
         self._recorded_coverages:List = []
 
 
