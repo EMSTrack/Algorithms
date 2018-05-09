@@ -37,6 +37,10 @@ Here are the UMLs for each group of programs we have.
 
 ![](classes_ems_algorithms.jpg)
 
+## Overall
+
+![](classes_ems.jpg)
+
 
 # Package Diagrams
 
@@ -55,6 +59,9 @@ Here are the UMLs for each group of programs we have.
 ## Algorithms
 
 ![](packages_ems_algorithms.jpg)
+
+## Overall
+![](packages_ems.jpg)
 
 
 ## How To Install auto UML Generator
