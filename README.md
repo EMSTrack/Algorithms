@@ -70,7 +70,11 @@ pyreverse comes with pylint, you need Graphviz: `brew install Graphiz` or `apt i
 
 Then run at the base folder of the repository, do
 
-`pyreverse -o png -p EMS ems`
+`pyreverse -o png -p ems ems`
+
+To run all diagrams in parallel, run 
+
+`python3 uml.py`
 
 ## TODO
 
