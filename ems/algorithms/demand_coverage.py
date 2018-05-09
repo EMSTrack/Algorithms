@@ -11,18 +11,17 @@ from ems.models.ambulance import Ambulance
 
 
 # Used by the sim to select ambulances
-class DemandCoverage (CoverageAlgorithm):
+class DemandCoverage(CoverageAlgorithm):
     """
         Barebone class. Users may subclass to implement their own ambulance_selection for
         finding coverage.
     """
 
-    def __init__(self, travel_times:TravelTimes):
-        self.travel_times:TravelTimes = travel_times
-        self._recorded_coverages:List = []
+    def __init__(self, travel_times: TravelTimes):
+        self.travel_times: TravelTimes = travel_times
+        self._recorded_coverages: List = []
 
-
-    def calculate_entire_coverage(self, ambulances : List[Ambulance]):
+    def calculate_entire_coverage(self, ambulances: List[Ambulance]):
         """
         At a time, given a list of ambulances, determine the coverage of all the demands.
 
@@ -36,7 +35,7 @@ class DemandCoverage (CoverageAlgorithm):
         demands_covered = [0 for _ in demands]
 
         for index in range(len(demands)):
-            if demands[index]: # TODO I don't know why this ishere
+            if demands[index]:  # TODO I don't know why this ishere
                 for base in active_bases:
                     dem = demands[index]
                     if self.travel_times.get_time(base, dem).total_seconds() < 600:
@@ -47,22 +46,14 @@ class DemandCoverage (CoverageAlgorithm):
         self._recorded_coverages.append(total)
         return total
 
-
-
-
     def get_most_recent(self):
         return self._recorded_coverages[-1]
 
     def get_all_coverages(self):
         return deepcopy(self._recorded_coverages)
 
-
-
-
-
     def avgCoverage(self):
         """
-
         :return: The average of the coverages so far.
         """
         avg = sum(self._recorded_coverages) / len(self._recorded_coverages)

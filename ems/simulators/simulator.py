@@ -20,6 +20,3 @@ class Simulator:
 
     def run(self):
         raise NotImplementedError()
-
-    # TODO
-    # def coverage(self, ):

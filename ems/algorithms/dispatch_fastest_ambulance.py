@@ -1,4 +1,5 @@
 # The following functions define default algorithms for the DispatchAlgorithm class.
+from datetime import datetime
 from datetime import timedelta
 from typing import List
 
@@ -7,23 +8,20 @@ from ems.data.traveltimes import TravelTimes
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 
-
-
 # An implementation of a "fastest travel time" ambulance_selection from a base to
 # the demand point closest to a case
+
 
 class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
 
     def __init__(self,
                  traveltimes: TravelTimes = None):
-
         self.traveltimes = traveltimes
-
-        # self.kd_tree = self.initialize_kd_tree(demands)
 
     def select_ambulance(self,
                          ambulances: List[Ambulance],
-                         case: Case):
+                         case: Case,
+                         current_time: datetime):
 
         # Compute the closest demand point to the case location
         # import IPython; IPython.embed()
@@ -38,8 +36,6 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
 
         return {'choice': chosen_ambulance,
                 'travel_time': ambulance_travel_time}
-
-
 
     def find_fastest_ambulance(self, ambulances, traveltimes, demand):
         """
@@ -66,14 +62,3 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
             return fastest_amb, shortest_time
 
         return None, None
-
-
-
-
-
-
-
-
-
-
-

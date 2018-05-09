@@ -19,13 +19,11 @@ class DispatcherSimulator(Simulator):
                  ambulances: List[Ambulance],
                  cases: List[Case],
                  ambulance_selector: AmbulanceSelectionAlgorithm,
-                 coverage_alg:DemandCoverage
-
-                 ):
+                 coverage_alg: DemandCoverage):
 
         self.finished_cases = []
-        self.current_time:datetime.datetime = cases[0].datetime if len(cases) > 0 else -1
-        self.demand_coverage:DemandCoverage = coverage_alg
+        self.current_time = cases[0].datetime if len(cases) > 0 else -1
+        self.demand_coverage = coverage_alg
         super(DispatcherSimulator, self).__init__(ambulances, cases, ambulance_selector)
 
     def run(self):
@@ -69,15 +67,14 @@ class DispatcherSimulator(Simulator):
                 # Should never reach this point
                 print("Invalid Event")
 
-
-
-    # Stage 2: Determine the next event
-    # Event Delay Case:         If no ambulances are available and next case occurs before any ambulance gets back
-    # Event Retire Ambulance:   If ambulances are currently handling cases and the ambulance gets back before
-    #                           next case occurs
-    # Event Start Case:         If ambulances are available and next case occurs before any ambulance gets back
-    #
-    # Finish when no more cases and no more ambulances attending cases
+            # Stage 2: Determine the next event
+            # Event Delay Case:         If no ambulances are available and next case occurs before any ambulance gets
+            #                           back
+            # Event Retire Ambulance:   If ambulances are currently handling cases and the ambulance gets back before
+            #                           next case occurs
+            # Event Start Case:         If ambulances are available and next case occurs before any ambulance gets back
+            #
+            # Finish when no more cases and no more ambulances attending cases
 
             # Loop end condition - No more case or moving ambulances
             if not pending_cases and not working_cases and not ambulances_in_motion:

@@ -1,4 +1,5 @@
 # Framework for using algorithms and allowing for replacement
+from datetime import datetime
 from typing import List
 
 from ems.models.ambulance import Ambulance
@@ -14,5 +15,6 @@ class AmbulanceSelectionAlgorithm:
 
     def select_ambulance(self,
                          ambulances: List[Ambulance],
-                         case: Case):
+                         case: Case,
+                         current_time: datetime):
         raise NotImplementedError()

@@ -14,8 +14,8 @@ class CoverageAlgorithm:
 
     # TODO This may not even be the right signature.
     def calculateCoverage(self,
-                         demands: LocationSet,
-                         ambulances: List[Ambulance]):
+                          demands: LocationSet,
+                          ambulances: List[Ambulance]):
         """
         The signature for the function which runs the coverage ambulance_selection
         :param demands:

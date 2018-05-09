@@ -1,4 +1,5 @@
 # Framework for using algorithms and allowing for replacement
+from datetime import datetime
 from typing import List
 
 from ems.algorithms.demand_coverage import CoverageAlgorithm
@@ -16,5 +17,6 @@ class FastestAmbulanceBestCoverage(BestTravelTimeAlgorithm, CoverageAlgorithm):
 
     def select_ambulance(self,
                          ambulances: List[Ambulance],
-                         case: Case):
+                         case: Case,
+                         current_time: datetime):
         pass

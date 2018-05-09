@@ -1,5 +1,6 @@
 # The following functions define default algorithms for the DispatchAlgorithm class.
 import random
+from datetime import datetime
 from typing import List
 
 from ems.algorithms.ambulance_selection import AmbulanceSelectionAlgorithm
@@ -14,7 +15,8 @@ class RandomAmbulanceSelectionAlgorithm(AmbulanceSelectionAlgorithm):
 
     def select_ambulance(self,
                          ambulances: List[Ambulance],
-                         case: Case):
+                         case: Case,
+                         current_time: datetime):
 
         # Calculate available ambulances
         available = [a for a in ambulances if not a.deployed]
