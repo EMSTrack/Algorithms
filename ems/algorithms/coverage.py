@@ -8,8 +8,8 @@ from ems.models.location_set import LocationSet
 # Used by the sim to select ambulances
 class CoverageAlgorithm:
     """
-        Barebone class. Users may subclass to implement their own ambulance_selection for
-        finding coverage.
+    Barebone class. Users may subclass to implement their own ambulance_selection for
+    finding coverage.
     """
 
     # TODO This may not even be the right signature.

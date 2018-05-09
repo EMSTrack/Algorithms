@@ -163,15 +163,8 @@ class DispatcherSimulator(Simulator):
                 event = Event.RETIRE_AMBULANCE
                 self.current_time = ambulance_release_time
 
-                
-
             print("Busy ambulances: ", sorted([amb.id for amb in ambulances_in_motion]))
             print("Pending cases: ", [case.id for case in pending_cases])
-
-            
-
-            # Compute coverage
-            # self.coverage (ambulances, self.traveltimes, self.bases, self.demands, required_r1)
 
         # TODO return "results" object with more potential information
         # Compute average coverage:
@@ -195,16 +188,17 @@ class DispatcherSimulator(Simulator):
         self.demand_coverage.calculate_entire_coverage(self.ambulances)
         print("Coverage: ", self.demand_coverage.get_most_recent())
 
-
         # Select ambulance to dispatch
-        selection = self.ambulance_selection.select_ambulance(self.ambulances, case)
+        available_ambulances = [amb for amb in self.ambulances if not amb.deployed]
+        selection = self.ambulance_selection.select_ambulance(available_ambulances, case, self.current_time)
         chosen_ambulance = selection.get('choice')
         ambulance_travel_time = selection.get('travel_time', None)
 
         # Dispatch an ambulance if one was found
         if chosen_ambulance is not None:
 
-            # TODO Currently assume that each case will take 2x travel time + 20 minutes
+            # TODO - Currently assume that each case will take 2x travel time + 20 minutes
+            # TODO - Algorithm for case duration?
             # Compute duration of the trip
             duration = ambulance_travel_time * 2 + datetime.timedelta(minutes=20)
 

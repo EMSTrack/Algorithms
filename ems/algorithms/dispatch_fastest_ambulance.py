@@ -19,7 +19,7 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
         self.traveltimes = traveltimes
 
     def select_ambulance(self,
-                         ambulances: List[Ambulance],
+                         available_ambulances: List[Ambulance],
                          case: Case,
                          current_time: datetime):
 
@@ -29,7 +29,7 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
 
         # Select an ambulance to attend to the given case and obtain the its duration of travel
         chosen_ambulance, ambulance_travel_time = self.find_fastest_ambulance(
-            ambulances, self.traveltimes, closest_demand)
+            available_ambulances, self.traveltimes, closest_demand)
 
         # Determine the overall coverage, and each ambulance's disruption to the cost. TODO 
         # current_coverage = self.determine_coverage(ambulances, case)
@@ -51,12 +51,11 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
         fastest_amb = None
 
         for amb in ambulances:
-            if not amb.deployed:
-                # import IPython; IPython.embed()
-                time = traveltimes.get_time(amb.base, demand)
-                if shortest_time > time:
-                    shortest_time = time
-                    fastest_amb = amb
+            # import IPython; IPython.embed()
+            time = traveltimes.get_time(amb.base, demand)
+            if shortest_time > time:
+                shortest_time = time
+                fastest_amb = amb
 
         if fastest_amb is not None:
             return fastest_amb, shortest_time

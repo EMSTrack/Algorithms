@@ -14,7 +14,7 @@ class AmbulanceSelectionAlgorithm:
     """
 
     def select_ambulance(self,
-                         ambulances: List[Ambulance],
+                         available_ambulances: List[Ambulance],
                          case: Case,
                          current_time: datetime):
         raise NotImplementedError()

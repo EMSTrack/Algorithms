@@ -14,15 +14,12 @@ from ems.models.case import Case
 class RandomAmbulanceSelectionAlgorithm(AmbulanceSelectionAlgorithm):
 
     def select_ambulance(self,
-                         ambulances: List[Ambulance],
+                         available_ambulances: List[Ambulance],
                          case: Case,
                          current_time: datetime):
 
-        # Calculate available ambulances
-        available = [a for a in ambulances if not a.deployed]
-
         # Randomly choose
-        chosen_ambulance = random.sample(available, 1)
+        chosen_ambulance = random.sample(available_ambulances, 1)
 
         return {'choice': chosen_ambulance }
 
