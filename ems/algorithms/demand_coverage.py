@@ -75,5 +75,5 @@ class DemandCoverage (CoverageAlgorithm):
         return min(self._recorded_coverages)
 
     def stdDevCoverage(self):
-        std_dev = np.std(np.array([time.total_seconds() for time in self._recorded_coverages]), axis=0)
-        return timedelta(std_dev.item())
+        std_dev = np.std(np.array([time for time in self._recorded_coverages]), axis=0)
+        return (std_dev.item())

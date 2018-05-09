@@ -88,7 +88,8 @@ class DispatcherSimulator(Simulator):
                 avg = self.demand_coverage.avgCoverage()
                 min = self.demand_coverage.minCoverage()
                 max = self.demand_coverage.maxCoverage()
-                print("Average, Min, and Max Coverages: ", avg, min, max)
+                stddev = self.demand_coverage.stdDevCoverage()
+                print("Average, Min, Max, Std Dev of Coverages: ", avg, min, max, stddev)
                 return self.finished_cases
 
             # Sort all ambulances by end times
@@ -179,7 +180,7 @@ class DispatcherSimulator(Simulator):
         # Compute average coverage:
         # total_cov = sum(self.measured_coverage)
         # avg_cov = total_cov/len(self.measured_coverage)
-        print("Average coverage: ", avg_cov)
+        # print("Average coverage: ", avg_cov)
         return self.finished_cases
 
     def start_case(self, case, ambulances_in_motion, start_time):
