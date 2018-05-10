@@ -15,8 +15,8 @@ from ems.models.case import Case
 class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
 
     def __init__(self,
-                 travel_times: TravelTimes = None):
-        self.travel_times = travel_times
+                 base_demand_travel_times: TravelTimes = None):
+        self.base_demand_travel_times = base_demand_travel_times
 
     def select_ambulance(self,
                          available_ambulances: List[Ambulance],
@@ -24,11 +24,12 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
                          current_time: datetime):
 
         # Compute the closest demand point to the case location
-        closest_demand = self.travel_times.find_nearest_demand(case.location)
+        demands = self.base_demand_travel_times.loc_set_2
+        closest_demand, distance = demands.closest(case.location)
 
         # Select an ambulance to attend to the given case and obtain the its duration of travel
         chosen_ambulance, ambulance_travel_time = self.find_fastest_ambulance(
-            available_ambulances, self.travel_times, closest_demand)
+            available_ambulances, self.base_demand_travel_times, closest_demand)
 
         return {'choice': chosen_ambulance,
                 'travel_time': ambulance_travel_time}

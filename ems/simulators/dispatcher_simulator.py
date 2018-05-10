@@ -82,10 +82,10 @@ class DispatcherSimulator(Simulator):
                 # total_cov = sum(self.measured_coverage)
                 # avg_cov = total_cov/len(self.measured_coverage)
                 # print("Average coverage: ", avg_cov)
-                avg = self.demand_coverage.avgCoverage()
-                min = self.demand_coverage.minCoverage()
-                max = self.demand_coverage.maxCoverage()
-                stddev = self.demand_coverage.stdDevCoverage()
+                avg = self.demand_coverage.avg_coverage()
+                min = self.demand_coverage.min_coverage()
+                max = self.demand_coverage.max_coverage()
+                stddev = self.demand_coverage.std_dev_coverage()
                 print("Average, Min, Max, Std Dev of Coverages: ", avg, min, max, stddev)
                 return self.finished_cases
 

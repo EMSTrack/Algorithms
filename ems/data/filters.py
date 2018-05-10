@@ -1,7 +1,11 @@
 import numpy as np
 
+from ems.data.travel_times import TravelTimes
+from ems.models.location_set import LocationSet
 
-def kmeans_select_bases(bases, traveltimes):
+
+def kmeans_select_bases(bases: LocationSet,
+                        traveltimes: TravelTimes):
 
 
     # This function happens to require the original Cruz Roja dataset. It doesn't necessarily need to.
@@ -10,10 +14,11 @@ def kmeans_select_bases(bases, traveltimes):
     print("Default init_bases(): Kmeans init bases")
 
     # Pick initial bases with kmeans ambulance_selection
-    chosen_base_indices, demands_covered = pick_starting_bases(traveltimes, len(bases), 600)
+    num_bases = len(bases.locations)
+    chosen_base_indices, demands_covered = pick_starting_bases(traveltimes, num_bases, 600)
 
     # Returns object list
-    chosen_bases = [bases[index] for index in chosen_base_indices]
+    chosen_bases = [bases.locations[index] for index in chosen_base_indices]
 
     return chosen_bases
 

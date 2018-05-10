@@ -10,13 +10,11 @@ from ems.models.ambulance import Ambulance
 
 
 # Used by the sim to select ambulances
-class DemandCoverage(CoverageAlgorithm):
-    """
-    Barebone class. Users may subclass to implement their own ambulance_selection for
-    finding coverage.
-    """
 
-    def __init__(self, travel_times: TravelTimes):
+class DemandCoverage(CoverageAlgorithm):
+
+    def __init__(self,
+                 travel_times: TravelTimes):
         self.travel_times = travel_times
         self._recorded_coverages = []
 
@@ -29,11 +27,11 @@ class DemandCoverage(CoverageAlgorithm):
         """
 
         active_bases = list([amb.base for amb in ambulances if not amb.deployed])
-        demands = self.travel_times.demands.locations
+        demands = self.travel_times.loc_set_2.locations
         demands_covered = [0 for _ in demands]
 
         for index in range(len(demands)):
-            if demands[index]:  # TODO I don't know why this ishere
+            if demands[index]:  # TODO I don't know why this is here
                 for base in active_bases:
                     dem = demands[index]
                     if self.travel_times.get_time(base, dem).total_seconds() < 600:
@@ -65,4 +63,4 @@ class DemandCoverage(CoverageAlgorithm):
 
     def std_dev_coverage(self):
         std_dev = np.std(np.array([time for time in self._recorded_coverages]), axis=0)
-        return (std_dev.item())
+        return std_dev.item()

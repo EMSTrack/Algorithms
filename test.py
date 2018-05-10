@@ -17,10 +17,7 @@ demands_filepath = file_path + 'demand_points.csv'
 cases_filepath = file_path + 'calls.csv'
 traveltimes_filepath = file_path + 'times.csv'
 
-
 # TODO cases_filepath
-
-
 def testSettings():
     set1 = Settings(debug=False)
     assert set1.demands_file is None

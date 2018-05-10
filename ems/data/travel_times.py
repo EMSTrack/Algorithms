@@ -1,49 +1,41 @@
 from datetime import timedelta
 
 import numpy as np
-from geopy import Point
 
-from ems.models.base import Base
-from ems.models.case import Demand
+from ems.models.location import Location
 from ems.models.location_set import LocationSet
 
 
 class TravelTimes:
     """
-
+    Maintains a matrix of travel times between one set of locations to another set of locations
     """
-    def __init__(self, bases: LocationSet, demands: LocationSet, times: np.ndarray):
+    def __init__(self,
+                 loc_set_1: LocationSet,
+                 loc_set_2: LocationSet,
+                 times: np.ndarray):
         """
-        :param bases:
-        :param demands:
+        :param loc_set_1:
+        :param loc_set_2:
         :param times:
         """
-        self.bases = bases
-        self.demands = demands
+        self.loc_set_1 = loc_set_1
+        self.loc_set_2 = loc_set_2
         self.times = times
 
-    def get_time(self, base: Base, demand: Demand):
+    def get_time(self, loc1: Location, loc2: Location):
         """
         Retrieves the travel time from the input base and demand point.
 
-        :param base:
-        :param demand:
+        :param loc1:
+        :param loc2:
         :return:
         """
 
-        base_ind = self.bases.locations.index(base)
-        demand_ind = self.demands.locations.index(demand)
+        index1 = self.loc_set_1.locations.index(loc1)
+        index2 = self.loc_set_2.locations.index(loc2)
 
-        print(base_ind)
-        print(demand_ind)
-
-        time = int(self.times[base_ind][demand_ind])
+        time = int(self.times[index1][index2])
 
         return timedelta(seconds=time)
-
-    def find_nearest_base(self, target_point: Point):
-        return self.bases.closest(target_point)[0]
-
-    def find_nearest_demand(self, target_point: Point):
-        return self.demands.closest(target_point)[0]
 

@@ -2,7 +2,7 @@ from datetime import datetime
 
 from geopy import Point
 
-from ems.models.base import Base
+from ems.models.location import Location
 
 
 # Define the Ambulance model.
@@ -11,7 +11,7 @@ class Ambulance:
 
     def __init__(self,
                  id: int,
-                 base: Base,
+                 base: Location,
                  unit: str = "XXX-XXXX",
                  deployed: bool = False,
                  location: Point = None,
