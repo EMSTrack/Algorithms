@@ -2,7 +2,7 @@
 
 from typing import List
 
-from ems.algorithms.ambulance_selection import AmbulanceSelectionAlgorithm
+from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 

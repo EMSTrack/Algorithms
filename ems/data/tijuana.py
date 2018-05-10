@@ -4,7 +4,7 @@ import pandas as pd
 from geopy import Point
 
 from ems.data.dataset import Dataset
-from ems.data.traveltimes import TravelTimes
+from ems.data.travel_times import TravelTimes
 from ems.models.base import Base
 from ems.models.case import Case
 from ems.models.demand import Demand

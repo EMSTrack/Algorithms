@@ -1,25 +1,24 @@
 # Framework for using algorithms and allowing for replacement
 from copy import deepcopy
-from datetime import timedelta
 from typing import List
 
 import numpy as np
 
-from ems.algorithms.coverage import CoverageAlgorithm
-from ems.data.traveltimes import TravelTimes
+from ems.algorithms.coverage.coverage import CoverageAlgorithm
+from ems.data.travel_times import TravelTimes
 from ems.models.ambulance import Ambulance
 
 
 # Used by the sim to select ambulances
 class DemandCoverage(CoverageAlgorithm):
     """
-        Barebone class. Users may subclass to implement their own ambulance_selection for
-        finding coverage.
+    Barebone class. Users may subclass to implement their own ambulance_selection for
+    finding coverage.
     """
 
     def __init__(self, travel_times: TravelTimes):
-        self.travel_times: TravelTimes = travel_times
-        self._recorded_coverages: List = []
+        self.travel_times = travel_times
+        self._recorded_coverages = []
 
     def calculate_coverage(self, ambulances: List[Ambulance]):
         """

@@ -3,8 +3,8 @@ from datetime import datetime
 from datetime import timedelta
 from typing import List
 
-from ems.algorithms.ambulance_selection import AmbulanceSelectionAlgorithm
-from ems.data.traveltimes import TravelTimes
+from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
+from ems.data.travel_times import TravelTimes
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 

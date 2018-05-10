@@ -1,7 +1,7 @@
 import argparse
 
-from ems.algorithms.demand_coverage import DemandCoverage
-from ems.algorithms.dispatch_fastest_ambulance import BestTravelTimeAlgorithm
+from ems.algorithms.coverage.demand_coverage import DemandCoverage
+from ems.algorithms.selection.dispatch_fastest_ambulance import BestTravelTimeAlgorithm
 from ems.data.filters import kmeans_select_bases
 from ems.data.tijuana import CSVTijuanaDataset
 from ems.models.ambulance import Ambulance

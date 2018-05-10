@@ -1,4 +1,4 @@
-from ems.algorithms.ambulance_selection import DispatcherAlgorithm
+from ems.algorithms.selection.ambulance_selection import DispatcherAlgorithm
 from ems.data.tijuana import CSVTijuanaDataset
 from ems.models.base import Base
 from ems.settings import Settings

@@ -6,8 +6,8 @@ from typing import List
 
 from termcolor import colored
 
-from ems.algorithms.ambulance_selection import AmbulanceSelectionAlgorithm
-from ems.algorithms.demand_coverage import DemandCoverage
+from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
+from ems.algorithms.coverage.demand_coverage import DemandCoverage
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 from ems.simulators.simulator import Simulator
@@ -185,7 +185,7 @@ class DispatcherSimulator(Simulator):
         print("Starting case {} which was recorded at {}".format(case.id, case.datetime))
 
         # Find the coverage, determine 
-        self.demand_coverage.calculate_entire_coverage(self.ambulances)
+        self.demand_coverage.calculate_coverage(self.ambulances)
         print("Coverage: ", self.demand_coverage.get_most_recent())
 
         # Select ambulance to dispatch
