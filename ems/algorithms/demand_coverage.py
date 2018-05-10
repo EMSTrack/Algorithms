@@ -21,7 +21,7 @@ class DemandCoverage(CoverageAlgorithm):
         self.travel_times: TravelTimes = travel_times
         self._recorded_coverages: List = []
 
-    def calculate_entire_coverage(self, ambulances: List[Ambulance]):
+    def calculate_coverage(self, ambulances: List[Ambulance]):
         """
         At a time, given a list of ambulances, determine the coverage of all the demands.
 
@@ -31,7 +31,6 @@ class DemandCoverage(CoverageAlgorithm):
 
         active_bases = list([amb.base for amb in ambulances if not amb.deployed])
         demands = self.travel_times.demands.locations
-        # import IPython; IPython.embed()
         demands_covered = [0 for _ in demands]
 
         for index in range(len(demands)):

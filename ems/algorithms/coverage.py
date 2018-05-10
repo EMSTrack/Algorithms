@@ -2,23 +2,17 @@
 from typing import List
 
 from ems.models.ambulance import Ambulance
-from ems.models.location_set import LocationSet
 
 
 # Used by the sim to select ambulances
 class CoverageAlgorithm:
     """
-    Barebone class. Users may subclass to implement their own ambulance_selection for
-    finding coverage.
+    Users may subclass to implement their own coverage algorithm
     """
 
-    # TODO This may not even be the right signature.
-    def calculate_coverage(self,
-                          demands: LocationSet,
-                          ambulances: List[Ambulance]):
+    def calculate_coverage(self, ambulances: List[Ambulance]):
         """
-        The signature for the function which runs the coverage ambulance_selection
-        :param demands:
+        The signature for the function which calculates coverage
         :param ambulances:
         :return:
         """

@@ -12,7 +12,6 @@ class TravelTimes:
     """
 
     """
-
     def __init__(self, bases: LocationSet, demands: LocationSet, times: np.ndarray):
         """
         :param bases:
@@ -31,11 +30,12 @@ class TravelTimes:
         :param demand:
         :return:
         """
-        assert(isinstance(base, Base))
-        assert(isinstance(demand, Demand))
 
-        base_ind = np.where(self.bases == base)
-        demand_ind = np.where(self.demands == demand)
+        base_ind = self.bases.locations.index(base)
+        demand_ind = self.demands.locations.index(demand)
+
+        print(base_ind)
+        print(demand_ind)
 
         time = int(self.times[base_ind][demand_ind])
 

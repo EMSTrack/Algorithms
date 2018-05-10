@@ -1,4 +1,4 @@
-import datetime.datetime
+from datetime import datetime
 
 from geopy import Point
 
