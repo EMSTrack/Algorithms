@@ -62,6 +62,7 @@ class CSVTijuanaDataset(Dataset):
         bases = []
         for index, row in bases_df.iterrows():
             base = Location(
+                id=index,
                 point=Point(row["lat"], row["long"])
             )
             bases.append(base)
@@ -78,6 +79,7 @@ class CSVTijuanaDataset(Dataset):
         demands = []
         for index, row in demands_df.iterrows():
             demand = Location(
+                id=index,
                 point=Point(row["lat"], row["long"])
             )
             demands.append(demand)

@@ -23,6 +23,14 @@ class TravelTimes:
         self.loc_set_2 = loc_set_2
         self.times = times
 
+        self.ls1_map = {}
+        for index, key1 in enumerate(loc_set_1.locations):
+            self.ls1_map[key1.id] = index
+
+        self.ls2_map = {}
+        for index, key2 in enumerate(loc_set_2.locations):
+            self.ls2_map[key2.id] = index
+
     def get_time(self, loc1: Location, loc2: Location):
         """
         Retrieves the travel time from the input base and demand point.
@@ -32,8 +40,8 @@ class TravelTimes:
         :return:
         """
 
-        index1 = self.loc_set_1.locations.index(loc1)
-        index2 = self.loc_set_2.locations.index(loc2)
+        index1 = self.ls1_map[loc1.id]
+        index2 = self.ls2_map[loc2.id]
 
         time = int(self.times[index1][index2])
 

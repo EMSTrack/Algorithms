@@ -4,7 +4,9 @@ from geopy import Point
 class Location:
 
     def __init__(self,
+                 id,
                  point: Point):
+        self.id = id
         self.location = point
 
     def __eq__(self, other):
