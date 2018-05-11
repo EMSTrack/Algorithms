@@ -7,7 +7,7 @@ from typing import List
 from termcolor import colored
 
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
-from ems.algorithms.coverage.demand_coverage import DemandCoverage
+from ems.algorithms.analysis.demand_coverage import DemandCoverage
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 from ems.simulators.simulator import Simulator
@@ -78,10 +78,10 @@ class DispatcherSimulator(Simulator):
 
             # Loop end condition - No more case or moving ambulances
             if not pending_cases and not working_cases and not ambulances_in_motion:
-                # TODO The coverage calls need to be to the Coverage instance
+                # TODO The analysis calls need to be to the Coverage instance
                 # total_cov = sum(self.measured_coverage)
                 # avg_cov = total_cov/len(self.measured_coverage)
-                # print("Average coverage: ", avg_cov)
+                # print("Average analysis: ", avg_cov)
                 avg = self.demand_coverage.avg_coverage()
                 min = self.demand_coverage.min_coverage()
                 max = self.demand_coverage.max_coverage()
@@ -167,10 +167,10 @@ class DispatcherSimulator(Simulator):
             print("Pending cases: ", [case.id for case in pending_cases])
 
         # TODO return "results" object with more potential information
-        # Compute average coverage:
+        # Compute average analysis:
         # total_cov = sum(self.measured_coverage)
         # avg_cov = total_cov/len(self.measured_coverage)
-        # print("Average coverage: ", avg_cov)
+        # print("Average analysis: ", avg_cov)
         return self.finished_cases
 
     def start_case(self, case, ambulances_in_motion, start_time):
@@ -184,7 +184,7 @@ class DispatcherSimulator(Simulator):
 
         print("Starting case {} which was recorded at {}".format(case.id, case.datetime))
 
-        # Find the coverage, determine 
+        # Find the analysis, determine
         self.demand_coverage.calculate_coverage(self.ambulances)
         print("Coverage: ", self.demand_coverage.get_most_recent())
 

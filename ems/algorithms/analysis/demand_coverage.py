@@ -4,7 +4,7 @@ from typing import List
 
 import numpy as np
 
-from ems.algorithms.coverage.coverage import CoverageAlgorithm
+from ems.algorithms.analysis.coverage import CoverageAlgorithm
 from ems.data.travel_times import TravelTimes
 from ems.models.ambulance import Ambulance
 
@@ -20,7 +20,7 @@ class DemandCoverage(CoverageAlgorithm):
 
     def calculate_coverage(self, ambulances: List[Ambulance]):
         """
-        At a time, given a list of ambulances, determine the coverage of all the demands.
+        At a time, given a list of ambulances, determine the analysis of all the demands.
 
         :param ambulances:
         :return:

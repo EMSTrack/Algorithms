@@ -36,7 +36,7 @@ def pick_starting_bases(traveltimes, num_bases, required_traveltime):
         d = [('index', int), ('covered', int)]
         count_covered = np.array(count_covered, d)
 
-        # Sort the table by row and grab the last element (the base with the most coverage)
+        # Sort the table by row and grab the last element (the base with the most analysis)
         (best_base, count) = np.sort(count_covered, order='covered', kind='mergesort')[-1]
         chosen_bases.append(best_base)
         demands_covered += count
