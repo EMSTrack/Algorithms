@@ -33,9 +33,13 @@ Here are the UMLs for each group of programs we have.
 
 ![](classes_ems_data.jpg)
 
-## Algorithms
+## Selectors
 
-![](classes_ems_algorithms.jpg)
+![](classes_ems_selection.jpg)
+
+## Analysis
+
+![](classes_ems_analysis.jpg)
 
 ## Overall
 
@@ -44,23 +48,7 @@ Here are the UMLs for each group of programs we have.
 
 # Package Diagrams
 
-## Simulator
 
-![](packages_ems_simulators.jpg)
-
-## Models
-
-![](packages_ems_models.jpg)
-
-## Data
-
-![](packages_ems_data.jpg)
-
-## Algorithms
-
-![](packages_ems_algorithms.jpg)
-
-## Overall
 ![](packages_ems.jpg)
 
 
