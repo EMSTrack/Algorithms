@@ -14,7 +14,9 @@ class Settings:
                  travel_times_file: str = None,
                  num_ambulances: int = 5,
                  num_bases: int = 5,
-                 args: Namespace = None):
+                 args: Namespace = None
+
+                 ):
 
         # TODO: Look for a settings file
         if args.settings:

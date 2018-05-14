@@ -17,9 +17,13 @@ parser.add_argument('--settings', help="Location of settings yaml file", type=st
 clargs = parser.parse_args()
 
 # TODO Fix this so that we can store these in a file :)
-file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
-# file_path = '../Data/'
+
+# file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
+file_path = '../Data/'
 # file_path = '~/tmp/data-cruz-roja/'
+
+print (file_path)
+
 bases_filepath = file_path + 'bases.csv'
 demands_filepath = file_path + 'demand_points.csv'
 cases_filepath = file_path + 'calls.csv'
@@ -46,7 +50,6 @@ ambulance_select = BestTravelTimeAlgorithm(base_demand_travel_times=dataset.trav
 # Initialize demand_coverage
 determine_coverage = DemandCoverage(travel_times=dataset.travel_times)
 
-
 # Select bases
 chosen_bases = kmeans_select_bases(dataset.bases, dataset.travel_times)
 
@@ -57,13 +60,13 @@ for index in range(settings.num_ambulances):
                           base=chosen_bases[index])
     ambulances.append(ambulance)
 
-# Initialize and run the simulator
+# Initialize the simulator
 sim = DispatcherSimulator(ambulances=ambulances,
                           cases=dataset.cases,
                           ambulance_selector=ambulance_select,
                           coverage_alg=determine_coverage)
 
-
+# Start the whole thing
 finished_cases = sim.run()
 
 

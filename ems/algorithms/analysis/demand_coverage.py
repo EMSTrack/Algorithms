@@ -16,7 +16,7 @@ class DemandCoverage(CoverageAlgorithm):
     def __init__(self,
                  travel_times: TravelTimes):
         self.travel_times = travel_times
-        self._recorded_coverages = []
+        # self._recorded_coverages = []
 
     def calculate_coverage(self, ambulances: List[Ambulance]):
         """
@@ -39,28 +39,28 @@ class DemandCoverage(CoverageAlgorithm):
                         break
 
         total = sum(demands_covered)
-        self._recorded_coverages.append(total)
+        # self._recorded_coverages.append(total)
         return total
 
-    def get_most_recent(self):
-        return self._recorded_coverages[-1]
-
-    def get_all_coverages(self):
-        return deepcopy(self._recorded_coverages)
-
-    def avg_coverage(self):
-        """
-        :return: The average of the coverages so far.
-        """
-        avg = sum(self._recorded_coverages) / len(self._recorded_coverages)
-        return avg
-
-    def max_coverage(self):
-        return max(self._recorded_coverages)
-
-    def min_coverage(self):
-        return min(self._recorded_coverages)
-
-    def std_dev_coverage(self):
-        std_dev = np.std(np.array([time for time in self._recorded_coverages]), axis=0)
-        return std_dev.item()
+    # def get_most_recent(self):
+    #     return self._recorded_coverages[-1]
+    #
+    # def get_all_coverages(self):
+    #     return deepcopy(self._recorded_coverages)
+    #
+    # def avg_coverage(self):
+    #     """
+    #     :return: The average of the coverages so far.
+    #     """
+    #     avg = sum(self._recorded_coverages) / len(self._recorded_coverages)
+    #     return avg
+    #
+    # def max_coverage(self):
+    #     return max(self._recorded_coverages)
+    #
+    # def min_coverage(self):
+    #     return min(self._recorded_coverages)
+    #
+    # def std_dev_coverage(self):
+    #     std_dev = np.std(np.array([time for time in self._recorded_coverages]), axis=0)
+    #     return std_dev.item()

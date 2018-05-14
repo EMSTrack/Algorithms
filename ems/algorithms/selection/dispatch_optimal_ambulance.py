@@ -25,6 +25,18 @@ class OptimalTravelTimeWithCoverageAlgorithm(BestTravelTimeAlgorithm):
         self.coverage = DemandCoverage(base_demand_travel_times)
 
 
+    def select_ambulance(self,
+                                              available_ambulances: List[Ambulance],
+                                              case: Case,
+                                              current_time: datetime):
+        pass
+
+    def _rank_ambulances_speed(self):
+        pass
+
+    def _rank_ambulances_coverage(self):
+        pass
+
 
 
 
