@@ -14,7 +14,7 @@ class Ambulance:
                  base: Location,
                  unit: str = "XXX-XXXX",
                  deployed: bool = False,
-                 location: Point = None,
+                 location: Location = None,
                  deployed_time: datetime = None,
                  end_time: datetime = None):
         self.id = id

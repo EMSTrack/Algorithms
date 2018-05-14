@@ -215,7 +215,6 @@ class DispatcherSimulator(Simulator):
             case.delay = case.start_time - case.datetime
             case.assigned_ambulance = chosen_ambulance
 
-            # TODO -- fill in destination?
             # Deploy ambulance
             chosen_ambulance.deploy(case)
             ambulances_in_motion.append(chosen_ambulance)
