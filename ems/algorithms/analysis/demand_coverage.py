@@ -26,7 +26,7 @@ class DemandCoverage(CoverageAlgorithm):
         :return:
         """
 
-        ambulance_locations = list([amb.base for amb in ambulances if not amb.deployed])
+        ambulance_locations = list([amb.location for amb in ambulances if not amb.deployed])
         locations_to_cover = self.travel_times.loc_set_2.locations
         locations_covered = [0 for _ in locations_to_cover]
 
