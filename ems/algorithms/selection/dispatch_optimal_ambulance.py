@@ -17,12 +17,12 @@ from ems.algorithms.analysis.demand_coverage import DemandCoverage
 class OptimalTravelTimeWithCoverageAlgorithm(BestTravelTimeAlgorithm):
 
     def __init__(self,
-                 base_demand_travel_times: TravelTimes = None):
+                 travel_times: TravelTimes = None):
 
-        super(BestTravelTimeAlgorithm, self).__init__(base_demand_travel_times=base_demand_travel_times)
+        super(BestTravelTimeAlgorithm, self).__init__(travel_times=travel_times)
 
         # This instance is used for calculating future coverages
-        self.coverage = DemandCoverage(base_demand_travel_times)
+        self.coverage = DemandCoverage(travel_times)
 
 
     def select_ambulance(self,
