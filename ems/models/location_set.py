@@ -35,3 +35,4 @@ class LocationSet:
         closest_point_ind = self.kd_tree.query((point.longitude, point.latitude))[1]
 
         return self.locations[closest_point_ind], closest_point_ind
+

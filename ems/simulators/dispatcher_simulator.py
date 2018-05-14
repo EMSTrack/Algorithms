@@ -7,7 +7,7 @@ from typing import List
 from termcolor import colored
 
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
-from ems.algorithms.analysis.demand_coverage import DemandCoverage
+from ems.algorithms.analysis.percent_coverage import PercentCoverage
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 from ems.simulators.simulator import Simulator
@@ -19,7 +19,7 @@ class DispatcherSimulator(Simulator):
                  ambulances: List[Ambulance],
                  cases: List[Case],
                  ambulance_selector: AmbulanceSelectionAlgorithm,
-                 coverage_alg: DemandCoverage):
+                 coverage_alg: PercentCoverage):
 
         self.finished_cases = []
         self.current_time = cases[0].datetime if len(cases) > 0 else -1
@@ -185,7 +185,7 @@ class DispatcherSimulator(Simulator):
         print("Starting case {} which was recorded at {}".format(case.id, case.datetime))
 
         # Find the analysis, determine
-        self.demand_coverage.calculate_coverage(self.ambulances)
+        self.demand_coverage.calculate(self.ambulances)
         # print("Coverage: ", self.demand_coverage.get_most_recent())
 
         # Select ambulance to dispatch

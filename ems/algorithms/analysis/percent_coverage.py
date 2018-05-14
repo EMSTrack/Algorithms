@@ -12,7 +12,7 @@ from ems.models.ambulance import Ambulance
 from ems.models.location import Location
 
 
-class DemandCoverage(CoverageAlgorithm):
+class PercentCoverage(CoverageAlgorithm):
 
     def __init__(self,
                  travel_times: TravelTimes,
@@ -21,7 +21,7 @@ class DemandCoverage(CoverageAlgorithm):
         self.r1 = r1
         # self._recorded_coverages = []
 
-    def calculate_coverage(self, ambulances: List[Ambulance]):
+    def calculate(self, ambulances: List[Ambulance]):
         """
         At a time, given a list of ambulances, determine the analysis of all the demands.
 

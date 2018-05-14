@@ -1,6 +1,6 @@
 import argparse
 
-from ems.algorithms.analysis.demand_coverage import DemandCoverage
+from ems.algorithms.analysis.percent_coverage import PercentCoverage
 from ems.algorithms.selection.dispatch_fastest_ambulance import BestTravelTimeAlgorithm
 from ems.data.filters import kmeans_select_bases
 from ems.data.tijuana import CSVTijuanaDataset
@@ -19,7 +19,7 @@ clargs = parser.parse_args()
 # TODO Fix this so that we can store these in a file :)
 file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
 # file_path = '../Data/'
-# file_path = '~/tmp/data-cruz-roja/'
+file_path = '~/tmp/data-cruz-roja/'
 
 print (file_path)
 
@@ -47,7 +47,7 @@ dataset = CSVTijuanaDataset(demands_filepath=settings.demands_file,
 ambulance_select = BestTravelTimeAlgorithm(travel_times=dataset.travel_times)
 
 # Initialize demand_coverage
-determine_coverage = DemandCoverage(travel_times=dataset.travel_times)
+determine_coverage = PercentCoverage(travel_times=dataset.travel_times)
 
 # Select bases
 chosen_bases = kmeans_select_bases(dataset.bases, dataset.travel_times)
