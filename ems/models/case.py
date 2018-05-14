@@ -3,6 +3,8 @@ from datetime import timedelta
 
 from geopy import Point
 
+from ems.models.ambulance import Ambulance
+
 
 class Case:
 
@@ -14,7 +16,8 @@ class Case:
                  priority: float = None,
                  start_time: datetime = None,
                  finish_time: datetime = None,
-                 delay: timedelta = None):
+                 delay: timedelta = None,
+                 assigned_ambulance: Ambulance = None):
         self.id = id
         self.location = point
         self.weekday = weekday
@@ -23,6 +26,7 @@ class Case:
         self.start_time = start_time
         self.finish_time = finish_time
         self.delay = delay
+        self.assigned_ambulance = assigned_ambulance
 
     def __eq__(self, other):
         """

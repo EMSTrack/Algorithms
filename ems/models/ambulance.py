@@ -36,7 +36,9 @@ class Ambulance:
 
         return False
 
-    def finish(self):
+    # TODO default to ambulance base location?
+    def finish(self,
+               amb_location: Location):
         """
         Resets the ambulance.
         :return: None. This just changes state.
@@ -47,15 +49,13 @@ class Ambulance:
             raise Exception("Ambulance {} not yet deployed, cannot finish".format(self.id))
 
         self.deployed = False
-        self.location = None
+        self.location = amb_location
         self.deployed_time = None
 
-    def deploy(self, deploy_datetime, destination, end_time):
+    def deploy(self, case):
         """
-        Deploys the ambulance by setting the deployed state, start times, end time, and location.
-        :param deploy_datetime:
-        :param destination:
-        :param end_time:
+        Deploys the ambulance by setting the deployed state, start times, end time, and location of the case.
+        :param case
         :return: Nothing. This function only changes state.
         """
 
@@ -63,13 +63,8 @@ class Ambulance:
         if self.deployed:
             raise Exception("Ambulance {} already deployed".format(self.id))
 
-        if not datetime:
-            raise Exception("Cannot set a deployed ambulance's deploy time to None")
-
-        if not end_time:
-            raise Exception("Cannot set a deployed ambulance's end time to None")
-
         self.deployed = True
-        self.deployed_time = deploy_datetime
-        self.end_time = end_time
-        self.location = destination
+        # TODO -- assumption
+        self.location = case.location
+        self.deployed_time = case.start_time
+        self.end_time = case.finish_time
