@@ -210,15 +210,15 @@ class DispatcherSimulator(Simulator):
                                                                                                 ambulance_travel_time,
                                                                                                 duration))
 
-            # TODO -- fill in destination?
-            # Deploy ambulance
-            chosen_ambulance.deploy(start_time, None, end_time)
-            ambulances_in_motion.append(chosen_ambulance)
-
             # Update the case with information
             case.start_time = start_time
             case.finish_time = end_time
             case.delay = case.start_time - case.datetime
+            case.assigned_ambulance = chosen_ambulance
+
+            # Deploy ambulance
+            chosen_ambulance.deploy(case)
+            ambulances_in_motion.append(chosen_ambulance)
 
             # Add case to finished cases and remove from working cases
             self.finished_cases.append(case)
@@ -244,7 +244,7 @@ class DispatcherSimulator(Simulator):
         new_ambulance_list = []
         for amb in ambulances_in_motion:
             if amb.end_time <= current_datetime:
-                amb.finish()
+                amb.finish(amb_location=amb.base)
                 print(colored('Retiring ambulance {} at time {}'.format(amb.id, amb.end_time), 'cyan'))
             else:
                 new_ambulance_list.append(amb)
