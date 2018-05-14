@@ -26,19 +26,19 @@ class DemandCoverage(CoverageAlgorithm):
         :return:
         """
 
-        active_bases = list([amb.base for amb in ambulances if not amb.deployed])
-        demands = self.travel_times.loc_set_2.locations
-        demands_covered = [0 for _ in demands]
+        ambulance_locations = list([amb.base for amb in ambulances if not amb.deployed])
+        locations_to_cover = self.travel_times.loc_set_2.locations
+        locations_covered = [0 for _ in locations_to_cover]
 
-        for index in range(len(demands)):
-            if demands[index]:  # TODO I don't know why this is here
-                for base in active_bases:
-                    dem = demands[index]
-                    if self.travel_times.get_time(base, dem).total_seconds() < 600:
-                        demands_covered[index] = 1
+        for index in range(len(locations_to_cover)):
+            loc = locations_to_cover[index]
+            if loc:  # TODO I don't know why this is here
+                for amb_location in ambulance_locations:
+                    if self.travel_times.get_time(amb_location, loc).total_seconds() < 600:
+                        locations_covered[index] = 1
                         break
 
-        total = sum(demands_covered)
+        total = sum(locations_covered)
         self._recorded_coverages.append(total)
         return total
 

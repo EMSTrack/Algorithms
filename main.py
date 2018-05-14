@@ -41,7 +41,7 @@ dataset = CSVTijuanaDataset(demands_filepath=settings.demands_file,
                             travel_times_filepath=settings.travel_times_file)
 
 # Initialize ambulance_selection
-ambulance_select = BestTravelTimeAlgorithm(base_demand_travel_times=dataset.travel_times)
+ambulance_select = BestTravelTimeAlgorithm(travel_times=dataset.travel_times)
 
 # Initialize demand_coverage
 determine_coverage = DemandCoverage(travel_times=dataset.travel_times)
