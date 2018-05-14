@@ -1,5 +1,4 @@
 # Framework for using algorithms and allowing for replacement
-from copy import deepcopy
 from typing import List
 
 import numpy as np
@@ -10,12 +9,16 @@ from ems.models.ambulance import Ambulance
 
 
 # Used by the sim to select ambulances
+from ems.models.location import Location
+
 
 class DemandCoverage(CoverageAlgorithm):
 
     def __init__(self,
-                 travel_times: TravelTimes):
+                 travel_times: TravelTimes,
+                 r1: int = 600):
         self.travel_times = travel_times
+        self.r1 = r1
         # self._recorded_coverages = []
 
     def calculate_coverage(self, ambulances: List[Ambulance]):
@@ -30,18 +33,22 @@ class DemandCoverage(CoverageAlgorithm):
         locations_to_cover = self.travel_times.loc_set_2.locations
         locations_covered = [0 for _ in locations_to_cover]
 
-        for index in range(len(locations_to_cover)):
-            loc = locations_to_cover[index]
-            if loc:  # TODO I don't know why this is here
-                for amb_location in ambulance_locations:
-                    if self.travel_times.get_time(amb_location, loc).total_seconds() < 600:
-                        locations_covered[index] = 1
-                        break
+        for index, location_to_cover in enumerate(locations_to_cover):
 
+            for amb_location in ambulance_locations:
 
-        # total = sum(demands_covered)
+                # Compute closest location in location set 1 to the ambulance location
+                if type(amb_location) is Location:
+                    amb_location = amb_location.location
 
-        total = sum(locations_covered)
+                closest_loc_to_ambulance = self.travel_times.loc_set_1.closest(amb_location)[0]
+
+                # See if travel time is within the r1 radius
+                if self.travel_times.get_time(closest_loc_to_ambulance, location_to_cover).total_seconds() < self.r1:
+                    locations_covered[index] += 1
+                    break
+
+        total = sum([1 for loc in locations_covered if loc > 0])
 
         return total
 

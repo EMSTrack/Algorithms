@@ -186,7 +186,7 @@ class DispatcherSimulator(Simulator):
 
         # Find the analysis, determine
         self.demand_coverage.calculate_coverage(self.ambulances)
-        print("Coverage: ", self.demand_coverage.get_most_recent())
+        # print("Coverage: ", self.demand_coverage.get_most_recent())
 
         # Select ambulance to dispatch
         available_ambulances = [amb for amb in self.ambulances if not amb.deployed]

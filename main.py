@@ -17,9 +17,8 @@ parser.add_argument('--settings', help="Location of settings yaml file", type=st
 clargs = parser.parse_args()
 
 # TODO Fix this so that we can store these in a file :)
-
-# file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
-file_path = '../Data/'
+file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
+# file_path = '../Data/'
 # file_path = '~/tmp/data-cruz-roja/'
 
 print (file_path)
@@ -57,7 +56,8 @@ chosen_bases = kmeans_select_bases(dataset.bases, dataset.travel_times)
 ambulances = []
 for index in range(settings.num_ambulances):
     ambulance = Ambulance(id=index,
-                          base=chosen_bases[index])
+                          base=chosen_bases[index],
+                          location=chosen_bases[index].location)
     ambulances.append(ambulance)
 
 # Initialize the simulator

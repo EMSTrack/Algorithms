@@ -1,6 +1,7 @@
 from geopy import Point
 
 
+# TODO -- subclass geopy point
 class Location:
 
     def __init__(self,
