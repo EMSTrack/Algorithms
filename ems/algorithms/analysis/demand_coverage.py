@@ -39,6 +39,7 @@ class DemandCoverage(CoverageAlgorithm):
                         break
 
 
+
         # total = sum(demands_covered)
 
         total = sum(locations_covered)

@@ -12,30 +12,17 @@ from ems.simulators.dispatcher_simulator import DispatcherSimulator
 parser = argparse.ArgumentParser(description="Load settings, data, preprocess models, run sim.")
 parser.add_argument('--ambulances', help="Number of ambulances", type=int, required=False)
 parser.add_argument('--bases',      help='Number of bases',     type=int,  required=False)
-parser.add_argument('--settings', help="Location of settings yaml file", type=str, required=False)
+parser.add_argument('--settings', help="for example, '--settings hans'", type=str, required=True)
 
 clargs = parser.parse_args()
 
-# TODO Fix this so that we can store these in a file :)
-
-# file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
-file_path = '../Data/'
-# file_path = '~/tmp/data-cruz-roja/'
-
-print (file_path)
-
-bases_filepath = file_path + 'bases.csv'
-demands_filepath = file_path + 'demand_points.csv'
-cases_filepath = file_path + 'calls.csv'
-travel_times_filepath = file_path + 'times.csv'
-cd_mapping_filepath = file_path + 'calls_demand_amor.csv'
 
 # Initialize settings
 settings = Settings(debug=True,
-                    demands_file=demands_filepath,
-                    bases_file=bases_filepath,
-                    cases_file=cases_filepath,
-                    travel_times_file=travel_times_filepath,
+                    # demands_file=demands_filepath,
+                    # bases_file=bases_filepath,
+                    # cases_file=cases_filepath,
+                    # travel_times_file=travel_times_filepath,
                     args=clargs)
 
 # Initialize dataset
