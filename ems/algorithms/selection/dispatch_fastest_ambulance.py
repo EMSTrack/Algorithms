@@ -10,6 +10,7 @@ from ems.models.case import Case
 
 # An implementation of a "fastest travel time" ambulance_selection from a base to
 # the demand point closest to a case
+from ems.models.location import Location
 
 
 class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
@@ -23,25 +24,22 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
                          case: Case,
                          current_time: datetime):
 
-
-
         # Compute the closest demand point to the case location
         loc_set_2 = self.travel_times.loc_set_2
-        closest_loc, distance = loc_set_2.closest(case.location)
+        closest_loc_to_case, distance = loc_set_2.closest(case.location)
 
         # Select an ambulance to attend to the given case and obtain the its duration of travel
         chosen_ambulance, ambulance_travel_time = self.find_fastest_ambulance(
-            available_ambulances, self.travel_times, closest_loc)
+            available_ambulances, closest_loc_to_case)
 
         return {'choice': chosen_ambulance,
                 'travel_time': ambulance_travel_time}
 
-    def find_fastest_ambulance(self, ambulances, travel_times, closest_loc):
+    def find_fastest_ambulance(self, ambulances, closest_loc_to_case):
         """
         Finds the ambulance with the shortest one way travel time from its base to the
         demand point
         :param ambulances:
-        :param travel_times:
         :param closest_loc:
         :return: The ambulance and the travel time
         """
@@ -49,9 +47,20 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
         shortest_time = timedelta(hours=9999999)
         fastest_amb = None
 
+        loc_set_1 = self.travel_times.loc_set_1
+
         for amb in ambulances:
+
+            # Compute closest location in the first set to the ambulance
             ambulance_location = amb.location
-            time = travel_times.get_time(ambulance_location, closest_loc)
+
+            # Compute closest location in location set 1 to the ambulance location
+            if type(ambulance_location) is Location:
+                ambulance_location = ambulance_location.location
+
+            closest_loc_to_ambulance = loc_set_1.closest(ambulance_location)[0]
+
+            time = self.travel_times.get_time(closest_loc_to_ambulance, closest_loc_to_case)
             if shortest_time > time:
                 shortest_time = time
                 fastest_amb = amb

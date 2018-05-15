@@ -10,7 +10,7 @@ class CoverageAlgorithm:
     Users may subclass to implement their own analysis algorithm
     """
 
-    def calculate_coverage(self, ambulances: List[Ambulance]):
+    def calculate(self, ambulances: List[Ambulance]):
         """
         The signature for the function which calculates analysis
         :param ambulances:

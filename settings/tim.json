@@ -6,5 +6,5 @@
 	 "times"				: "times.csv",
 	 "cases"				: "calls.csv",
 	 "num_ambs"				: 7,
-	 "num_bases"			: 7,
+	 "num_bases"			: 7
 }
