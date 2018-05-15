@@ -5,8 +5,8 @@ from geopy import Point
 
 from ems.data.dataset import Dataset
 from ems.data.travel_times import TravelTimes
-from ems.models.case import Case
 from ems.models.location_set import LocationSet
+from ems.models.tijuana_case import TijuanaCase
 from ems.utils import parse_headered_csv, parse_unheadered_csv
 
 
@@ -45,10 +45,10 @@ class CSVTijuanaDataset(Dataset):
         # Generate list of models from dataframe
         cases = []
         for index, row in cases_df.iterrows():
-            case = Case(
+            case = TijuanaCase(
                 id=row["id"],
-                point=Point(row["lat"], row["long"]),
-                dt=row["datetime"],
+                location=Point(row["lat"], row["long"]),
+                time=row["datetime"],
                 weekday=row["weekday"],
                 priority=row["priority"])
             cases.append(case)

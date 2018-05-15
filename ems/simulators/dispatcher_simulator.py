@@ -1,6 +1,5 @@
 # Runs the simulation.
 
-import datetime
 from copy import deepcopy
 from typing import List
 
@@ -22,7 +21,7 @@ class DispatcherSimulator(Simulator):
                  coverage_alg: PercentCoverage):
 
         self.finished_cases = []
-        self.current_time = cases[0].datetime if len(cases) > 0 else -1
+        self.current_time = cases[0].time if len(cases) > 0 else -1
         self.demand_coverage = coverage_alg
         super().__init__(ambulances, cases, ambulance_selector)
 
@@ -53,7 +52,7 @@ class DispatcherSimulator(Simulator):
                 pending_cases.append(case)
 
                 print(colored("No available ambulances to deal with incoming case: {} at {}".format(case.id,
-                                                                                                    case.datetime),
+                                                                                                    case.time),
                               "red"))
 
             elif event == Event.START_CASE:
@@ -104,7 +103,7 @@ class DispatcherSimulator(Simulator):
                     # If any pending cases, start those, otherwise get the next working case
                     next_case = pending_cases[0] if pending_cases else working_cases[0]
                     event = Event.START_CASE
-                    self.current_time = self.current_time if pending_cases else next_case.datetime
+                    self.current_time = self.current_time if pending_cases else next_case.time
 
                 # Ambulances are currently attending to cases
                 else:
@@ -118,7 +117,7 @@ class DispatcherSimulator(Simulator):
 
                         # Since we will only be delaying (not starting) we only care about the next working case
                         next_case = working_cases[0]
-                        next_case_time = next_case.datetime
+                        next_case_time = next_case.time
 
                         # Delay next case if it will arrive before any ambulance will finish
                         if ambulance_release_time > next_case_time:
@@ -138,7 +137,7 @@ class DispatcherSimulator(Simulator):
                         # Since we may be starting a case, we want to get the earliest case in pending if pending
                         # cases exist
                         next_case = pending_cases[0] if pending_cases else working_cases[0]
-                        next_case_time = next_case.datetime
+                        next_case_time = next_case.time
 
                         # Start the next case if it will arrive or has already arrived (pending)
                         # before any ambulance will finish
@@ -182,7 +181,7 @@ class DispatcherSimulator(Simulator):
         :return: True if case starts successfully; False if ambulance_selection fails to select an ambulance
         """
 
-        print("Starting case {} which was recorded at {}".format(case.id, case.datetime))
+        print("Starting case {} which was recorded at {}".format(case.id, case.time))
 
         # Find the analysis, determine
         # TODO Demand coverage should be a separate class.
@@ -198,30 +197,30 @@ class DispatcherSimulator(Simulator):
         # Dispatch an ambulance if one was found
         if chosen_ambulance is not None:
 
-            # TODO - Currently assume that each case will take 2x travel time + 20 minutes
-            # TODO - Algorithm for case duration?
-            # Compute duration of the trip
-            duration = ambulance_travel_time * 2 + datetime.timedelta(minutes=20)
+            # Start the case
+            case.start(chosen_ambulance, start_time, ambulance_travel_time)
 
-            # Compute the end timestamp of the trip
-            end_time = start_time + duration
+            # Get the case end time
+            finish_time = case.get_finish_time()
 
-            print('Ambulance {} chosen with one-way travel time {} (total duration: {})'.format(chosen_ambulance.id,
-                                                                                                ambulance_travel_time,
-                                                                                                duration))
-
-            # Update the case with information
-            case.start_time = start_time
-            case.finish_time = end_time
-            case.delay = case.start_time - case.datetime
-            case.assigned_ambulance = chosen_ambulance
+            # Get the case duration
+            case_duration = case.get_duration()
 
             # Deploy ambulance
-            chosen_ambulance.deploy(case)
+            chosen_ambulance.deploy(
+                location=case.location,
+                deployed_time=start_time,
+                finish_time=finish_time
+            )
+
             ambulances_in_motion.append(chosen_ambulance)
 
             # Add case to finished cases and remove from working cases
             self.finished_cases.append(case)
+
+            print('Ambulance {} chosen with one-way travel time {} (total duration: {})'.format(chosen_ambulance.id,
+                                                                                                ambulance_travel_time,
+                                                                                                case_duration))
 
             print(colored("Deploying ambulance {} at time {}".format(chosen_ambulance.id, start_time), "green"))
             print("Delay on this case: {}".format(case.delay))

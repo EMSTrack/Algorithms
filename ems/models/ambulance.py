@@ -50,10 +50,12 @@ class Ambulance:
         self.location = amb_location
         self.deployed_time = None
 
-    def deploy(self, case):
+    def deploy(self, location, deployed_time, finish_time):
         """
         Deploys the ambulance by setting the deployed state, start times, end time, and location of the case.
-        :param case
+        :param location
+        :param deployed_time
+        :param finish_time
         :return: Nothing. This function only changes state.
         """
 
@@ -62,7 +64,6 @@ class Ambulance:
             raise Exception("Ambulance {} already deployed".format(self.id))
 
         self.deployed = True
-        # TODO -- assumption
-        self.location = case.location
-        self.deployed_time = case.start_time
-        self.end_time = case.finish_time
+        self.location = location
+        self.deployed_time = deployed_time
+        self.end_time = finish_time

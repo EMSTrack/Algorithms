@@ -10,23 +10,32 @@ class Case:
 
     def __init__(self,
                  id: int,
-                 point: Point,
-                 dt: datetime,
-                 weekday: str,
+                 location: Point,
+                 time: datetime,
+                 weekday: str = None,
                  priority: float = None,
                  start_time: datetime = None,
                  finish_time: datetime = None,
                  delay: timedelta = None,
                  assigned_ambulance: Ambulance = None):
         self.id = id
-        self.location = point
+        self.location = location
+        self.time = time
         self.weekday = weekday
-        self.datetime = dt
         self.priority = priority
         self.start_time = start_time
         self.finish_time = finish_time
         self.delay = delay
         self.assigned_ambulance = assigned_ambulance
+
+    def start(self, ambulance, start_time, ambulance_travel_time):
+        raise NotImplementedError()
+
+    def get_duration(self):
+        raise NotImplementedError()
+
+    def get_finish_time(self):
+        raise NotImplementedError()
 
     def __eq__(self, other):
         """
