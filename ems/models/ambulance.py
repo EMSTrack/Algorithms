@@ -35,8 +35,7 @@ class Ambulance:
         return False
 
     # TODO default to ambulance base location?
-    def finish(self,
-               amb_location: Point):
+    def finish(self, amb_location: Point):
         """
         Resets the ambulance.
         :return: None. This just changes state.
@@ -50,7 +49,10 @@ class Ambulance:
         self.location = amb_location
         self.deployed_time = None
 
-    def deploy(self, location, deployed_time, finish_time):
+    def deploy(self,
+               location: Point,
+               deployed_time: datetime,
+               finish_time: datetime):
         """
         Deploys the ambulance by setting the deployed state, start times, end time, and location of the case.
         :param location
