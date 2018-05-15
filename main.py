@@ -19,7 +19,7 @@ clargs = parser.parse_args()
 # TODO Fix this so that we can store these in a file :)
 file_path = '/Users/timothylam/Documents/school/ENG100L/data-cruz-roja/'
 # file_path = '../Data/'
-file_path = '~/tmp/data-cruz-roja/'
+# file_path = '~/tmp/data-cruz-roja/'
 
 print (file_path)
 

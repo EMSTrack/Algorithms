@@ -21,36 +21,37 @@ class RadiusCoverage(CoverageAlgorithm):
         self.prct = prct
         # self._recorded_coverages = []
 
-    def calculate(self, ambulances: List[Ambulance]):
-        """
-        At a time, given a list of ambulances, determine the analysis of all the demands.
-
-        :param ambulances:
-        :return:
-        """
-
-        ambulance_locations = list([amb.location for amb in ambulances if not amb.deployed])
-        locations_to_cover = self.travel_times.loc_set_2.locations
-        locations_covered = [0 for _ in locations_to_cover]
-
-        for index, location_to_cover in enumerate(locations_to_cover):
-
-            for amb_location in ambulance_locations:
-
-                # Compute closest location in location set 1 to the ambulance location
-                if type(amb_location) is Location:
-                    amb_location = amb_location.location
-
-                closest_loc_to_ambulance = self.travel_times.loc_set_1.closest(amb_location)[0]
-
-                # See if travel time is within the r1 radius
-                if self.travel_times.get_time(closest_loc_to_ambulance, location_to_cover).total_seconds() < self.r1:
-                    locations_covered[index] += 1
-                    break
-
-        total = sum([1 for loc in locations_covered if loc > 0])
-
-        return total
+    # TODO
+    # def calculate(self, ambulances: List[Ambulance]):
+    #     """
+    #     At a time, given a list of ambulances, determine the analysis of all the demands.
+    #
+    #     :param ambulances:
+    #     :return:
+    #     """
+    #
+    #     ambulance_locations = list([amb.location for amb in ambulances if not amb.deployed])
+    #     locations_to_cover = self.travel_times.loc_set_2.locations
+    #     locations_covered = [0 for _ in locations_to_cover]
+    #
+    #     for index, location_to_cover in enumerate(locations_to_cover):
+    #
+    #         for amb_location in ambulance_locations:
+    #
+    #             # Compute closest location in location set 1 to the ambulance location
+    #             if type(amb_location) is Location:
+    #                 amb_location = amb_location.location
+    #
+    #             closest_loc_to_ambulance = self.travel_times.loc_set_1.closest(amb_location)[0]
+    #
+    #             # See if travel time is within the r1 radius
+    #             if self.travel_times.get_time(closest_loc_to_ambulance, location_to_cover).total_seconds() < self.r1:
+    #                 locations_covered[index] += 1
+    #                 break
+    #
+    #     total = sum([1 for loc in locations_covered if loc > 0])
+    #
+    #     return total
 
     # def get_most_recent(self):
     #     return self._recorded_coverages[-1]
