@@ -2,6 +2,7 @@
 from argparse import Namespace
 import json
 
+
 class Settings:
 
     # TODO - read from config to generate settings
@@ -30,7 +31,6 @@ class Settings:
 
                 num_ambulances = s['num_ambs']
                 num_bases = s['num_bases']
-
 
         # Assign the command line arguments into the parameter arguments
         if args.ambulances:

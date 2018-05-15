@@ -10,6 +10,7 @@ from ems.models.case import Case
 from ems.algorithms.selection.dispatch_fastest_ambulance import BestTravelTimeAlgorithm
 from ems.algorithms.analysis.percent_coverage import PercentCoverage
 
+
 # An implementation of a "fastest travel time" ambulance_selection from a base to
 # the demand point closest to a case
 
@@ -18,17 +19,15 @@ class OptimalTravelTimeWithCoverageAlgorithm(BestTravelTimeAlgorithm):
 
     def __init__(self,
                  travel_times: TravelTimes = None):
-
         super(BestTravelTimeAlgorithm, self).__init__(travel_times=travel_times)
 
         # This instance is used for calculating future coverages
         self.coverage = PercentCoverage(travel_times)
 
-
     def select_ambulance(self,
-                                              available_ambulances: List[Ambulance],
-                                              case: Case,
-                                              current_time: datetime):
+                         available_ambulances: List[Ambulance],
+                         case: Case,
+                         current_time: datetime):
         pass
 
     def _rank_ambulances_speed(self):
@@ -36,12 +35,6 @@ class OptimalTravelTimeWithCoverageAlgorithm(BestTravelTimeAlgorithm):
 
     def _rank_ambulances_coverage(self):
         pass
-
-
-
-
-
-
 
     # def select_ambulance(self,
     #                      available_ambulances: List[Ambulance],

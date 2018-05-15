@@ -18,10 +18,6 @@ clargs = parser.parse_args()
 
 # Initialize settings
 settings = Settings(debug=True,
-                    # demands_file=demands_filepath,
-                    # bases_file=bases_filepath,
-                    # cases_file=cases_filepath,
-                    # travel_times_file=travel_times_filepath,
                     args=clargs)
 
 # Initialize dataset
