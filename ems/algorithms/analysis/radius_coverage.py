@@ -1,15 +1,8 @@
-# Framework for using algorithms and allowing for replacement
-from typing import List
-
-import numpy as np
-
 from ems.algorithms.analysis.coverage import CoverageAlgorithm
 from ems.data.travel_times import TravelTimes
-from ems.models.ambulance import Ambulance
 
 
-# Used by the sim to select ambulances
-from ems.models.location import Location
+# Computes a radius coverage
 
 
 class RadiusCoverage(CoverageAlgorithm):

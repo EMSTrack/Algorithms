@@ -6,7 +6,6 @@ from geopy import Point
 from ems.data.dataset import Dataset
 from ems.data.travel_times import TravelTimes
 from ems.models.case import Case
-from ems.models.location import Location
 from ems.models.location_set import LocationSet
 from ems.utils import parse_headered_csv, parse_unheadered_csv
 
@@ -14,17 +13,21 @@ from ems.utils import parse_headered_csv, parse_unheadered_csv
 class CSVTijuanaDataset(Dataset):
 
     def __init__(self,
-                 demands_filepath: str,
-                 bases_filepath: str,
-                 cases_filepath: str,
-                 travel_times_filepath: str):
+                 demands_file_path: str,
+                 bases_file_path: str,
+                 cases_file_path: str,
+                 travel_times_file_path: str):
 
         # Read files into pandas dataframes and lists of objects
-        self.demands = self.read_demands(demands_filepath)
-        self.bases = self.read_bases(bases_filepath)
-        self.cases = self.read_cases(cases_filepath)
+        self.demands = self.read_demands(demands_file_path)
+        self.bases = self.read_bases(bases_file_path)
+        self.cases = self.read_cases(cases_file_path)
 
-        self.travel_times = self.read_times(travel_times_filepath)
+        travel_times_df = self.read_times_df(travel_times_file_path)
+
+        self.travel_times = TravelTimes(loc_set_1=self.bases,
+                                        loc_set_2=self.demands,
+                                        times=travel_times_df.as_matrix())
 
     # Helper functions
     def read_cases(self, filename):
@@ -61,10 +64,7 @@ class CSVTijuanaDataset(Dataset):
         # Generate list of models from dataframe
         bases = []
         for index, row in bases_df.iterrows():
-            base = Location(
-                id=index,
-                point=Point(row["lat"], row["long"])
-            )
+            base = Point(row["lat"], row["long"])
             bases.append(base)
 
         return LocationSet(bases)
@@ -78,23 +78,16 @@ class CSVTijuanaDataset(Dataset):
         # Generate list of models from dataframe
         demands = []
         for index, row in demands_df.iterrows():
-            demand = Location(
-                id=index,
-                point=Point(row["lat"], row["long"])
-            )
+            demand = Point(row["lat"], row["long"])
             demands.append(demand)
 
         return LocationSet(demands)
 
-    def read_times(self, filename):
+    def read_times_df(self, filename):
         # Read travel times from CSV file into a pandas dataframe
         travel_times_df = pd.read_csv(filename)
 
-        travel_times = TravelTimes(loc_set_1=self.bases,
-                                   loc_set_2=self.demands,
-                                   times=travel_times_df.as_matrix())
-
-        return travel_times
+        return travel_times_df
 
     # Implementation
     def get_cases(self):

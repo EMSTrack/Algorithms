@@ -21,5 +21,5 @@ class RandomAmbulanceSelectionAlgorithm(AmbulanceSelectionAlgorithm):
         # Randomly choose
         chosen_ambulance = random.sample(available_ambulances, 1)
 
-        return {'choice': chosen_ambulance }
+        return {'choice': chosen_ambulance}
 

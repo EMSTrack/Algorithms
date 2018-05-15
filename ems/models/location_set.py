@@ -1,13 +1,12 @@
 from typing import List
 
+from geopy import Point
 from scipy.spatial import KDTree
-
-from ems.models.location import Location
 
 
 class LocationSet:
 
-    def __init__(self, locations: List[Location]):
+    def __init__(self, locations: List[Point]):
         self.locations = locations
         self.kd_tree = self._initialize_kd_tree()
 
@@ -18,8 +17,8 @@ class LocationSet:
         :return:
         """
 
-        # Form a kd-tree
-        points = [(loc.location.longitude, loc.location.latitude) for loc in self.locations]
+        # Form a kd-tree with the given list of locations
+        points = [(loc.longitude, loc.latitude) for loc in self.locations]
         kd_tree = KDTree(points)
         return kd_tree
 
@@ -32,7 +31,12 @@ class LocationSet:
         """
 
         # Query kd tree for nearest neighbor
-        closest_point_ind = self.kd_tree.query((point.longitude, point.latitude))[1]
+        closest_point_data = self.kd_tree.query((point.longitude, point.latitude))
 
-        return self.locations[closest_point_ind], closest_point_ind
+        # Retrieve closest point, its index, and the distance to it
+        closest_point_ind = closest_point_data[1]
+        closest_point = self.locations[closest_point_ind]
+        closest_point_distance = closest_point_data[0]
+
+        return closest_point, closest_point_ind, closest_point_distance
 

@@ -1,15 +1,12 @@
 # Framework for using algorithms and allowing for replacement
 from typing import List
 
-import numpy as np
-
 from ems.algorithms.analysis.coverage import CoverageAlgorithm
 from ems.data.travel_times import TravelTimes
 from ems.models.ambulance import Ambulance
 
 
-# Used by the sim to select ambulances
-from ems.models.location import Location
+# Computes a percent coverage given a radius
 
 
 class PercentCoverage(CoverageAlgorithm):
@@ -39,12 +36,9 @@ class PercentCoverage(CoverageAlgorithm):
             for amb_location in ambulance_locations:
 
                 # Compute closest location in location set 1 to the ambulance location
-                if type(amb_location) is Location:
-                    amb_location = amb_location.location
-
                 closest_loc_to_ambulance = self.travel_times.loc_set_1.closest(amb_location)[0]
 
-                # See if travel time is within the r1 radius
+                # See if travel time is within the r1 radius and mark the location as covered if it is
                 if self.travel_times.get_time(closest_loc_to_ambulance, location_to_cover).total_seconds() < self.r1:
                     locations_covered[index] += 1
                     break

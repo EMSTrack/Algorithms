@@ -2,8 +2,6 @@ from datetime import datetime
 
 from geopy import Point
 
-from ems.models.location import Location
-
 
 # Define the Ambulance model.
 
@@ -11,10 +9,10 @@ class Ambulance:
 
     def __init__(self,
                  id: int,
-                 base: Location,
+                 base: Point,
                  unit: str = "XXX-XXXX",
                  deployed: bool = False,
-                 location: Location = None,
+                 location: Point = None,
                  deployed_time: datetime = None,
                  end_time: datetime = None):
         self.id = id
@@ -38,7 +36,7 @@ class Ambulance:
 
     # TODO default to ambulance base location?
     def finish(self,
-               amb_location: Location):
+               amb_location: Point):
         """
         Resets the ambulance.
         :return: None. This just changes state.

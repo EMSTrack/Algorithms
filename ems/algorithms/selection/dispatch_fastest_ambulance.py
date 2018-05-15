@@ -10,7 +10,6 @@ from ems.models.case import Case
 
 # An implementation of a "fastest travel time" ambulance_selection from a base to
 # the demand point closest to a case
-from ems.models.location import Location
 
 
 class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
@@ -26,7 +25,7 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
 
         # Compute the closest demand point to the case location
         loc_set_2 = self.travel_times.loc_set_2
-        closest_loc_to_case, distance = loc_set_2.closest(case.location)
+        closest_loc_to_case, _, _ = loc_set_2.closest(case.location)
 
         # Select an ambulance to attend to the given case and obtain the its duration of travel
         chosen_ambulance, ambulance_travel_time = self.find_fastest_ambulance(
@@ -40,7 +39,7 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
         Finds the ambulance with the shortest one way travel time from its base to the
         demand point
         :param ambulances:
-        :param closest_loc:
+        :param closest_loc_to_case:
         :return: The ambulance and the travel time
         """
 
@@ -55,11 +54,9 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
             ambulance_location = amb.location
 
             # Compute closest location in location set 1 to the ambulance location
-            if type(ambulance_location) is Location:
-                ambulance_location = ambulance_location.location
-
             closest_loc_to_ambulance = loc_set_1.closest(ambulance_location)[0]
 
+            # Compute the time from the location point mapped to the ambulance to the location point mapped to the case
             time = self.travel_times.get_time(closest_loc_to_ambulance, closest_loc_to_case)
             if shortest_time > time:
                 shortest_time = time

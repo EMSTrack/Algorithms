@@ -21,10 +21,10 @@ settings = Settings(debug=True,
                     args=clargs)
 
 # Initialize dataset
-dataset = CSVTijuanaDataset(demands_filepath=settings.demands_file,
-                            bases_filepath=settings.bases_file,
-                            cases_filepath=settings.cases_file,
-                            travel_times_filepath=settings.travel_times_file)
+dataset = CSVTijuanaDataset(demands_file_path=settings.demands_file,
+                            bases_file_path=settings.bases_file,
+                            cases_file_path=settings.cases_file,
+                            travel_times_file_path=settings.travel_times_file)
 
 # Initialize ambulance_selection
 ambulance_select = BestTravelTimeAlgorithm(travel_times=dataset.travel_times)
@@ -33,14 +33,14 @@ ambulance_select = BestTravelTimeAlgorithm(travel_times=dataset.travel_times)
 determine_coverage = PercentCoverage(travel_times=dataset.travel_times)
 
 # Select bases
-chosen_bases = kmeans_select_bases(dataset.bases, dataset.travel_times)
+chosen_base_locations = kmeans_select_bases(dataset.bases, dataset.travel_times)
 
 # Generate ambulances - random base placement (may want to abstract into function)
 ambulances = []
 for index in range(settings.num_ambulances):
     ambulance = Ambulance(id=index,
-                          base=chosen_bases[index],
-                          location=chosen_bases[index].location)
+                          base=chosen_base_locations[index],
+                          location=chosen_base_locations[index])
     ambulances.append(ambulance)
 
 # Initialize the simulator

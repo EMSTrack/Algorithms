@@ -1,8 +1,8 @@
 from datetime import timedelta
 
 import numpy as np
+from geopy import Point
 
-from ems.models.location import Location
 from ems.models.location_set import LocationSet
 
 
@@ -23,25 +23,25 @@ class TravelTimes:
         self.loc_set_2 = loc_set_2
         self.times = times
 
-        self.ls1_map = {}
-        for index, key1 in enumerate(loc_set_1.locations):
-            self.ls1_map[key1.id] = index
-
-        self.ls2_map = {}
-        for index, key2 in enumerate(loc_set_2.locations):
-            self.ls2_map[key2.id] = index
-
-    def get_time(self, loc1: Location, loc2: Location):
+    def get_time(self, location1: Point, location2: Point):
         """
         Retrieves the travel time from the input base and demand point.
 
-        :param loc1:
-        :param loc2:
+        :param location1:
+        :param location2:
         :return:
         """
 
-        index1 = self.ls1_map[loc1.id]
-        index2 = self.ls2_map[loc2.id]
+        # TODO implement delta?
+        # Find the first location in the first location set
+        _, index1, dist1 = self.loc_set_1.closest(location1)
+        if dist1 > 0:
+            raise Exception("Location 1 does not exist in location set 1")
+
+        # Find the second location in the first location set
+        _, index2, dist2 = self.loc_set_2.closest(location2)
+        if dist2 > 0:
+            raise Exception("Location 2 does not exist in location set 2")
 
         time = int(self.times[index1][index2])
 
