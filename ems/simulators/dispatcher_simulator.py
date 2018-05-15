@@ -24,7 +24,7 @@ class DispatcherSimulator(Simulator):
         self.finished_cases = []
         self.current_time = cases[0].datetime if len(cases) > 0 else -1
         self.demand_coverage = coverage_alg
-        super(DispatcherSimulator, self).__init__(ambulances, cases, ambulance_selector)
+        super().__init__(ambulances, cases, ambulance_selector)
 
     def run(self):
 

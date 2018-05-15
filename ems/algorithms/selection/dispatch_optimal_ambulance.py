@@ -19,7 +19,7 @@ class OptimalTravelTimeWithCoverageAlgorithm(BestTravelTimeAlgorithm):
 
     def __init__(self,
                  travel_times: TravelTimes = None):
-        super(BestTravelTimeAlgorithm, self).__init__(travel_times=travel_times)
+        super().__init__(travel_times=travel_times)
 
         # This instance is used for calculating future coverages
         self.coverage = PercentCoverage(travel_times)
