@@ -28,6 +28,27 @@ class OptimalTravelTimeWithCoverageAlgorithm(BestTravelTimeAlgorithm):
                          available_ambulances: List[Ambulance],
                          case: Case,
                          current_time: datetime):
+
+        # Used for determining priorities for selecting an ambulance to maximize kept coverage or
+        # minimize case duration
+        case_priority = case.priority
+
+        # TODO --
+        if case_priority is None:
+            # Find ambulance that when dispatched, impacts coverage the least
+            pass
+        else:
+            # Select based on best travel time
+            super().select_ambulance(available_ambulances=available_ambulances,
+                                     case=case,
+                                     current_time=current_time)
+
+    def find_least_coverage_impact_ambulance(self, ambulances: List[Ambulance]):
+        for i in range(len(ambulances)):
+            ambulances_remaining = ambulances[:i] + ambulances[i:]
+            print(ambulances_remaining)
+
+    def determine_coverage(self):
         pass
 
     def _rank_ambulances_speed(self):
