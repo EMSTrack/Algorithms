@@ -66,14 +66,16 @@ To run all diagrams in parallel, run
 
 ## TODO
 
+- Ambulance selection tension algorithm
 
-- Make coverage more efficient. (Done. Lesson learned, deepcopying drastically slows down runtime)
+- Coverage metrics
 
-- Begin brainstorming and implementing additional simulation evaluation metrics (e.g. coverage, etc.)
+  - Given a desired radius, calculate the set covered
+
+  - Given a desired set covered, calculate the radius
 
 - Expand the current testing framework to test the new project infrastructure
 
-- Read settings from file
 
 ## High-Level Overview
 
