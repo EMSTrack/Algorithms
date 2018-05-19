@@ -23,33 +23,33 @@ Here are the UMLs for each group of programs we have.
 
 ## Simulator
 
-![](classes_ems_simulators.jpg)
+![](uml/classes_ems_simulators.jpg)
 
 ## Models
 
-![](classes_ems_models.jpg)
+![](uml/classes_ems_models.jpg)
 
 ## Data
 
-![](classes_ems_data.jpg)
+![](uml/classes_ems_data.jpg)
 
 ## Selectors
 
-![](classes_ems_selection.jpg)
+![](uml/classes_ems_selection.jpg)
 
 ## Analysis
 
-![](classes_ems_analysis.jpg)
+![](uml/classes_ems_analysis.jpg)
 
 ## Overall
 
-![](classes_ems.jpg)
+![](uml/classes_ems.jpg)
 
 
 # Package Diagrams
 
 
-![](packages_ems.jpg)
+![](uml/packages_ems.jpg)
 
 
 ## How To Install auto UML Generator
