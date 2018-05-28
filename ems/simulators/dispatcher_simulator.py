@@ -6,7 +6,10 @@ from typing import List
 from termcolor import colored
 
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
-from ems.algorithms.analysis.percent_coverage import PercentCoverage
+from ems.algorithms.analysis.percent_coverage import CoverageAlgorithm, PercentCoverage
+from ems.algorithms.analysis.radius_coverage import RadiusCoverage
+from ems.algorithms.analysis.analyze_percent_coverage import AnalyzePercentCoverage
+from ems.algorithms.analysis.analyze_radius_coverage import AnalyzeRadiusCoverage
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 from ems.simulators.simulator import Simulator
@@ -18,7 +21,9 @@ class DispatcherSimulator(Simulator):
                  ambulances: List[Ambulance],
                  cases: List[Case],
                  ambulance_selector: AmbulanceSelectionAlgorithm,
-                 coverage_alg: PercentCoverage):
+                 coverage_alg: List[CoverageAlgorithm]):
+
+        assert type(coverage_alg) is list, 'demand_coverage should be a list, was: ' + str(type(coverage_alg))
 
         self.finished_cases = []
         self.current_time = cases[0].time if len(cases) > 0 else -1
@@ -57,8 +62,7 @@ class DispatcherSimulator(Simulator):
 
             elif event == Event.START_CASE:
 
-                # Get next pending case if there are any and start it
-                # If no pending cases exist, start the next working case
+                # Get next pending case if there are any and start it. If no pending cases exist, start the next working case
                 case = pending_cases.pop(0) if len(pending_cases) > 0 else working_cases.pop(0)
                 self.start_case(case, ambulances_in_motion, self.current_time)
 
@@ -78,14 +82,9 @@ class DispatcherSimulator(Simulator):
             # Loop end condition - No more case or moving ambulances
             if not pending_cases and not working_cases and not ambulances_in_motion:
                 # TODO The analysis calls need to be to the Coverage instance
-                # total_cov = sum(self.measured_coverage)
-                # avg_cov = total_cov/len(self.measured_coverage)
-                # print("Average analysis: ", avg_cov)
-                # avg = self.demand_coverage.avg_coverage()
-                # min = self.demand_coverage.min_coverage()
-                # max = self.demand_coverage.max_coverage()
-                # stddev = self.demand_coverage.std_dev_coverage()
-                # print("Average, Min, Max, Std Dev of Coverages: ", avg, min, max, stddev)
+                for cov_algo in self.demand_coverage:
+                    cov_result = cov_algo.stats()
+                    print(cov_result)
                 return self.finished_cases
 
             # Sort all ambulances by end times
@@ -166,10 +165,7 @@ class DispatcherSimulator(Simulator):
             print("Pending cases: ", [case.id for case in pending_cases])
 
         # TODO return "results" object with more potential information
-        # Compute average analysis:
-        # total_cov = sum(self.measured_coverage)
-        # avg_cov = total_cov/len(self.measured_coverage)
-        # print("Average analysis: ", avg_cov)
+
         return self.finished_cases
 
     def start_case(self, case, ambulances_in_motion, start_time):
@@ -185,8 +181,9 @@ class DispatcherSimulator(Simulator):
 
         # Find the analysis, determine
         # TODO Demand coverage should be a separate class.
-        self.demand_coverage.calculate(self.ambulances)
-        # print("Coverage: ", self.demand_coverage.get_most_recent())
+        for each_coverage in self.demand_coverage:
+            cov_result = each_coverage.calculate(self.ambulances)
+            print(colored("Coverage: {} %. ".format(cov_result*100), "yellow"))
 
         # Select ambulance to dispatch
         available_ambulances = [amb for amb in self.ambulances if not amb.deployed]
@@ -197,20 +194,16 @@ class DispatcherSimulator(Simulator):
         # Dispatch an ambulance if one was found
         if chosen_ambulance is not None:
 
-            # Start the case
+            # Start the case, get the results.
             case.start(chosen_ambulance, start_time, ambulance_travel_time)
-
-            # Get the case end time
             finish_time = case.get_finish_time()
-
-            # Get the case duration
             case_duration = case.get_duration()
 
             # Deploy ambulance
             chosen_ambulance.deploy(
-                location=case.location,
-                deployed_time=start_time,
-                finish_time=finish_time
+                location        = case.location,
+                deployed_time   = start_time,
+                finish_time     = finish_time
             )
 
             ambulances_in_motion.append(chosen_ambulance)

@@ -16,7 +16,6 @@ class PercentCoverage(CoverageAlgorithm):
                  r1: int = 600):
         self.travel_times = travel_times
         self.r1 = r1
-        # self._recorded_coverages = []
 
     def calculate(self, ambulances: List[Ambulance]):
         """
@@ -49,25 +48,4 @@ class PercentCoverage(CoverageAlgorithm):
         # Return proportion of covered locations
         return total / len(locations_to_cover)
 
-    # def get_most_recent(self):
-    #     return self._recorded_coverages[-1]
-    #
-    # def get_all_coverages(self):
-    #     return deepcopy(self._recorded_coverages)
-    #
-    # def avg_coverage(self):
-    #     """
-    #     :return: The average of the coverages so far.
-    #     """
-    #     avg = sum(self._recorded_coverages) / len(self._recorded_coverages)
-    #     return avg
-    #
-    # def max_coverage(self):
-    #     return max(self._recorded_coverages)
-    #
-    # def min_coverage(self):
-    #     return min(self._recorded_coverages)
-    #
-    # def std_dev_coverage(self):
-    #     std_dev = np.std(np.array([time for time in self._recorded_coverages]), axis=0)
-    #     return std_dev.item()
+
