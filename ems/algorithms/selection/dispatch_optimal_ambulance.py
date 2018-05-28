@@ -49,12 +49,25 @@ class OptimalTravelTimeWithCoverageAlgorithm(BestTravelTimeAlgorithm):
             print(ambulances_remaining)
 
     def determine_coverage(self):
+        """
+
+        :return:
+        """
         pass
 
+
     def _rank_ambulances_speed(self):
+        """
+        Returns the rankings of the ambulances according to shortest to longest travel time
+        :return:
+        """
         pass
 
     def _rank_ambulances_coverage(self):
+        """
+        Returns the rankings of the ambulances according to the least disruption to the worst disruption.
+        :return:
+        """
         pass
 
     # def select_ambulance(self,

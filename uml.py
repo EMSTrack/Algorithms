@@ -28,8 +28,9 @@ commands = [
 
     # 'ls -l',
 
-    # 'git add ems',
+    'git add uml',
     # 'git add *.jpg'
+    'git commit -m "uml updated"'
 
 ]
 

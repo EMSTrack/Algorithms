@@ -17,7 +17,7 @@ To see this, you may need to uncomment `printData()`. The test program will end 
 to proceed when ready. (Press Enter.)
 
 
-# Class diagrams
+# Class diagrams 
 
 Here are the UMLs for each group of programs we have.
 
