@@ -48,7 +48,8 @@ for index in range(settings.num_ambulances):
 sim = DispatcherSimulator(ambulances=ambulances,
                           cases=dataset.cases,
                           ambulance_selector=ambulance_select,
-                          coverage_alg=determine_coverage
+                          coverage_alg=determine_coverage,
+                          plot=settings.plot
                           )
 
 # Start the whole thing

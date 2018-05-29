@@ -4,7 +4,8 @@
 	 "demands"				: "demand_points.csv",
 	 "bases"				: "bases.csv",
 	 "times"				: "times.csv",
-	 "cases"				: "small_calls.csv",
+	 "cases"				: "tiny_calls.csv",
 	 "num_ambs"				: 3,
-	 "num_bases"			: 3
+	 "num_bases"			: 3,
+	 "plot"					: 1
 }

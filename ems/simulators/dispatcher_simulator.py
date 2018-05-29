@@ -21,13 +21,17 @@ class DispatcherSimulator(Simulator):
                  ambulances: List[Ambulance],
                  cases: List[Case],
                  ambulance_selector: AmbulanceSelectionAlgorithm,
-                 coverage_alg: List[CoverageAlgorithm]):
+                 coverage_alg: List[CoverageAlgorithm],
+                 plot:bool,
+                 ):
 
         assert type(coverage_alg) is list, 'demand_coverage should be a list, was: ' + str(type(coverage_alg))
 
         self.finished_cases = []
         self.current_time = cases[0].time if len(cases) > 0 else -1
         self.demand_coverage = coverage_alg
+        self.plot = plot
+
         super().__init__(ambulances, cases, ambulance_selector)
 
     def run(self):
@@ -40,9 +44,14 @@ class DispatcherSimulator(Simulator):
         # Iterate while there are ambulances moving or cases to dispatch
         while working_cases or ambulances_in_motion:
 
+            print('========================================================================')
             print()
             print(colored("Current Time: {}".format(self.current_time), "yellow", attrs=["bold"]))
             print(colored("Current Event: {}".format(event), "yellow", attrs=["bold"]))
+
+            for each_coverage in self.demand_coverage:
+                cov_result = each_coverage.calculate(self.ambulances, self.plot)
+                print(colored("Coverage: {} %. ".format(cov_result * 100), "yellow"))
 
             # Stage 1: Perform event for this time step
             if event == Event.RETIRE_AMBULANCE:
@@ -87,7 +96,8 @@ class DispatcherSimulator(Simulator):
                     for k in cov_result:
                         v = cov_result[k]
                         print('The {} was {}. '.format(k, v))
-                    cov_algo.chart()
+                    if self.plot:
+                        cov_algo.chart()
                 return self.finished_cases
 
             # Sort all ambulances by end times
@@ -184,9 +194,7 @@ class DispatcherSimulator(Simulator):
 
         # Find the analysis, determine
         # TODO Demand coverage should be a separate class.
-        for each_coverage in self.demand_coverage:
-            cov_result = each_coverage.calculate(self.ambulances)
-            print(colored("Coverage: {} %. ".format(cov_result*100), "yellow"))
+
 
         # Select ambulance to dispatch
         available_ambulances = [amb for amb in self.ambulances if not amb.deployed]

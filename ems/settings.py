@@ -14,29 +14,33 @@ class Settings:
                  travel_times_file: str = None,
                  num_ambulances: int = 5,
                  num_bases: int = 5,
-                 args: Namespace = None
+                 args: Namespace = None,
+                 plot:bool = False,
                  ):
 
         # TODO: Look for a settings file
-        if args.settings:
-            filename = "settings/" + args.settings + ".json"
-            with open (filename, 'r') as jsonfile:
-                s = json.load(jsonfile)
+        if args:
+            if args.settings:
+                filename = "settings/" + args.settings + ".json"
+                with open (filename, 'r') as jsonfile:
+                    s = json.load(jsonfile)
 
-                filepath = s['filepath']
-                demands_file = filepath + s['demands']
-                bases_file = filepath + s['bases']
-                travel_times_file = filepath + s['times']
-                cases_file = filepath + s['cases']
+                    filepath = s['filepath']
+                    demands_file = filepath + s['demands']
+                    bases_file = filepath + s['bases']
+                    travel_times_file = filepath + s['times']
+                    cases_file = filepath + s['cases']
 
-                num_ambulances = s['num_ambs']
-                num_bases = s['num_bases']
+                    num_ambulances = s['num_ambs']
+                    num_bases = s['num_bases']
+                    if 'plot' in s:
+                        plot = bool(s['plot'])
 
-        # Assign the command line arguments into the parameter arguments
-        if args.ambulances:
-            num_ambulances = args.ambulances
-        if args.bases:
-            num_bases = args.bases
+            # Assign the command line arguments into the parameter arguments
+            if args.ambulances:
+                num_ambulances = args.ambulances
+            if args.bases:
+                num_bases = args.bases
 
         # These are the parameters of the starship Enterprise
         self.data_filename = None
@@ -47,3 +51,4 @@ class Settings:
         self.travel_times_file = travel_times_file
         self.num_ambulances = num_ambulances
         self.num_bases = num_bases
+        self.plot = plot

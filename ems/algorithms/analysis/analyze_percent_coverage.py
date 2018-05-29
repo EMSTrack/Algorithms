@@ -24,17 +24,38 @@ class AnalyzePercentCoverage(PercentCoverage):
         super().__init__(travel_times=travel_times, r1=r1)
 
 
-    def calculate(self, ambulances: List[Ambulance]):
+    def calculate(self, ambulances: List[Ambulance], plot: bool):
         """
 
         :param ambulances:
         :return:
         """
 
-        result = super().calculate(ambulances)
-        self._accumulate_coverage.append(result)
+        locations_covered = super().mark_coverage(ambulances)
+        locations = self.travel_times.loc_set_2.locations
 
-        return result
+        if plot:
+            plt.scatter(
+                [locations[i].longitude for i in range(len(locations)) if locations_covered[i] >= 1],
+                [locations[i].latitude for i in range(len(locations)) if locations_covered[i] >= 1],
+                color='green'
+            )
+
+            plt.scatter(
+                [locations[i].longitude for i in range(len(locations)) if locations_covered[i] == 0],
+                [locations[i].latitude for i in range(len(locations)) if locations_covered[i] == 0],
+                color='red'
+            )
+            plt.show()
+
+        # Count how many locations are covered
+        total = sum([1 for loc in locations_covered if loc > 0])
+        percentage = total / len(locations_covered)
+        self._accumulate_coverage.append(percentage)
+
+        # Return proportion of covered locations
+        return percentage
+
 
     def stats(self):
         data = self._accumulate_coverage
@@ -55,8 +76,8 @@ class AnalyzePercentCoverage(PercentCoverage):
 
     def chart(self):
         plt.plot(self._accumulate_coverage)
-        plt.xlabel('something')
-        plt.ylabel('something else')
+        plt.xlabel('Case')
+        plt.ylabel('Coverage in Percent')
         plt.show()
 
 
