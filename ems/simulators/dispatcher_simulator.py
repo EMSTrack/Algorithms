@@ -96,8 +96,8 @@ class DispatcherSimulator(Simulator):
                     for k in cov_result:
                         v = cov_result[k]
                         print('The {} was {}. '.format(k, v))
-                    if self.plot:
-                        cov_algo.chart()
+                    # if self.plot:
+                    cov_algo.chart()
                 return self.finished_cases
 
             # Sort all ambulances by end times
