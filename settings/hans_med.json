@@ -6,5 +6,6 @@
 	 "times"				: "times.csv",
 	 "cases"				: "med_calls.csv",
 	 "num_ambs"				: 7,
-	 "num_bases"			: 7
+	 "num_bases"			: 7,
+	 "plot"					: 0
 }
