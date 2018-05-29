@@ -84,7 +84,10 @@ class DispatcherSimulator(Simulator):
                 # TODO The analysis calls need to be to the Coverage instance
                 for cov_algo in self.demand_coverage:
                     cov_result = cov_algo.stats()
-                    print(cov_result)
+                    for k in cov_result:
+                        v = cov_result[k]
+                        print('The {} was {}. '.format(k, v))
+                    cov_algo.chart()
                 return self.finished_cases
 
             # Sort all ambulances by end times

@@ -8,6 +8,8 @@ from ems.algorithms.analysis.percent_coverage import PercentCoverage
 
 from statistics import mean, median, mode, pstdev, pvariance
 
+import matplotlib.pyplot as plt
+
 # Computes a percent coverage given a radius
 
 
@@ -38,15 +40,23 @@ class AnalyzePercentCoverage(PercentCoverage):
         data = self._accumulate_coverage
 
         results = {
+            'elems'     : data,
+            'max'       : max(data),
+            'min'       : min(data),
             'mean'      : mean(data),
             'median'    : median(data),
             'mode'      : mode(data),
             'pstdev'    : pstdev(data),
             'pvariance' : pvariance(data),
+            'count'     : len(data),
         }
 
         return results
 
-
+    def chart(self):
+        plt.plot(self._accumulate_coverage)
+        plt.xlabel('something')
+        plt.ylabel('something else')
+        plt.show()
 
 

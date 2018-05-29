@@ -4,7 +4,7 @@
 	 "demands"				: "demand_points.csv",
 	 "bases"				: "bases.csv",
 	 "times"				: "times.csv",
-	 "cases"				: "calls.csv",
+	 "cases"				: "med_calls.csv",
 	 "num_ambs"				: 7,
 	 "num_bases"			: 7
 }
