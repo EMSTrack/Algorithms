@@ -47,8 +47,9 @@ class DispatcherSimulator(Simulator):
             print(colored("Current Event: {}".format(event), "yellow", attrs=["bold"]))
 
             cov_result = self.demand_coverage.calculate(self.ambulances)
+            cov_set = self.demand_coverage.mark_coverage(self.ambulances)
             print(colored("Coverage: {} %. ".format(cov_result * 100), "yellow"))
-            self.coverage_over_time.append((cov_result, self.current_time))
+            self.coverage_over_time.append((cov_result, self.current_time, cov_set))
 
             # Stage 1: Perform event for this time step
             if event == Event.RETIRE_AMBULANCE:
