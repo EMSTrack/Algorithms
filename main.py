@@ -26,7 +26,9 @@ settings = Settings(debug=True,
 dataset = CSVTijuanaDataset(demands_file_path=settings.demands_file,
                             bases_file_path=settings.bases_file,
                             cases_file_path=settings.cases_file,
-                            travel_times_file_path=settings.travel_times_file)
+                            travel_times_file_path=settings.travel_times_file,
+                            slices=clargs.slices
+                            )
 
 # Initialize ambulance_selection
 ambulance_select = BestTravelTimeAlgorithm(travel_times=dataset.travel_times)

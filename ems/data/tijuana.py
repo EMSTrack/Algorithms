@@ -16,7 +16,11 @@ class CSVTijuanaDataset(Dataset):
                  demands_file_path: str,
                  bases_file_path: str,
                  cases_file_path: str,
-                 travel_times_file_path: str):
+                 travel_times_file_path: str,
+                 slices:int = None
+                 ):
+
+        self.slices = slices
 
         # Read files into pandas dataframes and lists of objects
         self.demands = self.read_demands(demands_file_path)
@@ -52,6 +56,10 @@ class CSVTijuanaDataset(Dataset):
                 weekday=row["weekday"],
                 priority=row["priority"])
             cases.append(case)
+
+        if self.slices:
+            print(self.slices)
+            cases = cases[:self.slices]
 
         return cases
 
