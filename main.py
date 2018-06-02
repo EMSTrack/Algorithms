@@ -7,6 +7,7 @@ from ems.data.tijuana import CSVTijuanaDataset
 from ems.models.ambulance import Ambulance
 from ems.settings import Settings
 from ems.simulators.dispatcher_simulator import DispatcherSimulator
+from ems.algorithms.analyze.summarize import Summarize
 
 # TODO allow command line arguments
 parser = argparse.ArgumentParser(description="Load settings, data, preprocess models, run sim.")
@@ -54,5 +55,9 @@ sim = DispatcherSimulator(ambulances=ambulances,
 
 # Start the whole thing
 finished_cases = sim.run()
+
+results = Summarize()
+
+
 
 # TODO: Could
