@@ -24,8 +24,6 @@ class DispatcherSimulator(Simulator):
                  plot:bool,
                  ):
 
-        assert type(coverage_alg) is list, 'demand_coverage should be a list, was: ' + str(type(coverage_alg))
-
         self.finished_cases = []
         self.current_time = cases[0].time if len(cases) > 0 else -1
         self.demand_coverage = coverage_alg
@@ -48,9 +46,8 @@ class DispatcherSimulator(Simulator):
             print(colored("Current Time: {}".format(self.current_time), "yellow", attrs=["bold"]))
             print(colored("Current Event: {}".format(event), "yellow", attrs=["bold"]))
 
-            for each_coverage in self.demand_coverage:
-                cov_result = each_coverage.calculate(self.ambulances, self.plot)
-                print(colored("Coverage: {} %. ".format(cov_result * 100), "yellow"))
+            cov_result = self.demand_coverage.calculate(self.ambulances)
+            print(colored("Coverage: {} %. ".format(cov_result * 100), "yellow"))
 
             # Stage 1: Perform event for this time step
             if event == Event.RETIRE_AMBULANCE:
@@ -90,13 +87,13 @@ class DispatcherSimulator(Simulator):
             # Loop end condition - No more case or moving ambulances
             if not pending_cases and not working_cases and not ambulances_in_motion:
                 # TODO The coverage calls need to be to the Coverage instance
-                for cov_algo in self.demand_coverage:
-                    cov_result = cov_algo.stats()
-                    for k in cov_result:
-                        v = cov_result[k]
-                        print('The {} was {}. '.format(k, v))
-                    # if self.plot:
-                    cov_algo.chart()
+                # for cov_algo in self.demand_coverage:
+                #     cov_result = cov_algo.stats()
+                #     for k in cov_result:
+                #         v = cov_result[k]
+                #         print('The {} was {}. '.format(k, v))
+                #     # if self.plot:
+                #     cov_algo.chart()
                 return self.finished_cases
 
             # Sort all ambulances by end times

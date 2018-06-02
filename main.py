@@ -1,6 +1,6 @@
 import argparse
 
-from ems.algorithms.coverage.analyze_percent_coverage import AnalyzePercentCoverage
+from ems.algorithms.coverage.percent_coverage import PercentCoverage
 from ems.algorithms.selection.dispatch_fastest_ambulance import BestTravelTimeAlgorithm
 from ems.data.filters import kmeans_select_bases
 from ems.data.tijuana import CSVTijuanaDataset
@@ -12,7 +12,8 @@ from ems.simulators.dispatcher_simulator import DispatcherSimulator
 parser = argparse.ArgumentParser(description="Load settings, data, preprocess models, run sim.")
 parser.add_argument('--ambulances', help="Number of ambulances", type=int, required=False)
 parser.add_argument('--bases',      help='Number of bases',     type=int,  required=False)
-parser.add_argument('--settings', help="for example, '--settings hans'", type=str, required=True)
+parser.add_argument('--settings',   help="for example, '--settings hans'", type=str, required=True)
+parser.add_argument('--slices',     help="Number of cases to simulate", type=int, required=False)
 
 clargs = parser.parse_args()
 
@@ -30,8 +31,7 @@ dataset = CSVTijuanaDataset(demands_file_path=settings.demands_file,
 ambulance_select = BestTravelTimeAlgorithm(travel_times=dataset.travel_times)
 
 # Initialize demand_coverage
-determine_coverage = []
-determine_coverage.append(AnalyzePercentCoverage(travel_times=dataset.travel_times))
+determine_coverage = PercentCoverage(travel_times=dataset.travel_times)
 
 # Select bases
 chosen_base_locations = kmeans_select_bases(dataset.bases, dataset.travel_times)
