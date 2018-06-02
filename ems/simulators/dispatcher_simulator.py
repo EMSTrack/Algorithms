@@ -25,6 +25,7 @@ class DispatcherSimulator(Simulator):
                  ):
 
         self.finished_cases = []
+        self.coverage_over_time = []
         self.current_time = cases[0].time if len(cases) > 0 else -1
         self.demand_coverage = coverage_alg
         self.plot = plot
@@ -48,6 +49,7 @@ class DispatcherSimulator(Simulator):
 
             cov_result = self.demand_coverage.calculate(self.ambulances)
             print(colored("Coverage: {} %. ".format(cov_result * 100), "yellow"))
+            self.coverage_over_time.append((cov_result, self.current_time))
 
             # Stage 1: Perform event for this time step
             if event == Event.RETIRE_AMBULANCE:
@@ -86,15 +88,8 @@ class DispatcherSimulator(Simulator):
 
             # Loop end condition - No more case or moving ambulances
             if not pending_cases and not working_cases and not ambulances_in_motion:
-                # TODO The coverage calls need to be to the Coverage instance
-                # for cov_algo in self.demand_coverage:
-                #     cov_result = cov_algo.stats()
-                #     for k in cov_result:
-                #         v = cov_result[k]
-                #         print('The {} was {}. '.format(k, v))
-                #     # if self.plot:
-                #     cov_algo.chart()
-                return self.finished_cases
+
+                return self.finished_cases, self.coverage_over_time
 
             # Sort all ambulances by end times
             ambulances_in_motion = sorted(ambulances_in_motion, key=lambda k: k.end_time)
@@ -124,7 +119,7 @@ class DispatcherSimulator(Simulator):
                     if not ambulances_available:
 
                         # Since we will only be delaying (not starting) we only care about the next working case
-                        next_case = working_cases[0]
+                        next_case = working_cases[0] # TODO There is a bug here.
                         next_case_time = next_case.time
 
                         # Delay next case if it will arrive before any ambulance will finish

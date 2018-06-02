@@ -47,3 +47,7 @@ class Case:
             return True
 
         return False
+
+    def __str__(self):
+        return str([self.id, self.location, self.time, self.weekday, self.priority, self.start_time,
+        self.finish_time, self.delay, self.assigned_ambulance])

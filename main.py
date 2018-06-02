@@ -13,7 +13,7 @@ from ems.algorithms.analyze.summarize import Summarize
 parser = argparse.ArgumentParser(description="Load settings, data, preprocess models, run sim.")
 parser.add_argument('--ambulances', help="Number of ambulances", type=int, required=False)
 parser.add_argument('--bases',      help='Number of bases',     type=int,  required=False)
-parser.add_argument('--settings',   help="for example, '--settings hans'", type=str, required=True)
+parser.add_argument('--settings',   help="for example, '--settings hans'. Don't include '.json'", type=str, required=True)
 parser.add_argument('--slices',     help="Number of cases to simulate", type=int, required=False)
 
 clargs = parser.parse_args()
@@ -56,10 +56,9 @@ sim = DispatcherSimulator(ambulances=ambulances,
                           )
 
 # Start the whole thing
-finished_cases = sim.run()
+finished_cases, measured_coverage = sim.run()
 
-results = Summarize()
+print("Simulator has finished.")
 
-
-
-# TODO: Could
+summarize = Summarize()
+summarize.overall(measured_coverage)

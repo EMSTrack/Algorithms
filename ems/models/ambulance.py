@@ -69,3 +69,6 @@ class Ambulance:
         self.location = location
         self.deployed_time = deployed_time
         self.end_time = finish_time
+
+    def __str__(self):
+        return str([self.id, self.unit])

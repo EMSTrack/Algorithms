@@ -47,3 +47,4 @@ class TijuanaCase(Case):
         return self.finish_time
 
 
+
