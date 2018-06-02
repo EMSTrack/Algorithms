@@ -8,7 +8,6 @@ from termcolor import colored
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
 from ems.algorithms.coverage.percent_coverage import CoverageAlgorithm, PercentCoverage
 from ems.algorithms.coverage.radius_coverage import RadiusCoverage
-from ems.algorithms.coverage.analyze_percent_coverage import AnalyzePercentCoverage
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 from ems.simulators.simulator import Simulator
