@@ -63,7 +63,7 @@ print("Simulator has finished.")
 summarize = Summarize()
 
 summarize.specific(measured_coverage, dataset.demands)
-# summarize.overall(measured_coverage)
+summarize.overall(measured_coverage)
 
 # import IPython
 # IPython.embed()

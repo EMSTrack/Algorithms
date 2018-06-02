@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 class Summarize():
     """
-    
+
     """
     def __init__(self):
         """
@@ -21,9 +21,18 @@ class Summarize():
         :param coverage:
         :return:
         """
-        plt.plot([x[1] for x in coverage], [x[0] for x in coverage])
+        
+        plt.plot(
+            [x[1] for x in coverage],
+            [x[0] for x in coverage],
+        )
+
         plt.ylim(0, 1)
         plt.gcf().autofmt_xdate()
+
+        plt.xlabel('datetime')
+        plt.ylabel('coverage in percent')
+
         plt.show()
 
     def specific(self, points, demands):
@@ -40,7 +49,9 @@ class Summarize():
         ys = [x[1].latitude for x in demand_points if x[0] > 0]
 
         plt.scatter(xs, ys,
-            color='green',
+                    color='green',
+                    label='covered'
+
         )
 
         xs = [x[1].longitude for x in demand_points if x[0] == 0]
@@ -48,6 +59,12 @@ class Summarize():
 
         plt.scatter(xs, ys,
                     color='red',
+                    label='uncovered'
                     )
+
+        plt.xlabel('Longitude')
+        plt.ylabel('Latitude')
+
+        plt.legend()
 
         plt.show()
