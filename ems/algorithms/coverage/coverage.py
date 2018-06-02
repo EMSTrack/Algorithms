@@ -7,12 +7,12 @@ from ems.models.ambulance import Ambulance
 # Used by the sim to select ambulances
 class CoverageAlgorithm:
     """
-    Users may subclass to implement their own analysis algorithm
+    Users may subclass to implement their own coverage algorithm
     """
 
     def calculate(self, ambulances: List[Ambulance]):
         """
-        The signature for the function which calculates analysis
+        The signature for the function which calculates coverage
         :param ambulances:
         :return:
         """

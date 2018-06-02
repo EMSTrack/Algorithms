@@ -1,10 +1,10 @@
 
 from typing import List
 
-from ems.algorithms.analysis.coverage import CoverageAlgorithm
+from ems.algorithms.coverage.coverage import CoverageAlgorithm
 from ems.data.travel_times import TravelTimes
 from ems.models.ambulance import Ambulance
-from ems.algorithms.analysis.percent_coverage import PercentCoverage
+from ems.algorithms.coverage.percent_coverage import PercentCoverage
 
 from statistics import mean, median, mode, pstdev, pvariance
 

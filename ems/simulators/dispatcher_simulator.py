@@ -6,10 +6,9 @@ from typing import List
 from termcolor import colored
 
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
-from ems.algorithms.analysis.percent_coverage import CoverageAlgorithm, PercentCoverage
-from ems.algorithms.analysis.radius_coverage import RadiusCoverage
-from ems.algorithms.analysis.analyze_percent_coverage import AnalyzePercentCoverage
-from ems.algorithms.analysis.analyze_radius_coverage import AnalyzeRadiusCoverage
+from ems.algorithms.coverage.percent_coverage import CoverageAlgorithm, PercentCoverage
+from ems.algorithms.coverage.radius_coverage import RadiusCoverage
+from ems.algorithms.coverage.analyze_percent_coverage import AnalyzePercentCoverage
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 from ems.simulators.simulator import Simulator
@@ -90,7 +89,7 @@ class DispatcherSimulator(Simulator):
 
             # Loop end condition - No more case or moving ambulances
             if not pending_cases and not working_cases and not ambulances_in_motion:
-                # TODO The analysis calls need to be to the Coverage instance
+                # TODO The coverage calls need to be to the Coverage instance
                 for cov_algo in self.demand_coverage:
                     cov_result = cov_algo.stats()
                     for k in cov_result:
@@ -192,7 +191,7 @@ class DispatcherSimulator(Simulator):
 
         print("Starting case {} which was recorded at {}".format(case.id, case.time))
 
-        # Find the analysis, determine
+        # Find the coverage, determine
         # TODO Demand coverage should be a separate class.
 
 

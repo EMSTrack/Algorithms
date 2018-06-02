@@ -8,7 +8,7 @@ from ems.data.travel_times import TravelTimes
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 from ems.algorithms.selection.dispatch_fastest_ambulance import BestTravelTimeAlgorithm
-from ems.algorithms.analysis.percent_coverage import PercentCoverage
+from ems.algorithms.coverage.percent_coverage import PercentCoverage
 
 
 # An implementation of a "fastest travel time" ambulance_selection from a base to

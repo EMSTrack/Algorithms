@@ -1,4 +1,4 @@
-from ems.algorithms.analysis.coverage import CoverageAlgorithm
+from ems.algorithms.coverage.coverage import CoverageAlgorithm
 from ems.data.travel_times import TravelTimes
 
 

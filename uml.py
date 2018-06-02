@@ -1,7 +1,7 @@
 import os
 
 commands = [
-    'time pyreverse -o jpg -p ems_analysis ems.algorithms.analysis',
+    'time pyreverse -o jpg -p ems_analysis ems.algorithms.coverage',
     'mv classes_ems_analysis.jpg uml/',
     'mv packages_ems_analysis.jpg uml/',
 
