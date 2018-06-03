@@ -60,9 +60,13 @@ finished_cases, measured_coverage = sim.run()
 
 print("Simulator has finished.")
 
-summarize = Summarize()
+summarize = Summarize(
+    len(dataset.get_cases()),
+    clargs.slices,
+    len(ambulances)
+)
 
-# summarize.specific(measured_coverage, dataset.demands)
+summarize.specific(measured_coverage, dataset.demands)
 summarize.overall(measured_coverage)
 summarize.duration(
     [f.start_time for f in finished_cases],
