@@ -64,6 +64,8 @@ summarize = Summarize()
 
 # summarize.specific(measured_coverage, dataset.demands)
 summarize.overall(measured_coverage)
-summarize.duration([f.get_duration() for f in finished_cases])
+summarize.duration(
+    [f.start_time for f in finished_cases],
+    [f.get_duration() for f in finished_cases])
 
 # import IPython; IPython.embed()

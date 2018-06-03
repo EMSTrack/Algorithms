@@ -5,6 +5,8 @@
 
 import matplotlib.pyplot as plt
 
+from datetime import timedelta
+
 class Summarize():
     """
 
@@ -70,7 +72,13 @@ class Summarize():
 
         plt.show()
 
-    def duration(self, durations):
+    def duration(self, start_times, durations):
         # For each case plot the duration
-        plt.plot([d.total_seconds()/60.0 for d in durations])
+
+        plt.scatter(start_times,
+                    [d.total_seconds()/60.0 for d in durations]
+                    )
+        plt.xlim(start_times[0] - timedelta(days=0.2),
+                 start_times[-1] + timedelta(days=0.2)
+                 )
         plt.show()
