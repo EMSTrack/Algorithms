@@ -13,6 +13,7 @@ class Summarize():
         """
 
         """
+        # TODO maybe the coverage data are instance variables instead?
         pass
 
     def overall(self, coverage):
@@ -21,7 +22,7 @@ class Summarize():
         :param coverage:
         :return:
         """
-        
+
         plt.plot(
             [x[1] for x in coverage],
             [x[0] for x in coverage],
@@ -67,4 +68,9 @@ class Summarize():
 
         plt.legend()
 
+        plt.show()
+
+    def duration(self, durations):
+        # For each case plot the duration
+        plt.plot([d.total_seconds()/60.0 for d in durations])
         plt.show()

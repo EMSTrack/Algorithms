@@ -9,6 +9,7 @@ from ems.models.location_set import LocationSet
 from ems.models.tijuana_case import TijuanaCase
 from ems.utils import parse_headered_csv, parse_unheadered_csv
 
+from datetime import timedelta
 
 class CSVTijuanaDataset(Dataset):
 
@@ -57,9 +58,16 @@ class CSVTijuanaDataset(Dataset):
                 priority=row["priority"])
             cases.append(case)
 
+
+
         if self.slices:
+            first_datetime = cases[0].time
+            cutoff = first_datetime + timedelta(days=self.slices)
+            # print("first day is ", first_datetime, type(first_datetime))
+            # print("add slice: ", )
+
             print(self.slices)
-            cases = cases[:self.slices]
+        cases = [c for c in cases if c.time < cutoff]
 
         return cases
 
