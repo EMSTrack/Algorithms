@@ -47,6 +47,8 @@ class CSVTijuanaDataset(Dataset):
         # Sorts all cases by their datetimes (REQUIRED BY SIMULATOR)
         cases_df = cases_df.sort_values('datetime', ascending=True)
 
+        cases_df = cases_df[:100]
+
         # Generate list of models from dataframe
         cases = []
         for index, row in cases_df.iterrows():

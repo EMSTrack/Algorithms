@@ -9,11 +9,13 @@ from ems.models.ambulance import Ambulance
 class Case:
 
     def __init__(self,
+
                  id: int,
                  location: Point,
                  time: datetime,
-                 weekday: str = None,
                  priority: float = None,
+
+                 weekday: str = None,
                  start_time: datetime = None,
                  finish_time: datetime = None,
                  delay: timedelta = None,
