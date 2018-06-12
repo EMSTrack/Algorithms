@@ -66,10 +66,10 @@ summarize = Summarize(
     len(ambulances)
 )
 
-summarize.specific(measured_coverage, dataset.demands)
-summarize.overall(measured_coverage)
-summarize.duration(
-    [f.start_time for f in finished_cases],
-    [f.get_duration() for f in finished_cases])
+# summarize.specific(measured_coverage, dataset.demands)
+# summarize.overall(measured_coverage)
+# summarize.duration(
+#     [f.start_time for f in finished_cases],
+#     [f.get_duration() for f in finished_cases])
 
-# import IPython; IPython.embed()
+import IPython; IPython.embed()
