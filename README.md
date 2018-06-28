@@ -6,6 +6,19 @@ Try: `time python3 main.py --settings hans --ambulances 7 --bases 7 --slices 50`
 
 python3 main.py --help
 
+# Dependencies
+
+- pandas
+- scipy
+- numpy
+- geopy
+- termcolor
+- matplotlib
+
+In Ubuntu, Python 3.6 seems to be missing "tkinter". To install,
+
+`sudo apt-get install python3.6-tk`
+
 # TODO
 
 ## 1 Generalize cases into events.
@@ -15,7 +28,7 @@ python3 main.py --help
 ## 3 Implement the algorithms for coverage to radius and selection tension
 
 
-# Class diagrams 
+# Class diagrams
 
 Here are the UMLs for each group of programs we have.
 
@@ -58,7 +71,7 @@ Then run at the base folder of the repository, do
 
 `pyreverse -o png -p ems ems`
 
-To run all diagrams in parallel, run 
+To run all diagrams in parallel, run
 
 `python3 uml.py`
 
