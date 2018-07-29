@@ -1,15 +1,67 @@
 from datetime import datetime
 from datetime import timedelta
+from typing import List
 
 from geopy import Point
 
 from ems.models.ambulance import Ambulance
 
+from ems.models.event import Event
+from ems.models.random_event_generator import RandomEventGenerator
 
+
+# TODO -- Fix up these classes for Event Based Case Implementation
+class AbstractCase:
+
+    def __init__(self,
+                 id: int,
+                 priority: float = None):
+        self.id = id
+        self.priority = priority
+
+    def iterator(self):
+        raise NotImplementedError()
+
+
+class RandomCase(AbstractCase):
+
+    def __init__(self,
+                 id: int,
+                 number_of_events: int,
+                 labels: List[str],
+                 priority: float = None):
+        super().__init__(id, priority)
+        self.id = id
+        self.priority = priority
+        self.number_of_events = number_of_events
+        self.labels = labels
+
+    def iterator(self):
+        k = 0
+        events = RandomEventGenerator(timestamp)
+        while k < self.number_of_events:
+            yield events.generate(self.labels[k])
+
+
+class ListCase(AbstractCase):
+
+    def __init__(self,
+                 id: int,
+                 events: List[Event],
+                 priority: float = None):
+        super().__init__(id, priority)
+        self.id = id
+        self.events = events
+        self.priority = priority
+
+    def iterator(self):
+        return iter(self.events)
+
+
+# TODO -- Remove and replace with Event Based Case Implementation
 class Case:
 
     def __init__(self,
-
                  id: int,
                  location: Point,
                  time: datetime,
