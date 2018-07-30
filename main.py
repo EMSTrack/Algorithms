@@ -3,6 +3,7 @@ import argparse
 from ems.algorithms.coverage.percent_coverage import PercentCoverage
 from ems.algorithms.selection.dispatch_fastest_ambulance import BestTravelTimeAlgorithm
 from ems.data.filters import kmeans_select_bases
+from ems.data.jan_2017_dataset import Jan2017Dataset
 from ems.data.tijuana import CSVTijuanaDataset
 from ems.models.ambulance import Ambulance
 from ems.settings import Settings
@@ -12,9 +13,9 @@ from ems.algorithms.analyze.summarize import Summarize
 # TODO allow command line arguments
 parser = argparse.ArgumentParser(description="Load settings, data, preprocess models, run sim.")
 parser.add_argument('--ambulances', help="Number of ambulances", type=int, required=False)
-parser.add_argument('--bases',      help='Number of bases',     type=int,  required=False)
-parser.add_argument('--settings',   help="for example, '--settings hans'. Don't include '.json'", type=str, required=True)
-parser.add_argument('--slices',     help="Number of cases to simulate", type=int, required=False)
+parser.add_argument('--bases', help='Number of bases', type=int, required=False)
+parser.add_argument('--settings', help="for example, '--settings hans'. Don't include '.json'", type=str, required=True)
+parser.add_argument('--slices', help="Number of cases to simulate", type=int, required=False)
 
 clargs = parser.parse_args()
 
@@ -23,12 +24,10 @@ settings = Settings(debug=True,
                     args=clargs)
 
 # Initialize dataset
-dataset = CSVTijuanaDataset(demands_file_path=settings.demands_file,
-                            bases_file_path=settings.bases_file,
-                            cases_file_path=settings.cases_file,
-                            travel_times_file_path=settings.travel_times_file,
-                            slices=clargs.slices
-                            )
+dataset = Jan2017Dataset(demands_file_path=settings.demands_file,
+                         bases_file_path=settings.bases_file,
+                         cases_file_path=settings.cases_file,
+                         travel_times_file_path=settings.travel_times_file)
 
 # Initialize ambulance_selection
 ambulance_select = BestTravelTimeAlgorithm(travel_times=dataset.travel_times)
@@ -72,4 +71,6 @@ summarize = Summarize(
 #     [f.start_time for f in finished_cases],
 #     [f.get_duration() for f in finished_cases])
 
-import IPython; IPython.embed()
+import IPython;
+
+IPython.embed()

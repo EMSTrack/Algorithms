@@ -1,6 +1,3 @@
-# Model the data by their types.
-
-import pandas as pd
 from geopy import Point
 
 from ems.data.dataset import Dataset
@@ -9,20 +6,15 @@ from ems.models.location_set import LocationSet
 from ems.models.tijuana_case import TijuanaCase
 from ems.utils import parse_headered_csv, parse_unheadered_csv
 
-from datetime import timedelta
 
-
-class CSVTijuanaDataset(Dataset):
+class Jan2017Dataset(Dataset):
 
     def __init__(self,
                  demands_file_path: str,
                  bases_file_path: str,
                  cases_file_path: str,
                  travel_times_file_path: str,
-                 slices:int = None
                  ):
-
-        self.slices = slices
 
         # Read files into pandas dataframes and lists of objects
         self.demands = self.read_demands(demands_file_path)
@@ -38,39 +30,35 @@ class CSVTijuanaDataset(Dataset):
     # Helper functions
     def read_cases(self, filename):
         # Read cases from CSV into a pandas dataframe
-        case_headers = ["id", "lat", "long", "date", "weekday", "time", "priority"]
+        case_headers = ["Fecha", "No_unidad", "Dia_semana", "Latitud salida", "Longitud salida",
+                        "Hora_salida", "Latitud llegada incidente" ,"Longitud llegada incidente",
+                        "Hora_llegada incidente" , "Latitud salida al hospital", "Longitud  salida al hospital",
+                        "Hora_salida al hospital" , "Latitud arribo al hospital", "Longitud arribo al hospital",
+                        "Hora_arribo al hospital", "Tiempo_base_incidente", "Tiempo dando atencion pre-hospitalaria ",
+                        "Tiempo_incidente_hospital", "tiempo_total base-hospital"]
         cases_df = parse_headered_csv(filename, case_headers)
 
-        # Aggregates columms 'date' and 'time' to produce a column for datetime objects
-        # TODO -- SLOW OPERATION - find a better way to parse date and time to datetime object
-        cases_df["datetime"] = pd.to_datetime(cases_df.date + ' ' + cases_df.time)
+        print(cases_df)
 
-        # Sorts all cases by their datetimes (REQUIRED BY SIMULATOR)
-        cases_df = cases_df.sort_values('datetime', ascending=True)
-
-        cases_df = cases_df[:100]
-
-        # Generate list of models from dataframe
-        cases = []
-        for index, row in cases_df.iterrows():
-            case = TijuanaCase(
-                id=row["id"],
-                location=Point(row["lat"], row["long"]),
-                time=row["datetime"],
-                weekday=row["weekday"],
-                priority=row["priority"])
-            cases.append(case)
-
-
-
-        if self.slices:
-            first_datetime = cases[0].time
-            cutoff = first_datetime + timedelta(days=self.slices)
-            # print("first day is ", first_datetime, type(first_datetime))
-            # print("add slice: ", )
-
-            print(self.slices)
-        cases = [c for c in cases if c.time < cutoff]
+        # # Aggregates columms 'date' and 'time' to produce a column for datetime objects
+        # # TODO -- SLOW OPERATION - find a better way to parse date and time to datetime object
+        # cases_df["datetime"] = pd.to_datetime(cases_df.date + ' ' + cases_df.time)
+        #
+        # # Sorts all cases by their datetimes (REQUIRED BY SIMULATOR)
+        # cases_df = cases_df.sort_values('datetime', ascending=True)
+        #
+        # cases_df = cases_df[:100]
+        #
+        # # Generate list of models from dataframe
+        # cases = []
+        # for index, row in cases_df.iterrows():
+        #     case = TijuanaCase(
+        #         id=row["id"],
+        #         location=Point(row["lat"], row["long"]),
+        #         time=row["datetime"],
+        #         weekday=row["weekday"],
+        #         priority=row["priority"])
+        #     cases.append(case)
 
         return cases
 
