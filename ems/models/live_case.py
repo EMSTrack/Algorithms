@@ -6,6 +6,7 @@ from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 
 
+# TODO -- Remove and replace with Event Based Case Implementation
 class LiveCase(Case):
 
     def __init__(self,
