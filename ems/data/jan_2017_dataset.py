@@ -2,6 +2,8 @@ from geopy import Point
 
 from ems.data.dataset import Dataset
 from ems.data.travel_times import TravelTimes
+from ems.models.case import ListCase
+from ems.models.event import Event
 from ems.models.location_set import LocationSet
 from ems.models.tijuana_case import TijuanaCase
 from ems.utils import parse_headered_csv, parse_unheadered_csv
@@ -38,27 +40,55 @@ class Jan2017Dataset(Dataset):
                         "Tiempo_incidente_hospital", "tiempo_total base-hospital"]
         cases_df = parse_headered_csv(filename, case_headers)
 
-        print(cases_df)
+        cases_df["depart_dt"] = pd.to_datetime(cases_df['Fecha'] + ' ' + cases_df['Hora_salida'])
+        cases_df["incident_arrival_dt"] = pd.to_datetime(cases_df['Fecha'] + '' + cases_df['Hora_llegada incidente'])
+        cases_df["hospital_arrival_dt"] = pd.to_datetime(cases_df['Fecha'] + '' + cases_df['Hora_arribo al hospital'])
 
-        # # Aggregates columms 'date' and 'time' to produce a column for datetime objects
-        # # TODO -- SLOW OPERATION - find a better way to parse date and time to datetime object
-        # cases_df["datetime"] = pd.to_datetime(cases_df.date + ' ' + cases_df.time)
-        #
-        # # Sorts all cases by their datetimes (REQUIRED BY SIMULATOR)
-        # cases_df = cases_df.sort_values('datetime', ascending=True)
-        #
-        # cases_df = cases_df[:100]
-        #
-        # # Generate list of models from dataframe
-        # cases = []
-        # for index, row in cases_df.iterrows():
-        #     case = TijuanaCase(
-        #         id=row["id"],
-        #         location=Point(row["lat"], row["long"]),
-        #         time=row["datetime"],
-        #         weekday=row["weekday"],
-        #         priority=row["priority"])
-        #     cases.append(case)
+        cases_df = cases_df.sort_values('datetime', ascending=True)
+
+        # Generate list of models from dataframe
+        cases = []
+        for index, row in cases_df.iterrows():
+
+            # Timestamp of case start, destination is the incident destination
+            base_to_incident_event = Event(timestamp=row['depart_dt'],
+                                           location=Point(latitude=row['Latitud salida'],
+                                                             longitude=row['Longitud salida']),
+                                           destination=Point(latitude=row['Latitud llegada incidente'],
+                                                             longitude=row['Longitud llegada incidente']),
+                                           label="Travelling to Incident")
+
+            # Timestamp of incident arrival, destination is the hospital destination
+            incident_to_hospital_event = Event(timestamp=row['incident_arrival_dt'],
+                                               location=Point(latitude=row['Latitud llegada incidente'],
+                                                                 longitude=row['Longitud llegada incidente']),
+                                               destination=Point(latitude=row['Latitud arribo al hospital'],
+                                                                 longitude=row['Longitud arribo al hospital']),
+                                               label="Travelling to Hospital")
+
+            # Timestamp of hospital arrival, destination is the base destination
+            hospital_to_base_event = Event(timestamp=row['hospital_arrival_dt'],
+                                           location=Point(latitude=row['Latitud arribo al hospital'],
+                                                             longitude=row['Longitud arribo al hospital']),
+                                           destination=Point(latitude=row['Latitud salida'],
+                                                             longitude=row['Longitud salida']),
+                                           label="Travelling to Base")
+
+            # Timestamp of arrival back to base, no set destination
+            # TODO -- no timestamp of arrival provided
+            base_arrival_event = Event(timestamp=None,
+                                       location=Point(latitude=row['Latitud salida'],
+                                                      longitude=row['Longitud salida']),
+                                       destination=None,
+                                       label="Arrived Back to Base")
+
+            events = [base_to_incident_event, incident_to_hospital_event, hospital_to_base_event, base_arrival_event]
+
+            # Create case
+            case = ListCase(id=row['id'],
+                            events=events)
+
+            cases.append(case)
 
         return cases
 
