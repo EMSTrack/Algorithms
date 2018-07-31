@@ -51,24 +51,18 @@ class Jan2017Dataset(Dataset):
 
             # Timestamp of case start, destination is the incident destination
             base_to_incident_event = Event(timestamp=row['depart_dt'],
-                                           location=Point(latitude=row['Latitud salida'],
-                                                             longitude=row['Longitud salida']),
                                            destination=Point(latitude=row['Latitud llegada incidente'],
                                                              longitude=row['Longitud llegada incidente']),
                                            label="Travelling to Incident")
 
             # Timestamp of incident arrival, destination is the hospital destination
             incident_to_hospital_event = Event(timestamp=row['incident_arrival_dt'],
-                                               location=Point(latitude=row['Latitud llegada incidente'],
-                                                                 longitude=row['Longitud llegada incidente']),
                                                destination=Point(latitude=row['Latitud arribo al hospital'],
                                                                  longitude=row['Longitud arribo al hospital']),
                                                label="Travelling to Hospital")
 
             # Timestamp of hospital arrival, destination is the base destination
             hospital_to_base_event = Event(timestamp=row['hospital_arrival_dt'],
-                                           location=Point(latitude=row['Latitud arribo al hospital'],
-                                                             longitude=row['Longitud arribo al hospital']),
                                            destination=Point(latitude=row['Latitud salida'],
                                                              longitude=row['Longitud salida']),
                                            label="Travelling to Base")
@@ -76,8 +70,6 @@ class Jan2017Dataset(Dataset):
             # Timestamp of arrival back to base, no set destination
             # TODO -- no timestamp of arrival provided
             base_arrival_event = Event(timestamp=None,
-                                       location=Point(latitude=row['Latitud salida'],
-                                                      longitude=row['Longitud salida']),
                                        destination=None,
                                        label="Arrived Back to Base")
 
