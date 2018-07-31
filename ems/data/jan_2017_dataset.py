@@ -5,7 +5,6 @@ from ems.data.travel_times import TravelTimes
 from ems.models.case import ListCase
 from ems.models.event import Event
 from ems.models.location_set import LocationSet
-from ems.models.tijuana_case import TijuanaCase
 from ems.utils import parse_headered_csv, parse_unheadered_csv
 
 
