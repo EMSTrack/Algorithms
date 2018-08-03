@@ -1,5 +1,5 @@
 class EventType:
-    INCIDENT = "Travelling to Incident"
-    HOSPITAL = "Travelling to Hospital"
-    BASE = "Travelling to Base"
+    INCIDENT = "Traveling to Incident"
+    HOSPITAL = "Traveling to Hospital"
+    BASE = "Returning to Base"
     OTHER = "Other"
