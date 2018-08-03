@@ -1,11 +1,12 @@
+from ems.models.event_type import EventType
+
+
 class Event:
 
     def __init__(self,
                  timestamp,
                  destination,
-                 label):
+                 event_type: EventType):
         self.timestamp = timestamp
         self.destination = destination
-
-        # TODO -- Label should be an enum? e.g. event_type
-        self.label = label
+        self.event_type = event_type
