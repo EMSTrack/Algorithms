@@ -6,7 +6,7 @@ from geopy import Point
 class LocationPoint:
 
     def __init__(self,
-                 location: Point,
-                 timestamp: datetime):
+                 location: Point = None,
+                 timestamp: datetime = None):
         self.location = location
         self.timestamp = timestamp

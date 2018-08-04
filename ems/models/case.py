@@ -43,6 +43,7 @@ class RandomCase(AbstractCase):
             yield events.generate(self.labels[k])
 
 
+# TODO -- Change class name to be more descriptive? e.g. CompleteCase
 class ListCase(AbstractCase):
 
     def __init__(self,
