@@ -47,8 +47,8 @@ class Jan2017Dataset(Dataset):
         cases_df["incident_arrival_dt"] = pd.to_datetime(cases_df['Fecha'] + '' + cases_df['Hora_llegada incidente'])
         cases_df["hospital_arrival_dt"] = pd.to_datetime(cases_df['Fecha'] + '' + cases_df['Hora_arribo al hospital'])
 
-        # Not required to sort cases anymore -- Sorting occurs at event level
-        # cases_df = cases_df.sort_values('depart_dt', ascending=True)
+        # Sort cases by their departure times
+        cases_df = cases_df.sort_values('depart_dt', ascending=True)
 
         # Generate list of models from dataframe
         cases = []
