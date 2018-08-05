@@ -11,6 +11,8 @@ from ems.simulators.dispatcher_simulator import DispatcherSimulator
 from ems.algorithms.analyze.summarize import Summarize
 
 # TODO allow command line arguments
+from ems.simulators.dispatcher_simulator_event import EventBasedDispatcherSimulator
+
 parser = argparse.ArgumentParser(description="Load settings, data, preprocess models, run sim.")
 parser.add_argument('--ambulances', help="Number of ambulances", type=int, required=False)
 parser.add_argument('--bases', help='Number of bases', type=int, required=False)
@@ -47,12 +49,15 @@ for index in range(settings.num_ambulances):
     ambulances.append(ambulance)
 
 # Initialize the simulator
-sim = DispatcherSimulator(ambulances=ambulances,
-                          cases=dataset.cases,
-                          ambulance_selector=ambulance_select,
-                          coverage_alg=determine_coverage,
-                          plot=settings.plot
-                          )
+# sim = DispatcherSimulator(ambulances=ambulances,
+#                           cases=dataset.cases,
+#                           ambulance_selector=ambulance_select,
+#                           coverage_alg=determine_coverage,
+#                           plot=settings.plot
+#                           )
+sim = EventBasedDispatcherSimulator(ambulances=ambulances,
+                                    cases=dataset.cases,
+                                    ambulance_selector=ambulance_select)
 
 # Start the whole thing
 finished_cases, measured_coverage = sim.run()

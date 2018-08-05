@@ -51,6 +51,7 @@ class Jan2017Dataset(Dataset):
         # Generate list of models from dataframe
         cases = []
         for index, row in cases_df.iterrows():
+
             ### Datetimes
 
             # Create strings for dates; used to convert to datetimes
@@ -77,48 +78,66 @@ class Jan2017Dataset(Dataset):
                                                                longitude=row["Longitud llegada incidente"]),
                                                 timestamp=incident_arrival_dt)
 
-            # LocationPoint capturing when ambulance left incident for hospital
-            incident_depart_lp = LocationPoint(location=Point(latitude=row["Latitud llegada incidente"],
-                                                              longitude=row["Longitud llegada incidente"]),
-                                               timestamp=incident_depart_dt)
+            incident_depart_lp = None
+            hospital_arrival_lp = None
 
-            # LocationPoint capturing when ambulance arrived to hospital
-            hospital_arrival_lp = LocationPoint(location=Point(latitude=row["Latitud arribo al hospital"],
-                                                               longitude=row['Longitud arribo al hospital']),
-                                                timestamp=hospital_arrival_dt)
+            if row["Latitud salida al hospital"] != 0:
+                # LocationPoint capturing when ambulance left incident for hospital
+                incident_depart_lp = LocationPoint(location=Point(latitude=row["Latitud llegada incidente"],
+                                                                  longitude=row["Longitud llegada incidente"]),
+                                                   timestamp=incident_depart_dt)
 
-            # TODO -- No information on length of stay at hospital - no event for hospital stay length
+                # LocationPoint capturing when ambulance arrived to hospital
+                hospital_arrival_lp = LocationPoint(location=Point(latitude=row["Latitud arribo al hospital"],
+                                                                   longitude=row['Longitud arribo al hospital']),
+                                                    timestamp=hospital_arrival_dt)
+
+                # TODO -- No information on length of stay at hospital - no event for hospital stay length
 
             # LocationPoint capturing when ambulance returned to original base (no timestamp provided by dataset)
-            base_lp_return = LocationPoint(location=Point(latitude=row["Latitud salida"],
+            base_return_lp = LocationPoint(location=Point(latitude=row["Latitud salida"],
                                                           longitude=row["Longitud salida"]),
                                            timestamp=None)
 
             ### Events
+            events = []
 
             # Event capturing ambulance travelling from base to incident
             base_to_incident_event = Event(origin=base_depart_lp,
                                            destination=incident_arrival_lp,
                                            event_type=EventType.TO_INCIDENT)
+            events.append(base_to_incident_event)
 
-            # Event capturing patient pickup
-            at_incident_event = Event(origin=incident_arrival_lp,
-                                      destination=incident_depart_lp,
-                                      event_type=EventType.AT_INCIDENT)
+            if incident_depart_lp is not None:
+                # Event capturing patient pickup
+                # TODO -- When there is no patient to bring to hospital, no information provided on incident departure
+                at_incident_event = Event(origin=incident_arrival_lp,
+                                          destination=incident_depart_lp,
+                                          event_type=EventType.AT_INCIDENT)
+                events.append(at_incident_event)
 
-            # Event capturing ambulance travelling from incident to hospital
-            incident_to_hospital_event = Event(origin=incident_depart_lp,
-                                               destination=hospital_arrival_lp,
-                                               event_type=EventType.TO_HOSPITAL)
+                # Event capturing ambulance travelling from incident to hospital
+                incident_to_hospital_event = Event(origin=incident_depart_lp,
+                                                   destination=hospital_arrival_lp,
+                                                   event_type=EventType.TO_HOSPITAL)
+                events.append(incident_to_hospital_event)
 
-            # Event capturing ambulance travelling from hospital to base
-            # TODO -- May not be necessary; ambulances free as soon as they leave hospital
-            hospital_to_base_event = Event(origin=hospital_arrival_lp,
-                                           destination=base_lp_return,
-                                           event_type=EventType.TO_BASE)
+                # Event capturing ambulance travelling from hospital to base
+                # TODO -- May not be necessary; ambulances free as soon as they leave hospital
+                hospital_to_base_event = Event(origin=hospital_arrival_lp,
+                                               destination=base_return_lp,
+                                               event_type=EventType.TO_BASE)
+                events.append(hospital_to_base_event)
+
+            else:
+                # Event capturing ambulance travelling from incident to base
+                # TODO -- May not be necessary; ambulances free as soon as they leave incident
+                incident_to_base_event = Event(origin=incident_arrival_lp,
+                                               destination=base_return_lp,
+                                               event_type=EventType.TO_BASE)
+                events.append(incident_to_base_event)
 
             # Generate a case from events
-            events = [base_to_incident_event, at_incident_event, incident_to_hospital_event, hospital_to_base_event]
             case = ListCase(id=index,
                             events=events)
 

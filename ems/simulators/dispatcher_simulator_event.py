@@ -1,3 +1,4 @@
+import heapq
 from copy import deepcopy
 from typing import List
 
@@ -16,10 +17,40 @@ class EventBasedDispatcherSimulator(Simulator):
 
         super().__init__(ambulances, cases, ambulance_selector)
         self.finished_cases = []
-        # self.current_time = cases[0].time if len(cases) > 0 else -1
+        self.current_time = -1
 
     def run(self):
 
         ambulances_in_motion = []
+
         pending_cases = []
         working_cases = deepcopy(self.cases)
+
+        pending_events = []
+
+        for case_index, case in enumerate(working_cases):
+            for event_index, event in enumerate(case.iter()):
+
+                event_obj = event[0]
+                is_last = event[1]
+
+                # Heap orders events by timestamp, then by case ordering, then by event ordering
+                heapq.heappush(pending_events, (event_obj.origin.timestamp,
+                                                case_index,
+                                                event_index,
+                                                event_obj,
+                                                case,
+                                                is_last))
+
+        for a in pending_events[0:10]:
+            print(a[0])
+
+        while pending_events:
+            pass
+
+
+
+
+
+            # Print current time and event after execution
+
