@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pandas as pd
 
 from geopy import Point
@@ -36,67 +38,94 @@ class Jan2017Dataset(Dataset):
     def read_cases(self, filename):
         # Read cases from CSV into a pandas dataframe
         case_headers = ["Fecha", "No_unidad", "Dia_semana", "Latitud salida", "Longitud salida",
-                        "Hora_salida", "Latitud llegada incidente" ,"Longitud llegada incidente",
-                        "Hora_llegada incidente" , "Latitud salida al hospital", "Longitud  salida al hospital",
-                        "Hora_salida al hospital" , "Latitud arribo al hospital", "Longitud arribo al hospital",
+                        "Hora_salida", "Latitud llegada incidente", "Longitud llegada incidente",
+                        "Hora_llegada incidente", "Latitud salida al hospital", "Longitud  salida al hospital",
+                        "Hora_salida al hospital", "Latitud arribo al hospital", "Longitud arribo al hospital",
                         "Hora_arribo al hospital", "Tiempo_base_incidente", "Tiempo dando atencion pre-hospitalaria ",
                         "Tiempo_incidente_hospital", "tiempo_total base-hospital"]
         cases_df = parse_headered_csv(filename, case_headers)
 
-        cases_df["depart_dt"] = pd.to_datetime(cases_df['Fecha'] + ' ' + cases_df['Hora_salida'])
-        cases_df["incident_arrival_dt"] = pd.to_datetime(cases_df['Fecha'] + '' + cases_df['Hora_llegada incidente'])
-        cases_df["hospital_arrival_dt"] = pd.to_datetime(cases_df['Fecha'] + '' + cases_df['Hora_arribo al hospital'])
-
-        # Sort cases by their departure times
-        cases_df = cases_df.sort_values('depart_dt', ascending=True)
-
         # Generate list of models from dataframe
         cases = []
         for index, row in cases_df.iterrows():
+            ### Datetimes
+
+            # Create strings for dates; used to convert to datetimes
+            base_depart_dt_str = row["Fecha"] + " " + row["Hora_salida"]
+            incident_arrival_dt_str = row["Fecha"] + " " + row["Hora_llegada incidente"]
+            incident_depart_dt_str = row["Fecha"] + " " + row["Hora_salida al hospital"]
+            hospital_arrival_dt_str = row["Fecha"] + " " + row["Hora_arribo al hospital"]
+
+            # Datetime format
+            dt_format = "%m/%d/%Y %H:%M:%S"
+
+            # Generate datetimes
+            base_depart_dt = datetime.strptime(base_depart_dt_str, dt_format)
+            incident_arrival_dt = datetime.strptime(incident_arrival_dt_str, dt_format)
+            incident_depart_dt = datetime.strptime(incident_depart_dt_str, dt_format)
+            hospital_arrival_dt = datetime.strptime(hospital_arrival_dt_str, dt_format)
+
+            ### Location Points
 
             # LocationPoint capturing when ambulance departed from base
-            base_lp_departure = LocationPoint(location=Point(latitude=row["Latitud salida"],
-                                                             longitude=row["Longitud salida"]),
-                                              timestamp=row['depart_dt'])
+            base_depart_lp = LocationPoint(location=Point(latitude=row["Latitud salida"],
+                                                          longitude=row["Longitud salida"]),
+                                           timestamp=base_depart_dt)
 
-            # LocationPoint capturing when ambulance arrived (and departed) from incident
-            # TODO -- No event capturing the time to attend to patient at incident; not included in dataset
-            incident_lp = LocationPoint(location=Point(latitude=row["Latitud llegada incidente"],
-                                                       longitude=row["Longitud llegada incidente"]),
-                                        timestamp=row["incident_arrival_dt"])
+            # LocationPoint capturing when ambulance arrived to incident
+            incident_arrival_lp = LocationPoint(location=Point(latitude=row["Latitud llegada incidente"],
+                                                               longitude=row["Longitud llegada incidente"]),
+                                                timestamp=incident_arrival_dt)
 
-            # LocationPoint capturing when ambulance arrived (and departed) from incident
-            hospital_lp = LocationPoint(location=Point(latitude=row["Latitud arribo al hospital"],
-                                                       longitude=row['Longitud arribo al hospital']),
-                                        timestamp=row["hospital_arrival_dt"])
+            # LocationPoint capturing when ambulance left incident for hospital
+            incident_depart_lp = LocationPoint(location=Point(latitude=row["Latitud llegada incidente"],
+                                                              longitude=row["Longitud llegada incidente"]),
+                                               timestamp=incident_depart_dt)
 
-            # LocationPoint capturing when ambulance returned to original base
-            # Timestamp of return not provided; may not be a necessary event
+            # LocationPoint capturing when ambulance arrived to hospital
+            hospital_arrival_lp = LocationPoint(location=Point(latitude=row["Latitud arribo al hospital"],
+                                                               longitude=row['Longitud arribo al hospital']),
+                                                timestamp=hospital_arrival_dt)
+
+            # TODO -- No information on length of stay at hospital - no event for hospital stay length
+
+            # LocationPoint capturing when ambulance returned to original base (no timestamp provided by dataset)
             base_lp_return = LocationPoint(location=Point(latitude=row["Latitud salida"],
                                                           longitude=row["Longitud salida"]),
                                            timestamp=None)
 
+            ### Events
+
             # Event capturing ambulance travelling from base to incident
-            base_to_incident_event = Event(origin=base_lp_departure,
-                                           destination=incident_lp,
-                                           event_type=EventType.INCIDENT)
+            base_to_incident_event = Event(origin=base_depart_lp,
+                                           destination=incident_arrival_lp,
+                                           event_type=EventType.TO_INCIDENT)
+
+            # Event capturing patient pickup
+            at_incident_event = Event(origin=incident_arrival_lp,
+                                      destination=incident_depart_lp,
+                                      event_type=EventType.AT_INCIDENT)
 
             # Event capturing ambulance travelling from incident to hospital
-            incident_to_hospital_event = Event(origin=incident_lp,
-                                               destination=hospital_lp,
-                                               event_type=EventType.HOSPITAL)
+            incident_to_hospital_event = Event(origin=incident_depart_lp,
+                                               destination=hospital_arrival_lp,
+                                               event_type=EventType.TO_HOSPITAL)
 
             # Event capturing ambulance travelling from hospital to base
-            hospital_to_base_event = Event(origin=hospital_lp,
+            # TODO -- May not be necessary; ambulances free as soon as they leave hospital
+            hospital_to_base_event = Event(origin=hospital_arrival_lp,
                                            destination=base_lp_return,
-                                           event_type=EventType.BASE)
+                                           event_type=EventType.TO_BASE)
 
             # Generate a case from events
-            events = [base_to_incident_event, incident_to_hospital_event, hospital_to_base_event]
-            case = ListCase(id=row['id'],
+            events = [base_to_incident_event, at_incident_event, incident_to_hospital_event, hospital_to_base_event]
+            case = ListCase(id=index,
                             events=events)
 
             cases.append(case)
+
+        # Sort all cases by the departure time from base
+        cases.sort(key=lambda case: case.events[0].origin.timestamp)
 
         return cases
 

@@ -9,8 +9,7 @@ from ems.simulators.simulator import Simulator
 class EventBasedDispatcherSimulator(Simulator):
 
     def __init__(self,
-                 ambulances:
-                 List[Ambulance],
+                 ambulances: List[Ambulance],
                  cases: List[AbstractCase],
                  ambulance_selector: AmbulanceSelectionAlgorithm):
 
@@ -20,4 +19,4 @@ class EventBasedDispatcherSimulator(Simulator):
         # self.current_time = cases[0].time if len(cases) > 0 else -1
 
     def run(self):
-        pass
+        pass;
