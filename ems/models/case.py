@@ -15,32 +15,34 @@ class AbstractCase:
 
     def __init__(self,
                  id: int,
+                 assigned_ambulance: Ambulance = None,
                  priority: float = None):
         self.id = id
+        self.assigned_ambulance = assigned_ambulance
         self.priority = priority
 
     def iterator(self):
         raise NotImplementedError()
 
 
-class RandomCase(AbstractCase):
-
-    def __init__(self,
-                 id: int,
-                 number_of_events: int,
-                 labels: List[str],
-                 priority: float = None):
-        super().__init__(id, priority)
-        self.id = id
-        self.priority = priority
-        self.number_of_events = number_of_events
-        self.labels = labels
-
-    def iterator(self):
-        k = 0
-        events = RandomEventGenerator(timestamp)
-        while k < self.number_of_events:
-            yield events.generate(self.labels[k])
+# class RandomCase(AbstractCase):
+#
+#     def __init__(self,
+#                  id: int,
+#                  number_of_events: int,
+#                  labels: List[str],
+#                  priority: float = None):
+#         super().__init__(id, priority)
+#         self.id = id
+#         self.priority = priority
+#         self.number_of_events = number_of_events
+#         self.labels = labels
+#
+#     def iterator(self):
+#         k = 0
+#         events = RandomEventGenerator(timestamp)
+#         while k < self.number_of_events:
+#             yield events.generate(self.labels[k])
 
 
 # TODO -- Change class name to be more descriptive? e.g. CompleteCase
@@ -49,8 +51,9 @@ class ListCase(AbstractCase):
     def __init__(self,
                  id: int,
                  events: List[Event],
+                 assigned_ambulance: Ambulance = None,
                  priority: float = None):
-        super().__init__(id, priority)
+        super().__init__(id, assigned_ambulance, priority)
         self.id = id
         self.events = events
         self.priority = priority
