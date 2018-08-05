@@ -42,9 +42,6 @@ class EventBasedDispatcherSimulator(Simulator):
                                                 case,
                                                 is_last))
 
-        for a in pending_events[0:10]:
-            print(a[0])
-
         while pending_events:
             pass
 
