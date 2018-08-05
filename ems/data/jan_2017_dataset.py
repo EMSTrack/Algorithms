@@ -45,6 +45,9 @@ class Jan2017Dataset(Dataset):
                         "Tiempo_incidente_hospital", "tiempo_total base-hospital"]
         cases_df = parse_headered_csv(filename, case_headers)
 
+        # Datetime format
+        dt_format = "%m/%d/%Y %H:%M:%S"
+
         # Generate list of models from dataframe
         cases = []
         for index, row in cases_df.iterrows():
@@ -55,9 +58,6 @@ class Jan2017Dataset(Dataset):
             incident_arrival_dt_str = row["Fecha"] + " " + row["Hora_llegada incidente"]
             incident_depart_dt_str = row["Fecha"] + " " + row["Hora_salida al hospital"]
             hospital_arrival_dt_str = row["Fecha"] + " " + row["Hora_arribo al hospital"]
-
-            # Datetime format
-            dt_format = "%m/%d/%Y %H:%M:%S"
 
             # Generate datetimes
             base_depart_dt = datetime.strptime(base_depart_dt_str, dt_format)

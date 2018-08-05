@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import List
 
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
@@ -15,8 +16,10 @@ class EventBasedDispatcherSimulator(Simulator):
 
         super().__init__(ambulances, cases, ambulance_selector)
         self.finished_cases = []
-        self.coverage_over_time = []
         # self.current_time = cases[0].time if len(cases) > 0 else -1
 
     def run(self):
-        pass;
+
+        ambulances_in_motion = []
+        pending_cases = []
+        working_cases = deepcopy(self.cases)
