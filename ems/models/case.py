@@ -13,12 +13,11 @@ from ems.models.random_event_generator import RandomEventGenerator
 # TODO -- Fix up these classes for Event Based Case Implementation
 class AbstractCase:
 
+    # Include events
     def __init__(self,
                  id: int,
-                 assigned_ambulance: Ambulance = None,
                  priority: float = None):
         self.id = id
-        self.assigned_ambulance = assigned_ambulance
         self.priority = priority
 
     def iterator(self):
@@ -51,9 +50,8 @@ class ListCase(AbstractCase):
     def __init__(self,
                  id: int,
                  events: List[Event],
-                 assigned_ambulance: Ambulance = None,
                  priority: float = None):
-        super().__init__(id, assigned_ambulance, priority)
+        super().__init__(id, priority)
         self.id = id
         self.events = events
         self.priority = priority
@@ -75,7 +73,6 @@ class Case:
                  location: Point,
                  time: datetime,
                  priority: float = None,
-
                  weekday: str = None,
                  start_time: datetime = None,
                  finish_time: datetime = None,

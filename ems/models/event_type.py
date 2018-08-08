@@ -4,5 +4,6 @@ class EventType:
     TO_HOSPITAL = "Traveling to Hospital"
     AT_HOSPITAL = "Dropping off Patient at Hospital"
     TO_BASE = "Returning to Base"
+    # Incident to base
     OTHER = "Other"
 
