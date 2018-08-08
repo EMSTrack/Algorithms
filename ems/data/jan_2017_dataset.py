@@ -105,7 +105,7 @@ class Jan2017Dataset(Dataset):
             # Event capturing ambulance travelling from base to incident
             base_to_incident_event = Event(origin=base_depart_lp,
                                            destination=incident_arrival_lp,
-                                           event_type=EventType.TO_INCIDENT)
+                                           event_type=EventType.BASE_TO_INCIDENT)
             events.append(base_to_incident_event)
 
             if incident_depart_lp is not None:
@@ -119,14 +119,14 @@ class Jan2017Dataset(Dataset):
                 # Event capturing ambulance travelling from incident to hospital
                 incident_to_hospital_event = Event(origin=incident_depart_lp,
                                                    destination=hospital_arrival_lp,
-                                                   event_type=EventType.TO_HOSPITAL)
+                                                   event_type=EventType.INCIDENT_TO_HOSPITAL)
                 events.append(incident_to_hospital_event)
 
                 # Event capturing ambulance travelling from hospital to base
                 # TODO -- May not be necessary; ambulances free as soon as they leave hospital
                 hospital_to_base_event = Event(origin=hospital_arrival_lp,
                                                destination=base_return_lp,
-                                               event_type=EventType.TO_BASE)
+                                               event_type=EventType.HOSPITAL_TO_BASE)
                 events.append(hospital_to_base_event)
 
             else:
@@ -134,7 +134,7 @@ class Jan2017Dataset(Dataset):
                 # TODO -- May not be necessary; ambulances free as soon as they leave incident
                 incident_to_base_event = Event(origin=incident_arrival_lp,
                                                destination=base_return_lp,
-                                               event_type=EventType.TO_BASE)
+                                               event_type=EventType.INCIDENT_TO_BASE)
                 events.append(incident_to_base_event)
 
             # Generate a case from events
