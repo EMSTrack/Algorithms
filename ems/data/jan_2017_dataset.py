@@ -127,7 +127,7 @@ class Jan2017Dataset(Dataset):
                 hospital_to_base_event = Event(origin=hospital_arrival_lp,
                                                destination=base_return_lp,
                                                event_type=EventType.HOSPITAL_TO_BASE)
-                events.append(hospital_to_base_event)
+                # events.append(hospital_to_base_event)
 
             else:
                 # Event capturing ambulance travelling from incident to base
@@ -135,7 +135,7 @@ class Jan2017Dataset(Dataset):
                 incident_to_base_event = Event(origin=incident_arrival_lp,
                                                destination=base_return_lp,
                                                event_type=EventType.INCIDENT_TO_BASE)
-                events.append(incident_to_base_event)
+                # events.append(incident_to_base_event)
 
             # Generate a case from events
             case = ListCase(id=index,

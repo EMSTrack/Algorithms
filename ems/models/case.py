@@ -59,13 +59,8 @@ class ListCase(AbstractCase):
         self.events = events
         self.priority = priority
 
-    def iter(self):
-        it = iter(self.events)
-        last = next(it)
-        for item in it:
-            yield last, False
-            last = item
-        yield last, True
+    def iterator(self):
+        return iter(self.events)
 
 
 # TODO -- Remove and replace with Event Based Case Implementation
