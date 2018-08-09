@@ -140,6 +140,8 @@ class Jan2017Dataset(Dataset):
             # Generate a case from events
             case = ListCase(id=index,
                             date_recorded=base_depart_dt,
+                            incident_location=Point(latitude=row["Latitud llegada incidente"],
+                                                    longitude=row["Longitud llegada incidente"]),
                             events=events)
 
             cases.append(case)

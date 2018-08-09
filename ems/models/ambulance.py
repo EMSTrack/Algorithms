@@ -12,16 +12,12 @@ class Ambulance:
                  base: Point,
                  unit: str = "XXX-XXXX",
                  deployed: bool = False,
-                 location: Point = None,
-                 deployed_time: datetime = None,
-                 end_time: datetime = None):
+                 location: Point = None):
         self.id = id
         self.base = base
         self.unit = unit
         self.deployed = deployed
         self.location = location
-        self.deployed_time = deployed_time
-        self.end_time = end_time
 
     def __eq__(self, other):
         """
@@ -47,17 +43,11 @@ class Ambulance:
 
         self.deployed = False
         self.location = amb_location
-        self.deployed_time = None
 
-    def deploy(self,
-               location: Point,
-               deployed_time: datetime,
-               finish_time: datetime):
+    def deploy(self, location: Point):
         """
         Deploys the ambulance by setting the deployed state, start times, end time, and location of the case.
         :param location
-        :param deployed_time
-        :param finish_time
         :return: Nothing. This function only changes state.
         """
 
@@ -67,8 +57,6 @@ class Ambulance:
 
         self.deployed = True
         self.location = location
-        self.deployed_time = deployed_time
-        self.end_time = finish_time
 
     def __str__(self):
         return str([self.id, self.unit])

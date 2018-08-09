@@ -17,9 +17,11 @@ class AbstractCase:
     def __init__(self,
                  id: int,
                  date_recorded: datetime,
+                 incident_location: Point,
                  priority: float = None):
         self.id = id
         self.date_recorded = date_recorded
+        self.incident_location = incident_location
         self.priority = priority
 
     def iterator(self):
@@ -51,10 +53,11 @@ class ListCase(AbstractCase):
 
     def __init__(self,
                  id: int,
-                 date_recorded : datetime,
+                 date_recorded: datetime,
+                 incident_location: Point,
                  events: List[Event],
                  priority: float = None):
-        super().__init__(id, date_recorded, priority)
+        super().__init__(id, date_recorded, incident_location, priority)
         self.id = id
         self.events = events
         self.priority = priority
@@ -107,5 +110,6 @@ class Case:
         return False
 
     def __str__(self):
-        return "\n".join([str(item) for item in [self.id, self.location, self.time, self.weekday, self.priority, self.start_time,
-        self.finish_time, self.delay, self.assigned_ambulance]])
+        return "\n".join(
+            [str(item) for item in [self.id, self.location, self.time, self.weekday, self.priority, self.start_time,
+                                    self.finish_time, self.delay, self.assigned_ambulance]])

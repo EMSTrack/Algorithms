@@ -22,19 +22,20 @@ class EventBasedDispatcherSimulator(Simulator):
 
         super().__init__(ambulances, cases, ambulance_selector)
         self.finished_cases = []
-        self.ambulances_in_motion = []
         self.current_time = cases[0].date_recorded
 
     def run(self):
 
         unstarted_cases = deepcopy(self.cases)
+        ambulances_in_motion = []
         ongoing_cases = []
         pending_cases = []
         pending_events = []
+        selected_ambulances = {}
         current_time = None
 
         # Case level loop
-        while len(unstarted_cases) > 0 or self.ambulances_in_motion:
+        while len(unstarted_cases) > 0 or ambulances_in_motion:
 
             # Determine next event, pending case, and case
             event_data = pending_events[0] if len(pending_events) > 0 else None
@@ -44,7 +45,9 @@ class EventBasedDispatcherSimulator(Simulator):
             # Unpackage event data
             event_timestamp = event_data[0] if event_data is not None else datetime.max
 
-            are_ambulances_free = not len(self.ambulances) == len(self.ambulances_in_motion)
+            # Compute ambulances currently in motion
+            ambulances_in_motion = [amb for amb in self.ambulances if amb.deployed]
+            are_ambulances_free = not len(self.ambulances) == len(ambulances_in_motion)
 
             # Assigned values later
             next_event_case = None
@@ -59,7 +62,9 @@ class EventBasedDispatcherSimulator(Simulator):
                 next_event_case_iter = pending_case.iterator()
 
                 # Assign ambulance to case
-                self.assign_ambulance(next_event_case)
+                amb = self.select_ambulance(next_event_case, current_time)
+                amb.deployed = True
+                selected_ambulances[next_event_case.id] = amb
 
                 # Remove case from pending list
                 pending_cases.pop(0)
@@ -75,16 +80,18 @@ class EventBasedDispatcherSimulator(Simulator):
                 # Available ambulances
                 if are_ambulances_free:
 
-                    print("Assigning ambulance {} to working case: {}".format("TBD", unstarted_case.id))
-
                     next_event_case = unstarted_case
                     next_event_case_iter = unstarted_case.iterator()
 
                     # Assign ambulance to case
-                    self.assign_ambulance(next_event_case)
+                    amb = self.select_ambulance(next_event_case, current_time)
+                    amb.deployed = True
+                    selected_ambulances[next_event_case.id] = amb
 
                     # Add case to ongoing
                     ongoing_cases.append(unstarted_case)
+
+                    print("Assigning ambulance {} to working case: {}".format("TBD", unstarted_case.id))
 
                 # No available ambulances
                 else:
@@ -136,7 +143,10 @@ class EventBasedDispatcherSimulator(Simulator):
                     # Remove case from ongoing cases
                     ongoing_cases = [case for case in ongoing_cases if not case.id == next_event_case.id]
 
-            print("Busy ambulances: ", sorted([amb.id for amb in self.ambulances_in_motion]))
+                    # Free ambulance
+                    selected_ambulances[next_event_case.id].deployed = False
+
+            print("Busy ambulances: ", sorted([amb.id for amb in ambulances_in_motion]))
             print("Ongoing cases: ", [case.id for case in ongoing_cases])
             print("Pending cases: ", [case.id for case in pending_cases])
             print(colored("Current Time: {}".format(current_time), "yellow", attrs=["bold"]))
@@ -145,8 +155,10 @@ class EventBasedDispatcherSimulator(Simulator):
         return self.finished_cases, None
 
     # Selects an ambulance for the given case
-    def assign_ambulance(self, case: AbstractCase):
-        pass
+    def select_ambulance(self, case: AbstractCase, time: datetime):
+        available_ambulances = [amb for amb in self.ambulances if not amb.deployed]
+        selection = self.ambulance_selector.select_ambulance(available_ambulances, case, time)
+        return selection
 
     # Checks the event type of the event, computes timestamp using algorithms, and returns timestamp
     def compute_event_finish_time(self,

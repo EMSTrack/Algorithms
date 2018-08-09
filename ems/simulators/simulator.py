@@ -15,7 +15,7 @@ class Simulator:
                  ambulance_selector: AmbulanceSelectionAlgorithm):
         self.ambulances = ambulances
         self.cases = cases
-        self.ambulance_selection = ambulance_selector
+        self.ambulance_selector = ambulance_selector
 
     def run(self):
         raise NotImplementedError()
