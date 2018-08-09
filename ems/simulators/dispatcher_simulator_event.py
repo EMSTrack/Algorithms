@@ -3,6 +3,8 @@ from copy import deepcopy
 from datetime import datetime
 from typing import List
 
+from termcolor import colored
+
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
 from ems.models.ambulance import Ambulance
 from ems.models.case import AbstractCase
@@ -64,6 +66,8 @@ class EventBasedDispatcherSimulator(Simulator):
             # Next case comes in before the next event
             elif working_case is not None and working_case.date_recorded < event_timestamp:
 
+                current_time = working_case.date_recorded
+
                 # Available ambulances
                 if are_ambulances_free:
 
@@ -86,6 +90,9 @@ class EventBasedDispatcherSimulator(Simulator):
 
             # Perform the next event
             elif event_data is not None:
+
+                current_time = event_timestamp
+
                 event = event_data[1]
                 next_event_case = event_data[2]
                 next_event_case_iter = event_data[3]
@@ -115,6 +122,10 @@ class EventBasedDispatcherSimulator(Simulator):
                     print("Finished case: {}".format(next_event_case.id))
                     self.finished_cases.append(next_event_case)
 
+            print(colored("Current Time: {}".format(current_time), "yellow", attrs=["bold"]))
+            print("")
+
+    # Selects an ambulance for the given case
     def assign_ambulance(self, case: AbstractCase):
         pass
 
