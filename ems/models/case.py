@@ -16,8 +16,10 @@ class AbstractCase:
     # Include events
     def __init__(self,
                  id: int,
+                 date_recorded: datetime,
                  priority: float = None):
         self.id = id
+        self.date_recorded = date_recorded
         self.priority = priority
 
     def iterator(self):
@@ -49,9 +51,10 @@ class ListCase(AbstractCase):
 
     def __init__(self,
                  id: int,
+                 date_recorded : datetime,
                  events: List[Event],
                  priority: float = None):
-        super().__init__(id, priority)
+        super().__init__(id, date_recorded, priority)
         self.id = id
         self.events = events
         self.priority = priority
