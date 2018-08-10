@@ -7,6 +7,9 @@ from ems.models.ambulance import Ambulance
 
 
 # Used by the sim to compute a travel time between one point to another
+from ems.models.case import AbstractCase
+
+
 class TimeComputationAlgorithm:
     """
     Users may subclass to implement their own compute_travel_time for
@@ -15,6 +18,7 @@ class TimeComputationAlgorithm:
 
     def compute_travel_time(self,
                             ambulance: Ambulance,
+                            case: AbstractCase,
                             origin: Point,
                             destination: Point,
                             current_time: datetime):
