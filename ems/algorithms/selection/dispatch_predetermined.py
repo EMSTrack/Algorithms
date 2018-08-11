@@ -36,6 +36,14 @@ class PreDeterminedAmbulanceAlgorithm(AmbulanceSelectionAlgorithm):
     def select_ambulance(self, available_ambulances: List[Ambulance], case: Case, current_time: datetime):
         pre_det_ambulance = self.determined_ambulances[case]
 
-        # TODO check if ambulance is available
+        # TODO --- raise exception
+        if pre_det_ambulance is None:
+            print("Pre determined ambulance is None")
+            return None
 
-        return pre_det_ambulance
+        for ambulance in available_ambulances:
+            if ambulance.unit == pre_det_ambulance:
+                return ambulance
+
+        print("Ambulance {} not listed in available ambulances".format(pre_det_ambulance))
+        return None
