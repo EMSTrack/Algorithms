@@ -10,28 +10,28 @@ from ems.models.case import Case
 class PreDeterminedAmbulanceAlgorithm(AmbulanceSelectionAlgorithm):
 
     def __init__(self,
-                 cases: List[Case]=None,
-                 ambulances: List[Ambulance]=None):
+                 case_ids: List[int]=None,
+                 amb_units: List[str]=None):
 
-        if cases is None:
-            cases = []
+        if case_ids is None:
+            case_ids = []
 
-        if ambulances is None:
-            ambulances = []
+        if amb_units is None:
+            amb_units = []
 
-        if len(cases) != len(ambulances):
+        if len(case_ids) != len(amb_units):
             # TODO --- Custom exception
             raise Exception('Number of cases unequal to number of ambulances')
 
         # Generate dictionary of case -> ambulance mappings
         self.determined_ambulances = {}
-        for case, ambulance in zip(cases, ambulances):
-            self.determined_ambulances[case] = ambulance
+        for case_id, amb_unit in zip(case_ids, amb_units):
+            self.determined_ambulances[case_id] = amb_unit
 
     def register_case(self,
-                      case: Case,
-                      ambulance: Ambulance):
-        self.determined_ambulances[case] = ambulance
+                      case_id: int,
+                      amb_unit: str):
+        self.determined_ambulances[case_id] = amb_unit
 
     def select_ambulance(self, available_ambulances: List[Ambulance], case: Case, current_time: datetime):
         pre_det_ambulance = self.determined_ambulances[case]

@@ -1,7 +1,7 @@
 import argparse
 
 from ems.algorithms.coverage.percent_coverage import PercentCoverage
-from ems.algorithms.selection.dispatch_fastest_ambulance import BestTravelTimeAlgorithm
+from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
 from ems.data.filters import kmeans_select_bases
 from ems.data.jan_2017_dataset import Jan2017Dataset
 from ems.data.tijuana import CSVTijuanaDataset
