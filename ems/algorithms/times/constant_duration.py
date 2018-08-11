@@ -5,6 +5,7 @@ from geopy import Point
 from ems.algorithms.times.duration_algorithm import DurationAlgorithm
 from ems.models.ambulance import Ambulance
 from ems.models.case import AbstractCase
+from ems.models.event import Event
 
 
 class ConstantDurationAlgorithm(DurationAlgorithm):

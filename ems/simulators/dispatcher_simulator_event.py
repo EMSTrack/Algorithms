@@ -56,8 +56,6 @@ class EventBasedDispatcherSimulator(Simulator):
             # Pending case exists and ambulances are free
             if pending_case is not None and are_ambulances_free:
 
-                print("Assigning ambulance {} to pending case: {}".format("TBD", pending_case.id))
-
                 next_event_case = pending_case
                 next_event_case_iter = pending_case.iterator()
 
@@ -71,6 +69,8 @@ class EventBasedDispatcherSimulator(Simulator):
 
                 # Add case to ongoing
                 ongoing_cases.append(pending_case)
+
+                print("Assigning ambulance {} to pending case: {}".format(amb.id, pending_case.id))
 
             # Next case comes in before the next event
             elif unstarted_case is not None and unstarted_case.date_recorded < event_timestamp:
@@ -91,7 +91,7 @@ class EventBasedDispatcherSimulator(Simulator):
                     # Add case to ongoing
                     ongoing_cases.append(unstarted_case)
 
-                    print("Assigning ambulance {} to working case: {}".format("TBD", unstarted_case.id))
+                    print("Assigning ambulance {} to next case: {}".format(amb.id, unstarted_case.id))
 
                 # No available ambulances
                 else:

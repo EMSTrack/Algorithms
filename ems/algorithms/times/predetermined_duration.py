@@ -1,20 +1,19 @@
-# Framework for using algorithms and allowing for replacement
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from geopy import Point
 
+from ems.algorithms.times.duration_algorithm import DurationAlgorithm
 from ems.models.ambulance import Ambulance
-
 from ems.models.case import AbstractCase
-from ems.models.event import Event
 
 
-# Used by the sim to compute a travel time between one point to another
-class DurationAlgorithm:
+class PredeterminedDurationAlgorithm(DurationAlgorithm):
     """
-    Users may subclass to implement their own compute_travel_time for
-    computing travel times.
+    Implementation of a DurationAlgorithm that returns a constant duration
     """
+
+    def __init__(self, ):
+        pass
 
     def compute_duration(self,
                          ambulance: Ambulance,
@@ -22,4 +21,6 @@ class DurationAlgorithm:
                          origin: Point,
                          destination: Point,
                          current_time: datetime):
-        raise NotImplementedError()
+        pass
+
+
