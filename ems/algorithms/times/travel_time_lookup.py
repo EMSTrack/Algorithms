@@ -2,24 +2,23 @@ from datetime import datetime
 
 from geopy import Point
 
-from ems.algorithms.times.time_computation import TimeComputationAlgorithm
+from ems.algorithms.times.duration_algorithm import DurationAlgorithm
 from ems.data.travel_times import TravelTimes
 from ems.models.ambulance import Ambulance
 from ems.models.case import AbstractCase
 
 
-class TravelTimeLookupAlgorithm(TimeComputationAlgorithm):
+class TravelTimeLookupAlgorithm(DurationAlgorithm):
 
     def __init__(self, travel_times: TravelTimes):
         self.travel_times = travel_times
 
-    def compute_travel_time(self,
-                            ambulance: Ambulance,
-                            case: AbstractCase,
-                            origin: Point,
-                            destination: Point,
-                            current_time: datetime):
-
+    def compute_duration(self,
+                         ambulance: Ambulance,
+                         case: AbstractCase,
+                         origin: Point,
+                         destination: Point,
+                         current_time: datetime):
         # Compute the point from first location set to the origin
         loc_set_1 = self.travel_times.loc_set_1
         closest_loc_to_orig, _, _ = loc_set_1.closest(destination)
