@@ -75,7 +75,7 @@ class EventBasedDispatcherSimulator(Simulator):
                 current_time = next_ongoing_case_state.next_event_time
 
                 # Process ongoing case
-                case_state_to_add = self.process_ongoing_case(next_ongoing_case_state)
+                case_state_to_add = self.process_ongoing_case(next_ongoing_case_state, current_time)
                 if case_state_to_add is not None:
                     heapq.heappush(ongoing_case_states, case_state_to_add)
                 else:
@@ -91,12 +91,12 @@ class EventBasedDispatcherSimulator(Simulator):
 
     # Selects an ambulance for the case and returns a Case State representing the next event to complete and the event
     # iterator
-    def process_new_case(self, case, time):
+    def process_new_case(self, case: AbstractCase, current_time: datetime):
 
         print("Starting new case: {}".format(case.id))
 
         # Select an ambulance
-        selected_ambulance = self.select_ambulance(case, time)
+        selected_ambulance = self.select_ambulance(case, current_time)
         selected_ambulance.deployed = True
 
         print("Selected ambulance: {}".format(selected_ambulance.id))
@@ -104,7 +104,7 @@ class EventBasedDispatcherSimulator(Simulator):
         # Add new case to ongoing cases
         case_event_iterator = iter(case)
         case_next_event = next(case_event_iterator)
-        case_event_finish_datetime = self.compute_event_finish_time(case_next_event)
+        case_event_finish_datetime = current_time + self.compute_event_duration(case_next_event)
 
         return CaseState(case=case,
                          assigned_ambulance=selected_ambulance,
@@ -113,7 +113,7 @@ class EventBasedDispatcherSimulator(Simulator):
                          next_event_time=case_event_finish_datetime)
 
     # Processes the event in the case state and generates a new case state if there is another event after to process
-    def process_ongoing_case(self, case_state):
+    def process_ongoing_case(self, case_state: CaseState, current_time: datetime):
 
         # Perform event
         print("Finished event for case {}: {}".format(case_state.case.id,
@@ -123,7 +123,7 @@ class EventBasedDispatcherSimulator(Simulator):
 
         # Generate new Case State pointing to the next event
         if new_event:
-            new_event_finish_datetime = self.compute_event_finish_time(new_event)
+            new_event_finish_datetime = current_time + self.compute_event_duration(new_event)
             print("Started new event for case {}: {}".format(case_state.case.id, new_event.event_type))
             return CaseState(case=case_state.case,
                              assigned_ambulance=case_state.assigned_ambulance,
@@ -137,6 +137,9 @@ class EventBasedDispatcherSimulator(Simulator):
             # Free ambulance
             case_state.assigned_ambulance.deployed = False
 
+            # TODO -- Fix assumption that it gets back to base immediately
+            case_state.assigned_ambulance.location = case_state.assigned_ambulance.base
+
             return None
 
     # Selects an ambulance for the given case
@@ -146,33 +149,31 @@ class EventBasedDispatcherSimulator(Simulator):
         return selection
 
     # Checks the event type of the event, computes timestamp using algorithms, and returns timestamp
-    def compute_event_finish_time(self, event: Event):
+    def compute_event_duration(self, case: AbstractCase,
+                               ambulance: Ambulance,
+                               event: Event):
 
-        event_finish_timestamp = event.destination.timestamp
+        # if event.event_type == EventType.BASE_TO_INCIDENT:
+        #
+        #     pass
+        #
+        # elif event.event_type == EventType.AT_INCIDENT:
+        #
+        #     pass
+        #
+        # elif event.event_type == EventType.INCIDENT_TO_HOSPITAL:
+        #
+        #     pass
+        #
+        # elif event.event_type == EventType.AT_HOSPITAL:
+        #
+        #     pass
+        #
+        # elif event.event_type == EventType.HOSPITAL_TO_BASE:
+        #
+        #     pass
 
-        if event.event_type == EventType.BASE_TO_INCIDENT:
-
-            pass
-
-        elif event.event_type == EventType.AT_INCIDENT:
-
-            pass
-
-        elif event.event_type == EventType.INCIDENT_TO_HOSPITAL:
-
-            pass
-
-        elif event.event_type == EventType.AT_HOSPITAL:
-
-            pass
-
-        elif event.event_type == EventType.HOSPITAL_TO_BASE:
-
-            pass
-
-        return event_finish_timestamp
-
-        # Add event to pending events sorted by the when the event finishes
+        return event.duration
 
 
 class CaseState:

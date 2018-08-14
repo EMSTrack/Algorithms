@@ -1,9 +1,8 @@
 class EventType:
-    BASE_TO_INCIDENT = "Traveling from Base to Incident"
+    TO_INCIDENT = "Heading to Incident"
     AT_INCIDENT = "Attending to Incident"
-    INCIDENT_TO_HOSPITAL = "Traveling from Incident to Hospital"
+    TO_HOSPITAL = "Heading to Hospital"
     AT_HOSPITAL = "Dropping off Patient at Hospital"
-    HOSPITAL_TO_BASE = "Returning from Hospital to Base"
-    INCIDENT_TO_BASE = "Returning from Incident to Base"
+    TO_BASE = "Heading to Base"
     OTHER = "Other"
 
