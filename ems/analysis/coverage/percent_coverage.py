@@ -1,7 +1,7 @@
 # Framework for using algorithms and allowing for replacement
 from typing import List
 
-from ems.algorithms.coverage.coverage import CoverageAlgorithm
+from ems.analysis.coverage import CoverageAlgorithm
 from ems.data.travel_times import TravelTimes
 from ems.models.ambulance import Ambulance
 
@@ -41,7 +41,6 @@ class PercentCoverage(CoverageAlgorithm):
 
         return locations_covered
 
-
     def calculate(self, ambulances: List[Ambulance]):
         """
         At a time, given a list of ambulances, determine the proportion of demands covered
@@ -53,11 +52,8 @@ class PercentCoverage(CoverageAlgorithm):
 
         locations_covered = self.mark_coverage(ambulances)
 
-
         # Count how many locations are covered
         total = sum([1 for loc in locations_covered if loc > 0])
 
         # Return proportion of covered locations
         return total / len(locations_covered)
-
-

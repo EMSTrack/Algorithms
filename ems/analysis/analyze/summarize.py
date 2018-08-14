@@ -8,10 +8,12 @@ import numpy as np
 from datetime import timedelta
 from statistics import mean
 
+
 class Summarize():
     """
 
     """
+
     def __init__(self,
                  num_cases,
                  num_days,
@@ -24,7 +26,6 @@ class Summarize():
         self.num_cases = num_cases
         self.num_days = num_days
         self.num_ambulances = num_ambulances
-
 
     def overall(self, coverage):
         """
@@ -47,7 +48,7 @@ class Summarize():
         plt.title('Number of cases {} days {} ambulances {}\n'
                   'Average Coverage: {}%'.format(
             self.num_cases, self.num_days, self.num_ambulances,
-            mean([x[0] for x in coverage])*100
+            mean([x[0] for x in coverage]) * 100
         ))
 
         plt.show()
@@ -64,8 +65,7 @@ class Summarize():
         percentages = [point[0] for point in points]
         ind = np.argmin(percentages)
 
-
-        selected = points[ind][2] # TODO is wrong argument assumption
+        selected = points[ind][2]  # TODO is wrong argument assumption
 
         demand_points = list(zip(selected, demands.locations))
 
@@ -76,7 +76,7 @@ class Summarize():
                     color='green',
                     label='covered'
 
-        )
+                    )
 
         xs = [x[1].longitude for x in demand_points if x[0] == 0]
         ys = [x[1].latitude for x in demand_points if x[0] == 0]
@@ -93,9 +93,8 @@ class Summarize():
                   'Datetime: {}\n'
                   'Coverage: {}%'.format(
             self.num_cases, self.num_days, self.num_ambulances,
-            points[ind][1], points[ind][0]*100
+            points[ind][1], points[ind][0] * 100
         ))
-
 
         plt.gcf().autofmt_xdate()
         plt.legend()

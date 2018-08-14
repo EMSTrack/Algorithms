@@ -1,4 +1,4 @@
-from ems.algorithms.coverage.coverage import CoverageAlgorithm
+from ems.analysis.coverage import CoverageAlgorithm
 from ems.data.travel_times import TravelTimes
 
 
@@ -12,4 +12,3 @@ class RadiusCoverage(CoverageAlgorithm):
                  percent: float = 85):
         self.travel_times = travel_times
         self.percent = percent
-

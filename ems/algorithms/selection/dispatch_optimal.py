@@ -1,14 +1,12 @@
 # The following functions define default algorithms for the DispatchAlgorithm class.
 from datetime import datetime
-from datetime import timedelta
 from typing import List
 
-from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
 from ems.data.travel_times import TravelTimes
 from ems.models.ambulance import Ambulance
 from ems.models.case import Case
 from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
-from ems.algorithms.coverage.percent_coverage import PercentCoverage
+from ems.analysis.coverage.percent_coverage import PercentCoverage
 
 
 # An implementation of a "fastest travel time" ambulance_selection from a base to
