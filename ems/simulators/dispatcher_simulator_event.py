@@ -26,6 +26,36 @@ class EventBasedDispatcherSimulator(Simulator):
 
     def run(self):
 
+        case_iterator = iter(self.cases)
+
+        ongoing_cases = []
+        pending_cases = []
+
+        current_time = None
+
+        next_case = next(case_iterator)
+
+        while len(ongoing_cases) and next_case:
+
+            # Already decided which is next_case
+
+            # if next_case timestamp <= next_ongoing_case timestamp
+            #     if available_ambulances:
+            #         assign_ambulance
+            #         insert next_case into ongoing_cases
+            #         if len(pending_cases):
+            #             next_case = pending_cases.pop()
+            #         else:
+            #             next_case = next(case_iterator)
+            #     else:
+            #         insert next_case into pending_cases
+            #         next_case = next(case_iterator)
+
+            # PROCESS ONGOING CASES
+            pass
+
+    def run(self):
+
         unstarted_cases = deepcopy(self.cases)
         ambulances_in_motion = []
         ongoing_cases = []
