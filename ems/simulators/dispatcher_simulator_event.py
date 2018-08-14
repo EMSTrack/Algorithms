@@ -12,6 +12,24 @@ from ems.models.event_type import EventType
 from ems.simulators.simulator import Simulator
 
 
+class CaseState:
+
+    def __init__(self,
+                 case,
+                 assigned_ambulance,
+                 event_iterator,
+                 next_event_time,
+                 next_event):
+        self.case = case
+        self.assigned_ambulance = assigned_ambulance
+        self.next_event_time = next_event_time
+        self.next_event = next_event
+        self.event_iterator = event_iterator
+
+    def __lt__(self, other):
+        return self.next_event_time < other.next_event_time
+
+
 class EventBasedDispatcherSimulator(Simulator):
 
     def __init__(self,
@@ -104,8 +122,10 @@ class EventBasedDispatcherSimulator(Simulator):
         # Add new case to ongoing cases
         case_event_iterator = iter(case)
         case_next_event = next(case_event_iterator)
-        case_event_finish_datetime = current_time + self.compute_event_duration(case_next_event)
+        case_event_finish_datetime = current_time + self.compute_event_duration(case, selected_ambulance,
+                                                                                case_next_event)
 
+        print("Started new event for case {}: {}".format(case.id, case_next_event.event_type))
         return CaseState(case=case,
                          assigned_ambulance=selected_ambulance,
                          event_iterator=case_event_iterator,
@@ -118,12 +138,15 @@ class EventBasedDispatcherSimulator(Simulator):
         # Perform event
         print("Finished event for case {}: {}".format(case_state.case.id,
                                                       case_state.next_event.event_type))
+        case_state.assigned_ambulance.location = case_state.next_event.destination
 
         new_event = next(case_state.event_iterator, None)
 
         # Generate new Case State pointing to the next event
         if new_event:
-            new_event_finish_datetime = current_time + self.compute_event_duration(new_event)
+            new_event_finish_datetime = current_time + self.compute_event_duration(case_state.case,
+                                                                                   case_state.assigned_ambulance,
+                                                                                   new_event)
             print("Started new event for case {}: {}".format(case_state.case.id, new_event.event_type))
             return CaseState(case=case_state.case,
                              assigned_ambulance=case_state.assigned_ambulance,
@@ -149,9 +172,9 @@ class EventBasedDispatcherSimulator(Simulator):
         return selection
 
     # Checks the event type of the event, computes timestamp using algorithms, and returns timestamp
-    def compute_event_duration(self, case: AbstractCase,
-                               ambulance: Ambulance,
-                               event: Event):
+    def compute_event_duration(self, case: AbstractCase, ambulance: Ambulance, event: Event):
+
+        duration = event.duration
 
         # if event.event_type == EventType.BASE_TO_INCIDENT:
         #
@@ -173,25 +196,9 @@ class EventBasedDispatcherSimulator(Simulator):
         #
         #     pass
 
-        return event.duration
+        print("Event duration: {}".format(duration))
 
-
-class CaseState:
-
-    def __init__(self,
-                 case,
-                 assigned_ambulance,
-                 event_iterator,
-                 next_event_time,
-                 next_event):
-        self.case = case
-        self.assigned_ambulance = assigned_ambulance
-        self.next_event_time = next_event_time
-        self.next_event = next_event
-        self.event_iterator = event_iterator
-
-    def __lt__(self, other):
-        return self.next_event_time < other.next_event_time
+        return duration
 
 # MAURICIO pseudocode
 # Already decided which is next_case
