@@ -1,5 +1,4 @@
 import heapq
-from copy import deepcopy
 from datetime import datetime
 from typing import List
 
@@ -22,167 +21,123 @@ class EventBasedDispatcherSimulator(Simulator):
 
         super().__init__(ambulances, cases, ambulance_selector)
         self.finished_cases = []
-        self.current_time = cases[0].date_recorded
 
     def run(self):
 
         case_iterator = iter(self.cases)
-
-        ongoing_cases = []
         pending_cases = []
-
+        ongoing_case_states = []
         current_time = None
 
+        # Initialize next case
         next_case = next(case_iterator)
 
-        while len(ongoing_cases) and next_case:
+        while len(ongoing_case_states) or next_case:
 
-            # Already decided which is next_case
+            next_ongoing_case_state_dt = ongoing_case_states[0].next_event_time if ongoing_case_states else datetime.max
+            available_ambulances = [ambulance for ambulance in self.ambulances if not ambulance.deployed]
 
-            # if next_case timestamp <= next_ongoing_case timestamp
-            #     if available_ambulances:
-            #         assign_ambulance
-            #         insert next_case into ongoing_cases
-            #         if len(pending_cases):
-            #             next_case = pending_cases.pop()
-            #         else:
-            #             next_case = next(case_iterator)
-            #     else:
-            #         insert next_case into pending_cases
-            #         next_case = next(case_iterator)
+            # Process a pending case
+            if pending_cases and available_ambulances:
+                print(colored("Processing pending case", "yellow", attrs=["bold"]))
 
-            # PROCESS ONGOING CASES
-            pass
+                case = pending_cases.pop(0)
+                case_state_to_add = self.process_new_case(case, current_time)
+                heapq.heappush(ongoing_case_states, case_state_to_add)
 
-    def run(self):
+            # Look at the next case
+            elif next_case and next_case.date_recorded <= next_ongoing_case_state_dt:
 
-        unstarted_cases = deepcopy(self.cases)
-        ambulances_in_motion = []
-        ongoing_cases = []
-        pending_cases = []
-        pending_events = []
-        selected_ambulances = {}
-        current_time = None
+                print(colored("Processing next case", "yellow", attrs=["bold"]))
 
-        # Case level loop
-        while len(unstarted_cases) > 0 or ambulances_in_motion:
+                current_time = next_case.date_recorded
 
-            # Determine next event, pending case, and case
-            event_data = pending_events[0] if len(pending_events) > 0 else None
-            unstarted_case = unstarted_cases[0] if len(unstarted_cases) > 0 else None
-            pending_case = pending_cases[0] if len(pending_cases) > 0 else None
+                # Process a new case
+                if available_ambulances:
+                    case_state_to_add = self.process_new_case(next_case, current_time)
+                    heapq.heappush(ongoing_case_states, case_state_to_add)
 
-            # Unpackage event data
-            event_timestamp = event_data[0] if event_data is not None else datetime.max
-
-            # Compute ambulances currently in motion
-            ambulances_in_motion = [amb for amb in self.ambulances if amb.deployed]
-            are_ambulances_free = not len(self.ambulances) == len(ambulances_in_motion)
-
-            # Assigned values later
-            next_event_case = None
-            next_event_case_iter = None
-
-            # Pending case exists and ambulances are free
-            if pending_case is not None and are_ambulances_free:
-
-                next_event_case = pending_case
-                next_event_case_iter = pending_case.iterator()
-
-                # Assign ambulance to case
-                amb = self.select_ambulance(next_event_case, current_time)
-                amb.deployed = True
-                selected_ambulances[next_event_case.id] = amb
-
-                # Remove case from pending list
-                pending_cases.pop(0)
-
-                # Add case to ongoing
-                ongoing_cases.append(pending_case)
-
-                print("Assigning ambulance {} to pending case: {}".format(amb.id, pending_case.id))
-
-            # Next case comes in before the next event
-            elif unstarted_case is not None and unstarted_case.date_recorded < event_timestamp:
-
-                current_time = unstarted_case.date_recorded
-
-                # Available ambulances
-                if are_ambulances_free:
-
-                    next_event_case = unstarted_case
-                    next_event_case_iter = unstarted_case.iterator()
-
-                    # Assign ambulance to case
-                    amb = self.select_ambulance(next_event_case, current_time)
-                    amb.deployed = True
-                    selected_ambulances[next_event_case.id] = amb
-
-                    # Add case to ongoing
-                    ongoing_cases.append(unstarted_case)
-
-                    print("Assigning ambulance {} to next case: {}".format(amb.id, unstarted_case.id))
-
-                # No available ambulances
+                # Delay a case
                 else:
+                    print(colored("No ambulance; Case {} added to pending cases".format(next_case.id), "red",
+                                  attrs=["bold"]))
+                    pending_cases.append(next_case)
 
-                    print(colored("Delaying next unstarted case: {}".format(unstarted_case.id), "red", attrs=["bold"]))
-                    pending_cases.append(unstarted_case)
+                # Prepare the next case
+                next_case = next(case_iterator, None)
 
-                # Remove case from unstarted case list
-                unstarted_cases.pop(0)
-
-            # Perform the next event
-            elif event_data is not None:
-
-                current_time = event_timestamp
-
-                # Unpackage event data
-                event = event_data[2]
-                next_event_case = event_data[3]
-                next_event_case_iter = event_data[4]
-
-                # Perform event
-                print("Finished event for case {}: {}".format(next_event_case.id, event.event_type))
-
-                # Remove event from pending events
-                pending_events.pop(0)
-
+            # Process an ongoing case event
             else:
-                raise Exception("Sim should not reach this point; no unstarted, pending cases or pending events")
 
-            if next_event_case_iter is not None:
+                print(colored("Processing ongoing case", "yellow", attrs=["bold"]))
 
-                # More events, add next event of current case to pending events
-                try:
-                    next_event = next(next_event_case_iter)
-                    event_finish_datetime = self.compute_event_finish_time(next_event)
-                    heapq.heappush(pending_events, (event_finish_datetime,
-                                                    next_event_case.id,
-                                                    next_event,
-                                                    next_event_case,
-                                                    next_event_case_iter))
-                    duration = event_finish_datetime - current_time
-                    print("Case {}; Begin {}; Duration: {}".format(next_event_case.id, next_event.event_type, duration))
+                next_ongoing_case_state = ongoing_case_states.pop(0)
+                current_time = next_ongoing_case_state.next_event_time
 
-                # No more events
-                except StopIteration as e:
-                    print("Finished case: {}".format(next_event_case.id))
-                    self.finished_cases.append(next_event_case)
+                # Process ongoing case
+                case_state_to_add = self.process_ongoing_case(next_ongoing_case_state)
+                if case_state_to_add is not None:
+                    heapq.heappush(ongoing_case_states, case_state_to_add)
+                else:
+                    self.finished_cases.append(next_ongoing_case_state.case)
 
-                    # Remove case from ongoing cases
-                    ongoing_cases = [case for case in ongoing_cases if not case.id == next_event_case.id]
-
-                    # Free ambulance
-                    selected_ambulances[next_event_case.id].deployed = False
-
-            print("Busy ambulances: ", sorted([amb.id for amb in ambulances_in_motion]))
-            print("Ongoing cases: ", [case.id for case in ongoing_cases])
+            print("Busy ambulances: ", sorted([amb.id for amb in self.ambulances if amb.deployed]))
+            print("Ongoing cases: ", [case_state.case.id for case_state in ongoing_case_states])
             print("Pending cases: ", [case.id for case in pending_cases])
             print(colored("Current Time: {}".format(current_time), "yellow", attrs=["bold"]))
             print("")
 
         return self.finished_cases, None
+
+    # Selects an ambulance for the case and returns a Case State representing the next event to complete and the event
+    # iterator
+    def process_new_case(self, case, time):
+
+        print("Starting new case: {}".format(case.id))
+
+        # Select an ambulance
+        selected_ambulance = self.select_ambulance(case, time)
+        selected_ambulance.deployed = True
+
+        print("Selected ambulance: {}".format(selected_ambulance.id))
+
+        # Add new case to ongoing cases
+        case_event_iterator = iter(case)
+        case_next_event = next(case_event_iterator)
+        case_event_finish_datetime = self.compute_event_finish_time(case_next_event)
+
+        return CaseState(case=case,
+                         assigned_ambulance=selected_ambulance,
+                         event_iterator=case_event_iterator,
+                         next_event=case_next_event,
+                         next_event_time=case_event_finish_datetime)
+
+    # Processes the event in the case state and generates a new case state if there is another event after to process
+    def process_ongoing_case(self, case_state):
+
+        # Perform event
+        print("Finished event for case {}: {}".format(case_state.case.id,
+                                                      case_state.next_event.event_type))
+
+        new_event = next(case_state.event_iterator, None)
+
+        # Generate new Case State pointing to the next event
+        if new_event:
+            new_event_finish_datetime = self.compute_event_finish_time(new_event)
+            print("Started new event for case {}: {}".format(case_state.case.id, new_event.event_type))
+            return CaseState(case=case_state.case,
+                             assigned_ambulance=case_state.assigned_ambulance,
+                             event_iterator=case_state.event_iterator,
+                             next_event_time=new_event_finish_datetime,
+                             next_event=new_event)
+        # No more events
+        else:
+            print("Finished all events for case: {}".format(case_state.case.id))
+
+            # Free ambulance
+            case_state.assigned_ambulance.deployed = False
+
+            return None
 
     # Selects an ambulance for the given case
     def select_ambulance(self, case: AbstractCase, time: datetime):
@@ -191,8 +146,7 @@ class EventBasedDispatcherSimulator(Simulator):
         return selection
 
     # Checks the event type of the event, computes timestamp using algorithms, and returns timestamp
-    def compute_event_finish_time(self,
-                                  event: Event):
+    def compute_event_finish_time(self, event: Event):
 
         event_finish_timestamp = event.destination.timestamp
 
@@ -219,3 +173,38 @@ class EventBasedDispatcherSimulator(Simulator):
         return event_finish_timestamp
 
         # Add event to pending events sorted by the when the event finishes
+
+
+class CaseState:
+
+    def __init__(self,
+                 case,
+                 assigned_ambulance,
+                 event_iterator,
+                 next_event_time,
+                 next_event):
+        self.case = case
+        self.assigned_ambulance = assigned_ambulance
+        self.next_event_time = next_event_time
+        self.next_event = next_event
+        self.event_iterator = event_iterator
+
+    def __lt__(self, other):
+        return self.next_event_time < other.next_event_time
+
+# MAURICIO pseudocode
+# Already decided which is next_case
+
+# if next_case timestamp <= next_ongoing_case timestamp
+#     if available_ambulances:
+#         assign_ambulance
+#         insert next_case into ongoing_cases
+#         if len(pending_cases):
+#             next_case = pending_cases.pop()
+#         else:
+#             next_case = next(case_iterator)
+#     else:
+#         insert next_case into pending_cases
+#         next_case = next(case_iterator)
+
+# PROCESS ONGOING CASES

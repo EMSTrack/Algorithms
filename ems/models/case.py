@@ -24,7 +24,7 @@ class AbstractCase:
         self.incident_location = incident_location
         self.priority = priority
 
-    def iterator(self):
+    def __iter__(self):
         raise NotImplementedError()
 
 
@@ -58,11 +58,9 @@ class ListCase(AbstractCase):
                  events: List[Event],
                  priority: float = None):
         super().__init__(id, date_recorded, incident_location, priority)
-        self.id = id
         self.events = events
-        self.priority = priority
 
-    def iterator(self):
+    def __iter__(self):
         return iter(self.events)
 
 
