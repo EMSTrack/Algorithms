@@ -4,7 +4,7 @@ from typing import List
 
 from termcolor import colored
 
-from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
+from ems.algorithms.algorithm_set import AlgorithmSet
 from ems.models.ambulance import Ambulance
 from ems.models.case import AbstractCase
 from ems.models.event import Event
@@ -35,9 +35,9 @@ class EventBasedDispatcherSimulator(Simulator):
     def __init__(self,
                  ambulances: List[Ambulance],
                  cases: List[AbstractCase],
-                 ambulance_selector: AmbulanceSelectionAlgorithm):
+                 algorithm_set: AlgorithmSet):
 
-        super().__init__(ambulances, cases, ambulance_selector)
+        super().__init__(ambulances, cases, algorithm_set)
         self.finished_cases = []
 
     def run(self):
@@ -123,7 +123,7 @@ class EventBasedDispatcherSimulator(Simulator):
         case_event_iterator = iter(case)
         case_next_event = next(case_event_iterator)
         case_event_finish_datetime = current_time + self.compute_event_duration(case, selected_ambulance,
-                                                                                case_next_event)
+                                                                                case_next_event, current_time)
 
         print("Started new event for case {}: {}".format(case.id, case_next_event.event_type))
         return CaseState(case=case,
@@ -146,7 +146,7 @@ class EventBasedDispatcherSimulator(Simulator):
         if new_event:
             new_event_finish_datetime = current_time + self.compute_event_duration(case_state.case,
                                                                                    case_state.assigned_ambulance,
-                                                                                   new_event)
+                                                                                   new_event, current_time)
             print("Started new event for case {}: {}".format(case_state.case.id, new_event.event_type))
             return CaseState(case=case_state.case,
                              assigned_ambulance=case_state.assigned_ambulance,
@@ -168,35 +168,55 @@ class EventBasedDispatcherSimulator(Simulator):
     # Selects an ambulance for the given case
     def select_ambulance(self, case: AbstractCase, time: datetime):
         available_ambulances = [amb for amb in self.ambulances if not amb.deployed]
-        selection = self.ambulance_selector.select_ambulance(available_ambulances, case, time)
+        selection = self.algorithm_set.ambulance_selector.select_ambulance(available_ambulances, case, time)
         return selection
 
     # Checks the event type of the event, computes timestamp using algorithms, and returns timestamp
-    def compute_event_duration(self, case: AbstractCase, ambulance: Ambulance, event: Event):
+    def compute_event_duration(self, case: AbstractCase, ambulance: Ambulance, event: Event, current_time: datetime):
 
-        duration = event.duration
+        duration = 0
 
-        # if event.event_type == EventType.BASE_TO_INCIDENT:
-        #
-        #     pass
-        #
-        # elif event.event_type == EventType.AT_INCIDENT:
-        #
-        #     pass
-        #
-        # elif event.event_type == EventType.INCIDENT_TO_HOSPITAL:
-        #
-        #     pass
-        #
-        # elif event.event_type == EventType.AT_HOSPITAL:
-        #
-        #     pass
-        #
-        # elif event.event_type == EventType.HOSPITAL_TO_BASE:
-        #
-        #     pass
+        if event.event_type == EventType.TO_INCIDENT:
 
-        print("Event duration: {}".format(duration))
+            duration = self.algorithm_set.travel_duration_estimator.compute_duration(ambulance=ambulance,
+                                                                                     case=case,
+                                                                                     origin=ambulance.location,
+                                                                                     destination=event.destination,
+                                                                                     current_time=current_time)
+
+        elif event.event_type == EventType.AT_INCIDENT:
+
+            duration = self.algorithm_set.stay_duration_estimator.compute_duration(ambulance=ambulance,
+                                                                                   case=case,
+                                                                                   origin=ambulance.location,
+                                                                                   destination=event.destination,
+                                                                                   current_time=current_time)
+
+        elif event.event_type == EventType.TO_HOSPITAL:
+
+            duration = self.algorithm_set.travel_duration_estimator.compute_duration(ambulance=ambulance,
+                                                                                     case=case,
+                                                                                     origin=ambulance.location,
+                                                                                     destination=event.destination,
+                                                                                     current_time=current_time)
+
+        elif event.event_type == EventType.AT_HOSPITAL:
+
+            duration = self.algorithm_set.stay_duration_estimator.compute_duration(ambulance=ambulance,
+                                                                                   case=case,
+                                                                                   origin=ambulance.location,
+                                                                                   destination=event.destination,
+                                                                                   current_time=current_time)
+
+        elif event.event_type == EventType.TO_BASE:
+
+            duration = self.algorithm_set.travel_duration_estimator.compute_duration(ambulance=ambulance,
+                                                                                     case=case,
+                                                                                     origin=ambulance.location,
+                                                                                     destination=event.destination,
+                                                                                     current_time=current_time)
+
+        print("Next event duration: {}".format(duration))
 
         return duration
 

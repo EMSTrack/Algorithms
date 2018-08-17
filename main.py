@@ -1,12 +1,16 @@
 import argparse
+from datetime import timedelta
 
+from ems.algorithms.algorithm_set import AlgorithmSet
+from ems.algorithms.times.constant_duration import ConstantDurationAlgorithm
+from ems.algorithms.times.travel_time_lookup import TravelTimeLookupAlgorithm
 from ems.analysis.coverage.percent_coverage import PercentCoverage
 from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
 from ems.data.filters import kmeans_select_bases
 from ems.data.jan_2017_dataset import Jan2017Dataset
 from ems.models.ambulance import Ambulance
 from ems.settings import Settings
-from ems.analysis.analyze import Summarize
+from ems.analysis.analyze.summarize import Summarize
 
 # TODO allow command line arguments
 from ems.simulators.dispatcher_simulator_event import EventBasedDispatcherSimulator
@@ -31,6 +35,12 @@ dataset = Jan2017Dataset(demands_file_path=settings.demands_file,
 
 # Initialize ambulance_selection
 ambulance_select = BestTravelTimeAlgorithm(travel_times=dataset.travel_times)
+duration_estimation = TravelTimeLookupAlgorithm(travel_times=dataset.travel_times)
+stay_estimation = ConstantDurationAlgorithm(constant=timedelta(minutes=20))
+
+algorithm_set = AlgorithmSet(ambulance_selector=ambulance_select,
+                             travel_duration_estimator=duration_estimation,
+                             stay_duration_estimator=stay_estimation)
 
 # Initialize demand_coverage
 determine_coverage = PercentCoverage(travel_times=dataset.travel_times)
@@ -46,16 +56,10 @@ for index in range(settings.num_ambulances):
                           location=chosen_base_locations[index])
     ambulances.append(ambulance)
 
-# Initialize the simulator
-# sim = DispatcherSimulator(ambulances=ambulances,
-#                           cases=dataset.cases,
-#                           ambulance_selector=ambulance_select,
-#                           coverage_alg=determine_coverage,
-#                           plot=settings.plot
-#                           )
+# Initialize simulator
 sim = EventBasedDispatcherSimulator(ambulances=ambulances,
                                     cases=dataset.cases,
-                                    ambulance_selector=ambulance_select)
+                                    algorithm_set=algorithm_set)
 
 # Start the whole thing
 finished_cases, measured_coverage = sim.run()
