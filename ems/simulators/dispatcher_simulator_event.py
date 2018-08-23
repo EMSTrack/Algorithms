@@ -96,8 +96,8 @@ class EventBasedDispatcherSimulator(Simulator):
                 current_time = next_ongoing_case_state.next_event_time
 
                 # Process ongoing case
-                case_state_to_add = self.process_ongoing_case(next_ongoing_case_state, current_time)
-                if case_state_to_add is not None:
+                case_state_to_add, finished = self.process_ongoing_case(next_ongoing_case_state, current_time)
+                if not finished:
                     heapq.heappush(ongoing_case_states, case_state_to_add)
                 else:
                     self.finished_cases.append(next_ongoing_case_state.case_record)
@@ -132,7 +132,6 @@ class EventBasedDispatcherSimulator(Simulator):
 
         case_record = CaseRecord(case=case,
                                  ambulance=selected_ambulance,
-                                 event_history=[],
                                  delay=current_time - case.date_recorded)
 
         return CaseState(case=case,
@@ -151,7 +150,7 @@ class EventBasedDispatcherSimulator(Simulator):
         # Perform event
         print("Finished event for case {}: {}".format(case_state.case.id,
                                                       finished_event.event_type))
-        case_state.assigned_ambulance.location = case_state.next_event.destination
+        case_state.assigned_ambulance.location = finished_event.destination
 
         new_event = next(case_state.event_iterator, None)
 
@@ -166,7 +165,7 @@ class EventBasedDispatcherSimulator(Simulator):
             case_state.next_event_time = new_event_finish_datetime
             case_state.next_event = new_event
 
-            return case_state
+            return case_state, False
 
         # No more events
         else:
@@ -178,7 +177,7 @@ class EventBasedDispatcherSimulator(Simulator):
             # TODO -- Fix assumption that it gets back to base immediately
             case_state.assigned_ambulance.location = case_state.assigned_ambulance.base
 
-            return None
+            return case_state, True
 
     # Selects an ambulance for the given case
     def select_ambulance(self, case: AbstractCase, time: datetime):
