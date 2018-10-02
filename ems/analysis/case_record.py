@@ -12,7 +12,7 @@ class CaseRecord:
                  case: AbstractCase,
                  ambulance: Ambulance,
                  delay: timedelta,
-                 event_history: List[Event]=[]):
+                 event_history: []):
         self.case = case
         self.ambulance = ambulance
         self.event_history = event_history

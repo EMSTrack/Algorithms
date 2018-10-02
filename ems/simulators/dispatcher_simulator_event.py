@@ -132,7 +132,8 @@ class EventBasedDispatcherSimulator(Simulator):
 
         case_record = CaseRecord(case=case,
                                  ambulance=selected_ambulance,
-                                 delay=current_time - case.date_recorded)
+                                 delay=current_time - case.date_recorded,
+                                 event_history=[case_next_event])
 
         return CaseState(case=case,
                          assigned_ambulance=selected_ambulance,
