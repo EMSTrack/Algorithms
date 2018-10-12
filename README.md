@@ -34,13 +34,7 @@ Here are the UMLs for each group of programs we have.
 
 ## Overall
 
-![](uml/classes_ems.jpg)
-
-
-# Package Diagrams
-
-
-![](uml/packages_ems.jpg)
+![](uml/classes_ems.png)
 
 
 ## How To Install auto UML Generator
