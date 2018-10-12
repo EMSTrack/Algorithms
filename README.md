@@ -32,26 +32,6 @@ In Ubuntu, Python 3.6 seems to be missing "tkinter". To install,
 
 Here are the UMLs for each group of programs we have.
 
-## Simulator
-
-![](uml/classes_ems_simulators.jpg)
-
-## Models
-
-![](uml/classes_ems_models.jpg)
-
-## Data
-
-![](uml/classes_ems_data.jpg)
-
-## Selectors
-
-![](uml/classes_ems_selection.jpg)
-
-## Analysis
-
-![](uml/classes_ems_analysis.jpg)
-
 ## Overall
 
 ![](uml/classes_ems.jpg)
