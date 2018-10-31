@@ -19,8 +19,6 @@ In Ubuntu, Python 3.6 seems to be missing "tkinter". To install,
 
 `sudo apt-get install python3.6-tk`
 
-# TODO
-
 ## Project UML
 
 ![](uml/ems_uml.png)
