@@ -8,6 +8,15 @@ class LocationSet:
 
     def __init__(self, locations: List[Point]):
         self.locations = locations
+
+    def closest(self, point: Point):
+        raise NotImplementedError()
+
+
+class KDTreeLocationSet(LocationSet):
+
+    def __init__(self, locations: List[Point]):
+        super().__init__(locations)
         self.kd_tree = self._initialize_kd_tree()
 
     def _initialize_kd_tree(self):
@@ -22,7 +31,7 @@ class LocationSet:
         kd_tree = KDTree(points)
         return kd_tree
 
-    def closest(self, point):
+    def closest(self, point: Point):
         """
         Finds the closest point in the corresponding generic list.
         For example, find the closest base given a GPS location.

@@ -13,6 +13,7 @@ from ems.models.event_type import EventType
 from ems.simulators.simulator import Simulator
 
 
+# Representation of a case in progress
 class CaseState:
 
     def __init__(self,

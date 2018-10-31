@@ -9,7 +9,7 @@ from ems.data.travel_times import TravelTimes
 from ems.models.case import ListCase
 from ems.models.event import Event
 from ems.models.event_type import EventType
-from ems.models.location_set import LocationSet
+from ems.models.location_set import KDTreeLocationSet
 from ems.utils import parse_headered_csv, parse_unheadered_csv
 
 
@@ -132,7 +132,7 @@ class Jan2017Dataset(Dataset):
             base = Point(row["lat"], row["long"])
             bases.append(base)
 
-        return LocationSet(bases)
+        return KDTreeLocationSet(bases)
 
     def read_demands(self, filename):
         # Read demands from an unheadered CSV into a pandas dataframe
@@ -146,7 +146,7 @@ class Jan2017Dataset(Dataset):
             demand = Point(row["lat"], row["long"])
             demands.append(demand)
 
-        return LocationSet(demands)
+        return KDTreeLocationSet(demands)
 
     def read_times_df(self, filename):
         # Read travel times from CSV file into a pandas dataframe
