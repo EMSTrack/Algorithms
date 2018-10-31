@@ -28,28 +28,12 @@ In Ubuntu, Python 3.6 seems to be missing "tkinter". To install,
 ## 3 Implement the algorithms for coverage to radius and selection tension
 
 
-# Class diagrams
+# Project UML
 
-Here are the UMLs for each group of programs we have.
-
-## Overall
-
-![](uml/classes_ems.png)
+![](uml/ems_uml.png)
 
 
-## How To Install auto UML Generator
-
-pyreverse comes with pylint, you need Graphviz: `brew install Graphiz` or `apt install Graphviz`
-
-Then run at the base folder of the repository, do
-
-`pyreverse -o png -p ems ems`
-
-To run all diagrams in parallel, run
-
-`python3 uml.py`
-
-## TODO
+# TODO
 
 - Ambulance selection tension algorithm
 
