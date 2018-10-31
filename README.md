@@ -6,7 +6,7 @@ Try: `time python3 main.py --settings hans --ambulances 7 --bases 7 --slices 50`
 
 python3 main.py --help
 
-# Dependencies
+## Dependencies
 
 - pandas
 - scipy
