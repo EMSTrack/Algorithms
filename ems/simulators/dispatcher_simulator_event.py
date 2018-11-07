@@ -6,6 +6,7 @@ from termcolor import colored
 
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
 from ems.analysis.case_record import CaseRecord
+from ems.datasets.case.case_set import CaseSet
 from ems.models.ambulance import Ambulance
 from ems.models.cases.case import Case
 from ems.simulators.simulator import Simulator
@@ -36,15 +37,15 @@ class EventBasedDispatcherSimulator(Simulator):
 
     def __init__(self,
                  ambulances: List[Ambulance],
-                 cases: List[Case],
+                 case_set: CaseSet,
                  ambulance_selector: AmbulanceSelectionAlgorithm):
 
-        super().__init__(ambulances, cases, ambulance_selector)
+        super().__init__(ambulances, case_set, ambulance_selector)
         self.finished_cases = []
 
     def run(self):
 
-        case_iterator = iter(self.cases)
+        case_iterator = self.case_set.iterator()
         pending_cases = []
         ongoing_case_states = []
         current_time = None

@@ -6,8 +6,11 @@ from ems.algorithms.times.constant_duration import ConstantDurationAlgorithm
 from ems.algorithms.times.travel_time_lookup import TravelTimeLookupAlgorithm
 from ems.analysis.coverage.percent_coverage import PercentCoverage
 from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
+from ems.datasets.case.jan2017_case_set import Jan2017CaseSet
+from ems.datasets.location.tijuana_base_set import TijuanaBaseSet
+from ems.datasets.location.tijuana_demand_set import TijuanaDemandSet
+from ems.datasets.travel_times.tijuana_travel_times import TijuanaTravelTimes
 from ems.filters import kmeans_select_bases
-from ems.data.jan_2017_dataset import Jan2017Dataset
 from ems.models.ambulance import Ambulance
 from ems.settings import Settings
 from ems.analysis.analyze.summarize import Summarize
@@ -27,26 +30,22 @@ clargs = parser.parse_args()
 settings = Settings(debug=True,
                     args=clargs)
 
-# Initialize dataset
-dataset = Jan2017Dataset(demands_file_path=settings.demands_file,
-                         bases_file_path=settings.bases_file,
-                         cases_file_path=settings.cases_file,
-                         travel_times_file_path=settings.travel_times_file)
+# Initialize datasets
+demand_set = TijuanaDemandSet(filename=settings.demands_file)
+base_set = TijuanaBaseSet(filename=settings.bases_file)
+case_set = Jan2017CaseSet(filename=settings.cases_file)
+travel_times = TijuanaTravelTimes(loc_set_1=base_set,
+                                  loc_set_2=demand_set,
+                                  filename=settings.travel_times_file)
 
-# Initialize ambulance_selection
-ambulance_select = BestTravelTimeAlgorithm(travel_times=dataset.travel_times)
-duration_estimation = TravelTimeLookupAlgorithm(travel_times=dataset.travel_times)
-stay_estimation = ConstantDurationAlgorithm(constant=timedelta(minutes=20))
+# Initialize ambulance_selection algorithm
+ambulance_select = BestTravelTimeAlgorithm(travel_times=travel_times)
 
-algorithm_set = AlgorithmSet(ambulance_selector=ambulance_select,
-                             travel_duration_estimator=duration_estimation,
-                             stay_duration_estimator=stay_estimation)
-
-# Initialize demand_coverage
-determine_coverage = PercentCoverage(travel_times=dataset.travel_times)
+# Initialize demand_coverage algorithm
+determine_coverage = PercentCoverage(travel_times=travel_times)
 
 # Select bases
-chosen_base_locations = kmeans_select_bases(dataset.bases, dataset.travel_times)
+chosen_base_locations = kmeans_select_bases(base_set, travel_times)
 
 # Generate ambulances - random base placement (may want to abstract into function)
 ambulances = []
@@ -58,8 +57,8 @@ for index in range(settings.num_ambulances):
 
 # Initialize simulator
 sim = EventBasedDispatcherSimulator(ambulances=ambulances,
-                                    cases=dataset.cases,
-                                    algorithm_set=algorithm_set)
+                                    cases=case_set,
+                                    ambulance_selector=ambulance_select)
 
 # Start the whole thing
 finished_cases, measured_coverage = sim.run()

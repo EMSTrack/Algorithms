@@ -1,13 +1,11 @@
 import numpy as np
 
-from ems.datasets.travel_times import TravelTimes
 from ems.datasets.location.location_set import LocationSet
+from ems.datasets.travel_times.travel_times import TravelTimes
 
 
 def kmeans_select_bases(bases: LocationSet,
                         traveltimes: TravelTimes):
-
-
     # This function happens to require the original Cruz Roja dataset. It doesn't necessarily need to.
     # For example, we could randomly choose bases.
 
@@ -23,7 +21,7 @@ def kmeans_select_bases(bases: LocationSet,
     return chosen_bases
 
 
-# Refactor TODO. I can't believe I just shoved this in and it worked.
+# TODO -- refactor
 def pick_starting_bases(traveltimes, num_bases, required_traveltime):
     np_traveltimes = np.array(traveltimes.times)
     chosen_bases = []
