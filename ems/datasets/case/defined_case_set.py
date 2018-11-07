@@ -11,5 +11,8 @@ class DefinedCaseSet(CaseSet):
                  cases: List[Case]=None):
         self.cases = cases
 
+    def __len__(self):
+        return len(self.cases)
+
     def iterator(self):
         return iter(self.cases)

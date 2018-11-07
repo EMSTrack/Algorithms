@@ -1,11 +1,8 @@
 import argparse
-from datetime import timedelta
 
-from ems.algorithms.algorithm_set import AlgorithmSet
-from ems.algorithms.times.constant_duration import ConstantDurationAlgorithm
-from ems.algorithms.times.travel_time_lookup import TravelTimeLookupAlgorithm
-from ems.analysis.coverage.percent_coverage import PercentCoverage
 from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
+from ems.analysis.analyze.summarize import Summarize
+from ems.analysis.coverage.percent_coverage import PercentCoverage
 from ems.datasets.case.jan2017_case_set import Jan2017CaseSet
 from ems.datasets.location.tijuana_base_set import TijuanaBaseSet
 from ems.datasets.location.tijuana_demand_set import TijuanaDemandSet
@@ -13,9 +10,6 @@ from ems.datasets.travel_times.tijuana_travel_times import TijuanaTravelTimes
 from ems.filters import kmeans_select_bases
 from ems.models.ambulance import Ambulance
 from ems.settings import Settings
-from ems.analysis.analyze.summarize import Summarize
-
-# TODO allow command line arguments
 from ems.simulators.dispatcher_simulator_event import EventBasedDispatcherSimulator
 
 parser = argparse.ArgumentParser(description="Load settings, data, preprocess models, run sim.")
@@ -57,7 +51,7 @@ for index in range(settings.num_ambulances):
 
 # Initialize simulator
 sim = EventBasedDispatcherSimulator(ambulances=ambulances,
-                                    cases=case_set,
+                                    case_set=case_set,
                                     ambulance_selector=ambulance_select)
 
 # Start the whole thing
@@ -66,7 +60,7 @@ finished_cases, measured_coverage = sim.run()
 print("Simulator has finished.")
 
 summarize = Summarize(
-    len(dataset.get_cases()),
+    len(case_set),
     clargs.slices,
     len(ambulances)
 )

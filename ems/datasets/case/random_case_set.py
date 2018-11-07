@@ -43,3 +43,6 @@ class RandomCaseSet(CaseSet):
             k += 1
 
             yield case
+
+    def __len__(self):
+        return self.num_cases

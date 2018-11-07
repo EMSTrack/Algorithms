@@ -1,4 +1,4 @@
-from _ast import List
+from typing import List
 
 from geopy import Point
 from scipy.spatial import KDTree

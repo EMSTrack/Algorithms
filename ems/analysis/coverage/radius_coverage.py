@@ -1,10 +1,8 @@
-from ems.analysis.coverage import CoverageAlgorithm
-from ems.datasets.travel_times import TravelTimes
+from ems.analysis.coverage.coverage import CoverageAlgorithm
+from ems.datasets.travel_times.travel_times import TravelTimes
 
 
 # Computes a radius coverage
-
-
 class RadiusCoverage(CoverageAlgorithm):
 
     def __init__(self,

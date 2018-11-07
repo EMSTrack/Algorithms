@@ -20,6 +20,9 @@ class Jan2017CaseSet(CaseSet):
     def iterator(self):
         return iter(self.cases)
 
+    def __len__(self):
+        return len(self.cases)
+
     def read_cases(self, filename):
 
         # Read cases from CSV into a pandas dataframe

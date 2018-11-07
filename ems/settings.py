@@ -15,8 +15,7 @@ class Settings:
                  num_ambulances: int = 5,
                  num_bases: int = 5,
                  args: Namespace = None,
-                 plot:bool = False,
-                 ):
+                 plot: bool = False):
 
         # TODO: Look for a settings file
         if args:
@@ -28,7 +27,7 @@ class Settings:
                     filepath = s['filepath']
                     demands_file = filepath + s['demands']
                     bases_file = filepath + s['bases']
-                    travel_times_file = filepath + s['travel_times']
+                    travel_times_file = filepath + s['times']
                     cases_file = filepath + s['cases']
 
                     num_ambulances = s['num_ambs']

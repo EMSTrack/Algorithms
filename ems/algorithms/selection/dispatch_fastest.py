@@ -4,7 +4,7 @@ from datetime import timedelta
 from typing import List
 
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
-from ems.datasets.travel_times import TravelTimes
+from ems.datasets.travel_times.travel_times import TravelTimes
 from ems.models.ambulance import Ambulance
 from ems.models.cases.case import Case
 
