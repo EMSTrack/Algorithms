@@ -71,7 +71,7 @@ class EventBasedDispatcherSimulator(Simulator):
             # Look at the next case
             elif next_case and next_case.date_recorded <= next_ongoing_case_state_dt:
 
-                print(colored("Processing next case: {}".format(next_case.id), "green", attrs=["bold"]))
+                print(colored("Processing new case: {}".format(next_case.id), "green", attrs=["bold"]))
 
                 current_time = next_case.date_recorded
 
@@ -168,7 +168,7 @@ class EventBasedDispatcherSimulator(Simulator):
             print("Started new event: ".format(new_event.event_type))
             print("Destination: {}, {}".format(new_event.destination.latitude, new_event.destination.longitude))
             print("Duration: {}".format(new_event.duration))
-            
+
             # Update case state with new info
             case_state.next_event_time = new_event_finish_datetime
             case_state.next_event = new_event
