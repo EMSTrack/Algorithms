@@ -60,16 +60,18 @@ class EventBasedDispatcherSimulator(Simulator):
 
             # Process a pending case
             if pending_cases and available_ambulances:
-                print(colored("Processing pending case", "yellow", attrs=["bold"]))
 
                 case = pending_cases.pop(0)
                 case_state_to_add = self.process_new_case(case, current_time)
                 heapq.heappush(ongoing_case_states, case_state_to_add)
 
+                print(colored("Current Time: {}".format(current_time), "yellow", attrs=["bold"]))
+                print(colored("Processing pending case: {}".format(case.id), "yellow", attrs=["bold"]))
+
             # Look at the next case
             elif next_case and next_case.date_recorded <= next_ongoing_case_state_dt:
 
-                print(colored("Processing next case", "green", attrs=["bold"]))
+                print(colored("Processing next case: {}".format(next_case.id), "green", attrs=["bold"]))
 
                 current_time = next_case.date_recorded
 
@@ -80,7 +82,8 @@ class EventBasedDispatcherSimulator(Simulator):
 
                 # Delay a case
                 else:
-                    print(colored("No ambulance; Case {} added to pending cases".format(next_case.id), "red",
+                    print(colored("Current Time: {}".format(current_time), "yellow", attrs=["bold"]))
+                    print(colored("No ambulance; Case added to pending cases".format(), "red",
                                   attrs=["bold"]))
                     pending_cases.append(next_case)
 
@@ -90,10 +93,12 @@ class EventBasedDispatcherSimulator(Simulator):
             # Process an ongoing case event
             else:
 
-                print(colored("Processing ongoing case", "yellow", attrs=["bold"]))
-
                 next_ongoing_case_state = ongoing_case_states.pop(0)
                 current_time = next_ongoing_case_state.next_event_time
+
+                print(colored("Current Time: {}".format(current_time), "yellow", attrs=["bold"]))
+                print(colored("Processing ongoing case: {}".format(next_ongoing_case_state.case_record.case.id),
+                              "green", attrs=["bold"]))
 
                 # Process ongoing case
                 case_state_to_add, finished = self.process_ongoing_case(next_ongoing_case_state, current_time)
@@ -102,10 +107,11 @@ class EventBasedDispatcherSimulator(Simulator):
                 else:
                     self.finished_cases.append(next_ongoing_case_state.case_record)
 
-            print("Busy ambulances: ", sorted([amb.id for amb in self.ambulances if amb.deployed]))
-            print("Ongoing cases: ", [case_state.case.id for case_state in ongoing_case_states])
-            print("Pending cases: ", [case.id for case in pending_cases])
-            print(colored("Current Time: {}".format(current_time), "yellow", attrs=["bold"]))
+            print(colored("Busy ambulances: {}".format(sorted([amb.id for amb in self.ambulances if amb.deployed])),
+                          "cyan"))
+            print(colored("Ongoing cases: {}".format([case_state.case.id for case_state in ongoing_case_states]),
+                          "cyan"))
+            print(colored("Pending cases: {}".format([case.id for case in pending_cases]), "magenta"))
             print("")
 
         return self.finished_cases, None
@@ -150,8 +156,7 @@ class EventBasedDispatcherSimulator(Simulator):
         case_state.case_record.event_history.append(finished_event)
 
         # Perform event
-        print("Finished event for case {}: {}".format(case_state.case.id,
-                                                      finished_event.event_type))
+        print("Finished event: {}".format(finished_event.event_type))
         case_state.assigned_ambulance.location = finished_event.destination
 
         new_event = next(case_state.event_iterator, None)
@@ -160,10 +165,10 @@ class EventBasedDispatcherSimulator(Simulator):
         if new_event:
 
             new_event_finish_datetime = current_time + new_event.duration
-            print("Started new event (Duration {}) for case {}: {}".format(new_event.duration,
-                                                                           case_state.case.id,
-                                                                           new_event.event_type))
-
+            print("Started new event: ".format(new_event.event_type))
+            print("Destination: {}, {}".format(new_event.destination.latitude, new_event.destination.longitude))
+            print("Duration: {}".format(new_event.duration))
+            
             # Update case state with new info
             case_state.next_event_time = new_event_finish_datetime
             case_state.next_event = new_event
@@ -172,7 +177,7 @@ class EventBasedDispatcherSimulator(Simulator):
 
         # No more events
         else:
-            print("Finished all events for case: {}".format(case_state.case.id))
+            print("Finished all events".format())
 
             # Free ambulance
             case_state.assigned_ambulance.deployed = False
