@@ -1,14 +1,20 @@
 import argparse
+from datetime import timedelta, datetime
+
+from geopy import Point
 
 from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
 from ems.analysis.analyze.summarize import Summarize
 from ems.analysis.coverage.percent_coverage import PercentCoverage
 from ems.datasets.case.dedatos_case_set import DeDatosCaseSet
 from ems.datasets.case.jan2017_case_set import Jan2017CaseSet
+from ems.datasets.case.random_case_set import RandomCaseSet
 from ems.datasets.location.tijuana_base_set import TijuanaBaseSet
 from ems.datasets.location.tijuana_demand_set import TijuanaDemandSet
 from ems.datasets.travel_times.tijuana_travel_times import TijuanaTravelTimes
 from ems.filters import kmeans_select_bases
+from ems.generators.case.location.random_circle_location import RandomCircleLocationGenerator
+from ems.generators.case.time.poisson_time import PoissonCaseTimeGenerator
 from ems.generators.event.travel_time_duration import TravelTimeDurationGenerator
 from ems.models.ambulance import Ambulance
 from ems.settings import Settings
@@ -33,12 +39,34 @@ travel_times = TijuanaTravelTimes(loc_set_1=base_set,
                                   loc_set_2=demand_set,
                                   filename=settings.travel_times_file)
 
-# Initialize event duration generator
-event_duration_generator=TravelTimeDurationGenerator(travel_times=travel_times)
-
 # Initialize dataset for cases
 # case_set = Jan2017CaseSet(filename=settings.cases_file)
-case_set = DeDatosCaseSet(filename=settings.cases_file, duration_generator=event_duration_generator)
+# case_set = DeDatosCaseSet(filename=settings.cases_file, duration_generator=event_duration_generator)
+
+# Define random case params
+# This example = 4 cases an hour
+num_cases = 200
+
+timeframe = timedelta(hours=48)
+initial_time = datetime.now() - timeframe
+end_time = datetime.now()
+minutes = timeframe.total_seconds() / 60
+
+# Define a poisson case time generator with given lambda
+case_time_generator = PoissonCaseTimeGenerator(lmda=num_cases/minutes)
+
+# Define a random location generator
+center = Point(latitude=32.504876, longitude= -116.958774)
+radius = 0.5
+location_generator = RandomCircleLocationGenerator(center=center, radius=radius)
+
+event_duration_generator = TravelTimeDurationGenerator(travel_times=travel_times)
+
+case_set = RandomCaseSet(num_cases=num_cases,
+                         initial_time=initial_time,
+                         case_time_generator=case_time_generator,
+                         location_generator=location_generator,
+                         event_duration_generator=event_duration_generator)
 
 # Initialize ambulance_selection algorithm
 ambulance_select = BestTravelTimeAlgorithm(travel_times=travel_times)
