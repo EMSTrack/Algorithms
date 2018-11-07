@@ -4,8 +4,8 @@ import pandas as pd
 from geopy import Point
 
 from ems.data.dataset import Dataset
-from ems.data.travel_times import TravelTimes
-from ems.models.location_set import LocationSet
+from ems.datasets.travel_times import TravelTimes
+from ems.datasets.location_set import LocationSet
 from ems.models.tijuana_case import TijuanaCase
 from ems.utils import parse_headered_csv, parse_unheadered_csv
 

@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List
 
 from ems.models.ambulance import Ambulance
-from ems.models.case import AbstractCase
+from ems.models.cases.case import Case
 
 
 # Used by the sim to select ambulances
@@ -15,6 +15,6 @@ class AmbulanceSelectionAlgorithm:
 
     def select_ambulance(self,
                          available_ambulances: List[Ambulance],
-                         case: AbstractCase,
+                         case: Case,
                          current_time: datetime):
         raise NotImplementedError()

@@ -2,7 +2,7 @@
 from typing import List
 
 from ems.analysis.coverage.coverage import CoverageAlgorithm
-from ems.data.travel_times import TravelTimes
+from ems.datasets.travel_times import TravelTimes
 from ems.models.ambulance import Ambulance
 
 

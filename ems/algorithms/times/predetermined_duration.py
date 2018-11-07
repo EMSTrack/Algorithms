@@ -4,7 +4,7 @@ from geopy import Point
 
 from ems.algorithms.times.duration_algorithm import DurationAlgorithm
 from ems.models.ambulance import Ambulance
-from ems.models.case import AbstractCase
+from ems.models.cases.case import Case
 
 
 class PredeterminedDurationAlgorithm(DurationAlgorithm):
@@ -17,7 +17,7 @@ class PredeterminedDurationAlgorithm(DurationAlgorithm):
 
     def compute_duration(self,
                          ambulance: Ambulance,
-                         case: AbstractCase,
+                         case: Case,
                          origin: Point,
                          destination: Point,
                          current_time: datetime):

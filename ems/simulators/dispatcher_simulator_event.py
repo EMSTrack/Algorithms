@@ -1,15 +1,13 @@
 import heapq
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import List
 
 from termcolor import colored
 
-from ems.algorithms.algorithm_set import AlgorithmSet
+from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
 from ems.analysis.case_record import CaseRecord
 from ems.models.ambulance import Ambulance
-from ems.models.case import AbstractCase
-from ems.models.event import Event
-from ems.models.event_type import EventType
+from ems.models.cases.case import Case
 from ems.simulators.simulator import Simulator
 
 
@@ -38,10 +36,10 @@ class EventBasedDispatcherSimulator(Simulator):
 
     def __init__(self,
                  ambulances: List[Ambulance],
-                 cases: List[AbstractCase],
-                 algorithm_set: AlgorithmSet):
+                 cases: List[Case],
+                 ambulance_selector: AmbulanceSelectionAlgorithm):
 
-        super().__init__(ambulances, cases, algorithm_set)
+        super().__init__(ambulances, cases, ambulance_selector)
         self.finished_cases = []
 
     def run(self):
@@ -113,7 +111,7 @@ class EventBasedDispatcherSimulator(Simulator):
 
     # Selects an ambulance for the case and returns a Case State representing the next event to complete and the event
     # iterator
-    def process_new_case(self, case: AbstractCase, current_time: datetime):
+    def process_new_case(self, case: Case, current_time: datetime):
 
         print("Starting new case: {}".format(case.id))
 
@@ -126,10 +124,10 @@ class EventBasedDispatcherSimulator(Simulator):
         # Add new case to ongoing cases
         case_event_iterator = iter(case)
         case_next_event = next(case_event_iterator)
-        case_event_finish_datetime = current_time + self.compute_event_duration(case, selected_ambulance,
-                                                                                case_next_event, current_time)
+        case_event_finish_datetime = current_time + case_next_event.duration
 
         print("Started new event for case {}: {}".format(case.id, case_next_event.event_type))
+        print("Event will take: {} minutes".format(case_next_event.duration))
 
         case_record = CaseRecord(case=case,
                                  ambulance=selected_ambulance,
@@ -158,10 +156,10 @@ class EventBasedDispatcherSimulator(Simulator):
 
         # Generate new Case State pointing to the next event
         if new_event:
-            new_event_finish_datetime = current_time + self.compute_event_duration(case_state.case,
-                                                                                   case_state.assigned_ambulance,
-                                                                                   new_event, current_time)
+
+            new_event_finish_datetime = current_time + new_event.duration
             print("Started new event for case {}: {}".format(case_state.case.id, new_event.event_type))
+            print("Event will take: {} minutes".format(new_event.duration))
 
             # Update case state with new info
             case_state.next_event_time = new_event_finish_datetime
@@ -182,50 +180,7 @@ class EventBasedDispatcherSimulator(Simulator):
             return case_state, True
 
     # Selects an ambulance for the given case
-    def select_ambulance(self, case: AbstractCase, time: datetime):
+    def select_ambulance(self, case: Case, time: datetime):
         available_ambulances = [amb for amb in self.ambulances if not amb.deployed]
-        selection = self.algorithm_set.ambulance_selector.select_ambulance(available_ambulances, case, time)
+        selection = self.ambulance_selector.select_ambulance(available_ambulances, case, time)
         return selection
-
-    # Checks the event type of the event, computes timestamp using algorithms, and returns timestamp
-    def compute_event_duration(self, case: AbstractCase, ambulance: Ambulance, event: Event, current_time: datetime):
-
-        duration = timedelta.min
-
-        if event.event_type == EventType.TO_INCIDENT or event.event_type == EventType.TO_HOSPITAL \
-                or event.event_type == EventType.TO_BASE:
-
-            duration = self.algorithm_set.travel_duration_estimator.compute_duration(ambulance=ambulance,
-                                                                                     case=case,
-                                                                                     origin=ambulance.location,
-                                                                                     destination=event.destination,
-                                                                                     current_time=current_time)
-
-        elif event.event_type == EventType.AT_INCIDENT or event.event_type == EventType.AT_HOSPITAL:
-
-            duration = self.algorithm_set.stay_duration_estimator.compute_duration(ambulance=ambulance,
-                                                                                   case=case,
-                                                                                   origin=ambulance.location,
-                                                                                   destination=event.destination,
-                                                                                   current_time=current_time)
-
-        print("Next event duration: {}".format(duration))
-
-        return duration
-
-# MAURICIO pseudocode
-# Already decided which is next_case
-
-# if next_case timestamp <= next_ongoing_case timestamp
-#     if available_ambulances:
-#         assign_ambulance
-#         insert next_case into ongoing_cases
-#         if len(pending_cases):
-#             next_case = pending_cases.pop()
-#         else:
-#             next_case = next(case_iterator)
-#     else:
-#         insert next_case into pending_cases
-#         next_case = next(case_iterator)
-
-# PROCESS ONGOING CASES

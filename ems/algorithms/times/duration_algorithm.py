@@ -5,8 +5,7 @@ from geopy import Point
 
 from ems.models.ambulance import Ambulance
 
-from ems.models.case import AbstractCase
-from ems.models.event import Event
+from ems.models.cases.case import Case
 
 
 # Used by the sim to compute a travel time between one point to another
@@ -18,7 +17,7 @@ class DurationAlgorithm:
 
     def compute_duration(self,
                          ambulance: Ambulance,
-                         case: AbstractCase,
+                         case: Case,
                          origin: Point,
                          destination: Point,
                          current_time: datetime):

@@ -1,7 +1,7 @@
 import numpy as np
 
-from ems.data.travel_times import TravelTimes
-from ems.models.location_set import LocationSet
+from ems.datasets.travel_times import TravelTimes
+from ems.datasets.location_set import LocationSet
 
 
 def kmeans_select_bases(bases: LocationSet,

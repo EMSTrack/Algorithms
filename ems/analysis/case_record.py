@@ -1,15 +1,13 @@
-from _ast import List
 from datetime import timedelta
 
 from ems.models.ambulance import Ambulance
-from ems.models.case import AbstractCase
-from ems.models.event import Event
+from ems.models.cases.case import Case
 
 
 class CaseRecord:
 
     def __init__(self,
-                 case: AbstractCase,
+                 case: Case,
                  ambulance: Ambulance,
                  delay: timedelta,
                  event_history: []):

@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from geopy import Point
 
-from ems.models.event_type import EventType
+from ems.models.events.event_type import EventType
 
 
 class Event:

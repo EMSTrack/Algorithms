@@ -5,11 +5,11 @@ import pandas as pd
 from geopy import Point
 
 from ems.data.dataset import Dataset
-from ems.data.travel_times import TravelTimes
-from ems.models.case import ListCase
-from ems.models.event import Event
-from ems.models.event_type import EventType
-from ems.models.location_set import KDTreeLocationSet
+from ems.datasets.travel_times import TravelTimes
+from ems.models.cases.defined_case import DefinedCase
+from ems.models.events.event import Event
+from ems.models.events.event_type import EventType
+from ems.datasets.location_set import KDTreeLocationSet
 from ems.utils import parse_headered_csv, parse_unheadered_csv
 
 
@@ -107,7 +107,7 @@ class Jan2017Dataset(Dataset):
                 # events.append(incident_to_base_event)
 
             # Generate a case from events
-            case = ListCase(id=index,
+            case = DefinedCase(id=index,
                             date_recorded=base_depart_dt,
                             incident_location=Point(latitude=row["Latitud llegada incidente"],
                                                     longitude=row["Longitud llegada incidente"]),

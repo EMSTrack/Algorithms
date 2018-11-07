@@ -5,7 +5,7 @@ from typing import List
 
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
 from ems.models.ambulance import Ambulance
-from ems.models.case import Case
+from ems.models.cases.case import Case
 
 
 # An implementation of a "fastest travel time" ambulance_selection from a base to

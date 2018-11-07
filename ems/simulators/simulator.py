@@ -2,20 +2,20 @@
 
 from typing import List
 
-from ems.algorithms.algorithm_set import AlgorithmSet
+from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
 from ems.models.ambulance import Ambulance
-from ems.models.case import AbstractCase
+from ems.models.cases.case import Case
 
 
 class Simulator:
 
     def __init__(self,
                  ambulances: List[Ambulance],
-                 cases: List[AbstractCase],
-                 algorithm_set: AlgorithmSet):
+                 cases: List[Case],
+                 ambulance_selector: AmbulanceSelectionAlgorithm):
         self.ambulances = ambulances
         self.cases = cases
-        self.algorithm_set = algorithm_set
+        self.ambulance_selector = ambulance_selector
 
     def run(self):
         raise NotImplementedError()

@@ -4,7 +4,7 @@ from typing import List, Dict
 
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
 from ems.models.ambulance import Ambulance
-from ems.models.case import Case
+from ems.models.cases.case import Case
 
 
 class PreDeterminedAmbulanceAlgorithm(AmbulanceSelectionAlgorithm):

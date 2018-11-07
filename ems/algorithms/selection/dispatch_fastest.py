@@ -4,9 +4,9 @@ from datetime import timedelta
 from typing import List
 
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
-from ems.data.travel_times import TravelTimes
+from ems.datasets.travel_times import TravelTimes
 from ems.models.ambulance import Ambulance
-from ems.models.case import Case, AbstractCase
+from ems.models.cases.case import Case
 
 
 # An implementation of a "fastest travel time" ambulance_selection from a base to
@@ -21,7 +21,7 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
 
     def select_ambulance(self,
                          available_ambulances: List[Ambulance],
-                         case: AbstractCase,
+                         case: Case,
                          current_time: datetime):
 
         # Compute the closest demand point to the case location

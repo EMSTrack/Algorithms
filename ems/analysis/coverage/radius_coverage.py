@@ -1,5 +1,5 @@
 from ems.analysis.coverage import CoverageAlgorithm
-from ems.data.travel_times import TravelTimes
+from ems.datasets.travel_times import TravelTimes
 
 
 # Computes a radius coverage

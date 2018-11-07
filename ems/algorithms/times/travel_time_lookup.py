@@ -3,9 +3,9 @@ from datetime import datetime
 from geopy import Point
 
 from ems.algorithms.times.duration_algorithm import DurationAlgorithm
-from ems.data.travel_times import TravelTimes
+from ems.datasets.travel_times import TravelTimes
 from ems.models.ambulance import Ambulance
-from ems.models.case import AbstractCase
+from ems.models.cases.case import Case
 
 
 class TravelTimeLookupAlgorithm(DurationAlgorithm):
@@ -15,7 +15,7 @@ class TravelTimeLookupAlgorithm(DurationAlgorithm):
 
     def compute_duration(self,
                          ambulance: Ambulance,
-                         case: AbstractCase,
+                         case: Case,
                          origin: Point,
                          destination: Point,
                          current_time: datetime):

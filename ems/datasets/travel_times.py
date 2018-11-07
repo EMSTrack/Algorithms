@@ -3,7 +3,7 @@ from datetime import timedelta
 import numpy as np
 from geopy import Point
 
-from ems.models.location_set import LocationSet
+from ems.datasets.location_set import LocationSet
 
 
 class TravelTimes:
