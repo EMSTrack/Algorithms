@@ -18,5 +18,5 @@ class DefinedCase(Case):
         super().__init__(id, date_recorded, incident_location, priority)
         self.events = events
 
-    def __iter__(self):
+    def iterator(self, ambulance, current_time):
         return iter(self.events)

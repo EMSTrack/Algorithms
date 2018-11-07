@@ -69,7 +69,7 @@ class EventBasedDispatcherSimulator(Simulator):
             # Look at the next case
             elif next_case and next_case.date_recorded <= next_ongoing_case_state_dt:
 
-                print(colored("Processing next case", "yellow", attrs=["bold"]))
+                print(colored("Processing next case", "green", attrs=["bold"]))
 
                 current_time = next_case.date_recorded
 
@@ -123,12 +123,13 @@ class EventBasedDispatcherSimulator(Simulator):
         print("Selected ambulance: {}".format(selected_ambulance.id))
 
         # Add new case to ongoing cases
-        case_event_iterator = iter(case)
+        case_event_iterator = case.iterator(selected_ambulance, current_time)
         case_next_event = next(case_event_iterator)
         case_event_finish_datetime = current_time + case_next_event.duration
 
-        print("Started new event for case {}: {}".format(case.id, case_next_event.event_type))
-        print("Event will take: {} minutes".format(case_next_event.duration))
+        print("Started new event (Duration {}) for case {}: {}".format(case_next_event.duration,
+                                                                       case.id,
+                                                                       case_next_event.event_type))
 
         case_record = CaseRecord(case=case,
                                  ambulance=selected_ambulance,
@@ -159,8 +160,9 @@ class EventBasedDispatcherSimulator(Simulator):
         if new_event:
 
             new_event_finish_datetime = current_time + new_event.duration
-            print("Started new event for case {}: {}".format(case_state.case.id, new_event.event_type))
-            print("Event will take: {} minutes".format(new_event.duration))
+            print("Started new event (Duration {}) for case {}: {}".format(new_event.duration,
+                                                                           case_state.case.id,
+                                                                           new_event.event_type))
 
             # Update case state with new info
             case_state.next_event_time = new_event_finish_datetime

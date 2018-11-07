@@ -3,11 +3,13 @@ import argparse
 from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
 from ems.analysis.analyze.summarize import Summarize
 from ems.analysis.coverage.percent_coverage import PercentCoverage
+from ems.datasets.case.dedatos_case_set import DeDatosCaseSet
 from ems.datasets.case.jan2017_case_set import Jan2017CaseSet
 from ems.datasets.location.tijuana_base_set import TijuanaBaseSet
 from ems.datasets.location.tijuana_demand_set import TijuanaDemandSet
 from ems.datasets.travel_times.tijuana_travel_times import TijuanaTravelTimes
 from ems.filters import kmeans_select_bases
+from ems.generators.event.travel_time_duration import TravelTimeDurationGenerator
 from ems.models.ambulance import Ambulance
 from ems.settings import Settings
 from ems.simulators.dispatcher_simulator_event import EventBasedDispatcherSimulator
@@ -27,10 +29,16 @@ settings = Settings(debug=True,
 # Initialize datasets
 demand_set = TijuanaDemandSet(filename=settings.demands_file)
 base_set = TijuanaBaseSet(filename=settings.bases_file)
-case_set = Jan2017CaseSet(filename=settings.cases_file)
 travel_times = TijuanaTravelTimes(loc_set_1=base_set,
                                   loc_set_2=demand_set,
                                   filename=settings.travel_times_file)
+
+# Initialize event duration generator
+event_duration_generator=TravelTimeDurationGenerator(travel_times=travel_times)
+
+# Initialize dataset for cases
+# case_set = Jan2017CaseSet(filename=settings.cases_file)
+case_set = DeDatosCaseSet(filename=settings.cases_file, duration_generator=event_duration_generator)
 
 # Initialize ambulance_selection algorithm
 ambulance_select = BestTravelTimeAlgorithm(travel_times=travel_times)

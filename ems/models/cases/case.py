@@ -15,5 +15,5 @@ class Case:
         self.incident_location = incident_location
         self.priority = priority
 
-    def __iter__(self):
+    def iterator(self, ambulance, current_time):
         raise NotImplementedError()

@@ -4,8 +4,8 @@ from ems.datasets.case.case_set import CaseSet
 
 from ems.generators.case.location.location import LocationGenerator
 from ems.generators.case.time.time import CaseTimeGenerator
+from ems.generators.event.duration import EventDurationGenerator
 
-from ems.generators.event.random_duration import RandomDurationGenerator
 from ems.models.cases.random_case import RandomCase
 
 
@@ -16,11 +16,13 @@ class RandomCaseSet(CaseSet):
                  num_cases: int,
                  initial_time: datetime,
                  case_time_generator: CaseTimeGenerator,
-                 location_generator: LocationGenerator):
+                 location_generator: LocationGenerator,
+                 event_duration_generator: EventDurationGenerator):
         self.num_cases = num_cases
         self.initial_time = initial_time
         self.case_time_generator = case_time_generator
         self.location_generator = location_generator
+        self.event_duration_generator = event_duration_generator
 
     def iterator(self):
         k = 1
@@ -31,14 +33,11 @@ class RandomCaseSet(CaseSet):
             time = self.case_time_generator.generate(time)
             point = self.location_generator.generate()
 
-            # Define event duration generator for the case
-            gen = RandomDurationGenerator()
-
             # Create case
             case = RandomCase(id=k,
                               date_recorded=time,
                               incident_location=point,
-                              event_duration_generator=gen)
+                              event_duration_generator=self.event_duration_generator)
 
             k += 1
 

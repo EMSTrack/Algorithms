@@ -2,6 +2,7 @@ from datetime import datetime
 
 from geopy import Point
 
+from ems.generators.case.location.random_circle_location import RandomCircleLocationGenerator
 from ems.generators.event.duration import EventDurationGenerator
 from ems.models.cases.case import Case
 from ems.models.events.event import Event
@@ -28,6 +29,8 @@ class RandomCase(Case):
                                                           destination=self.incident_location,
                                                           current_time=current_time)
 
+        current_time = current_time + duration
+
         # Produce new event for TO INCIDENT
         yield Event(destination=self.incident_location,
                     event_type=EventType.TO_INCIDENT,
@@ -37,17 +40,25 @@ class RandomCase(Case):
         duration = self.event_duration_generator.generate(ambulance=ambulance,
                                                           destination=self.incident_location,
                                                           current_time=current_time)
+
+        current_time = current_time + duration
+
         # Produce new event for AT INCIDENT
         yield Event(destination=self.incident_location,
                     event_type=EventType.AT_INCIDENT,
                     duration=duration)
 
-        hospital_location = Point(latitude=0, longitude=0)
+        # TODO -- replace with actual hospital picker!!
+        rand_loc_generator = RandomCircleLocationGenerator(center=Point(latitude=32.504876, longitude= -116.958774),
+                                                           radius=0.5)
+        hospital_location = rand_loc_generator.generate()
 
         # Compute duration of trip
         duration = self.event_duration_generator.generate(ambulance=ambulance,
                                                           destination=hospital_location,
                                                           current_time=current_time)
+
+        current_time = current_time + duration
 
         # Produce new event for TO HOSPITAL
         yield Event(destination=hospital_location,

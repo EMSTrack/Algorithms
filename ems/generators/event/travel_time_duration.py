@@ -17,9 +17,9 @@ class TravelTimeDurationGenerator(EventDurationGenerator):
                  ambulance: Ambulance,
                  destination: Point,
                  current_time: datetime):
-        # Compute the point from first location set to the origin
+        # Compute the point from first location set to the ambulance location
         loc_set_1 = self.travel_times.loc_set_1
-        closest_loc_to_orig, _, _ = loc_set_1.closest(destination)
+        closest_loc_to_orig, _, _ = loc_set_1.closest(ambulance.location)
 
         # Compute the point from the second location set to the destination
         loc_set_2 = self.travel_times.loc_set_2
