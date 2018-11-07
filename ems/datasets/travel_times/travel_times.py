@@ -3,12 +3,12 @@ from datetime import timedelta
 import numpy as np
 from geopy import Point
 
-from ems.datasets.location_set import LocationSet
+from ems.datasets.location.location_set import LocationSet
 
 
 class TravelTimes:
     """
-    Maintains a matrix of travel times between one set of locations to another set of locations
+    Maintains a matrix of travel travel_times between one set of locations to another set of locations
     """
     def __init__(self,
                  loc_set_1: LocationSet,

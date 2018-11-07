@@ -1,7 +1,7 @@
 import numpy as np
 
 from ems.datasets.travel_times import TravelTimes
-from ems.datasets.location_set import LocationSet
+from ems.datasets.location.location_set import LocationSet
 
 
 def kmeans_select_bases(bases: LocationSet,
@@ -30,7 +30,7 @@ def pick_starting_bases(traveltimes, num_bases, required_traveltime):
     demands_covered = 0
 
     for _ in range(num_bases):
-        # Make a True/False table of the times and then count how many covered.
+        # Make a True/False table of the travel_times and then count how many covered.
         covered = [[t < required_traveltime for t in row] for row in np_traveltimes]
         count_covered = [(index, covered[index].count(True)) for index in range(len(covered))]
         d = [('index', int), ('covered', int)]

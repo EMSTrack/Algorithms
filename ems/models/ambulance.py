@@ -46,7 +46,7 @@ class Ambulance:
 
     def deploy(self, location: Point):
         """
-        Deploys the ambulance by setting the deployed state, start times, end time, and location of the case.
+        Deploys the ambulance by setting the deployed state, start travel_times, end time, and location of the case.
         :param location
         :return: Nothing. This function only changes state.
         """

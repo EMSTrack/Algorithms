@@ -4,6 +4,7 @@ from geopy import Point
 
 from ems.generators.event.duration import EventDurationGenerator
 from ems.models.cases.case import Case
+from ems.models.events.event import Event
 from ems.models.events.event_type import EventType
 
 

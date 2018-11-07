@@ -1,16 +1,9 @@
-from typing import List
+from _ast import List
 
 from geopy import Point
 from scipy.spatial import KDTree
 
-
-class LocationSet:
-
-    def __init__(self, locations: List[Point]):
-        self.locations = locations
-
-    def closest(self, point: Point):
-        raise NotImplementedError()
+from ems.datasets.location.location_set import LocationSet
 
 
 class KDTreeLocationSet(LocationSet):
@@ -48,4 +41,3 @@ class KDTreeLocationSet(LocationSet):
         closest_point_distance = closest_point_data[0]
 
         return closest_point, closest_point_ind, closest_point_distance
-

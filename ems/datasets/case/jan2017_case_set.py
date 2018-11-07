@@ -1,40 +1,27 @@
+# Implementation of a case set which is instantiated from a list of already known cases
 from datetime import datetime
-
-import pandas as pd
 
 from geopy import Point
 
-from ems.data.dataset import Dataset
-from ems.datasets.travel_times import TravelTimes
+from ems.datasets.case.case_set import CaseSet
 from ems.models.cases.defined_case import DefinedCase
 from ems.models.events.event import Event
 from ems.models.events.event_type import EventType
-from ems.datasets.location_set import KDTreeLocationSet
-from ems.utils import parse_headered_csv, parse_unheadered_csv
+from ems.utils import parse_headered_csv
 
 
-class Jan2017Dataset(Dataset):
+class Jan2017CaseSet(CaseSet):
 
     def __init__(self,
-                 demands_file_path: str,
-                 bases_file_path: str,
-                 cases_file_path: str,
-                 travel_times_file_path: str,
-                 ):
+                 filename: str):
+        self.filename = filename
+        self.cases = self.read_cases(filename)
 
-        # Read files into pandas dataframes and lists of objects
-        self.demands = self.read_demands(demands_file_path)
-        self.bases = self.read_bases(bases_file_path)
-        self.cases = self.read_cases(cases_file_path)
+    def iterator(self):
+        return iter(self.cases)
 
-        travel_times_df = self.read_times_df(travel_times_file_path)
-
-        self.travel_times = TravelTimes(loc_set_1=self.bases,
-                                        loc_set_2=self.demands,
-                                        times=travel_times_df.as_matrix())
-
-    # Helper functions
     def read_cases(self, filename):
+
         # Read cases from CSV into a pandas dataframe
         case_headers = ["Fecha", "No_unidad", "Dia_semana", "Latitud salida", "Longitud salida",
                         "Hora_salida", "Latitud llegada incidente", "Longitud llegada incidente",
@@ -108,10 +95,10 @@ class Jan2017Dataset(Dataset):
 
             # Generate a case from events
             case = DefinedCase(id=index,
-                            date_recorded=base_depart_dt,
-                            incident_location=Point(latitude=row["Latitud llegada incidente"],
-                                                    longitude=row["Longitud llegada incidente"]),
-                            events=events)
+                               date_recorded=base_depart_dt,
+                               incident_location=Point(latitude=row["Latitud llegada incidente"],
+                                                       longitude=row["Longitud llegada incidente"]),
+                               events=events)
 
             cases.append(case)
 
@@ -119,41 +106,3 @@ class Jan2017Dataset(Dataset):
         cases.sort(key=lambda case: case.date_recorded)
 
         return cases
-
-    def read_bases(self, filename):
-        # Read bases from an unheadered CSV into a pandas dataframe
-        base_col_positions = [4, 5]
-        base_headers = ["lat", "long"]
-        bases_df = parse_unheadered_csv(filename, base_col_positions, base_headers)
-
-        # Generate list of models from dataframe
-        bases = []
-        for index, row in bases_df.iterrows():
-            base = Point(row["lat"], row["long"])
-            bases.append(base)
-
-        return KDTreeLocationSet(bases)
-
-    def read_demands(self, filename):
-        # Read demands from an unheadered CSV into a pandas dataframe
-        demand_col_positions = [0, 1]
-        demand_headers = ["lat", "long"]
-        demands_df = parse_unheadered_csv(filename, demand_col_positions, demand_headers)
-
-        # Generate list of models from dataframe
-        demands = []
-        for index, row in demands_df.iterrows():
-            demand = Point(row["lat"], row["long"])
-            demands.append(demand)
-
-        return KDTreeLocationSet(demands)
-
-    def read_times_df(self, filename):
-        # Read travel times from CSV file into a pandas dataframe
-        travel_times_df = pd.read_csv(filename)
-
-        return travel_times_df
-
-    # Implementation
-    def get_cases(self):
-        return self.cases

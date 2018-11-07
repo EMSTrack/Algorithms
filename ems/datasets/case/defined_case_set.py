@@ -7,7 +7,8 @@ from ems.models.cases.case import Case
 
 class DefinedCaseSet(CaseSet):
 
-    def __init__(self, cases: List[Case]):
+    def __init__(self,
+                 cases: List[Case]=None):
         self.cases = cases
 
     def iterator(self):

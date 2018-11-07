@@ -12,7 +12,7 @@ from ems.models.cases.case import Case
 class DurationAlgorithm:
     """
     Users may subclass to implement their own compute_travel_time for
-    computing travel times.
+    computing travel travel_times.
     """
 
     def compute_duration(self,

@@ -6,7 +6,7 @@ from ems.algorithms.times.constant_duration import ConstantDurationAlgorithm
 from ems.algorithms.times.travel_time_lookup import TravelTimeLookupAlgorithm
 from ems.analysis.coverage.percent_coverage import PercentCoverage
 from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
-from ems.data.filters import kmeans_select_bases
+from ems.filters import kmeans_select_bases
 from ems.data.jan_2017_dataset import Jan2017Dataset
 from ems.models.ambulance import Ambulance
 from ems.settings import Settings

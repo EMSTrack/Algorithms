@@ -28,7 +28,7 @@ class Settings:
                     filepath = s['filepath']
                     demands_file = filepath + s['demands']
                     bases_file = filepath + s['bases']
-                    travel_times_file = filepath + s['times']
+                    travel_times_file = filepath + s['travel_times']
                     cases_file = filepath + s['cases']
 
                     num_ambulances = s['num_ambs']
