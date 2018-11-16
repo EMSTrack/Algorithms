@@ -72,7 +72,9 @@ case_set = RandomCaseSet(num_cases=num_cases,
 ambulance_select = BestTravelTimeAlgorithm(travel_times=travel_times)
 
 # Initialize demand_coverage algorithm
-determine_coverage = PercentCoverage(travel_times=travel_times)
+determine_coverage = PercentCoverage(demands=demand_set,
+                                     travel_times=travel_times,
+                                     r1=timedelta(seconds=600))
 
 # Select bases
 chosen_base_locations = kmeans_select_bases(base_set, travel_times)
@@ -88,7 +90,8 @@ for index in range(settings.num_ambulances):
 # Initialize simulator
 sim = EventBasedDispatcherSimulator(ambulances=ambulances,
                                     case_set=case_set,
-                                    ambulance_selector=ambulance_select)
+                                    ambulance_selector=ambulance_select,
+                                    coverage_calculator=determine_coverage)
 
 # Start the whole thing
 finished_cases, measured_coverage = sim.run()
