@@ -6,7 +6,8 @@ from termcolor import colored
 
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
 from ems.analysis.case_record import CaseRecord
-from ems.analysis.coverage.coverage import CoverageAlgorithm
+
+from ems.analysis.metric_aggregator import MetricAggregator
 from ems.datasets.case.case_set import CaseSet
 from ems.models.ambulance import Ambulance
 from ems.models.cases.case import Case
@@ -40,9 +41,9 @@ class EventBasedDispatcherSimulator(Simulator):
                  ambulances: List[Ambulance],
                  case_set: CaseSet,
                  ambulance_selector: AmbulanceSelectionAlgorithm,
-                 coverage_calculator: CoverageAlgorithm):
+                 metric_aggregator: MetricAggregator):
 
-        super().__init__(ambulances, case_set, ambulance_selector, coverage_calculator)
+        super().__init__(ambulances, case_set, ambulance_selector, metric_aggregator)
         self.finished_cases = []
 
     def run(self):
@@ -113,7 +114,11 @@ class EventBasedDispatcherSimulator(Simulator):
             print(colored("Ongoing cases: {}".format([case_state.case.id for case_state in ongoing_case_states]),
                           "yellow"))
             print(colored("Pending cases: {}".format([case.id for case in pending_cases]), "red"))
-            print(colored("Current coverage: {}".format(self.coverage_calculator.calculate(self.ambulances))))
+            print("")
+            print(colored("Metrics", "magenta", attrs=["bold"]))
+            metrics = self.metric_aggregator.calculate(self.ambulances)
+            for metric_tag, value in metrics.items():
+                print(colored("{}: {}".format(metric_tag, value), "magenta"))
             print("----------------------------------------------------------")
 
         return self.finished_cases, None

@@ -2,7 +2,7 @@
 from datetime import timedelta
 from typing import List
 
-from ems.analysis.coverage.coverage import CoverageAlgorithm
+from ems.analysis.metric import Metric
 from ems.datasets.location.location_set import LocationSet
 from ems.datasets.travel_times.travel_times import TravelTimes
 from ems.models.ambulance import Ambulance
@@ -11,12 +11,14 @@ from ems.models.ambulance import Ambulance
 # Computes a percent coverage given a radius
 
 
-class PercentCoverage(CoverageAlgorithm):
+class PercentCoverage(Metric):
 
     def __init__(self,
                  demands: LocationSet,
                  travel_times: TravelTimes,
-                 r1: timedelta = timedelta(600)):
+                 r1: timedelta = timedelta(600),
+                 tag = 'percent_coverage'):
+        super().__init__(tag=tag)
         self.demands = demands
         self.travel_times = travel_times
         self.r1 = r1
