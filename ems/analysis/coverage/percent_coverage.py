@@ -24,8 +24,8 @@ class PercentCoverage(Metric):
         self.r1 = r1
 
         # Caching for better performance
-        self.coverage_state = CoverageState(ambulances=set(),
-                                            locations_coverage=[set() for _ in demands.locations])
+        self.coverage_state = PercentCoverageState(ambulances=set(),
+                                                   locations_coverage=[set() for _ in demands.locations])
 
     def calculate(self, ambulances: List[Ambulance]):
         """
@@ -81,7 +81,7 @@ class PercentCoverage(Metric):
         self.coverage_state.ambulances.remove(ambulance)
 
 
-class CoverageState:
+class PercentCoverageState:
 
     def __init__(self,
                  ambulances,

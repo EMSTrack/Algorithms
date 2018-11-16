@@ -6,6 +6,7 @@ from geopy import Point
 from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
 from ems.analysis.analyze.summarize import Summarize
 from ems.analysis.coverage.percent_coverage import PercentCoverage
+from ems.analysis.coverage.radius_coverage import RadiusCoverage
 from ems.analysis.metric_aggregator import MetricAggregator
 from ems.datasets.case.dedatos_case_set import DeDatosCaseSet
 from ems.datasets.case.jan2017_case_set import Jan2017CaseSet
@@ -72,13 +73,17 @@ case_set = RandomCaseSet(num_cases=num_cases,
 # Initialize ambulance_selection algorithm
 ambulance_select = BestTravelTimeAlgorithm(travel_times=travel_times)
 
-# Initialize demand_coverage algorithm
+# Initialize demand percentage coverage algorithm
 percent_coverage = PercentCoverage(demands=demand_set,
                                    travel_times=travel_times,
                                    r1=timedelta(seconds=600))
 
+# Initialize demand radius coverage algorithm
+radius_coverage = RadiusCoverage(demands=demand_set,
+                                 travel_times=travel_times)
+
 # Initialize metric aggregator
-metric_aggregator = MetricAggregator([percent_coverage])
+metric_aggregator = MetricAggregator([percent_coverage, radius_coverage])
 
 # Select bases
 chosen_base_locations = kmeans_select_bases(base_set, travel_times)
