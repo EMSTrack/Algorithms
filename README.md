@@ -37,11 +37,11 @@ In Ubuntu, Python 3.6 seems to be missing "tkinter". To install,
 
 ## Components
 
-# Cases
-# Location Sets (e.g. Bases, Demands)
-# Ambulances
-# Events
-# Simulators
-# Generators
-# Ambulance Selection Algorithms
-# Metrics
+### Cases
+### Location Sets (e.g. Bases, Demands)
+### Ambulances
+### Events
+### Simulators
+### Generators
+### Ambulance Selection Algorithms
+### Metrics
