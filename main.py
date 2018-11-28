@@ -4,9 +4,11 @@ from datetime import timedelta, datetime
 from geopy import Point
 
 from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
+from ems.analysis.metrics.count_pending import CountPending
 from ems.analysis.metrics.coverage.percent_coverage import PercentCoverage
 from ems.analysis.metrics.coverage.radius_coverage import RadiusCoverage
 from ems.analysis.metrics.metric_aggregator import MetricAggregator
+from ems.analysis.metrics.total_delay import TotalDelay
 from ems.datasets.case.random_case_set import RandomCaseSet
 from ems.datasets.location.tijuana_base_set import TijuanaBaseSet
 from ems.datasets.location.tijuana_demand_set import TijuanaDemandSet
@@ -70,17 +72,21 @@ case_set = RandomCaseSet(num_cases=num_cases,
 # Initialize ambulance_selection algorithm
 ambulance_select = BestTravelTimeAlgorithm(travel_times=travel_times)
 
-# Initialize demand percentage coverage algorithm
+# Initialize demand percentage coverage metric
 percent_coverage = PercentCoverage(demands=demand_set,
                                    travel_times=travel_times,
                                    r1=timedelta(seconds=600))
 
-# Initialize demand radius coverage algorithm
+# Initialize demand radius coverage metric
 radius_coverage = RadiusCoverage(demands=demand_set,
                                  travel_times=travel_times)
 
+# Initialize other metrics
+total_delay = TotalDelay()
+count_pending = CountPending()
+
 # Initialize metric aggregator
-metric_aggregator = MetricAggregator([percent_coverage])
+metric_aggregator = MetricAggregator([percent_coverage, total_delay, count_pending])
 
 # Select bases
 chosen_base_locations = kmeans_select_bases(base_set, travel_times)
