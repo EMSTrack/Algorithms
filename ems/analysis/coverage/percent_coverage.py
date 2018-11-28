@@ -1,5 +1,5 @@
 # Framework for using algorithms and allowing for replacement
-from datetime import timedelta
+from datetime import timedelta, datetime
 from typing import List
 
 from ems.analysis.metric import Metric
@@ -9,6 +9,7 @@ from ems.models.ambulance import Ambulance
 
 
 # Computes a percent coverage given a radius
+from ems.models.cases.case import Case
 
 
 class PercentCoverage(Metric):
@@ -27,12 +28,14 @@ class PercentCoverage(Metric):
         self.coverage_state = PercentCoverageState(ambulances=set(),
                                                    locations_coverage=[set() for _ in demands.locations])
 
-    def calculate(self, ambulances: List[Ambulance]):
-        """
+    def calculate(self,
+                  timestamp: datetime,
+                  **kwargs):
 
-        :param ambulances:
-        :return:
-        """
+        if "ambulances" not in kwargs:
+            return None
+
+        ambulances = kwargs["ambulances"]
 
         available_ambulances = [amb for amb in ambulances if not amb.deployed]
 
@@ -50,7 +53,7 @@ class PercentCoverage(Metric):
             if len(location_coverage) > 0:
                 sm += 1
 
-        return sm/len(self.demands)
+        return {self.tag: sm/len(self.demands), "timestamp": timestamp}
 
     def add_ambulance_coverage(self, ambulance):
 

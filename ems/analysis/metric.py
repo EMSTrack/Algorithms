@@ -1,6 +1,4 @@
-from typing import List
-
-from ems.models.ambulance import Ambulance
+from datetime import datetime
 
 
 class Metric:
@@ -11,6 +9,7 @@ class Metric:
     def __eq__(self, other):
         return self.tag == self.tag
 
-    # TODO -- define more parameters
-    def calculate(self, ambulances: List[Ambulance]):
-        raise NotImplementedError
+    def calculate(self,
+                  timestamp: datetime,
+                  **kwargs):
+        raise NotImplementedError()

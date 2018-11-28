@@ -83,7 +83,7 @@ radius_coverage = RadiusCoverage(demands=demand_set,
                                  travel_times=travel_times)
 
 # Initialize metric aggregator
-metric_aggregator = MetricAggregator([percent_coverage, radius_coverage])
+metric_aggregator = MetricAggregator([percent_coverage])
 
 # Select bases
 chosen_base_locations = kmeans_select_bases(base_set, travel_times)
@@ -102,16 +102,18 @@ sim = EventBasedDispatcherSimulator(ambulances=ambulances,
                                     ambulance_selector=ambulance_select,
                                     metric_aggregator=metric_aggregator)
 
-# Start the whole thing
-finished_cases, measured_coverage = sim.run()
+# Start the simulation
+metric_aggregator = sim.run()
 
-print("Simulator has finished.")
+metric_aggregator.write_to_file('results')
 
-summarize = Summarize(
-    len(case_set),
-    clargs.slices,
-    len(ambulances)
-)
+# print("Simulator has finished.")
+#
+# summarize = Summarize(
+#     len(case_set),
+#     clargs.slices,
+#     len(ambulances)
+# )
 
 # summarize.specific(measured_coverage, dataset.demands)
 # summarize.overall(measured_coverage)

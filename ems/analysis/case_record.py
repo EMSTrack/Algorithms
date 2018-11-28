@@ -1,4 +1,5 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
+from enum import Enum
 
 from ems.models.ambulance import Ambulance
 from ems.models.cases.case import Case
@@ -15,3 +16,8 @@ class CaseRecord:
         self.ambulance = ambulance
         self.event_history = event_history
         self.delay = delay
+
+
+
+
+

@@ -1,11 +1,11 @@
 import heapq
 from datetime import datetime
+from enum import Enum
 from typing import List
 
 from termcolor import colored
 
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
-from ems.analysis.case_record import CaseRecord
 
 from ems.analysis.metric_aggregator import MetricAggregator
 from ems.datasets.case.case_set import CaseSet
@@ -22,14 +22,12 @@ class CaseState:
                  assigned_ambulance,
                  event_iterator,
                  next_event_time,
-                 next_event,
-                 case_record):
+                 next_event):
         self.case = case
         self.assigned_ambulance = assigned_ambulance
         self.next_event_time = next_event_time
         self.next_event = next_event
         self.event_iterator = event_iterator
-        self.case_record = case_record
 
     def __lt__(self, other):
         return self.next_event_time < other.next_event_time
@@ -44,7 +42,6 @@ class EventBasedDispatcherSimulator(Simulator):
                  metric_aggregator: MetricAggregator):
 
         super().__init__(ambulances, case_set, ambulance_selector, metric_aggregator)
-        self.finished_cases = []
 
     def run(self):
 
@@ -99,15 +96,13 @@ class EventBasedDispatcherSimulator(Simulator):
                 current_time = next_ongoing_case_state.next_event_time
 
                 print(colored("Current Time: {}".format(current_time), "cyan", attrs=["bold"]))
-                print(colored("Processing ongoing case: {}".format(next_ongoing_case_state.case_record.case.id),
+                print(colored("Processing ongoing case: {}".format(next_ongoing_case_state.case.id),
                               "green"))
 
                 # Process ongoing case
                 case_state_to_add, finished = self.process_ongoing_case(next_ongoing_case_state, current_time)
                 if not finished:
                     heapq.heappush(ongoing_case_states, case_state_to_add)
-                else:
-                    self.finished_cases.append(next_ongoing_case_state.case_record)
 
             print(colored("Busy ambulances: {}".format(sorted([amb.id for amb in self.ambulances if amb.deployed])),
                           "yellow"))
@@ -116,12 +111,19 @@ class EventBasedDispatcherSimulator(Simulator):
             print(colored("Pending cases: {}".format([case.id for case in pending_cases]), "red"))
             print("")
             print(colored("Metrics", "magenta", attrs=["bold"]))
-            metrics = self.metric_aggregator.calculate(self.ambulances)
+
+            metric_kwargs = {"ambulances": self.ambulances,
+                             "ongoing_cases": [case_state.case for case_state in ongoing_case_states],
+                             "pending_cases": pending_cases}
+
+            # Compute metrics
+            metrics = self.metric_aggregator.calculate(current_time, **metric_kwargs)
             for metric_tag, value in metrics.items():
                 print(colored("{}: {}".format(metric_tag, value), "magenta"))
+
             print("----------------------------------------------------------")
 
-        return self.finished_cases, None
+        return self.metric_aggregator
 
     # Selects an ambulance for the case and returns a Case State representing the next event to complete and the event
     # iterator
@@ -142,23 +144,16 @@ class EventBasedDispatcherSimulator(Simulator):
                                                                        case.id,
                                                                        case_next_event.event_type))
 
-        case_record = CaseRecord(case=case,
-                                 ambulance=selected_ambulance,
-                                 delay=current_time - case.date_recorded,
-                                 event_history=[case_next_event])
-
         return CaseState(case=case,
                          assigned_ambulance=selected_ambulance,
                          event_iterator=case_event_iterator,
                          next_event=case_next_event,
-                         next_event_time=case_event_finish_datetime,
-                         case_record=case_record)
+                         next_event_time=case_event_finish_datetime)
 
     # Processes the event in the case state and generates a new case state if there is another event after to process
     def process_ongoing_case(self, case_state: CaseState, current_time: datetime):
 
         finished_event = case_state.next_event
-        case_state.case_record.event_history.append(finished_event)
 
         # Perform event
         print("Finished event: {}".format(finished_event.event_type))
@@ -197,3 +192,10 @@ class EventBasedDispatcherSimulator(Simulator):
         available_ambulances = [amb for amb in self.ambulances if not amb.deployed]
         selection = self.ambulance_selector.select_ambulance(available_ambulances, case, time)
         return selection
+
+
+class SimEvent(Enum):
+    START_INCOMING = "Start incoming case",
+    START_PENDING = "Start pending case",
+    PROCESS_ONGOING = "Process ongoing case"
+    DELAY_CASE = "Delay incoming case"
