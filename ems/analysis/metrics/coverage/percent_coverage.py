@@ -1,15 +1,12 @@
 # Framework for using algorithms and allowing for replacement
 from datetime import timedelta, datetime
-from typing import List
 
-from ems.analysis.metric import Metric
+from ems.analysis.metrics.metric import Metric
 from ems.datasets.location.location_set import LocationSet
 from ems.datasets.travel_times.travel_times import TravelTimes
-from ems.models.ambulance import Ambulance
 
 
 # Computes a percent coverage given a radius
-from ems.models.cases.case import Case
 
 
 class PercentCoverage(Metric):
@@ -53,7 +50,7 @@ class PercentCoverage(Metric):
             if len(location_coverage) > 0:
                 sm += 1
 
-        return {self.tag: sm/len(self.demands), "timestamp": timestamp}
+        return sm/len(self.demands)
 
     def add_ambulance_coverage(self, ambulance):
 

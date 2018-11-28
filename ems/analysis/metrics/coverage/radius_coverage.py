@@ -1,15 +1,11 @@
-from datetime import timedelta, datetime
-from typing import List
+from datetime import datetime
 
-from ems.analysis.metric import Metric
+from ems.analysis.metrics.metric import Metric
 from ems.datasets.location.location_set import LocationSet
 from ems.datasets.travel_times.travel_times import TravelTimes
 
-from ems.models.ambulance import Ambulance
-
 
 # Computes a radius coverage
-from ems.models.cases.case import Case
 
 
 class RadiusCoverage(Metric):
@@ -46,7 +42,7 @@ class RadiusCoverage(Metric):
                                not ambulance.deployed]
 
         if len(ambulance_locations) == 0:
-            return timedelta.max
+            return -1
 
         # Snap demand location to closest location in loc_set_2
         demand_locations = [self.travel_times.loc_set_2.closest(demand_location)[0] for demand_location in
@@ -61,7 +57,7 @@ class RadiusCoverage(Metric):
             min_tts.append(min(tt_to_ambulance))
 
         # Take the max of those travel times
-        return {self.tag: max(min_tts), "timestamp": timestamp}
+        return max(min_tts).seconds
 
     # def add_ambulance_coverage(self, ambulance):
     #

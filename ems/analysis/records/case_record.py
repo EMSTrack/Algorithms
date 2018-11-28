@@ -1,8 +1,9 @@
-from datetime import timedelta, datetime
-from enum import Enum
+from typing import List
+from datetime import datetime
 
 from ems.models.ambulance import Ambulance
 from ems.models.cases.case import Case
+from ems.models.events.event import Event
 
 
 class CaseRecord:
@@ -10,14 +11,12 @@ class CaseRecord:
     def __init__(self,
                  case: Case,
                  ambulance: Ambulance,
-                 delay: timedelta,
-                 event_history: []):
+                 start_time: datetime,
+                 event_history: List[Event]):
         self.case = case
         self.ambulance = ambulance
         self.event_history = event_history
-        self.delay = delay
+        self.start_time = start_time
 
-
-
-
-
+    def __lt__(self, other):
+        return self.case < other.case

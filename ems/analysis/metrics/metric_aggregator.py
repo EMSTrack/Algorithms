@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List
 
-from ems.analysis.metric import Metric
+from ems.analysis.metrics.metric import Metric
 
 import pandas as pd
 
@@ -16,10 +16,7 @@ class MetricAggregator:
             metrics = []
 
         self.metrics = metrics
-        self.results = {}
-
-        for metric in metrics:
-            self.results[metric.tag] = []
+        self.results = []
 
     def add_metric(self, metric: Metric):
 
@@ -28,33 +25,23 @@ class MetricAggregator:
             raise Exception("Metric with tag '{}' already exists".format(metric.tag))
 
         self.metrics.append(metric)
-        self.results[metric.tag] = []
 
     def remove_metric(self, metric: Metric):
         self.metrics.remove(metric)
-        self.results.pop(metric.tag)
 
     def calculate(self,
                   timestamp: datetime,
                   **kwargs):
 
-        d = {}
+        d = {"timestamp": timestamp}
         for metric in self.metrics:
-
             calculation = metric.calculate(timestamp, **kwargs)
-
             if calculation is not None:
-                self.results[metric.tag].append(calculation)
                 d[metric.tag] = calculation
 
+        self.results.append(d)
         return d
 
-    def write_to_file(self, output_directory):
-
-        for metric in self.metrics:
-            metric_results = self.results[metric.tag]
-            df = pd.DataFrame(metric_results)
-
-            # Write results to CSV
-            df.to_csv(output_directory + '/' + metric.tag + '.csv')
-
+    def write_to_file(self, output_filename):
+        df = pd.DataFrame(self.results, columns=["timestamp"] + [metric.tag for metric in self.metrics])
+        df.to_csv(output_filename, index=False)

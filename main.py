@@ -4,12 +4,9 @@ from datetime import timedelta, datetime
 from geopy import Point
 
 from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
-from ems.analysis.analyze.summarize import Summarize
-from ems.analysis.coverage.percent_coverage import PercentCoverage
-from ems.analysis.coverage.radius_coverage import RadiusCoverage
-from ems.analysis.metric_aggregator import MetricAggregator
-from ems.datasets.case.dedatos_case_set import DeDatosCaseSet
-from ems.datasets.case.jan2017_case_set import Jan2017CaseSet
+from ems.analysis.metrics.coverage.percent_coverage import PercentCoverage
+from ems.analysis.metrics.coverage.radius_coverage import RadiusCoverage
+from ems.analysis.metrics.metric_aggregator import MetricAggregator
 from ems.datasets.case.random_case_set import RandomCaseSet
 from ems.datasets.location.tijuana_base_set import TijuanaBaseSet
 from ems.datasets.location.tijuana_demand_set import TijuanaDemandSet
@@ -103,9 +100,10 @@ sim = EventBasedDispatcherSimulator(ambulances=ambulances,
                                     metric_aggregator=metric_aggregator)
 
 # Start the simulation
-metric_aggregator = sim.run()
+case_record_set, metric_aggregator = sim.run()
 
-metric_aggregator.write_to_file('results')
+case_record_set.write_to_file('./results/processed_cases.csv')
+metric_aggregator.write_to_file('./results/results.csv')
 
 # print("Simulator has finished.")
 #

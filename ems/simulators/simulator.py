@@ -4,7 +4,7 @@ from typing import List
 
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
 
-from ems.analysis.metric_aggregator import MetricAggregator
+from ems.analysis.metrics.metric_aggregator import MetricAggregator
 from ems.datasets.case.case_set import CaseSet
 from ems.models.ambulance import Ambulance
 

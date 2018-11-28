@@ -17,3 +17,6 @@ class Case:
 
     def iterator(self, ambulance, current_time):
         raise NotImplementedError()
+
+    def __lt__(self, other):
+        return self.date_recorded < other.date_recorded
