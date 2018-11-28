@@ -2,7 +2,7 @@
 
 A library to do ambulance dispatch simulation and analysis.
 
-Try: `time python3 main.py --settings hans --ambulances 7 --bases 7 --slices 50`
+Try: `python3 main.py --settings tim --ambulances 7 --bases 7`
 
 python3 main.py --help
 
@@ -26,37 +26,22 @@ In Ubuntu, Python 3.6 seems to be missing "tkinter". To install,
 
 ## TODO
 
-- Introduce stochastic case and event generation
-
 - Best coverage algorithm
 
 - Best coverage/Fastest ambulance tension algorithm
-
-- Coverage metrics
-
-  - Given a desired radius, calculate the set covered
-
-  - Given a desired set covered, calculate the radius
   
-- Make a runnable animation of the simulation
+- Introduce visualization component
 
 - Introduce testing framework
 
 
-## High-Level Overview
+## Components
 
-### Datasets (ems/data/*)
-
-- CSVTijuanaDataset
-
-- Jan2017Dataset
-
-### Ambulance Selection Algorithms (ems/algorithms/selection/*)
-
-- FastestAmbulanceSelection
-
-- RandomAmbulanceSelection
-
-### Simulators (ems/simulators/*)
-
-- EventBasedDispatcherSimulator
+# Cases
+# Location Sets (e.g. Bases, Demands)
+# Ambulances
+# Events
+# Simulators
+# Generators
+# Ambulance Selection Algorithms
+# Metrics
