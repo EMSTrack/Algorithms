@@ -1,6 +1,6 @@
-import heapq
 import pandas as pd
 from typing import List
+import bisect
 
 from ems.analysis.records.case_record import CaseRecord
 from ems.models.events.event_type import EventType
@@ -18,7 +18,7 @@ class CaseRecordSet:
         self.case_records = case_records
 
     def add_case_record(self, case_record: CaseRecord):
-        heapq.heappush(self.case_records, case_record)
+        bisect.insort(self.case_records, case_record)
 
     def write_to_file(self, output_filename):
         a = []

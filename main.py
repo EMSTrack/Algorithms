@@ -109,7 +109,7 @@ sim = EventBasedDispatcherSimulator(ambulances=ambulances,
 case_record_set, metric_aggregator = sim.run()
 
 case_record_set.write_to_file('./results/processed_cases.csv')
-metric_aggregator.write_to_file('./results/results.csv')
+metric_aggregator.write_to_file('./results/metrics.csv')
 
 # print("Simulator has finished.")
 #
