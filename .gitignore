@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# gvim 
+# gvim
 *~
 *.swp
 *.*.swp
@@ -111,3 +111,6 @@ ENV/
 .idea/*
 
 .DS_Store
+
+# Visual Studio Code
+.vscode/
