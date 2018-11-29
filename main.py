@@ -23,11 +23,17 @@ from ems.algorithms.base_selectors.kmeans_base_selector import KMeansBaseSelecto
 from ems.settings import Settings
 from ems.simulators.dispatcher_simulator_event import EventBasedDispatcherSimulator
 
-parser = argparse.ArgumentParser(description="Load settings, data, preprocess models, run sim.")
+parser = argparse.ArgumentParser(description="Load settings, data, preprocess models. Run simulator on "
+                                             "ambulance dispatch. Decisions are made during the simulation, but "
+                                             "the events are output to a csv file for replay.")
+
+parser.add_argument('--settings', help="for example, '--settings hans'. Don't include '.json'", type=str, required=True)
+
 parser.add_argument('--ambulances', help="Number of ambulances", type=int, required=False)
 parser.add_argument('--bases', help='Number of bases', type=int, required=False)
-parser.add_argument('--settings', help="for example, '--settings hans'. Don't include '.json'", type=str, required=True)
+
 parser.add_argument('--slices', help="Number of cases to simulate", type=int, required=False)
+parser.add_argument('--output-file', help="Output filename for simulator info", type=str, required=False)
 
 clargs = parser.parse_args()
 
@@ -52,7 +58,9 @@ travel_times = TijuanaTravelTimes(loc_set_1=base_set,
 
 # Define random case params
 # This example = 4 cases an hour
-num_cases = 200
+
+num_cases=200
+# num_cases = 2000
 
 timeframe = timedelta(hours=48)
 initial_time = datetime.now() - timeframe
