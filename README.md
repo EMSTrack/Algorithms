@@ -14,6 +14,7 @@ python3 main.py --help
 - geopy
 - termcolor
 - matplotlib
+- shapely
 
 In Ubuntu, Python 3.6 seems to be missing "tkinter". To install,
 

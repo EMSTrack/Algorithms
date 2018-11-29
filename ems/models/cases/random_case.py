@@ -2,7 +2,7 @@ from datetime import datetime
 
 from geopy import Point
 
-from ems.generators.case.location.random_circle_location import RandomCircleLocationGenerator
+from ems.generators.case.location.random_circle import RandomCircleLocationGenerator
 from ems.generators.event.duration import EventDurationGenerator
 from ems.models.cases.case import Case
 from ems.models.events.event import Event

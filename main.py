@@ -14,7 +14,7 @@ from ems.datasets.location.tijuana_base_set import TijuanaBaseSet
 from ems.datasets.location.tijuana_demand_set import TijuanaDemandSet
 from ems.datasets.travel_times.tijuana_travel_times import TijuanaTravelTimes
 from ems.filters import kmeans_select_bases
-from ems.generators.case.location.random_circle_location import RandomCircleLocationGenerator
+from ems.generators.case.location.random_circle import RandomCircleLocationGenerator
 from ems.generators.case.time.poisson_time import PoissonCaseTimeGenerator
 from ems.generators.event.travel_time_duration import TravelTimeDurationGenerator
 from ems.models.ambulance import Ambulance
