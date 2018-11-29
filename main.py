@@ -74,14 +74,6 @@ minutes = timeframe.total_seconds() / 60
 case_time_generator = PoissonCaseTimeGenerator(lmda=num_cases / minutes)
 
 # Define a random location generator
-<<<<<<< HEAD
-=======
-center = Point(latitude=32.504876, longitude= -116.958774)
-radius = 0.5
-
-# location_generator = RandomCircleLocationGenerator(center=center, radius=radius)
-
->>>>>>> working vis for line path
 perimeter_vertices = [
     Point(32.533696, -117.123506),
     Point(32.554803, -116.876454),

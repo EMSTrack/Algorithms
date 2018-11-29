@@ -5,7 +5,6 @@
 	 "bases"				: "bases.csv",
 	 "times"				: "times.csv",
 	 "cases"				: "tabladedatos.csv",
-	 "num_ambs"				: 6,
-	 "num_bases"			: 6
-
+	 "num_ambs"				: 7,
+	 "num_bases"			: 7
 }

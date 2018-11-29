@@ -50,4 +50,3 @@ class TravelTimes:
         time = int(self.times[index1][index2])
 
         return timedelta(seconds=time)
-
