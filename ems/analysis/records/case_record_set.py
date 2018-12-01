@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 import pandas as pd
 from typing import List
 import bisect
@@ -32,17 +34,20 @@ class CaseRecordSet:
                  "ambulance": case_record.ambulance.id,
                  "start_time": case_record.start_time}
 
+            total_durations_other = timedelta(minutes=0)
             for event in case_record.event_history:
 
-                # TODO -- add together all 'OTHER' Event Type durations?
                 if event == EventType.OTHER:
-                    break
+                    total_durations_other += event.duration
+                else:
 
-                d[event.event_type.name + "_duration"] = event.duration
+                    d[event.event_type.name + "_duration"] = event.duration
 
-                if event.event_type == EventType.TO_HOSPITAL:
-                    d["hospital_latitude"] = event.destination.latitude
-                    d["hospital_longitude"] = event.destination.longitude
+                    if event.event_type == EventType.TO_HOSPITAL:
+                        d["hospital_latitude"] = event.destination.latitude
+                        d["hospital_longitude"] = event.destination.longitude
+
+            d["OTHER_duration"] = total_durations_other
 
             a.append(d)
 

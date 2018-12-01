@@ -193,9 +193,6 @@ class EventBasedDispatcherSimulator(Simulator):
             # Free ambulance
             case_state.assigned_ambulance.deployed = False
 
-            # TODO -- Fix assumption that it gets back to base immediately
-            case_state.assigned_ambulance.location = case_state.assigned_ambulance.base
-
             return case_state, True
 
     # Selects an ambulance for the given case
