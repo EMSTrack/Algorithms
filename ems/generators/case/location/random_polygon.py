@@ -15,7 +15,7 @@ class RandomPolygonLocationGenerator(LocationGenerator):
     def __init__(self, points: List[Point]):
         self.polygon = geometry.Polygon([(point.longitude, point.latitude) for point in points])
 
-    def generate(self):
+    def generate(self, timestamp):
         triangles = triangulate(self.polygon)
         areas = [triangle.area for triangle in triangles]
         areas_normalized = [triangle.area / sum(areas) for triangle in triangles]

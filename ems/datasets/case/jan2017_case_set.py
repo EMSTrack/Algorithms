@@ -82,19 +82,17 @@ class Jan2017CaseSet(CaseSet):
                 events.append(incident_to_hospital_event)
 
                 # Event capturing ambulance travelling from hospital to base
-                # TODO -- May not be necessary; ambulances free as soon as they leave hospital
                 hospital_to_base_event = Event(destination=Point(latitude=row["Latitud salida"],
                                                                  longitude=row["Longitud salida"]),
                                                event_type=EventType.TO_BASE)
-                # events.append(hospital_to_base_event)
+                events.append(hospital_to_base_event)
 
             else:
                 # Event capturing ambulance travelling from incident to base
-                # TODO -- May not be necessary; ambulances free as soon as they leave incident
                 incident_to_base_event = Event(destination=Point(latitude=row["Latitud salida"],
                                                                  longitude=row["Longitud salida"]),
                                                event_type=EventType.TO_BASE)
-                # events.append(incident_to_base_event)
+                events.append(incident_to_base_event)
 
             # Generate a case from events
             case = DefinedCase(id=index,

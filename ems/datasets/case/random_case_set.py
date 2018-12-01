@@ -34,7 +34,7 @@ class RandomCaseSet(CaseSet):
         while k <= self.num_cases:
             # Compute time and location of next event via generators
             time = self.case_time_generator.generate(time)
-            point = self.location_generator.generate()
+            point = self.location_generator.generate(time)
 
             # Create case
             case = RandomCase(id=k,

@@ -16,7 +16,7 @@ class RandomCircleLocationGenerator(LocationGenerator):
         self.center = center
         self.radius = radius
 
-    def generate(self):
+    def generate(self, timestamp):
         direction = random.uniform(0, 2 * math.pi)
         magnitude = self.radius * math.sqrt(random.uniform(0, 1))
 
