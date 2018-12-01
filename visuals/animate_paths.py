@@ -72,7 +72,7 @@ def update_line(num, line, path):
 
 def main():
 
-    p3 = Path(Point(0, 0), Point(1, 1), pieces=1000, display=200)
+    p3 = Path(Point(0, 0), Point(1, 1), pieces=50, display=5)
 
 
     fig1 = plt.figure()
@@ -88,7 +88,7 @@ def main():
         2000,
         # 0,
         fargs=(line, p3),
-        interval = 4,
+        interval = 100,
         blit=False
     )
 
