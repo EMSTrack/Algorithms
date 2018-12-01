@@ -61,10 +61,11 @@ travel_times = TijuanaTravelTimes(loc_set_1=base_set,
 # Define random case params
 # This example = 4 cases an hour
 
-num_cases=200
+num_cases = 1500
+
 # num_cases = 2000
 
-timeframe = timedelta(hours=48)
+timeframe = timedelta(hours=480)
 initial_time = datetime.now() - timeframe
 end_time = datetime.now()
 minutes = timeframe.total_seconds() / 60
@@ -73,6 +74,14 @@ minutes = timeframe.total_seconds() / 60
 case_time_generator = PoissonCaseTimeGenerator(lmda=num_cases / minutes)
 
 # Define a random location generator
+<<<<<<< HEAD
+=======
+center = Point(latitude=32.504876, longitude= -116.958774)
+radius = 0.5
+
+# location_generator = RandomCircleLocationGenerator(center=center, radius=radius)
+
+>>>>>>> working vis for line path
 perimeter_vertices = [
     Point(32.533696, -117.123506),
     Point(32.554803, -116.876454),
