@@ -62,10 +62,8 @@ travel_times = TijuanaTravelTimes(loc_set_1=base_set,
 # This example = 4 cases an hour
 
 num_cases = 1500
-
-# num_cases = 2000
-
 timeframe = timedelta(hours=480)
+
 initial_time = datetime.now() - timeframe
 end_time = datetime.now()
 minutes = timeframe.total_seconds() / 60
