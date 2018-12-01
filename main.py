@@ -16,6 +16,9 @@ from ems.datasets.location.location_set import LocationSet
 from ems.datasets.location.tijuana_base_set import TijuanaBaseSet
 from ems.datasets.location.tijuana_demand_set import TijuanaDemandSet
 from ems.datasets.travel_times.tijuana_travel_times import TijuanaTravelTimes
+
+# from ems.filters import kmeans_select_bases
+
 from ems.generators.case.location.random_polygon import RandomPolygonLocationGenerator
 from ems.generators.case.time.poisson_time import PoissonCaseTimeGenerator
 from ems.generators.event.duration.random_duration import RandomDurationGenerator
@@ -74,6 +77,12 @@ minutes = timeframe.total_seconds() / 60
 case_time_generator = PoissonCaseTimeGenerator(lmda=num_cases / minutes)
 
 # Define a random location generator
+
+center = Point(latitude=32.504876, longitude= -116.958774)
+radius = 0.5
+
+# location_generator = RandomCircleLocationGenerator(center=center, radius=radius)
+
 perimeter_vertices = [
     Point(32.533696, -117.123506),
     Point(32.554803, -116.876454),
