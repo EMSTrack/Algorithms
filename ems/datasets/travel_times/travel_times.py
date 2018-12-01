@@ -47,7 +47,6 @@ class TravelTimes:
         len1 = len(self.times)
 
         len2 = len(self.times[index1])
-        print("indices: {}, {} ".format(index1, index2))
         time = int(self.times[index1][index2])
 
         return timedelta(seconds=time)
