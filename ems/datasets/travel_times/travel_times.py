@@ -43,10 +43,6 @@ class TravelTimes:
         if dist2 > 0:
             raise Exception("Location 2 does not exist in location set 2")
 
-        # TODO check why there is an off by one
-        len1 = len(self.times)
-
-        len2 = len(self.times[index1])
         time = int(self.times[index1][index2])
 
         return timedelta(seconds=time)
