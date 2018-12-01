@@ -1,19 +1,20 @@
 from geopy import Point
 
+from ems.models.ambulances.capability import Capability
+
 
 # Define the Ambulance model.
-
 class Ambulance:
 
     def __init__(self,
-                 id: int,
+                 id: str,
                  base: Point,
-                 unit: str = "XXX-XXXX",
+                 capability: Capability = Capability.BASIC,
                  deployed: bool = False,
                  location: Point = None):
         self.id = id
         self.base = base
-        self.unit = unit
+        self.capability = capability
         self.deployed = deployed
         self.location = location
 
@@ -32,4 +33,4 @@ class Ambulance:
         return hash(self.id)
 
     def __str__(self):
-        return str([self.id, self.unit])
+        return self.id

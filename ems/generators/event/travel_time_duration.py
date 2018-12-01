@@ -4,7 +4,7 @@ from geopy import Point
 
 from ems.datasets.travel_times.travel_times import TravelTimes
 from ems.generators.event.duration import EventDurationGenerator
-from ems.models.ambulance import Ambulance
+from ems.models.ambulances.ambulance import Ambulance
 
 
 class TravelTimeDurationGenerator(EventDurationGenerator):

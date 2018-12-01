@@ -5,7 +5,7 @@ from datetime import timedelta, datetime
 from geopy import Point
 
 from ems.generators.event.duration import EventDurationGenerator
-from ems.models.ambulance import Ambulance
+from ems.models.ambulances.ambulance import Ambulance
 
 
 class RandomDurationGenerator(EventDurationGenerator):

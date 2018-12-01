@@ -9,15 +9,15 @@ from ems.analysis.metrics.coverage.percent_coverage import PercentCoverage
 from ems.analysis.metrics.coverage.radius_coverage import RadiusCoverage
 from ems.analysis.metrics.metric_aggregator import MetricAggregator
 from ems.analysis.metrics.total_delay import TotalDelay
+from ems.datasets.ambulance.custom_ambulance_set import CustomAmbulanceSet
 from ems.datasets.case.random_case_set import RandomCaseSet
 from ems.datasets.location.tijuana_base_set import TijuanaBaseSet
 from ems.datasets.location.tijuana_demand_set import TijuanaDemandSet
 from ems.datasets.travel_times.tijuana_travel_times import TijuanaTravelTimes
-from ems.filters import kmeans_select_bases
-from ems.generators.case.location.random_circle import RandomCircleLocationGenerator
+from ems.generators.case.location.random_polygon import RandomPolygonLocationGenerator
 from ems.generators.case.time.poisson_time import PoissonCaseTimeGenerator
 from ems.generators.event.travel_time_duration import TravelTimeDurationGenerator
-from ems.models.ambulance import Ambulance
+from ems.algorithms.base_selectors.kmeans_base_selector import KMeansBaseSelector
 from ems.settings import Settings
 from ems.simulators.dispatcher_simulator_event import EventBasedDispatcherSimulator
 
@@ -54,12 +54,18 @@ end_time = datetime.now()
 minutes = timeframe.total_seconds() / 60
 
 # Define a poisson case time generator with given lambda
-case_time_generator = PoissonCaseTimeGenerator(lmda=num_cases/minutes)
+case_time_generator = PoissonCaseTimeGenerator(lmda=num_cases / minutes)
 
 # Define a random location generator
-center = Point(latitude=32.504876, longitude= -116.958774)
-radius = 0.5
-location_generator = RandomCircleLocationGenerator(center=center, radius=radius)
+perimeter_vertices = [
+    Point(32.533696, -117.123506),
+    Point(32.554803, -116.876454),
+    Point(32.469300, -116.789148),
+    Point(32.439235, -116.967181),
+    Point(32.530337, -117.123475)
+]
+
+location_generator = RandomPolygonLocationGenerator(points=perimeter_vertices)
 
 event_duration_generator = TravelTimeDurationGenerator(travel_times=travel_times)
 
@@ -88,19 +94,15 @@ count_pending = CountPending()
 # Initialize metric aggregator
 metric_aggregator = MetricAggregator([percent_coverage, total_delay, count_pending])
 
-# Select bases
-chosen_base_locations = kmeans_select_bases(base_set, travel_times)
-
 # Generate ambulances - random base placement (may want to abstract into function)
-ambulances = []
-for index in range(settings.num_ambulances):
-    ambulance = Ambulance(id=index,
-                          base=chosen_base_locations[index],
-                          location=chosen_base_locations[index])
-    ambulances.append(ambulance)
+base_selector = KMeansBaseSelector(base_set=base_set,
+                                   travel_times=travel_times,
+                                   num_bases=settings.num_bases)
+ambulance_set = CustomAmbulanceSet(ambulance_count=settings.num_ambulances,
+                                   base_selector=base_selector)
 
 # Initialize simulator
-sim = EventBasedDispatcherSimulator(ambulances=ambulances,
+sim = EventBasedDispatcherSimulator(ambulance_set=ambulance_set,
                                     case_set=case_set,
                                     ambulance_selector=ambulance_select,
                                     metric_aggregator=metric_aggregator)

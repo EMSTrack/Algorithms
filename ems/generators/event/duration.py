@@ -3,7 +3,7 @@ from datetime import datetime
 
 from geopy import Point
 
-from ems.models.ambulance import Ambulance
+from ems.models.ambulances.ambulance import Ambulance
 
 
 class EventDurationGenerator:

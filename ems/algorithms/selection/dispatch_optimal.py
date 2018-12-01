@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List
 
 from ems.datasets.travel_times import TravelTimes
-from ems.models.ambulance import Ambulance
+from ems.models.ambulances.ambulance import Ambulance
 from ems.models.cases.case import Case
 from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
 from ems.analysis.metrics.coverage.percent_coverage import PercentCoverage

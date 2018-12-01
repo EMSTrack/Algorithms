@@ -1,7 +1,7 @@
 from typing import List
 from datetime import datetime
 
-from ems.models.ambulance import Ambulance
+from ems.models.ambulances.ambulance import Ambulance
 from ems.models.cases.case import Case
 from ems.models.events.event import Event
 
