@@ -116,3 +116,4 @@ ENV/
 ./results/*.csv
 results/*.csv
 .mp4
+.vscode/
