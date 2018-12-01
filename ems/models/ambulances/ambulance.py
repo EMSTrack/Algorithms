@@ -24,10 +24,7 @@ class Ambulance:
         :return: True if objects are equal; else False
         """
 
-        if type(other) is Ambulance and self.id == other.id:
-            return True
-
-        return False
+        return type(other) is Ambulance and self.id == other.id
 
     def __hash__(self):
         return hash(self.id)

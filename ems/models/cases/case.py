@@ -20,3 +20,6 @@ class Case:
 
     def __lt__(self, other):
         return self.date_recorded < other.date_recorded
+
+    def __eq__(self, other):
+        return type(other) is Case and self.id == other.id
