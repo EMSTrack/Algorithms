@@ -33,6 +33,11 @@ class CaseRecordSet:
                  "start_time": case_record.start_time}
 
             for event in case_record.event_history:
+
+                # TODO -- add together all 'OTHER' Event Type durations?
+                if event == EventType.OTHER:
+                    break
+
                 d[event.event_type.name + "_duration"] = event.duration
 
                 if event.event_type == EventType.TO_HOSPITAL:
