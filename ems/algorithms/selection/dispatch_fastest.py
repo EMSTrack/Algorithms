@@ -43,7 +43,7 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
         :return: The ambulance and the travel time
         """
 
-        shortest_time = timedelta(hours=9999999)
+        shortest_time = timedelta.max
         fastest_amb = None
 
         loc_set_1 = self.travel_times.loc_set_1

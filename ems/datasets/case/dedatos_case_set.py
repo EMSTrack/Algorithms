@@ -2,6 +2,7 @@
 import pandas as pd
 from geopy import Point
 
+from ems.algorithms.hospital_selectors.hospital_selector import HospitalSelector
 from ems.datasets.case.case_set import CaseSet
 from ems.datasets.travel_times.travel_times import TravelTimes
 from ems.generators.event.duration import EventDurationGenerator
@@ -15,9 +16,12 @@ class DeDatosCaseSet(CaseSet):
 
     def __init__(self,
                  filename: str,
-                 duration_generator: EventDurationGenerator):
+                 duration_generator: EventDurationGenerator,
+                 hospital_selector: HospitalSelector):
         self.filename = filename
-        self.cases = self.read_cases(filename, duration_generator)
+        self.duration_generator = duration_generator
+        self.hospital_selector = hospital_selector
+        self.cases = self.read_cases()
 
     def iterator(self):
         return iter(self.cases)
@@ -25,11 +29,11 @@ class DeDatosCaseSet(CaseSet):
     def __len__(self):
         return len(self.cases)
 
-    def read_cases(self, filename, duration_generator):
+    def read_cases(self):
 
         # Read cases from CSV into a pandas dataframe
         case_headers = ["id", "latitud", "longitud", "fecha", "dia_semana", "hora_llamada", "vprioridad"]
-        cases_df = parse_headered_csv(filename, case_headers)
+        cases_df = parse_headered_csv(self.filename, case_headers)
 
         # Aggregates columms 'date' and 'time' to produce a column for datetime objects
         # TODO -- SLOW OPERATION - find a better way to parse date and time to datetime object
@@ -46,7 +50,8 @@ class DeDatosCaseSet(CaseSet):
             case = RandomCase(id=row["id"],
                               date_recorded=row["datetime"],
                               incident_location=Point(row["latitud"], row["longitud"]),
-                              event_duration_generator=duration_generator,
+                              event_duration_generator=self.duration_generator,
+                              hospital_selector=self.hospital_selector,
                               priority=row["vprioridad"])
             cases.append(case)
 

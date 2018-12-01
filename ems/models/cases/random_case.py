@@ -2,6 +2,7 @@ from datetime import datetime
 
 from geopy import Point
 
+from ems.algorithms.hospital_selectors.hospital_selector import HospitalSelector
 from ems.generators.case.location.random_circle import RandomCircleLocationGenerator
 from ems.generators.event.duration import EventDurationGenerator
 from ems.models.cases.case import Case
@@ -19,9 +20,11 @@ class RandomCase(Case):
                  date_recorded: datetime,
                  incident_location: Point,
                  event_duration_generator: EventDurationGenerator,
+                 hospital_selector: HospitalSelector,
                  priority: float = None):
         super().__init__(id, date_recorded, incident_location, priority)
         self.event_duration_generator = event_duration_generator
+        self.hospital_selector = hospital_selector
 
     def iterator(self, ambulance, current_time):
         # Compute duration of trip
@@ -48,10 +51,8 @@ class RandomCase(Case):
                     event_type=EventType.AT_INCIDENT,
                     duration=duration)
 
-        # TODO -- replace with actual hospital picker!!
-        rand_loc_generator = RandomCircleLocationGenerator(center=Point(latitude=32.504876, longitude= -116.958774),
-                                                           radius=0.5)
-        hospital_location = rand_loc_generator.generate()
+        hospital_location = self.hospital_selector.select(timestamp=current_time,
+                                                          ambulance=ambulance)
 
         # Compute duration of trip
         duration = self.event_duration_generator.generate(ambulance=ambulance,

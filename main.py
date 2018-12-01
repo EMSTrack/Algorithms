@@ -3,6 +3,7 @@ from datetime import timedelta, datetime
 
 from geopy import Point
 
+from ems.algorithms.hospital_selectors.select_fastest import FastestHospitalSelector
 from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
 from ems.analysis.metrics.count_pending import CountPending
 from ems.analysis.metrics.coverage.percent_coverage import PercentCoverage
@@ -11,6 +12,7 @@ from ems.analysis.metrics.metric_aggregator import MetricAggregator
 from ems.analysis.metrics.total_delay import TotalDelay
 from ems.datasets.ambulance.custom_ambulance_set import CustomAmbulanceSet
 from ems.datasets.case.random_case_set import RandomCaseSet
+from ems.datasets.location.location_set import LocationSet
 from ems.datasets.location.tijuana_base_set import TijuanaBaseSet
 from ems.datasets.location.tijuana_demand_set import TijuanaDemandSet
 from ems.datasets.travel_times.tijuana_travel_times import TijuanaTravelTimes
@@ -36,6 +38,10 @@ settings = Settings(debug=True,
 # Initialize datasets
 demand_set = TijuanaDemandSet(filename=settings.demands_file)
 base_set = TijuanaBaseSet(filename=settings.bases_file)
+hospital_set = LocationSet(locations=[Point(longitude=-117.0097589492798,
+                                            latitude=32.52506901611384),
+                                      Point(longitude=-117.00371, latitude=32.5027),
+                                      Point(longitude=117.0078, latitude=32.5180)])
 travel_times = TijuanaTravelTimes(loc_set_1=base_set,
                                   loc_set_2=demand_set,
                                   filename=settings.travel_times_file)
@@ -66,14 +72,16 @@ perimeter_vertices = [
 ]
 
 location_generator = RandomPolygonLocationGenerator(points=perimeter_vertices)
-
 event_duration_generator = TravelTimeDurationGenerator(travel_times=travel_times)
+hospital_selector = FastestHospitalSelector(hospital_set=hospital_set,
+                                            travel_times=travel_times)
 
 case_set = RandomCaseSet(num_cases=num_cases,
                          initial_time=initial_time,
                          case_time_generator=case_time_generator,
                          location_generator=location_generator,
-                         event_duration_generator=event_duration_generator)
+                         event_duration_generator=event_duration_generator,
+                         hospital_selector=hospital_selector)
 
 # Initialize ambulance_selection algorithm
 ambulance_select = BestTravelTimeAlgorithm(travel_times=travel_times)
