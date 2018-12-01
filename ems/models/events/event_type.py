@@ -8,6 +8,6 @@ class EventType(Enum):
     AT_INCIDENT = "Attending to Incident"
     TO_HOSPITAL = "Heading to Hospital"
     AT_HOSPITAL = "Dropping off Patient at Hospital"
-    TO_BASE = "Heading to Base"
+    TO_BASE = "Returning to Base"
     OTHER = "Other"
 

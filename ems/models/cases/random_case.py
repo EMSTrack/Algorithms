@@ -75,3 +75,12 @@ class RandomCase(Case):
         yield Event(destination=hospital_location,
                     event_type=EventType.AT_HOSPITAL,
                     duration=duration)
+
+        # Compute duration of trip back to base
+        duration = self.event_duration_generator.generate(ambulance=ambulance,
+                                                          destination=ambulance.base,
+                                                          current_time=current_time)
+
+        yield Event(destination=ambulance.base,
+                    event_type=EventType.TO_BASE,
+                    duration=duration)
