@@ -116,4 +116,5 @@ ENV/
 .vscode/
 
 # Results from the simulator should NOT be pushed. 
-.results/
+./results/
+results/
