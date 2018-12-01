@@ -4,7 +4,7 @@ from datetime import timedelta, datetime
 
 from geopy import Point
 
-from ems.generators.event.duration import EventDurationGenerator
+from ems.generators.event.duration.duration import EventDurationGenerator
 from ems.models.ambulances.ambulance import Ambulance
 
 
@@ -19,7 +19,7 @@ class RandomDurationGenerator(EventDurationGenerator):
     def generate(self,
                  ambulance: Ambulance,
                  destination: Point,
-                 current_time: datetime):
+                 timestamp: datetime):
         seconds_lower_bound = self.lower_bound.total_seconds()
         seconds_upper_bound = self.upper_bound.total_seconds()
 

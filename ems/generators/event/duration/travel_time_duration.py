@@ -3,7 +3,7 @@ import datetime
 from geopy import Point
 
 from ems.datasets.travel_times.travel_times import TravelTimes
-from ems.generators.event.duration import EventDurationGenerator
+from ems.generators.event.duration.duration import EventDurationGenerator
 from ems.models.ambulances.ambulance import Ambulance
 
 
@@ -16,7 +16,7 @@ class TravelTimeDurationGenerator(EventDurationGenerator):
     def generate(self,
                  ambulance: Ambulance,
                  destination: Point,
-                 current_time: datetime):
+                 timestamp: datetime):
         # Compute the point from first location set to the ambulance location
         loc_set_1 = self.travel_times.loc_set_1
         closest_loc_to_orig, _, _ = loc_set_1.closest(ambulance.location)

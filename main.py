@@ -18,8 +18,10 @@ from ems.datasets.location.tijuana_demand_set import TijuanaDemandSet
 from ems.datasets.travel_times.tijuana_travel_times import TijuanaTravelTimes
 from ems.generators.case.location.random_polygon import RandomPolygonLocationGenerator
 from ems.generators.case.time.poisson_time import PoissonCaseTimeGenerator
-from ems.generators.event.travel_time_duration import TravelTimeDurationGenerator
+from ems.generators.event.duration.random_duration import RandomDurationGenerator
+from ems.generators.event.duration.travel_time_duration import TravelTimeDurationGenerator
 from ems.algorithms.base_selectors.kmeans_base_selector import KMeansBaseSelector
+from ems.generators.event.event_duration_gen_set import EventGenerator
 from ems.settings import Settings
 from ems.simulators.dispatcher_simulator_event import EventBasedDispatcherSimulator
 
@@ -71,16 +73,26 @@ perimeter_vertices = [
     Point(32.530337, -117.123475)
 ]
 
-location_generator = RandomPolygonLocationGenerator(points=perimeter_vertices)
-event_duration_generator = TravelTimeDurationGenerator(travel_times=travel_times)
+case_location_generator = RandomPolygonLocationGenerator(points=perimeter_vertices)
+
+event_travel_duration_generator = TravelTimeDurationGenerator(travel_times=travel_times)
+event_incident_duration_generator = RandomDurationGenerator(lower_bound=timedelta(minutes=5),
+                                                            upper_bound=timedelta(minutes=10))
+event_hospital_duration_generator = RandomDurationGenerator(lower_bound=timedelta(minutes=5),
+                                                            upper_bound=timedelta(minutes=10))
 hospital_selector = FastestHospitalSelector(hospital_set=hospital_set,
                                             travel_times=travel_times)
+
+event_generator = EventGenerator(travel_duration_generator=event_travel_duration_generator,
+                                 incident_duration_generator=event_incident_duration_generator,
+                                 hospital_duration_generator=event_hospital_duration_generator,
+                                 hospital_selector=hospital_selector)
 
 case_set = RandomCaseSet(num_cases=num_cases,
                          initial_time=initial_time,
                          case_time_generator=case_time_generator,
-                         location_generator=location_generator,
-                         event_duration_generator=event_duration_generator,
+                         location_generator=case_location_generator,
+                         event_generator=event_generator,
                          hospital_selector=hospital_selector)
 
 # Initialize ambulance_selection algorithm

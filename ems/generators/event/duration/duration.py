@@ -11,5 +11,5 @@ class EventDurationGenerator:
     def generate(self,
                  ambulance: Ambulance,
                  destination: Point,
-                 current_time: datetime):
+                 timestamp: datetime):
         raise NotImplementedError()

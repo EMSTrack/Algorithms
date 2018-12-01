@@ -4,10 +4,7 @@ from geopy import Point
 
 from ems.algorithms.hospital_selectors.hospital_selector import HospitalSelector
 from ems.datasets.case.case_set import CaseSet
-from ems.datasets.travel_times.travel_times import TravelTimes
 from ems.generators.event.duration import EventDurationGenerator
-from ems.generators.event.random_duration import RandomDurationGenerator
-from ems.generators.event.travel_time_duration import TravelTimeDurationGenerator
 from ems.models.cases.random_case import RandomCase
 from ems.utils import parse_headered_csv
 
