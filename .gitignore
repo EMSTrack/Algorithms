@@ -115,3 +115,4 @@ ENV/
 # Results from the simulator should NOT be pushed.
 ./results/*.csv
 results/*.csv
+.mp4
