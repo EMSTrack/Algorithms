@@ -5,7 +5,7 @@ from ems.datasets.case.case_set import CaseSet
 
 from ems.generators.case.location.location import LocationGenerator
 from ems.generators.case.time.time import CaseTimeGenerator
-from ems.generators.event.event_duration_gen_set import EventGenerator
+from ems.generators.event.event_generator import EventGenerator
 
 from ems.models.cases.random_case import RandomCase
 

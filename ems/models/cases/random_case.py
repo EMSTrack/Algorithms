@@ -2,7 +2,7 @@ from datetime import datetime
 
 from geopy import Point
 
-from ems.generators.event.event_duration_gen_set import EventGenerator
+from ems.generators.event.event_generator import EventGenerator
 from ems.models.cases.case import Case
 from ems.models.events.event_type import EventType
 

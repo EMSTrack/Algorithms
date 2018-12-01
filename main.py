@@ -21,7 +21,7 @@ from ems.generators.case.time.poisson_time import PoissonCaseTimeGenerator
 from ems.generators.event.duration.random_duration import RandomDurationGenerator
 from ems.generators.event.duration.travel_time_duration import TravelTimeDurationGenerator
 from ems.algorithms.base_selectors.kmeans_base_selector import KMeansBaseSelector
-from ems.generators.event.event_duration_gen_set import EventGenerator
+from ems.generators.event.event_generator import EventGenerator
 from ems.settings import Settings
 from ems.simulators.dispatcher_simulator_event import EventBasedDispatcherSimulator
 
