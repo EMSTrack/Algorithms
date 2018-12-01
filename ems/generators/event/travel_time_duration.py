@@ -26,6 +26,4 @@ class TravelTimeDurationGenerator(EventDurationGenerator):
         closest_loc_to_dest, _, _ = loc_set_2.closest(destination)
 
         # Return time lookup
-        print('Orig: {}'.format(str(closest_loc_to_orig))) #TODO
-        print('Dest: {}'.format(str(closest_loc_to_dest))) #TODO
         return self.travel_times.get_time(closest_loc_to_orig, closest_loc_to_dest)
