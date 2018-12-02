@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# gvim 
+# gvim
 *~
 *.swp
 *.*.swp
@@ -115,3 +115,5 @@ ENV/
 # Results from the simulator should NOT be pushed.
 ./results/*.csv
 results/*.csv
+.mp4
+.vscode/

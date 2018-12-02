@@ -25,11 +25,17 @@ from ems.generators.event.event_generator import EventGenerator
 from ems.settings import Settings
 from ems.simulators.dispatcher_simulator_event import EventBasedDispatcherSimulator
 
-parser = argparse.ArgumentParser(description="Load settings, data, preprocess models, run sim.")
+parser = argparse.ArgumentParser(description="Load settings, data, preprocess models. Run simulator on "
+                                             "ambulance dispatch. Decisions are made during the simulation, but "
+                                             "the events are output to a csv file for replay.")
+
+parser.add_argument('--settings', help="for example, '--settings hans'. Don't include '.json'", type=str, required=True)
+
 parser.add_argument('--ambulances', help="Number of ambulances", type=int, required=False)
 parser.add_argument('--bases', help='Number of bases', type=int, required=False)
-parser.add_argument('--settings', help="for example, '--settings hans'. Don't include '.json'", type=str, required=True)
+
 parser.add_argument('--slices', help="Number of cases to simulate", type=int, required=False)
+parser.add_argument('--output-file', help="Output filename for simulator info", type=str, required=False)
 
 clargs = parser.parse_args()
 
@@ -54,9 +60,10 @@ travel_times = TijuanaTravelTimes(loc_set_1=base_set,
 
 # Define random case params
 # This example = 4 cases an hour
-num_cases = 200
 
-timeframe = timedelta(hours=48)
+num_cases = 5
+timeframe = timedelta(hours=1)
+
 initial_time = datetime.now() - timeframe
 end_time = datetime.now()
 minutes = timeframe.total_seconds() / 60
@@ -65,6 +72,12 @@ minutes = timeframe.total_seconds() / 60
 case_time_generator = PoissonCaseTimeGenerator(lmda=num_cases / minutes)
 
 # Define a random location generator
+
+center = Point(latitude=32.504876, longitude= -116.958774)
+radius = 0.5
+
+# location_generator = RandomCircleLocationGenerator(center=center, radius=radius)
+
 perimeter_vertices = [
     Point(32.533696, -117.123506),
     Point(32.554803, -116.876454),
