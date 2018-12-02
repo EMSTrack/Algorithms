@@ -115,5 +115,9 @@ ENV/
 # Results from the simulator should NOT be pushed.
 ./results/*.csv
 results/*.csv
+<<<<<<< HEAD
 .mp4
 .vscode/
+=======
+.mp4 
+>>>>>>> modularization

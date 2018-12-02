@@ -26,10 +26,11 @@
     # Using the duration and the start time, calculate the new start time. Repeat until
     # no more paths to take.
 
-# import numpy as np
+
+
+
+import numpy as np
 import pandas as pd
-# import matplotlib.pyplot as plt
-# import matplotlib.animation as animation
 
 from ambulance_trip import AmbulanceTrip
 
@@ -55,6 +56,9 @@ class RegionalVisualizer:
         """
 
         raw_data = pd.read_csv(source_file)
+
+        np.array([[[]]])
+
         self.ambulance_trips = []
 
         for index in raw_data.index:
