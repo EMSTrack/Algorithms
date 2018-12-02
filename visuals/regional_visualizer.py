@@ -27,25 +27,16 @@
     # no more paths to take.
 
 
-
-
 import numpy as np
 import pandas as pd
+from geopy import Point
 
 from ambulance_trip import AmbulanceTrip
-
-
 
 class RegionalVisualizer:
     """ Basically a 3d Array: time x ambulances x dot positions """
 
-    def __init_ambulances(self, count):
-        """ Generates a list of colors for each ambulance, randomly. """
-        self.ambulance_colors = []
-        for i in range(0, count):
-            self.ambulance_colors.append(None)
-
-    def __init__(self, source_file):
+    def __init__(self, source_file, ambulance_file):
         """
         Get the starting location for each path
         Get the number of ambulances
@@ -56,15 +47,31 @@ class RegionalVisualizer:
         """
 
         raw_data = pd.read_csv(source_file)
+        amb_data = pd.read_csv(ambulance_file)
 
-        np.array([[[]]])
+        np.array([[[]]])  # TODO Not sure if necessary
 
-        self.ambulance_trips = []
+
+        ambulance_bases = self.__init_ambulances(amb_data)
+        # from IPython import embed; embed()
+
+        self.ambulance_trips = [[] for _ in range(len(ambulance_bases))]
 
         for index in raw_data.index:
             row = raw_data.iloc[[index]]
-            a = AmbulanceTrip(row)
-            self.ambulance_trips.append(a)
+            amb_trip = AmbulanceTrip(row, ambulance_bases)
+            self.ambulance_trips[amb_trip.ambulance_id].append(amb_trip)
+
+    def __init_ambulances(self, data):
+        """ Generates a list of colors for each ambulance, randomly. """
+
+        ambulance_bases = [
+            Point(
+                data.iloc[[index]]['base_latitude'].values[0], data.iloc[[index]]['base_longitude'].values[0]
+            )
+            for index in data.index
+        ]
+        return ambulance_bases
 
     def __str__(self):
         return str(self.ambulance_trips)
@@ -72,15 +79,14 @@ class RegionalVisualizer:
 
 
 def main():
+    amb_file = '../results/ambulances.csv'
+    src_file = '../results/processed_cases.csv'
+    r = RegionalVisualizer(src_file, amb_file)
 
-    srcfile = '../results/processed_cases.csv'
-    r = RegionalVisualizer(srcfile)
-
-    for a in r.ambulance_trips:
-        print(a)
+    from IPython import embed; embed()
 
 
 if __name__ == "__main__":
-    print("main starting")
+    print("vis starting")
     main()
-    print("main ended")
+    print("vis ended")

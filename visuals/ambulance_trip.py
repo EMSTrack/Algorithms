@@ -13,6 +13,22 @@ class AmbulanceTrip:
     Let's say one dot per minute?
     """
 
+    def __init__(self, row, ambulances):
+        """
+        A single trip of an ambulance has any number of lines.
+        Alternates between stationary and traveling.
+
+
+        """
+
+        self.row = {k: row[k].values[0] for k in row} # TODO Don't save this in the object
+        self.ambulances = ambulances # TODO also dont keep this in the object
+
+        # cast the appropriate types
+        self.__location()
+        self.__duration()
+        self._dots_and_lines() # TODO Make clear what is being saved to self
+
     def __location(self):
         """ Using regexs to convert lat, lons from doubles into geopy.Points """
 
@@ -27,53 +43,35 @@ class AmbulanceTrip:
         for location_name in names:
             lat = self.row[location_name + "_latitude"]
             lon = self.row[location_name + "_longitude"]
-            self.row[location_name + "_point"] = Point(lat, lon)
+            self.row[location_name + "_point"] = Point(lat, lon) # TODO Don't save this in self.
             del self.row[location_name + "_latitude"]
             del self.row[location_name + "_longitude"]
 
     def __duration(self):
         """ For each ___duration, convert into timedelta.  """
 
-        self.row['start_time'] = pd.to_datetime(self.row['start_time'])
+        self.row['start_time'] = pd.to_datetime(self.row['start_time']) # TODO Don't save this in self.
 
         for k in self.row:
             if "_duration" in k:
                 self.row[k] = pd.to_timedelta(self.row[k])
 
-    def __init__(self, row):
+    def _dots_and_lines(self):
         """
-        A single trip of an ambulance has any number of lines.
-        Alternates between stationary and traveling.
+        Converts the ambulance trip into dots and lines.
 
-        :param amb_id:
-        :param starts:
-        :param ends:
-        :param durations:
-        """
-
-        self.row = {k: row[k].values[0] for k in row}
-
-        # cast the appropriate types
-        self.__location()
-        self.__duration()
-
-    def __str__(self):
-        return str(self.row)
-
-    def dots_and_lines(self):
-        """
-        TODO Converts the ambulance trip into dots and lines.
         :param l: list of list of strings denoting stationary or travel actions
         :return:
         """
 
+        self.ambulance_id = self.row['ambulance']
         events = []
 
         # Travel from base to incident
         l1 = Line(
-            None, # TODO We don't have the starting locations yet so I might have to bullshit this.
+            self.ambulances[self.ambulance_id],
             self.row["incident_point"],
-            events[-1].end_time(),
+            self.row['start_time'],
             self.row["TO_INCIDENT_duration"]
         )
         events.append(l1)
@@ -100,18 +98,25 @@ class AmbulanceTrip:
             events[-1].end_time(),
             self.row['AT_INCIDENT_duration']
         )
-        events.append(d1)
+        events.append(d2)
 
         # From hospital to base
         l3 = Line(
             self.row['hospital_point'],
-            None, # TODO Base Location
+            self.ambulances[self.ambulance_id],
             events[-1].end_time(),
-            None # TODO To base duration
+            self.row['TO_BASE_duration']
         )
         events.append(l3)
 
-        # Time at base
+        self.events = events # TODO DO SAVE THIS IN SELF. Just od it up there.
+        self.end_time = events[-1].end_time() + self.row['TO_BASE_duration'] # TODO same with this one
 
-    def end_time(self):
-        raise NotImplementedError
+        # Time at base should be calculate from this endtime and next start_time
+
+
+    def __str__(self):
+        return str([str(event) for event in self.events]) + "\n" +  str(self.end_time)
+
+    def get_end_time(self):
+        return self.end_time
