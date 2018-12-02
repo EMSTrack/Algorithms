@@ -130,6 +130,7 @@ sim = EventBasedDispatcherSimulator(ambulance_set=ambulance_set,
 # Start the simulation
 case_record_set, metric_aggregator = sim.run()
 
+ambulance_set.write_to_file('./results/ambulances.csv')
 case_record_set.write_to_file('./results/processed_cases.csv')
 metric_aggregator.write_to_file('./results/metrics.csv')
 
