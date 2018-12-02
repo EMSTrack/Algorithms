@@ -74,7 +74,6 @@ def main():
 
     p3 = Path(Point(0, 0), Point(1, 1), pieces=50, display=5)
 
-
     fig1 = plt.figure()
 
     # data = np.random.rand(2, 25)
@@ -95,6 +94,7 @@ def main():
     # To save the animation, use the command: line_ani.save('lines.mp4')
     # line_ani.save('line.mp4', fps=30)
     plt.show()
+
 
 if __name__ == "__main__":
     main()
