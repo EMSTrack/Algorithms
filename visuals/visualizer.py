@@ -72,6 +72,7 @@ class RegionalVisualizer:
 
 
 def main():
+
     srcfile = '../results/processed_cases.csv'
     r = RegionalVisualizer(srcfile)
 
