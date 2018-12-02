@@ -28,7 +28,7 @@ class ProcessedCases:
 
         for index in self.cases.index:
             row = self.cases.iloc[[index]]
-            x1, y1, x2, y2 = ( row.incident_longitude, row.incident_latitude,
+            x1, y1, x2, y2 = (row.incident_longitude, row.incident_latitude,
                              row.hospital_longitude, row.hospital_latitude)
 
             x1 = x1.values[0]
