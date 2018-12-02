@@ -69,28 +69,49 @@ class AmbulanceTrip:
 
         events = []
 
-        # From base to incident
-        Line()
+        # Travel from base to incident
+        l1 = Line(
+            None, # TODO We don't have the starting locations yet so I might have to bullshit this.
+            self.row["incident_point"],
+            events[-1].end_time(),
+            self.row["TO_INCIDENT_duration"]
+        )
+        events.append(l1)
 
-        # Time at incident
-        Dot(
+        # Stationary time at incident
+        d1 = Dot(
             self.row['incident_point'],
-            self.row["start_time"] + self.row['TO_INCIDENT_duration'],
+            events[-1].end_time(),
             self.row['AT_INCIDENT_duration']
         )
+        events.append(d1)
 
         # From incident to hospital
-        Line(
+        l2 = Line(
             self.row['incident_point'],
             self.row['hospital_point'],
-            self.row["start_time"] + self.row['TO_INCIDENT_duration'] + self.row['AT_INCIDENT_duration'],
+            events[-1].end_time(),
             self.row['TO_HOSPITAL_duration'])
+        events.append(l2)
 
         # Time at hospital
+        d2 = Dot(
+            self.row['hospital_point'],
+            events[-1].end_time(),
+            self.row['AT_INCIDENT_duration']
+        )
+        events.append(d1)
 
         # From hospital to base
+        l3 = Line(
+            self.row['hospital_point'],
+            None, # TODO Base Location
+            events[-1].end_time(),
+            None # TODO To base duration
+        )
+        events.append(l3)
 
         # Time at base
-        
+
     def end_time(self):
         raise NotImplementedError
