@@ -34,13 +34,28 @@ import re
 from geopy import Point
 
 
-class Dot:
-    """ Represents the location of the ambulance over time.  """
+class Event:
+
+    def __init__(self):
+        pass
+
+    def end_time(self):
+        raise NotImplementedError
+
+
+class Dot(Event):
+    """ Represents the location of the ambulance over time."""
     def __init__(self, location, starting_time, duration):
+        """
+
+        :param location:
+        :param starting_time:
+        :param duration:
+        """
         pass
 
 
-class Line:
+class Line(Event):
     """ Represents the edge of the ambulance over time. """
     def __duration_as_dots(self):
         """
@@ -85,6 +100,9 @@ class AmbulanceTrip:
 
     def __duration(self):
         """ For each ___duration, convert into timedelta.  """
+
+        self.row['start_time'] = pd.to_datetime(self.row['start_time'])
+
         for k in self.row:
             if "_duration" in k:
                 self.row[k] = pd.to_timedelta(self.row[k])
@@ -108,6 +126,39 @@ class AmbulanceTrip:
     def __str__(self):
         return str(self.row)
 
+    def dots_and_lines(self):
+        """
+        TODO Converts the ambulance trip into dots and lines.
+        :param l: list of list of strings denoting stationary or travel actions
+        :return:
+        """
+
+        events = []
+
+        # From base to incident
+        Line()
+
+        # Time at incident
+        Dot(
+            self.row['incident_point'],
+            self.row["start_time"] + self.row['TO_INCIDENT_duration'],
+            self.row['AT_INCIDENT_duration']
+        )
+
+        # From incident to hospital
+        Line(
+            self.row['incident_point'],
+            self.row['hospital_point'],
+            self.row["start_time"] + self.row['TO_INCIDENT_duration'] + self.row['AT_INCIDENT_duration'],
+            self.row['TO_HOSPITAL_duration'])
+
+        # Time at hospital
+
+        # From hospital to base
+
+        # Time at base
+    def end_time(self):
+        raise NotImplementedError
 
 class RegionalVisualizer:
     """ Basically a 3d Array: time x ambulances x dot positions """
@@ -138,6 +189,8 @@ class RegionalVisualizer:
 
     def __str__(self):
         return str(self.ambulance_trips)
+
+
 
 def main():
     srcfile = '../results/processed_cases.csv'
