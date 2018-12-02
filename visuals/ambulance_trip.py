@@ -14,7 +14,7 @@ class AmbulanceTrip:
     """
 
     def __location(self):
-        """Convert lat, lons from doubles into geopy.Points"""
+        """ Using regexs to convert lat, lons from doubles into geopy.Points """
 
         names = set()
         for k in self.row:
@@ -44,6 +44,7 @@ class AmbulanceTrip:
         """
         A single trip of an ambulance has any number of lines.
         Alternates between stationary and traveling.
+
         :param amb_id:
         :param starts:
         :param ends:
@@ -90,5 +91,6 @@ class AmbulanceTrip:
         # From hospital to base
 
         # Time at base
+        
     def end_time(self):
         raise NotImplementedError
