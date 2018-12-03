@@ -61,7 +61,7 @@ travel_times = TijuanaTravelTimes(loc_set_1=base_set,
 # Define random case params
 # This example = 4 cases an hour
 
-num_cases = 15
+num_cases = 3
 timeframe = timedelta(hours=1)
 
 initial_time = datetime.now() - timeframe
