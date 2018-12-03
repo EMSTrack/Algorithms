@@ -3,6 +3,7 @@ from geopy import Point
 from event import Line, Dot
 import pandas as pd
 
+
 class AmbulanceTrip:
     """ Each case should have three instances of these enumerated.
     Takes the data from the CSV and changes into start dot, end dot, and
@@ -14,12 +15,8 @@ class AmbulanceTrip:
     """
 
     def __init__(self, row, ambulances):
-        """
-        A single trip of an ambulance has any number of lines.
-        Alternates between stationary and traveling.
-
-
-        """
+        """ A single trip of an ambulance has any number of lines.
+        Alternates between stationary and traveling. """
 
         self.row = {k: row[k].values[0] for k in row} # TODO Don't save this in the object
         self.ambulances = ambulances # TODO also dont keep this in the object
@@ -32,6 +29,7 @@ class AmbulanceTrip:
     def __location(self):
         """ Using regexs to convert lat, lons from doubles into geopy.Points """
 
+        # Match all non-BASE location points.
         names = set()
         for k in self.row:
             if any([
@@ -40,6 +38,7 @@ class AmbulanceTrip:
             ):
                 names.add(k.split("_")[0])
 
+        # Recreate them as geopy.Points
         for location_name in names:
             lat = self.row[location_name + "_latitude"]
             lon = self.row[location_name + "_longitude"]
@@ -114,9 +113,10 @@ class AmbulanceTrip:
 
         # Time at base should be calculate from this endtime and next start_time
 
-
     def __str__(self):
-        return str([str(event) for event in self.events]) + "\n" +  str(self.end_time)
+        print("\n    ".join([str(event) for event in self.events]) + "\n" + str(self.end_time))
+        return "\n\n    ".join([str(event) for event in self.events]) + "\n" + \
+               "end: " + str(self.end_time) + "\n"
 
     def get_end_time(self):
         return self.end_time

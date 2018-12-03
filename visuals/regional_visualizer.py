@@ -26,56 +26,70 @@
     # Using the duration and the start time, calculate the new start time. Repeat until
     # no more paths to take.
 
+# TODO IF AMBULANCE TRIP IS EMPTY THEN IT IS IN BASE. JUST FILL IN THE BLANKS WITH BASE_LOC
+
 
 import numpy as np
 import pandas as pd
 from geopy import Point
+from IPython import embed
 
 from ambulance_trip import AmbulanceTrip
 
+
 class RegionalVisualizer:
-    """ Basically a 3d Array: time x ambulances x dot positions """
+    """ Basically a 3d Array: time x ambulances x dot positions.
+     This class is the overall visualizer that invokes reading the CSV files,
+     processes them into useful data, and runs the matplotlib animations. """
 
     def __init__(self, source_file, ambulance_file):
         """
-        Get the starting location for each path
-        Get the number of ambulances
-        Read in the cases, convert them into paths
-        Put each path into the list.
 
         :param source_file:
+        :param ambulance_file:
         """
 
+        # Read the raw data from the CSV files
         raw_data = pd.read_csv(source_file)
         amb_data = pd.read_csv(ambulance_file)
 
-        np.array([[[]]])  # TODO Not sure if necessary
-
-
+        # Get the number and starting location of the ambulances
         ambulance_bases = self.__init_ambulances(amb_data)
-        # from IPython import embed; embed()
-
         self.ambulance_trips = [[] for _ in range(len(ambulance_bases))]
 
+        self.start_time = pd.to_datetime(raw_data.iloc[[0]]['start_time'].values[0])
+
+        # Read each row of the trips. Each row is an ambulance case.
         for index in raw_data.index:
             row = raw_data.iloc[[index]]
             amb_trip = AmbulanceTrip(row, ambulance_bases)
             self.ambulance_trips[amb_trip.ambulance_id].append(amb_trip)
 
+        # Find the end time
+        end_time = None
+        for trips in self.ambulance_trips:
+            if trips:
+                last_trip = trips[-1]
+                if not end_time or end_time < last_trip.end_time:
+                    end_time = last_trip.end_time
+
+        self.end_time = end_time
+        self.num_minutes = round((self.end_time - self.start_time).seconds/60)
+        embed()
+
     def __init_ambulances(self, data):
         """ Generates a list of colors for each ambulance, randomly. """
 
-        ambulance_bases = [
-            Point(
-                data.iloc[[index]]['base_latitude'].values[0], data.iloc[[index]]['base_longitude'].values[0]
-            )
-            for index in data.index
+        ambulance_bases = [Point(
+            data.iloc[[index]]['base_latitude'].values[0],
+            data.iloc[[index]]['base_longitude'].values[0]
+            ) for index in data.index
         ]
         return ambulance_bases
 
     def __str__(self):
-        return str(self.ambulance_trips)
-
+        return "\n  ".join(['['] + [str(ambulance_trip) + ',' for ambulance_life in self.ambulance_trips \
+                                    for ambulance_trip in ambulance_life ]) + "\n]"
 
 
 def main():
@@ -83,7 +97,8 @@ def main():
     src_file = '../results/processed_cases.csv'
     r = RegionalVisualizer(src_file, amb_file)
 
-    from IPython import embed; embed()
+    print(r)
+    # embed()
 
 
 if __name__ == "__main__":
