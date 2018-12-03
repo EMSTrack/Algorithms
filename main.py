@@ -1,6 +1,7 @@
 import argparse
 from datetime import timedelta, datetime
 
+import numpy as np
 from geopy import Point
 
 from ems.algorithms.hospital_selectors.select_fastest import FastestHospitalSelector
@@ -12,15 +13,16 @@ from ems.analysis.metrics.metric_aggregator import MetricAggregator
 from ems.analysis.metrics.total_delay import TotalDelay
 from ems.datasets.ambulance.custom_ambulance_set import CustomAmbulanceSet
 from ems.datasets.case.random_case_set import RandomCaseSet
+from ems.datasets.location.kd_tree_location_set import KDTreeLocationSet
 from ems.datasets.location.location_set import LocationSet
-from ems.datasets.location.tijuana_base_set import TijuanaBaseSet
-from ems.datasets.location.tijuana_demand_set import TijuanaDemandSet
+from ems.datasets.location.base.tijuana_base_set import TijuanaBaseSet
+from ems.datasets.location.demand.tijuana_demand_set import TijuanaDemandSet
 from ems.datasets.travel_times.tijuana_travel_times import TijuanaTravelTimes
 from ems.generators.case.location.random_polygon import RandomPolygonLocationGenerator
 from ems.generators.case.time.poisson_time import PoissonCaseTimeGenerator
 from ems.generators.event.duration.random_duration import RandomDurationGenerator
 from ems.generators.event.duration.travel_time_duration import TravelTimeDurationGenerator
-from ems.algorithms.base_selectors.kmeans_base_selector import KMeansBaseSelector
+from ems.algorithms.base_selectors.round_robin import RoundRobinBaseSelector
 from ems.generators.event.event_generator import EventGenerator
 from ems.settings import Settings
 from ems.simulators.dispatcher_simulator_event import EventBasedDispatcherSimulator
@@ -53,6 +55,33 @@ hospital_set = LocationSet(locations=[Point(longitude=-117.0097589492798,
 travel_times = TijuanaTravelTimes(loc_set_1=base_set,
                                   loc_set_2=demand_set,
                                   filename=settings.travel_times_file)
+
+
+# Filter base_set
+np_travel_times = np.array(travel_times.times)
+chosen_bases = []
+demands_covered = 0
+required_travel_time = 600
+
+for _ in range(settings.num_bases):
+    # Make a True/False table of the travel_times and then count how many covered.
+    covered = [[t < required_travel_time for t in row] for row in np_travel_times]
+    count_covered = [(index, covered[index].count(True)) for index in range(len(covered))]
+    d = [('index', int), ('covered', int)]
+    count_covered = np.array(count_covered, d)
+
+    # Sort the table by row and grab the last element (the base with the most coverage)
+    (best_base, count) = np.sort(count_covered, order='covered', kind='mergesort')[-1]
+    chosen_bases.append(base_set.locations[best_base])
+    demands_covered += count
+    demand_coverage = covered[best_base]
+
+    # Delete the covered columns
+    delete_cols = [d for d in range(len(demand_coverage)) if demand_coverage[d]]
+    np_travel_times = np.delete(np_travel_times, delete_cols, axis=1)
+
+# Create new base set after filtering bases
+base_set = KDTreeLocationSet(chosen_bases)
 
 # Initialize dataset for cases
 # case_set = Jan2017CaseSet(filename=settings.cases_file)
@@ -128,9 +157,7 @@ count_pending = CountPending()
 metric_aggregator = MetricAggregator([percent_coverage, total_delay, count_pending])
 
 # Generate ambulances - random base placement (may want to abstract into function)
-base_selector = KMeansBaseSelector(base_set=base_set,
-                                   travel_times=travel_times,
-                                   num_bases=settings.num_bases)
+base_selector = RoundRobinBaseSelector(base_set=base_set)
 ambulance_set = CustomAmbulanceSet(ambulance_count=settings.num_ambulances,
                                    base_selector=base_selector)
 
@@ -144,6 +171,8 @@ sim = EventBasedDispatcherSimulator(ambulance_set=ambulance_set,
 case_record_set, metric_aggregator = sim.run()
 
 ambulance_set.write_to_file('./results/ambulances.csv')
+base_set.write_to_file('./results/bases.csv')
+hospital_set.write_to_file('./results/hospitals.csv')
 case_record_set.write_to_file('./results/processed_cases.csv')
 metric_aggregator.write_to_file('./results/metrics.csv')
 

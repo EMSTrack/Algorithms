@@ -1,3 +1,4 @@
+import pandas as pd
 from typing import List
 
 from geopy import Point
@@ -13,3 +14,9 @@ class LocationSet:
 
     def closest(self, point: Point):
         raise NotImplementedError()
+
+    def write_to_file(self, output_filename: str):
+        a = [{"latitude": location.latitude,
+              "longitude": location.longitude} for location in self.locations]
+        df = pd.DataFrame(a, columns=["latitude", "longitude"])
+        df.to_csv(output_filename, index=False)

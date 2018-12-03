@@ -7,8 +7,7 @@ from ems.utils import parse_unheadered_csv
 class TijuanaBaseSet(KDTreeLocationSet):
 
     def __init__(self, filename):
-        bases = self.read_bases(filename)
-        super().__init__(bases)
+        super().__init__(self.read_bases(filename))
 
     def read_bases(self, filename):
         # Read bases from an unheadered CSV into a pandas dataframe

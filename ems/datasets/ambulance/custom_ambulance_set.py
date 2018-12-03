@@ -1,6 +1,6 @@
 import pandas as pd
 
-from ems.algorithms.base_selectors.amb_base_selector import AmbulanceBaseSelector
+from ems.algorithms.base_selectors.selector import AmbulanceBaseSelector
 from ems.datasets.ambulance.ambulance_set import AmbulanceSet
 from ems.models.ambulances.ambulance import Ambulance
 
