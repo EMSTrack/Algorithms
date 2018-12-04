@@ -2,9 +2,8 @@
 import pandas as pd
 from geopy import Point
 
-from ems.algorithms.hospital_selectors.hospital_selector import HospitalSelector
 from ems.datasets.case.case_set import CaseSet
-from ems.generators.event.duration import EventDurationGenerator
+from ems.generators.event.event_generator import EventGenerator
 from ems.models.cases.random_case import RandomCase
 from ems.utils import parse_headered_csv
 
@@ -13,11 +12,9 @@ class DeDatosCaseSet(CaseSet):
 
     def __init__(self,
                  filename: str,
-                 duration_generator: EventDurationGenerator,
-                 hospital_selector: HospitalSelector):
+                 event_generator: EventGenerator):
         self.filename = filename
-        self.duration_generator = duration_generator
-        self.hospital_selector = hospital_selector
+        self.event_generator = event_generator
         self.cases = self.read_cases()
 
     def iterator(self):
@@ -47,8 +44,7 @@ class DeDatosCaseSet(CaseSet):
             case = RandomCase(id=row["id"],
                               date_recorded=row["datetime"],
                               incident_location=Point(row["latitud"], row["longitud"]),
-                              event_duration_generator=self.duration_generator,
-                              hospital_selector=self.hospital_selector,
+                              event_generator=self.event_generator,
                               priority=row["vprioridad"])
             cases.append(case)
 
