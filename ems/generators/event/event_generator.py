@@ -46,8 +46,7 @@ class EventGenerator:
             duration = self.travel_duration_generator.generate(ambulance=ambulance,
                                                                destination=incident_location,
                                                                timestamp=timestamp)
-        # TODO -- other
-        else:
+        elif event_type == EventType.TO_HOSPITAL or event_type == EventType.AT_HOSPITAL:
 
             if not hospital_location:
                 destination = self.hospital_selector.select(timestamp=timestamp,
@@ -63,6 +62,9 @@ class EventGenerator:
                 duration = self.hospital_duration_generator.generate(ambulance=ambulance,
                                                                      destination=destination,
                                                                      timestamp=timestamp)
+        else:
+            # TODO -- other
+            pass
         return Event(destination=destination,
                      duration=duration,
                      event_type=event_type)
