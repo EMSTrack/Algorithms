@@ -10,7 +10,7 @@ from ems.models.events.event_type import EventType
 
 class CaseRecordSet:
 
-    # TODO enforce case_records sorted
+    # TODO -- test sort case records
     def __init__(self,
                  case_records: List[CaseRecord] = None):
 
@@ -18,6 +18,7 @@ class CaseRecordSet:
             case_records = []
 
         self.case_records = case_records
+        self.case_records.sort()
 
     def add_case_record(self, case_record: CaseRecord):
         bisect.insort(self.case_records, case_record)
