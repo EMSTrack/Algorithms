@@ -10,7 +10,7 @@ from shapely.ops import triangulate
 from ems.generators.case.location.location import LocationGenerator
 
 
-class RandomPolygonLocationGenerator(LocationGenerator):
+class PolygonLocationGenerator(LocationGenerator):
 
     def __init__(self, points: List[Point]):
         self.polygon = geometry.Polygon([(point.longitude, point.latitude) for point in points])

@@ -18,7 +18,8 @@ from ems.datasets.location.location_set import LocationSet
 from ems.datasets.location.base.tijuana_base_set import TijuanaBaseSet
 from ems.datasets.location.demand.tijuana_demand_set import TijuanaDemandSet
 from ems.datasets.travel_times.tijuana_travel_times import TijuanaTravelTimes
-from ems.generators.case.location.random_polygon import RandomPolygonLocationGenerator
+from ems.generators.case.location.multiple_polygon import MultiPolygonLocationGenerator
+from ems.generators.case.location.polygon import PolygonLocationGenerator
 from ems.generators.case.time.poisson_time import PoissonCaseTimeGenerator
 from ems.generators.event.duration.random_duration import RandomDurationGenerator
 from ems.generators.event.duration.travel_time_duration import TravelTimeDurationGenerator
@@ -92,6 +93,8 @@ base_set = KDTreeLocationSet(chosen_bases)
 
 num_cases = 3
 timeframe = timedelta(hours=1)
+# num_cases = 400
+# timeframe = timedelta(hours=96)
 
 initial_time = datetime.now() - timeframe
 end_time = datetime.now()
@@ -107,6 +110,33 @@ radius = 0.5
 
 # location_generator = RandomCircleLocationGenerator(center=center, radius=radius)
 
+# p1 = [
+#     Point(32.536133, -117.046517),
+#     Point(32.524786, -117.048024),
+#     Point(32.516778, -117.033531),
+#     Point(32.523999, -117.011641),
+#     Point(32.540343, -117.012103)
+# ]
+#
+# p2 = [
+#     Point(32.517819, -117.056606),
+#     Point(32.514025, -117.076816),
+#     Point(32.496831, -117.068864),
+#     Point(32.492395, -117.052702),
+#     Point(32.503284, -117.052451)
+# ]
+#
+# p3 = [
+#     Point(32.507969, -117.040670),
+#     Point(32.493550, -117.030457),
+#     Point(32.497594, -117.003704),
+#     Point(32.516966, -117.008547)
+# ]
+#
+# polygons = [p1, p2, p3]
+
+# case_location_generator = MultiPolygonLocationGenerator(polygons, densities=[0.65, 0.15, 0.2])
+
 perimeter_vertices = [
     Point(32.533696, -117.123506),
     Point(32.554803, -116.876454),
@@ -115,7 +145,7 @@ perimeter_vertices = [
     Point(32.530337, -117.123475)
 ]
 
-case_location_generator = RandomPolygonLocationGenerator(points=perimeter_vertices)
+case_location_generator = PolygonLocationGenerator(perimeter_vertices)
 
 event_travel_duration_generator = TravelTimeDurationGenerator(travel_times=travel_times)
 event_incident_duration_generator = RandomDurationGenerator(lower_bound=timedelta(minutes=5),

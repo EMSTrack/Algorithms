@@ -8,7 +8,7 @@ from ems.generators.case.location.location import LocationGenerator
 
 # Implementation for a location generator that randomly selects a point uniformly from a circle with given
 # center and radius
-class RandomCircleLocationGenerator(LocationGenerator):
+class CircleLocationGenerator(LocationGenerator):
 
     def __init__(self,
                  center: Point,
