@@ -144,9 +144,9 @@ class EventDispatcherSimulator(Simulator):
         case_next_event = next(case_event_iterator)
         case_event_finish_datetime = current_time + case_next_event.duration
 
-        print("Started new event (Duration {}) for case {}: {}".format(case_next_event.duration,
-                                                                       case.id,
-                                                                       case_next_event.event_type))
+        print("Started new event: {}".format(case_next_event.event_type.value))
+        print("Destination: {}, {}".format(case_next_event.destination.latitude, case_next_event.destination.longitude))
+        print("Duration: {}".format(case_next_event.duration))
 
         case_record = CaseRecord(case=case,
                                  ambulance=selected_ambulance,
