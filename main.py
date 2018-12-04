@@ -23,10 +23,10 @@ from ems.generators.case.location.polygon import PolygonLocationGenerator
 from ems.generators.case.time.poisson_time import PoissonCaseTimeGenerator
 from ems.generators.event.duration.random_duration import RandomDurationGenerator
 from ems.generators.event.duration.travel_time_duration import TravelTimeDurationGenerator
-from ems.algorithms.base_selectors.round_robin import RoundRobinBaseSelector
+from ems.algorithms.base_selectors.round_robin_selector import RoundRobinBaseSelector
 from ems.generators.event.event_generator import EventGenerator
 from ems.settings import Settings
-from ems.simulators.dispatcher_simulator_event import EventBasedDispatcherSimulator
+from ems.simulators.event_simulator import EventDispatcherSimulator
 
 parser = argparse.ArgumentParser(description="Load settings, data, preprocess models. Run simulator on "
                                              "ambulance dispatch. Decisions are made during the simulation, but "
@@ -192,10 +192,10 @@ ambulance_set = CustomAmbulanceSet(ambulance_count=settings.num_ambulances,
                                    base_selector=base_selector)
 
 # Initialize simulator
-sim = EventBasedDispatcherSimulator(ambulance_set=ambulance_set,
-                                    case_set=case_set,
-                                    ambulance_selector=ambulance_select,
-                                    metric_aggregator=metric_aggregator)
+sim = EventDispatcherSimulator(ambulance_set=ambulance_set,
+                               case_set=case_set,
+                               ambulance_selector=ambulance_select,
+                               metric_aggregator=metric_aggregator)
 
 # Start the simulation
 case_record_set, metric_aggregator = sim.run()

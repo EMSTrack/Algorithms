@@ -34,7 +34,7 @@ class CaseState:
         return self.next_event_time < other.next_event_time
 
 
-class EventBasedDispatcherSimulator(Simulator):
+class EventDispatcherSimulator(Simulator):
 
     def __init__(self,
                  ambulance_set: AmbulanceSet,
