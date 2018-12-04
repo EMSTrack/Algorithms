@@ -127,8 +127,12 @@ class Animator:
             plots.append([line_plot, dot_plot])
 
         # TODO Make boundaries parameters
-        plt.xlim(-117.173017, -116.744906)
-        plt.ylim(32.367460, 32.619161)
+        # 32.563261, -117.124533
+        # 32.405490, -116.804590
+        # plt.xlim(-117.173017, -116.744906)
+        # plt.ylim(32.367460, 32.619161)
+        img = plt.imread("tijuana.png")
+        plt.imshow(img, extent=[-117.124533, -116.804590, 32.405490, 32.563261])
 
         ani = animation.FuncAnimation(fig, _get_frame, len(self.frames),
                                       fargs=(plots,), interval=50)
