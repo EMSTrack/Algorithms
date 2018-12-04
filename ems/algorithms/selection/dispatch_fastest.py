@@ -1,4 +1,3 @@
-# The following functions define default algorithms for the DispatchAlgorithm class.
 from datetime import datetime
 from datetime import timedelta
 from typing import List
@@ -11,8 +10,6 @@ from ems.models.cases.case import Case
 
 # An implementation of a "fastest travel time" ambulance_selection from a base to
 # the demand point closest to a case
-
-
 class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
 
     def __init__(self,

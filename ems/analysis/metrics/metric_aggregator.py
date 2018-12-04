@@ -8,12 +8,17 @@ import pandas as pd
 
 class MetricAggregator:
 
-    # TODO -- enforce metric tags unique
     def __init__(self,
                  metrics: List[Metric] = None):
 
         if metrics is None:
             metrics = []
+
+        tags = set()
+        for metric in metrics:
+            if metric.tag in tags:
+                raise Exception("Metric with tag '{}' already exists".format(metric.tag))
+            tags.add(metric.tag)
 
         self.metrics = metrics
         self.results = []

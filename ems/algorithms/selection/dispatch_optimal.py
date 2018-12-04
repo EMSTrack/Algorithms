@@ -1,8 +1,7 @@
-# The following functions define default algorithms for the DispatchAlgorithm class.
 from datetime import datetime
 from typing import List
 
-from ems.datasets.travel_times import TravelTimes
+from ems.datasets.travel_times.travel_times import TravelTimes
 from ems.models.ambulances.ambulance import Ambulance
 from ems.models.cases.case import Case
 from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
@@ -10,9 +9,7 @@ from ems.analysis.metrics.coverage.percent_coverage import PercentCoverage
 
 
 # An implementation of a "fastest travel time" ambulance_selection from a base to
-# the demand point closest to a case
-
-
+# the demand point closest to a cas
 class OptimalTravelTimeWithCoverageAlgorithm(BestTravelTimeAlgorithm):
 
     def __init__(self,
@@ -31,7 +28,7 @@ class OptimalTravelTimeWithCoverageAlgorithm(BestTravelTimeAlgorithm):
         # minimize case duration
         case_priority = case.priority
 
-        # TODO --
+        # TODO
         if case_priority is None:
             # Find ambulance that when dispatched, impacts coverage the least
             pass

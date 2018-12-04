@@ -1,8 +1,5 @@
-import numpy as np
-
 from ems.algorithms.base_selectors.selector import AmbulanceBaseSelector
 from ems.datasets.location.location_set import LocationSet
-from ems.datasets.travel_times.travel_times import TravelTimes
 
 
 class RoundRobinBaseSelector(AmbulanceBaseSelector):
