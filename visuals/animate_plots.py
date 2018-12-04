@@ -24,26 +24,20 @@ class Animator:
 
         self.frames = frames
         self.duration = duration
-        self.ambulance_bases = ambulance_bases
+        self.ambulance_bases = ambulance_bases # This is actually a bit of a misnomer.
+        # ^ This should be the ambulance's base location, not a list of bases.
 
-    def set_frames(self, frames, index_start, ambulance_id, xs, ys, display=5):
+    def set_frames(self, frames, index_start, ambulance_id, xs, ys, display=10):
 
         if not xs: return
 
         curr_index = index_start
         start_position = 0
         end_position = 1
-        last_position = len(xs) - 1
-
+        last_position = len(xs)
 
         while start_position < end_position:
-            # from IPython import embed; embed()
-            # TODO something is wrong with the way I'm enumerating this.
-            # TODO starting with one case.
-            print(curr_index, ambulance_id)
-            print(start_position, end_position)
-            print(len(frames))
-            print()
+            
             frames[curr_index][ambulance_id][0] += xs[start_position: end_position]
             frames[curr_index][ambulance_id][1] += ys[start_position: end_position]
 
@@ -53,40 +47,51 @@ class Animator:
                 start_position += 1
 
             curr_index += 1
-            # embed()
-
-
 
     def run_animation(self):
+        """ Define a new update function and use it as the update function
+         for the matplotlib.  """
 
-        def _get_frame(index, plot):
+        def _get_frame(frame_index, plots):
             """ Should be called by run_animations only. """
 
-            # TODO for now all the ambulances are the same color
-            # [amb for amb in self.frames[index]]
-            xs = [amb[0] for amb in self.frames[index]]
-            ys = [amb[1] for amb in self.frames[index]]
-            accum_x = []
-            accum_y = []
-            for x in xs:
-                accum_x += x
-            for y in ys:
-                accum_y += y
-            # print("Do I at least get here?")
-            # d = np.array([xs, ys])
-            plot.set_data(accum_x, accum_y)
-            # embed()
-            # plot.set_data(d)
-            return plot,
+            # TODO Using the indices of the self.frames, plot in correct location.
+            # Okay right now there is a problem where it's unknown whether the set of coordinates
+            # is a line or a dot -- that info got lost up there
 
+            for amb_index in range(len(self.frames[frame_index])):
+                xs = self.frames[frame_index][amb_index][0]
+                ys = self.frames[frame_index][amb_index][1]
+                plots[amb_index][0].set_data(xs, ys)
+
+            return plots,
 
         fig = plt.figure()
-        plot, = plt.plot([], [], 'b+')
+
+        # TODO need [number of ambulances] x [number of states]
+
+        plots = []
+        for _ in range(len(self.ambulance_bases)):
+            new_color = 'blue'
+            line_plot, = plt.plot([], [],
+                             marker='+',
+                             linestyle='',
+                             markerfacecolor=new_color,
+                             markeredgecolor=new_color
+                             )
+            dot_plot, = plt.plot([], [],
+                             marker='o',
+                             linestyle='',
+                             markerfacecolor=new_color,
+                             markeredgecolor=new_color
+                             )
+            plots.append([line_plot, dot_plot])
+
         plt.xlim(-117.173017, -116.744906)
         plt.ylim(32.367460, 32.619161)
-        print("do I get here?")
+
         ani = animation.FuncAnimation(fig, _get_frame, len(self.frames),
-                                      fargs=(plot,), interval=50)
-        # plt.show()
-        ani.save('regional_vis.mp4', fps=15)
+                                      fargs=(plots,), interval=50)
+        plt.show()
+        # ani.save('regional_vis4.mp4', fps=15)
 
