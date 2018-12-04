@@ -12,6 +12,9 @@ class Animator:
         duration = round(time_delta.seconds / 60) + time_delta.days * 24 * 60
         frames = [[[[],[]] for _ in range(len(ambulance_bases))] for _ in range(duration)]
 
+        self.ambulance_bases = ambulance_bases  # This is actually a bit of a misnomer.
+        # ^ This should be the ambulance's base location, not a list of bases.
+
         for ambulance in ambulance_trips:
             for trip in ambulance:
                 ambulance_id = trip.ambulance_id
@@ -20,15 +23,29 @@ class Animator:
                     xs = [point.longitude for point in event.dots]
                     ys = [point.latitude for point in event.dots]
                     self.set_frames(frames, index_start, ambulance_id, xs, ys)
-                    # print(index_start, ambulance_id, xs, ys)
 
+        for curr_index in range(len(frames)):
+            for ambulance_id in range(len(ambulance_bases)):
+                # If no position was specified, then it is at base and stationary.
+                if not frames[curr_index][ambulance_id][0]:
+                    frames[curr_index][ambulance_id][0] += [self.ambulance_bases[ambulance_id].longitude] * 2
+                    frames[curr_index][ambulance_id][1] += [self.ambulance_bases[ambulance_id].latitude] * 2
         self.frames = frames
-        embed()
         self.duration = duration
-        self.ambulance_bases = ambulance_bases # This is actually a bit of a misnomer.
-        # ^ This should be the ambulance's base location, not a list of bases.
+
 
     def set_frames(self, frames, index_start, ambulance_id, xs, ys, display=10):
+        """
+        Take the coordinates from the events and enumerate them frame by frame.
+        The [display] most recent coordinates are used.
+        :param frames:
+        :param index_start:
+        :param ambulance_id:
+        :param xs:
+        :param ys:
+        :param display:
+        :return:
+        """
 
         if not xs: return
 
@@ -37,6 +54,7 @@ class Animator:
         end_position = 1
         last_position = len(xs)
 
+        # Enumerate the historically most recent coordinates.
         while start_position < end_position:
 
             frames[curr_index][ambulance_id][0] += xs[start_position: end_position]
@@ -49,6 +67,8 @@ class Animator:
                 start_position += 1
 
             curr_index += 1
+
+
 
     def run_animation(self):
         """ Define a new update function and use it as the update function
@@ -65,18 +85,6 @@ class Animator:
                 xs = self.frames[frame_index][amb_index][0]
                 ys = self.frames[frame_index][amb_index][1]
 
-                # If it moved from its previous location, then it's line [0]
-                # Else, it's dot [1]
-                # if frame_index != 0:
-                #     prev_xs = self.frames[frame_index - 1][amb_index][0]
-                #     prev_ys = self.frames[frame_index - 1][amb_index][1]
-                #
-                #     if prev_xs and prev_ys and xs and ys:
-                #         if xs[-1] == prev_xs[-1] and ys[-1] == prev_ys[-1]:
-                #             plots[amb_index][0].set_data(xs, ys)
-                #             continue
-
-                # if len(xs) != len(set(xs)): embed()
                 if len(xs) > 1:
                     if xs[0] == xs[1]:
                         plots[amb_index][1].set_data([xs[0]], [ys[0]])
@@ -120,7 +128,7 @@ class Animator:
         plt.ylim(32.367460, 32.619161)
 
         ani = animation.FuncAnimation(fig, _get_frame, len(self.frames),
-                                      fargs=(plots,), interval=50)
+                                      fargs=(plots,), interval=100)
         plt.show()
         # ani.save('regional_vis4.mp4', fps=15)
 
