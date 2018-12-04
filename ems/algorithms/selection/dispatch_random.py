@@ -19,7 +19,7 @@ class RandomAmbulanceSelectionAlgorithm(AmbulanceSelectionAlgorithm):
                          current_time: datetime):
 
         # Randomly choose
-        chosen_ambulance = random.sample(available_ambulances, 1)
+        chosen_ambulance = random.sample(available_ambulances, 1)[0]
 
         return chosen_ambulance
 
