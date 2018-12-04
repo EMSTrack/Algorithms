@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-import numpy as np
+import random
 
 from IPython import embed # TODO remove later
 
@@ -33,6 +33,9 @@ class Animator:
         self.frames = frames
         self.duration = duration
 
+        # Random color generator
+        r = lambda: random.randint(0, 255)
+        self.ambulance_colors = ['#%02X%02X%02X' % (r(), r(), r()) for _ in range(len(ambulance_bases))]
 
     def set_frames(self, frames, index_start, ambulance_id, xs, ys, display=10):
         """
@@ -103,9 +106,9 @@ class Animator:
         # TODO need [number of ambulances] x [number of states]
 
         plots = []
-        for _ in range(len(self.ambulance_bases)):
+        for i in range(len(self.ambulance_bases)):
 
-            new_color = 'blue'
+            new_color = self.ambulance_colors[i]
 
             line_plot, = plt.plot([], [],
                              marker='+',
@@ -128,7 +131,7 @@ class Animator:
         plt.ylim(32.367460, 32.619161)
 
         ani = animation.FuncAnimation(fig, _get_frame, len(self.frames),
-                                      fargs=(plots,), interval=100)
+                                      fargs=(plots,), interval=50)
         plt.show()
         # ani.save('regional_vis4.mp4', fps=15)
 
