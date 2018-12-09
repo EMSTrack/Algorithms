@@ -75,7 +75,7 @@ class Line(Event):
         # List of [minutes] points between start and end
         return [Point(
             self.starting_point.latitude + time_slice * d_lat,
-            self.starting_point.longitude + time_slice * d_lat)
+            self.starting_point.longitude + time_slice * d_lon)
                 for time_slice in range(delta)]
 
     def end_time(self):
