@@ -91,8 +91,8 @@ base_set = KDTreeLocationSet(chosen_bases)
 # Define random case params
 # This example = 4 cases an hour
 
-num_cases = 30
-timeframe = timedelta(hours=2)
+num_cases = 150
+timeframe = timedelta(hours=15)
 
 initial_time = datetime.now() - timeframe
 end_time = datetime.now()

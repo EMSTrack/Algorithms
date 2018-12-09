@@ -15,6 +15,8 @@ class Animator:
         self.ambulance_bases = ambulance_bases  # This is actually a bit of a misnomer.
         # ^ This should be the ambulance's base location, not a list of bases.
 
+        event_count = 0
+
         for ambulance in ambulance_trips:
             for trip in ambulance:
                 ambulance_id = trip.ambulance_id
@@ -23,6 +25,8 @@ class Animator:
                     xs = [point.longitude for point in event.dots]
                     ys = [point.latitude for point in event.dots]
                     self.set_frames(frames, index_start, ambulance_id, xs, ys)
+
+                    event_count += 1
 
         for curr_index in range(len(frames)):
             for ambulance_id in range(len(ambulance_bases)):
@@ -34,8 +38,13 @@ class Animator:
         self.duration = duration
 
         # Random color generator
-        r = lambda: random.randint(0, 255)
+        r = lambda: random.randint(0, 226)
         self.ambulance_colors = ['#%02X%02X%02X' % (r(), r(), r()) for _ in range(len(ambulance_bases))]
+
+        if True:
+            print('frames: {}\nambs: {}\nevents: {}\n'.format(
+                len(self.frames), len(ambulance_bases), event_count
+            ))
 
     def set_frames(self, frames, index_start, ambulance_id, xs, ys, display=10):
         """
@@ -133,9 +142,13 @@ class Animator:
         # plt.ylim(32.367460, 32.619161)
         img = plt.imread("tijuana.png")
         plt.imshow(img, extent=[-117.124533, -116.804590, 32.405490, 32.563261])
-
+        print("draw the animation")
         ani = animation.FuncAnimation(fig, _get_frame, len(self.frames),
                                       fargs=(plots,), interval=50)
-        plt.show()
-        # ani.save('regional_vis4.mp4', fps=15)
 
+        plt.show()
+
+        # fps = 15
+        # print('save the animation')
+        # print("it may take up to {}".format(len(self.frames)/fps))
+        # ani.save('regional_vis6.mp4', fps=fps, dpi=150)
