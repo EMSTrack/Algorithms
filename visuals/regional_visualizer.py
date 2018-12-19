@@ -35,6 +35,7 @@ from geopy import Point
 from IPython import embed
 
 from ambulance_trip import AmbulanceTrip
+from animate_plots import Animator
 
 
 class RegionalVisualizer:
@@ -75,7 +76,14 @@ class RegionalVisualizer:
 
         self.end_time = end_time
         self.num_minutes = round((self.end_time - self.start_time).seconds/60)
-        embed()
+
+        # embed()
+        # Call the animator
+        a = Animator(self.start_time, self.end_time, ambulance_bases, self.ambulance_trips)
+        a.run_animation()
+
+        # embed() # TODO
+
 
     def __init_ambulances(self, data):
         """ Generates a list of colors for each ambulance, randomly. """
@@ -97,8 +105,7 @@ def main():
     src_file = '../results/processed_cases.csv'
     r = RegionalVisualizer(src_file, amb_file)
 
-    print(r)
-    # embed()
+    # print(r)
 
 
 if __name__ == "__main__":
