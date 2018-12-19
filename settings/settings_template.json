@@ -1,0 +1,10 @@
+{
+	"name_of_settings_file" : "[NAME OF YOUR SETTINGS FILE]",
+	"filepath" 				: "[FILEPATH TO YOUR INPUT FILES]",
+	 "demands"				: "demand_points.csv",
+	 "bases"				: "bases.csv",
+	 "times"				: "times.csv",
+	 "cases"				: "tabladedatos.csv",
+	 "num_ambs"				: 7,
+	 "num_bases"			: 7
+}
