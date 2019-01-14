@@ -1,10 +1,14 @@
 {
 	"name_of_settings_file" : "mau",
 	"filepath" 				: "~/tmp/data-cruz-roja/",
-	 "demands"				: "demand_points.csv",
-	 "bases"				: "bases.csv",
-	 "times"				: "times.csv",
-	 "cases"				: "calls.csv",
-	 "num_ambs"				: 3,
-	 "num_bases"			: 3
+	"demands"				: "demand_points.csv",
+	"bases"				: "bases.csv",
+	"times"				: "times.csv",
+	"cases"				: "calls.csv",
+	"num_ambs"				: 3,
+	"num_bases"			: 3,
+	"case_location"         : { "type": "PolygonLocationGenerator",
+		                        "parameters": { "vertices": [] } },
+	"event_incident_duration" : { "type":  "RandomDurationGenerator",
+		                          "parameters":  { "lower_bound":  5, "upper_bound":  10 } }
 }
