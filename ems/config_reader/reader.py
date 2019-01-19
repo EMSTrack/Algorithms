@@ -1,30 +1,10 @@
 # Tells the sim where to look for the data, and whether to enable debug.
-import argparse
 from argparse import Namespace
 import json
 
-class SimulatorCLI:
-    def __init__(self):
-        parser = argparse.ArgumentParser(description="Load settings, data, preprocess models. Run simulator on "
-                                                     "ambulance dispatch. Decisions are made during the simulation, but "
-                                                     "the events are output to a csv file for replay.")
+class ResolveConfigs:
 
-        parser.add_argument('--settings', help="for example, '--settings hans'. Don't include '.json'", type=str,
-                            required=True)
-
-        parser.add_argument('--ambulances', help="Number of ambulances", type=int, required=False)
-        parser.add_argument('--bases', help='Number of bases', type=int, required=False)
-
-        parser.add_argument('--slices', help="Number of cases to simulate", type=int, required=False)
-        parser.add_argument('--output-file', help="Output filename for simulator info", type=str, required=False)
-        self.parser = parser
-
-    def args(self):
-        return self.parser.parse_args()
-
-class Settings:
-
-    # TODO - read from config to generate settings
+    # TODO - read from config to generate configurations
     def __init__(self,
                  debug: bool = False,
                  demands_file: str = None,
@@ -36,10 +16,10 @@ class Settings:
                  args: Namespace = None,
                  plot: bool = False):
 
-        # TODO: Look for a settings file
+        # TODO: Look for a configurations file
         if args:
-            if args.settings:
-                filename = "settings/" + args.settings + ".json"
+            if args.configurations:
+                filename = "configurations/" + args.configurations + ".json"
                 with open (filename, 'r') as jsonfile:
                     s = json.load(jsonfile)
 

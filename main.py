@@ -1,7 +1,3 @@
-from ems.configure import SimulatorCLI
-
-import argparse
-
 from datetime import timedelta, datetime
 
 import numpy as np
@@ -21,28 +17,25 @@ from ems.datasets.location.location_set import LocationSet
 from ems.datasets.location.base.tijuana_base_set import TijuanaBaseSet
 from ems.datasets.location.demand.tijuana_demand_set import TijuanaDemandSet
 from ems.datasets.travel_times.tijuana_travel_times import TijuanaTravelTimes
-from ems.generators.case.location.multiple_polygon import MultiPolygonLocationGenerator
 from ems.generators.case.location.polygon import PolygonLocationGenerator
 from ems.generators.case.time.poisson_time import PoissonCaseTimeGenerator
 from ems.generators.event.duration.random_duration import RandomDurationGenerator
 from ems.generators.event.duration.travel_time_duration import TravelTimeDurationGenerator
 from ems.algorithms.base_selectors.round_robin_selector import RoundRobinBaseSelector
 from ems.generators.event.event_generator import EventGenerator
-from ems.configure import Settings
+from ems.config_reader.reader import ResolveConfigs
 from ems.simulators.event_simulator import EventDispatcherSimulator
 
-# TODO -- fn names may change. (Goal is to replace above imports with this one).
-from ems.driver import UserInput, SetupPrecondition, SimulatorRunner
 
+# TODO RFC: Naming
+from ems.driver import UserInput
+from ems.driver import SetupPrecondition
+from ems.driver import SimulatorRunner
 
+# Initialize configurations
+user_data = UserInput()
 
-cli = SimulatorCLI()
-
-# Initialize settings
-settings = Settings(debug=True,
-                    args=cli.args())
-
-from IPython import embed; embed()
+exit(1) # TODO. Program should only work up to here.
 
 # Initialize datasets
 demand_set = TijuanaDemandSet(filename=settings.demands_file)
@@ -83,8 +76,8 @@ for _ in range(settings.num_bases):
 base_set = KDTreeLocationSet(chosen_bases)
 
 # Initialize dataset for cases
-# case_set = Jan2017CaseSet(filename=settings.cases_file)
-# case_set = DeDatosCaseSet(filename=settings.cases_file, duration_generator=event_duration_generator)
+# case_set = Jan2017CaseSet(filename=configurations.cases_file)
+# case_set = DeDatosCaseSet(filename=configurations.cases_file, duration_generator=event_duration_generator)
 
 # Define random case params
 # This example = 4 cases an hour
