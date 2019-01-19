@@ -1,6 +1,6 @@
 # Tells the sim where to look for the data, and whether to enable debug.
 from argparse import Namespace
-import json
+import yaml as json
 
 class ResolveConfigs:
 
@@ -19,7 +19,7 @@ class ResolveConfigs:
         # TODO: Look for a configurations file
         if args:
             if args.configurations:
-                filename = "configurations/" + args.configurations + ".json"
+                filename = "configurations/" + args.configurations + ".yaml"
                 with open (filename, 'r') as jsonfile:
                     s = json.load(jsonfile)
 

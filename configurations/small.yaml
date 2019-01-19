@@ -1,0 +1,13 @@
+# Test file for development
+# Small number of ambulances and bases, choose methods that calculate arbitrarily, whenever possible.
+
+name: small and test dev
+
+num_ambs: 4
+num_bases: 4
+
+filepath: ../Data/
+demands: demands_points.csv
+bases: bases.csv
+times: times.csv
+cases: tabladedatos.csv
