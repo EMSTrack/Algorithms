@@ -32,25 +32,3 @@ In Ubuntu, Python 3.6 seems to be missing "tkinter". To install,
 
 ![](uml/ems_uml.png)
 
-
-## TODO
-
-- Best coverage algorithm
-
-- Best coverage/Fastest ambulance tension algorithm
-  
-- Introduce visualization component
-
-- Introduce testing framework
-
-
-## Components
-
-### Cases
-### Location Sets (e.g. Bases, Demands)
-### Ambulances
-### Events
-### Simulators
-### Generators
-### Ambulance Selection Algorithms
-### Metrics
