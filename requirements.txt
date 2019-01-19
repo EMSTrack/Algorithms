@@ -1,0 +1,7 @@
+pandas
+scipy
+numpy
+geopy
+termcolor
+matplotlib
+shapely
