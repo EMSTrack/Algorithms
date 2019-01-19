@@ -1,4 +1,7 @@
+from ems.configure import SimulatorCLI
+
 import argparse
+
 from datetime import timedelta, datetime
 
 import numpy as np
@@ -25,29 +28,21 @@ from ems.generators.event.duration.random_duration import RandomDurationGenerato
 from ems.generators.event.duration.travel_time_duration import TravelTimeDurationGenerator
 from ems.algorithms.base_selectors.round_robin_selector import RoundRobinBaseSelector
 from ems.generators.event.event_generator import EventGenerator
-from ems.settings import Settings
+from ems.configure import Settings
 from ems.simulators.event_simulator import EventDispatcherSimulator
 
 # TODO -- fn names may change. (Goal is to replace above imports with this one).
 from ems.driver import UserInput, SetupPrecondition, SimulatorRunner
 
-parser = argparse.ArgumentParser(description="Load settings, data, preprocess models. Run simulator on "
-                                             "ambulance dispatch. Decisions are made during the simulation, but "
-                                             "the events are output to a csv file for replay.")
 
-parser.add_argument('--settings', help="for example, '--settings hans'. Don't include '.json'", type=str, required=True)
 
-parser.add_argument('--ambulances', help="Number of ambulances", type=int, required=False)
-parser.add_argument('--bases', help='Number of bases', type=int, required=False)
-
-parser.add_argument('--slices', help="Number of cases to simulate", type=int, required=False)
-parser.add_argument('--output-file', help="Output filename for simulator info", type=str, required=False)
-
-clargs = parser.parse_args()
+cli = SimulatorCLI()
 
 # Initialize settings
 settings = Settings(debug=True,
-                    args=clargs)
+                    args=cli.args())
+
+from IPython import embed; embed()
 
 # Initialize datasets
 demand_set = TijuanaDemandSet(filename=settings.demands_file)
