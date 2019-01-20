@@ -1,0 +1,7 @@
+# Template and yaml file to check custom files against
+
+name
+simulator:
+    type: EventDispatchSimulator
+    ambulances:
+      type: CustomAmbulanceSet
