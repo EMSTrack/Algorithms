@@ -7,8 +7,8 @@ from ems.utils import parse_unheadered_csv
 class TijuanaDemandSet(KDTreeLocationSet):
 
     def __init__(self, filename):
-        demands = self.read_demands(filename)
-        super().__init__(demands)
+        latitudes, longitudes = self.read_demands(filename)
+        super().__init__(latitudes, longitudes)
 
     def read_demands(self, filename):
         # Read demands from an unheadered CSV into a pandas dataframe
@@ -17,9 +17,10 @@ class TijuanaDemandSet(KDTreeLocationSet):
         demands_df = parse_unheadered_csv(filename, demand_col_positions, demand_headers)
 
         # Generate list of models from dataframe
-        demands = []
+        latitudes = []
+        longitudes = []
         for index, row in demands_df.iterrows():
-            demand = Point(row["lat"], row["long"])
-            demands.append(demand)
+            latitudes.append(row["lat"])
+            longitudes.append(row["long"])
 
-        return demands
+        return latitudes, longitudes

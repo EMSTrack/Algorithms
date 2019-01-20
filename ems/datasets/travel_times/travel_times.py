@@ -11,16 +11,16 @@ class TravelTimes:
     Maintains a matrix of travel travel_times between one set of locations to another set of locations
     """
     def __init__(self,
-                 loc_set_1: LocationSet,
-                 loc_set_2: LocationSet,
+                 origins: LocationSet,
+                 destinations: LocationSet,
                  times: np.ndarray):
         """
-        :param loc_set_1:
-        :param loc_set_2:
+        :param origins:
+        :param destinations:
         :param times:
         """
-        self.loc_set_1 = loc_set_1
-        self.loc_set_2 = loc_set_2
+        self.origins = origins
+        self.destinations = destinations
         self.times = times
 
     def get_time(self, location1: Point, location2: Point):
@@ -34,12 +34,12 @@ class TravelTimes:
 
         # TODO implement delta?
         # Find the first location in the first location set
-        _, index1, dist1 = self.loc_set_1.closest(location1)
+        _, index1, dist1 = self.origins.closest(location1)
         if dist1 > 0:
             raise Exception("Location 1 does not exist in location set 1")
 
         # Find the second location in the first location set
-        _, index2, dist2 = self.loc_set_2.closest(location2)
+        _, index2, dist2 = self.destinations.closest(location2)
         if dist2 > 0:
             raise Exception("Location 2 does not exist in location set 2")
 

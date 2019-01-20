@@ -1,0 +1,10 @@
+{
+	"name_of_settings_file" : "configurations",
+	"filepath" 				: "C:/Users/lupita/Documents/Python/Ejercicios/ems/configurations",
+	 "demands"				: "demand_points.csv",
+	 "bases"				: "bases.csv",
+	 "times"				: "times.csv",
+	 "cases"				: "tabladedatos.csv",
+	 "num_ambs"				: 7,
+	 "num_bases"			: 7
+}

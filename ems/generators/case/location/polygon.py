@@ -12,8 +12,14 @@ from ems.generators.case.location.location import LocationGenerator
 
 class PolygonLocationGenerator(LocationGenerator):
 
-    def __init__(self, points: List[Point]):
-        self.polygon = geometry.Polygon([(point.longitude, point.latitude) for point in points])
+    def __init__(self,
+                 vertices_latitude: List[float],
+                 vertices_longitude: List[float]):
+
+        self.vertices_latitude = vertices_latitude
+        self.vertices_longitude = vertices_longitude
+        self.polygon = geometry.Polygon([(latitude, longitude) for latitude, longitude in
+                                         zip(vertices_latitude, vertices_longitude)])
 
     def generate(self, timestamp):
         triangles = triangulate(self.polygon)

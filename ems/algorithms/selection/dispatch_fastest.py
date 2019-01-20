@@ -22,7 +22,7 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
                          current_time: datetime):
 
         # Compute the closest demand point to the case location
-        loc_set_2 = self.travel_times.loc_set_2
+        loc_set_2 = self.travel_times.destinations
         closest_loc_to_case, _, _ = loc_set_2.closest(case.incident_location)
 
         # Select an ambulance to attend to the given case and obtain the its duration of travel
@@ -43,7 +43,7 @@ class BestTravelTimeAlgorithm(AmbulanceSelectionAlgorithm):
         shortest_time = timedelta.max
         fastest_amb = None
 
-        loc_set_1 = self.travel_times.loc_set_1
+        loc_set_1 = self.travel_times.origins
 
         for amb in ambulances:
 

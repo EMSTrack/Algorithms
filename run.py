@@ -48,9 +48,9 @@ base_set = TijuanaBaseSet(filename=settings.bases_file)
 hospital_set = LocationSet(locations=[Point(longitude=-117.0097589492798,
                                             latitude=32.52506901611384),
                                       Point(longitude=-117.00371, latitude=32.5027),
-                                      Point(longitude=117.0078, latitude=32.5180)])
-travel_times = TijuanaTravelTimes(loc_set_1=base_set,
-                                  loc_set_2=demand_set,
+                                      Point(longitude=-117.0078, latitude=32.5180)])
+travel_times = TijuanaTravelTimes(origins=base_set,
+                                  destinations=demand_set,
                                   filename=settings.travel_times_file)
 
 
@@ -131,21 +131,16 @@ radius = 0.5
 
 # case_location_generator = MultiPolygonLocationGenerator(polygons, densities=[0.65, 0.15, 0.2])
 
-perimeter_vertices = [
-    Point(32.533696, -117.123506),
-    Point(32.554803, -116.876454),
-    Point(32.469300, -116.789148),
-    Point(32.439235, -116.967181),
-    Point(32.530337, -117.123475)
-]
+perimeter_latitudes = [32.533696, 32.554803, 32.469300, 32.439235, 32.530337]
+perimeter_longitudes = [-117.123506, -116.876454, -116.789148, -116.967181, -117.123475]
 
-case_location_generator = PolygonLocationGenerator(perimeter_vertices)
+case_location_generator = PolygonLocationGenerator(perimeter_latitudes, perimeter_longitudes)
 
 event_travel_duration_generator = TravelTimeDurationGenerator(travel_times=travel_times)
-event_incident_duration_generator = RandomDurationGenerator(lower_bound=timedelta(minutes=5),
-                                                            upper_bound=timedelta(minutes=10))
-event_hospital_duration_generator = RandomDurationGenerator(lower_bound=timedelta(minutes=5),
-                                                            upper_bound=timedelta(minutes=10))
+event_incident_duration_generator = RandomDurationGenerator(lower_bound=5,
+                                                            upper_bound=10)
+event_hospital_duration_generator = RandomDurationGenerator(lower_bound=5,
+                                                            upper_bound=10)
 hospital_selector = FastestHospitalSelector(hospital_set=hospital_set,
                                             travel_times=travel_times)
 
@@ -154,10 +149,10 @@ event_generator = EventGenerator(travel_duration_generator=event_travel_duration
                                  hospital_duration_generator=event_hospital_duration_generator,
                                  hospital_selector=hospital_selector)
 
-case_set = RandomCaseSet(num_cases=num_cases,
+case_set = RandomCaseSet(quantity=num_cases,
                          initial_time=initial_time,
                          case_time_generator=case_time_generator,
-                         location_generator=case_location_generator,
+                         case_location_generator=case_location_generator,
                          event_generator=event_generator,
                          hospital_selector=hospital_selector)
 

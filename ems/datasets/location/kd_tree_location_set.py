@@ -8,8 +8,10 @@ from ems.datasets.location.location_set import LocationSet
 
 class KDTreeLocationSet(LocationSet):
 
-    def __init__(self, locations: List[Point]):
-        super().__init__(locations)
+    def __init__(self,
+                 latitudes: List[float],
+                 longitudes: List[float]):
+        super().__init__(latitudes, longitudes)
         self.kd_tree = self._initialize_kd_tree()
 
     def _initialize_kd_tree(self):

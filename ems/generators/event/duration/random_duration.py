@@ -11,10 +11,10 @@ from ems.models.ambulances.ambulance import Ambulance
 class RandomDurationGenerator(EventDurationGenerator):
 
     def __init__(self,
-                 lower_bound: timedelta = timedelta(minutes=5),
-                 upper_bound: timedelta = timedelta(minutes=20)):
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
+                 lower_bound: float = 5,
+                 upper_bound: float = 20):
+        self.lower_bound = timedelta(minutes=lower_bound)
+        self.upper_bound = timedelta(minutes=upper_bound)
 
     def generate(self,
                  ambulance: Ambulance,

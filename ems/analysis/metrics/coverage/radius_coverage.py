@@ -38,14 +38,14 @@ class RadiusCoverage(Metric):
         # ambulances_to_remove = [a for a in self.coverage_state.ambulances if a not in available_ambulances]
 
         # Snap ambulance location to closest location in loc_set_1
-        ambulance_locations = [self.travel_times.loc_set_1.closest(ambulance.location)[0] for ambulance in ambulances if
+        ambulance_locations = [self.travel_times.origins.closest(ambulance.location)[0] for ambulance in ambulances if
                                not ambulance.deployed]
 
         if len(ambulance_locations) == 0:
             return -1
 
         # Snap demand location to closest location in loc_set_2
-        demand_locations = [self.travel_times.loc_set_2.closest(demand_location)[0] for demand_location in
+        demand_locations = [self.travel_times.destinations.closest(demand_location)[0] for demand_location in
                             self.demands.locations]
 
         min_tts = []

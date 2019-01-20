@@ -14,16 +14,16 @@ from ems.models.cases.random_case import RandomCase
 class RandomCaseSet(CaseSet):
 
     def __init__(self,
-                 num_cases: int,
+                 quantity: int,
                  initial_time: datetime,
                  case_time_generator: CaseTimeGenerator,
-                 location_generator: LocationGenerator,
+                 case_location_generator: LocationGenerator,
                  event_generator: EventGenerator,
                  hospital_selector: HospitalSelector):
-        self.num_cases = num_cases
+        self.num_cases = quantity
         self.initial_time = initial_time
         self.case_time_generator = case_time_generator
-        self.location_generator = location_generator
+        self.location_generator = case_location_generator
         self.event_generator = event_generator
         self.hospital_selector = hospital_selector
 
