@@ -24,7 +24,6 @@ from ems.generators.event.duration.random_duration import RandomDurationGenerato
 from ems.generators.event.duration.travel_time_duration import TravelTimeDurationGenerator
 from ems.algorithms.base_selectors.round_robin_selector import RoundRobinBaseSelector
 from ems.generators.event.event_generator import EventGenerator
-from ems.config_reader.resolver import ResolveConfigs
 from ems.simulators.event_simulator import EventDispatcherSimulator
 
 
