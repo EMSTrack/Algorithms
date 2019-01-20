@@ -27,6 +27,7 @@ In Ubuntu, Python 3.6 seems to be missing "tkinter". To install,
 If all is well, the simulator library should be runnable now. 
 
 `python run.py small.yaml`
+
 `python run.py --help`
 
 ## Project UML
