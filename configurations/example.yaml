@@ -2,131 +2,222 @@
 name:
   Random Cases, Preset Bases, Preset Travel Times
 
-# Defines the cases to be used in the simulation
-cases:
-  type: RandomCaseSet
-  parameters:
-    # Number of cases to generate
-    quantity: 150
+# Defines the simulator to be used
+simulator:
+  type: EventDispatcherSimulator
 
-    # Starting time
-    initial_time: 2001-12-15T02:59:43.1Z
+  # Defines the ambulances to be used in the simulation
+  ambulances:
+    type: CustomAmbulanceSet
+    parameters:
 
-    # Duration in minutes that the cases will be generated in
-    duration: 900
+      # Number of ambulances to generate
+      count: 10
 
-    # Defines method on when cases are randomly generated
-    case_time_generator:
-      type: PoissonCaseTimeGenerator
+      # Determines which base each generated ambulance will reside
+      base_selector:
+        type: RoundRobinBaseSelector
+        parameters:
 
-    # Defines method on where cases are randomly generated
-    case_location_generator:
-      type: PolygonLocationGenerator
+          # Defines the bases to be selecting from
+          base_set:
+            type: TijuanaBaseSet
+            parameters:
+              filename: ../Data/bases.csv
 
-      # Vertices of the polygon
-      parameters:
-        'vertices_latitude':
-          - 32.533696
-          - 32.554803
-          - 32.469300
-          - 32.439235
-          - 32.530337
-        'vertices_longitude':
-          - -117.123506
-          - -116.876454
-          - -116.789148
-          - -116.967181
-          - -117.123475
 
-    # Defines how events will be randomly generated for a case
-    event_generator:
-      type: EventGenerator
-      parameters:
+  # Defines the cases to be used in the simulation
+  cases:
+    type: RandomCaseSet
+    parameters:
+      # Number of cases to generate
+      quantity: 150
 
-        # Defines the duration of a trip from from point A to point B during an event
-        travel_duration_generator:
-          type: TravelTimeDurationGenerator
-          parameters:
+      # Starting time
+      initial_time: 2001-12-15T02:59:43.1Z
 
-            # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
-            # any point in B
-            travel_times:
-              type: TijuanaTravelTimes
-              parameters:
+      # Duration in minutes that the cases will be generated in
+      duration: 900
 
-                # Defines filename to read the travel times
-                filename: ../Data/times.csv
+      # Defines method on when cases are randomly generated
+      case_time_generator:
+        type: PoissonCaseTimeGenerator
 
-                # Defines the origin points of the travel times
-                origins:
-                  type: TijuanaBaseSet
-                  parameters:
-                    filename: ../Data/bases.csv
+      # Defines method on where cases are randomly generated
+      case_location_generator:
+        type: PolygonLocationGenerator
 
-                # Defines the destination points of the travel times
-                destinations:
-                  type: TijuanaDemandSet
-                  parameters:
-                    filename: ../Data/demand_points.csv
+        # Vertices of the polygon
+        parameters:
+          'vertices_latitude':
+            - 32.533696
+            - 32.554803
+            - 32.469300
+            - 32.439235
+            - 32.530337
+          'vertices_longitude':
+            - -117.123506
+            - -116.876454
+            - -116.789148
+            - -116.967181
+            - -117.123475
 
-        # Defines the duration of the stay at an incident location
-        incident_duration_generator:
-          type: RandomDurationGenerator
-          parameters:
+      # Defines how events will be randomly generated for a case
+      event_generator:
+        type: EventGenerator
+        parameters:
 
-            # Defines the lower bound in minutes of duration generation
-            lower_bound: 5
+          # Defines the duration of a trip from from point A to point B during an event
+          travel_duration_generator:
+            type: TravelTimeDurationGenerator
+            parameters:
 
-            # Defines the upper bound in minutes of duration generation
-            upper_bound: 10
+              # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
+              # any point in B
+              travel_times:
+                type: TijuanaTravelTimes
+                parameters:
 
-        hospital_duration_generator:
-          type: RandomDurationGenerator
-          parameters:
+                  # Defines filename to read the travel times
+                  filename: ../Data/times.csv
 
-            # Defines the lower bound in minutes of duration generation
-            lower_bound: 5
+                  # Defines the origin points of the travel times
+                  origins:
+                    type: TijuanaBaseSet
+                    parameters:
+                      filename: ../Data/bases.csv
 
-            # Defines the upper bound in minutes of duration generation
-            upper_bound: 10
+                  # Defines the destination points of the travel times
+                  destinations:
+                    type: TijuanaDemandSet
+                    parameters:
+                      filename: ../Data/demand_points.csv
 
-        hospital_selector:
-          type: FastestHospitalSelector
-          parameters:
+          # Defines the duration of the stay at an incident location
+          incident_duration_generator:
+            type: RandomDurationGenerator
+            parameters:
 
-            # Defines set of hospitals to select from
-            hospital_set:
-              type: LocationSet
-              parameters:
+              # Defines the lower bound in minutes of duration generation
+              lower_bound: 5
 
-                # Defines latitudes of the location set
-                latitudes:
-                  - 32.52506901611384
-                  - 32.5027
-                  - 32.5180
+              # Defines the upper bound in minutes of duration generation
+              upper_bound: 10
 
-                # Defines longitudes of the location set
-                longitudes:
-                  - -117.0097589492798
-                  - -117.00371
-                  - -117.0078
+          hospital_duration_generator:
+            type: RandomDurationGenerator
+            parameters:
 
-            travel_times:
-              type: TijuanaTravelTimes
-              parameters:
+              # Defines the lower bound in minutes of duration generation
+              lower_bound: 5
 
-                # Defines filename to read the travel times
-                filename: ../Data/times.csv
+              # Defines the upper bound in minutes of duration generation
+              upper_bound: 10
 
-                # Defines the origin points of the travel times
-                origins:
-                  type: TijuanaBaseSet
-                  parameters:
-                    filename: ../Data/bases.csv
+          hospital_selector:
+            type: FastestHospitalSelector
+            parameters:
 
-                # Defines the destination points of the travel times
-                destinations:
-                  type: TijuanaDemandSet
-                  parameters:
-                    filename: ../Data/demand_points.csv
+              # Defines set of hospitals to select from
+              hospital_set:
+                type: LocationSet
+                parameters:
 
+                  # Defines latitudes of the location set
+                  latitudes:
+                    - 32.52506901611384
+                    - 32.5027
+                    - 32.5180
+
+                  # Defines longitudes of the location set
+                  longitudes:
+                    - -117.0097589492798
+                    - -117.00371
+                    - -117.0078
+
+              # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
+              # any point in B
+              travel_times:
+                type: TijuanaTravelTimes
+                parameters:
+
+                  # Defines filename to read the travel times
+                  filename: ../Data/times.csv
+
+                  # Defines the origin points of the travel times
+                  origins:
+                    type: TijuanaBaseSet
+                    parameters:
+                      filename: ../Data/bases.csv
+
+                  # Defines the destination points of the travel times
+                  destinations:
+                    type: TijuanaDemandSet
+                    parameters:
+                      filename: ../Data/demand_points.csv
+
+  # Defines algorithm for selecting ambulances during dispatch
+  ambulance_selector:
+    type: BestTravelTime
+    parameters:
+
+      # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
+      # any point in B
+      travel_times:
+        type: TijuanaTravelTimes
+        parameters:
+
+          # Defines filename to read the travel times
+          filename: ../Data/times.csv
+
+          # Defines the origin points of the travel times
+          origins:
+            type: TijuanaBaseSet
+            parameters:
+              filename: ../Data/bases.csv
+
+          # Defines the destination points of the travel times
+          destinations:
+            type: TijuanaDemandSet
+            parameters:
+              filename: ../Data/demand_points.csv
+
+  # Defines the metrics to be computed during the simulation
+  metric_aggregator:
+    type: MetricAggregator
+    parameters:
+      - type: PercentCoverage
+        parameters:
+
+          # Radius for an ambulance
+          r1: 600
+
+          # Demands to cover
+          demands:
+            type: TijuanaDemandSet
+            parameters:
+              filename: ../Data/demand_points.csv
+
+          # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
+          # any point in B
+          travel_times:
+            type: TijuanaTravelTimes
+            parameters:
+
+              # Defines filename to read the travel times
+              filename: ../Data/times.csv
+
+              # Defines the origin points of the travel times
+              origins:
+                type: TijuanaBaseSet
+                parameters:
+                  filename: ../Data/bases.csv
+
+              # Defines the destination points of the travel times
+              destinations:
+                type: TijuanaDemandSet
+                parameters:
+                  filename: ../Data/demand_points.csv
+
+      - type: TotalDelay
+      - type: CountPending

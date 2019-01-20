@@ -6,7 +6,7 @@ from ems.models.cases.case import Case
 
 
 # Used by the simulation to select ambulances
-class AmbulanceSelectionAlgorithm:
+class AmbulanceSelector:
     """
     Users may subclass to implement their own ambulance_selection for
     selecting an ambulance.

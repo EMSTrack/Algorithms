@@ -8,17 +8,17 @@ from ems.models.ambulances.ambulance import Ambulance
 class CustomAmbulanceSet(AmbulanceSet):
 
     def __init__(self,
-                 ambulance_count: int,
+                 count: int,
                  base_selector: AmbulanceBaseSelector):
-        self.ambulance_count = ambulance_count
+        self.count = count
         self.base_selector = base_selector
         super().__init__(self.initialize_ambulances())
 
     def initialize_ambulances(self):
-        bases = self.base_selector.select(self.ambulance_count)
+        bases = self.base_selector.select(self.count)
         ambulances = [Ambulance(id=str(i),
                                 base=bases[i],
-                                location=bases[i]) for i in range(self.ambulance_count)]
+                                location=bases[i]) for i in range(self.count)]
 
         return ambulances
 
@@ -31,4 +31,4 @@ class CustomAmbulanceSet(AmbulanceSet):
         df.to_csv(output_filename, index=False)
 
     def __len__(self):
-        return self.ambulance_count
+        return self.count

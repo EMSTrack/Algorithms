@@ -4,13 +4,13 @@ from typing import List
 from ems.datasets.travel_times.travel_times import TravelTimes
 from ems.models.ambulances.ambulance import Ambulance
 from ems.models.cases.case import Case
-from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
+from ems.algorithms.selection.dispatch_fastest import BestTravelTime
 from ems.analysis.metrics.coverage.percent_coverage import PercentCoverage
 
 
 # An implementation of a "fastest travel time" ambulance_selection from a base to
 # the demand point closest to a cas
-class OptimalTravelTimeWithCoverageAlgorithm(BestTravelTimeAlgorithm):
+class OptimalTravelTimeWithCoverage(BestTravelTime):
 
     def __init__(self,
                  travel_times: TravelTimes = None):

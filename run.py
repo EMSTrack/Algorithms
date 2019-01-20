@@ -5,7 +5,7 @@ import numpy as np
 from geopy import Point
 
 from ems.algorithms.hospital_selectors.select_fastest import FastestHospitalSelector
-from ems.algorithms.selection.dispatch_fastest import BestTravelTimeAlgorithm
+from ems.algorithms.selection.dispatch_fastest import BestTravelTime
 from ems.analysis.metrics.count_pending import CountPending
 from ems.analysis.metrics.coverage.percent_coverage import PercentCoverage
 from ems.analysis.metrics.coverage.radius_coverage import RadiusCoverage
@@ -157,7 +157,7 @@ case_set = RandomCaseSet(quantity=num_cases,
                          hospital_selector=hospital_selector)
 
 # Initialize ambulance_selection algorithm
-ambulance_select = BestTravelTimeAlgorithm(travel_times=travel_times)
+ambulance_select = BestTravelTime(travel_times=travel_times)
 
 # Initialize demand percentage coverage metric
 percent_coverage = PercentCoverage(demands=demand_set,
@@ -177,12 +177,12 @@ metric_aggregator = MetricAggregator([percent_coverage, total_delay, count_pendi
 
 # Generate ambulances - random base placement (may want to abstract into function)
 base_selector = RoundRobinBaseSelector(base_set=base_set)
-ambulance_set = CustomAmbulanceSet(ambulance_count=settings.num_ambulances,
+ambulance_set = CustomAmbulanceSet(count=settings.num_ambulances,
                                    base_selector=base_selector)
 
 # Initialize simulator
 sim = EventDispatcherSimulator(ambulance_set=ambulance_set,
-                               case_set=case_set,
+                               cases=case_set,
                                ambulance_selector=ambulance_select,
                                metric_aggregator=metric_aggregator)
 
