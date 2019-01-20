@@ -14,5 +14,5 @@ files:
   cases:    tabladedatos.csv
 
 init: # initial conditions
-  num_ambs:   4
+  num_ambulances:   4
   num_bases:  4

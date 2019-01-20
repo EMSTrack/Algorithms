@@ -29,14 +29,19 @@ from ems.simulators.event_simulator import EventDispatcherSimulator
 
 
 # TODO RFC: Naming
+from ems.driver import read_user_input
 from ems.driver import UserInput
 from ems.driver import SetupPrecondition
 from ems.driver import SimulatorRunner
 
-# Initialize configurations
-user_data = UserInput()
+import pprint as pp
+pprint = pp.PrettyPrinter(indent=4, compact=False).pprint
 
-exit(1) # TODO. Program should only work up to here.
+# Initialize configurations
+sim_args = read_user_input()
+pprint(sim_args)
+
+exit(1) # TODO. Program should only work up to here. ########################################################
 
 # Initialize datasets
 demand_set = TijuanaDemandSet(filename=settings.demands_file)

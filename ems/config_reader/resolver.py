@@ -23,16 +23,16 @@ class ResolveConfigs:
                 with open (filename, 'r') as jsonfile:
                     s = load(jsonfile)
 
-                    filepath = s['filepath']
-                    demands_file = filepath + s['demands']
-                    bases_file = filepath + s['bases']
-                    travel_times_file = filepath + s['times']
-                    cases_file = filepath + s['cases']
+                    # filepath = s['filepath']
+                    # demands_file = filepath + s['demands']
+                    # bases_file = filepath + s['bases']
+                    # travel_times_file = filepath + s['times']
+                    # cases_file = filepath + s['cases']
 
-                    num_ambulances = s['num_ambs']
-                    num_bases = s['num_bases']
-                    if 'plot' in s:
-                        plot = bool(s['plot'])
+                    # num_ambulances = s['num_ambs']
+                    # num_bases = s['num_bases']
+                    # if 'plot' in s:
+                    #     plot = bool(s['plot'])
 
             # Assign the command line arguments into the parameter arguments
             if args.ambulances:

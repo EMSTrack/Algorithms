@@ -14,6 +14,7 @@ Use the new environment:
 
 `source venv/bin/activate`
 
+
 ### Libraries
 
 Install the dependencies via the following command:
@@ -24,13 +25,15 @@ In Ubuntu, Python 3.6 seems to be missing "tkinter". To install,
 
 `sudo apt-get install python3.6-tk`
 
+
 ### Run the code! 
 
 If all is well, the simulator library should be runnable now. 
 
+`python run.py --help`
+
 `python run.py small.yaml`
 
-`python run.py --help`
 
 ## Project UML
 

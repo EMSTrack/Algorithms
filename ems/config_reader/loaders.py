@@ -16,12 +16,28 @@ class UserArguments:
         """ Define the command line tool here. Use helper methods as needed. """
 
         cli_args = self._command_line_args()
-        file_contents = yaml.load(open("./configurations/" + self.cli_args.configurations, 'r'))
-        self.user_args = self._resolve_args(cli_args, file_contents)
-        embed()
+        file_contents = yaml.load(open("./configurations/" + cli_args.config_file, 'r'))
+        self._resolve_files(file_contents['files'])
+        self._resolve_init(cli_args, file_contents['init'])
+        self.sim_args = file_contents
 
-    def _resolve_args(self, cli, file):
-        return 0
+    def get_sim_args(self):
+        return self.sim_args
+
+    def _resolve_files(self, file):
+        """ make the path strings callable by open  """
+
+        dir = file['filepath']
+        del file['filepath']
+
+        for k in file:
+            file[k] = dir + '/' + file[k]
+
+
+    def _resolve_init(self, cli, file):
+        if cli.ambulances: file['num_ambulances'] = cli.ambulances
+        if cli.bases: file['num_bases'] = cli.bases
+
 
     def _command_line_args(self):
 
@@ -30,7 +46,7 @@ class UserArguments:
                         "ambulance dispatch. Decisions are made during the simulation, but "
                         "the events are output to a csv file for replay.")
 
-        parser.add_argument('configurations',
+        parser.add_argument('config_file',
                                  help="The simulator needs a configuration to begin the computaiton.",
                                  type=str,
                                  )
