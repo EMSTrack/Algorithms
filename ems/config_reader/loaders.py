@@ -15,12 +15,15 @@ class UserArguments:
     def __init__(self):
         """ Define the command line tool here. Use helper methods as needed. """
 
-        self.cli_args = self.user_args()
-        contents = yaml.load(open("./configurations/" + self.cli_args.configurations, 'r'))
+        cli_args = self._command_line_args()
+        file_contents = yaml.load(open("./configurations/" + self.cli_args.configurations, 'r'))
+        self.user_args = self._resolve_args(cli_args, file_contents)
         embed()
 
+    def _resolve_args(self, cli, file):
+        return 0
 
-    def user_args(self):
+    def _command_line_args(self):
 
         parser = argparse.ArgumentParser(
             description="Load configurations, data, preprocess models. Run simulator on "
