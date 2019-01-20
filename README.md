@@ -21,7 +21,7 @@ Install the dependencies via the following command:
 
 `pip install -r requirements.txt` 
 
-In Ubuntu, Python 3.6 seems to be missing "tkinter". To install,
+In Ubuntu, "tkinter" seems to be missing for Python3.6. To install,
 
 `sudo apt-get install python3.6-tk`
 
