@@ -1,7 +1,7 @@
 from ems.config_reader.commandline import SimulatorCLI
 from ems.config_reader.reader import ResolveConfigs
 
-# TODO: Goal of this file is to abstract out a lot of the main.py in the above directory.
+# TODO: Goal of this file is to abstract out a lot of the run.py in the above directory.
 # TODO: user inputs from CLI args (parse_args) and configurations stored in the files.
 
 class UserInput: # TODO Request for comments (RFC) on name

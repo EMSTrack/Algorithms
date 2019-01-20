@@ -1,3 +1,4 @@
+#!venv/bin/python
 from datetime import timedelta, datetime
 
 import numpy as np

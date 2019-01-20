@@ -19,7 +19,7 @@ class ResolveConfigs:
         # TODO: Look for a configurations file
         if args:
             if args.configurations:
-                filename = "configurations/" + args.configurations + ".yaml"
+                filename = "./configurations/" + args.configurations
                 with open (filename, 'r') as jsonfile:
                     s = json.load(jsonfile)
 

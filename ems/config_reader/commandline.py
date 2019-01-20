@@ -9,11 +9,16 @@ class SimulatorCLI:
                                                      "ambulance dispatch. Decisions are made during the simulation, but "
                                                      "the events are output to a csv file for replay.")
 
-        # TODO LAST: All the configurations that can be set in the configuration files should be override-able here.
-        parser.add_argument('--configurations',
-                            help="for example, '--configurations hans'. Don't include '.json'",
+        parser.add_argument('configurations',
+                            help="The simulator needs a configuration to begin the computaiton.",
                             type=str,
-                            required=True)
+                            )
+
+        # TODO LAST: All the configurations that can be set in the configuration files should be override-able here.
+        # parser.add_argument('--configurations',
+        #                     help="for example, '--configurations hans'. Don't include '.json'",
+        #                     type=str,
+        #                     required=True)
 
         parser.add_argument('--ambulances',
                             help="Number of ambulances",
