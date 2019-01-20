@@ -12,7 +12,7 @@ python3 main.py --help
 
 Create a new environment: 
 
-`virtualenv venv`
+`virtualenv -p python3 venv`
 
 Use the new environment:
 

@@ -1,6 +1,6 @@
 # Tells the sim where to look for the data, and whether to enable debug.
 from argparse import Namespace
-import yaml as json
+from yaml import load
 
 class ResolveConfigs:
 
@@ -21,7 +21,7 @@ class ResolveConfigs:
             if args.configurations:
                 filename = "./configurations/" + args.configurations
                 with open (filename, 'r') as jsonfile:
-                    s = json.load(jsonfile)
+                    s = load(jsonfile)
 
                     filepath = s['filepath']
                     demands_file = filepath + s['demands']
@@ -47,6 +47,19 @@ class ResolveConfigs:
         self.bases_file = bases_file
         self.cases_file = cases_file
         self.travel_times_file = travel_times_file
+
         self.num_ambulances = num_ambulances
         self.num_bases = num_bases
+
         self.plot = plot
+
+
+    def set_file_locations(self, configs):
+        pass
+
+    def set_initial_conditions(self, configs):
+        pass
+
+    def set_coordinates(self, points):
+        # TODO this may not exaclty be in a single function
+        pass
