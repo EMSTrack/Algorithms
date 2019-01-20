@@ -2,11 +2,7 @@
 
 A library to do ambulance dispatch simulation and analysis.
 
-Try: `python3 main.py --settings tim --ambulances 7 --bases 7`
-
-python3 main.py --help
-
-## Install 
+## Install and Run
 
 ### A virtual environment
 
@@ -27,6 +23,11 @@ Install the dependencies via the following command:
 In Ubuntu, Python 3.6 seems to be missing "tkinter". To install,
 
 `sudo apt-get install python3.6-tk`
+
+If all is well, the simulator library should be runnable now. 
+
+`python run.py small.yaml`
+`python run.py --help`
 
 ## Project UML
 

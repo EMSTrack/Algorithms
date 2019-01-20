@@ -6,3 +6,4 @@ termcolor
 matplotlib
 shapely
 pyyaml
+IPython
