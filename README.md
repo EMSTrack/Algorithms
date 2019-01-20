@@ -24,6 +24,8 @@ In Ubuntu, Python 3.6 seems to be missing "tkinter". To install,
 
 `sudo apt-get install python3.6-tk`
 
+### Run the code! 
+
 If all is well, the simulator library should be runnable now. 
 
 `python run.py small.yaml`
