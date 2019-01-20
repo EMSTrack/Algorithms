@@ -35,6 +35,11 @@ If all is well, the simulator library should be runnable now.
 `python run.py small.yaml`
 
 
+### yaml configuration files
+
+We use yaml to read configurations from files into the simulator. Take a look 
+at `configurations/small.yaml` for an example.
+
 ## Project UML
 
 ![](uml/ems_uml.png)

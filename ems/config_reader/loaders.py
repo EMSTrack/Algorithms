@@ -8,7 +8,7 @@ class UserArguments:
         1) the command line
         2) the config file
 
-    Then it will self resolve discrepancies (?)
+    Then it will self resolve discrepancies.
 
     """
 
@@ -29,15 +29,12 @@ class UserArguments:
 
         dir = file['filepath']
         del file['filepath']
-
         for k in file:
             file[k] = dir + '/' + file[k]
-
 
     def _resolve_init(self, cli, file):
         if cli.ambulances: file['num_ambulances'] = cli.ambulances
         if cli.bases: file['num_bases'] = cli.bases
-
 
     def _command_line_args(self):
 
