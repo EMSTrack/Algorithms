@@ -19,7 +19,7 @@ class FastestHospitalSelector(HospitalSelector):
                ambulance: Ambulance):
 
         # Compute the closest point in set 2 to the ambulance
-        loc_set_1 = self.travel_times.loc_set_1
+        loc_set_1 = self.travel_times.origins
         closest_loc_to_ambulance, _, _ = loc_set_1.closest(ambulance.location)
 
         # Select an ambulance to attend to the given case and obtain the its duration of travel
@@ -32,7 +32,7 @@ class FastestHospitalSelector(HospitalSelector):
         shortest_time = timedelta.max
         fastest_hosp = None
 
-        loc_set_2 = self.travel_times.loc_set_2
+        loc_set_2 = self.travel_times.destinations
 
         for hospital_location in self.hospital_set.locations:
 

@@ -6,8 +6,11 @@ from geopy import Point
 
 class LocationSet:
 
-    def __init__(self, locations: List[Point]):
-        self.locations = locations
+    def __init__(self,
+                 latitudes: List[float],
+                 longitudes: List[float]):
+            self.locations = [Point(latitude=latitude, longitude=longitude)
+                              for latitude, longitude in zip(latitudes, longitudes)]
 
     def __len__(self):
         return len(self.locations)

@@ -6,7 +6,7 @@ A library to do ambulance dispatch simulation and analysis.
 
 ### A virtual environment
 
-Create a new environment: 
+Create a new environment with Python 3: 
 
 `virtualenv -p python3 venv`
 
@@ -32,13 +32,12 @@ If all is well, the simulator library should be runnable now.
 
 `python run.py --help`
 
-`python run.py small.yaml`
-
+`python run.py example.yaml`
 
 ### yaml configuration files
 
 We use yaml to read configurations from files into the simulator. Take a look 
-at `configurations/small.yaml` for an example.
+at `configurations/example.yaml` for an example.
 
 ## Project UML
 

@@ -3,7 +3,7 @@ from datetime import datetime
 
 from termcolor import colored
 
-from ems.algorithms.selection.ambulance_selection import AmbulanceSelectionAlgorithm
+from ems.algorithms.selection.ambulance_selection import AmbulanceSelector
 from ems.analysis.metrics.metric_aggregator import MetricAggregator
 from ems.analysis.records.case_record import CaseRecord
 from ems.analysis.records.case_record_set import CaseRecordSet
@@ -37,17 +37,17 @@ class CaseState:
 class EventDispatcherSimulator(Simulator):
 
     def __init__(self,
-                 ambulance_set: AmbulanceSet,
-                 case_set: CaseSet,
-                 ambulance_selector: AmbulanceSelectionAlgorithm,
+                 ambulances: AmbulanceSet,
+                 cases: CaseSet,
+                 ambulance_selector: AmbulanceSelector,
                  metric_aggregator: MetricAggregator):
-        super().__init__(ambulance_set, case_set, ambulance_selector, metric_aggregator)
+        super().__init__(ambulances, cases, ambulance_selector, metric_aggregator)
 
     def run(self):
 
-        ambulances = self.ambulance_set.ambulances
+        ambulances = self.ambulances.ambulances
         case_record_set = CaseRecordSet()
-        case_iterator = self.case_set.iterator()
+        case_iterator = self.cases.iterator()
         pending_cases = []
         ongoing_case_states = []
         current_time = None

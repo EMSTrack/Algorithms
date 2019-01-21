@@ -14,12 +14,12 @@ class PercentCoverage(Metric):
     def __init__(self,
                  demands: LocationSet,
                  travel_times: TravelTimes,
-                 r1: timedelta = timedelta(600),
+                 r1: int = 600,
                  tag = 'percent_coverage'):
         super().__init__(tag=tag)
         self.demands = demands
         self.travel_times = travel_times
-        self.r1 = r1
+        self.r1 = timedelta(r1)
 
         # Caching for better performance
         self.coverage_state = PercentCoverageState(ambulances=set(),
@@ -55,12 +55,12 @@ class PercentCoverage(Metric):
     def add_ambulance_coverage(self, ambulance):
 
         # Retrieve closest point from set 1 to the ambulance
-        closest_to_amb, _, _ = self.travel_times.loc_set_1.closest(ambulance.location)
+        closest_to_amb, _, _ = self.travel_times.origins.closest(ambulance.location)
 
         for index, demand_loc in enumerate(self.demands.locations):
 
             # Retrieve closest point from set 2 to the demand
-            closest_to_demand, _, _ = self.travel_times.loc_set_2.closest(demand_loc)
+            closest_to_demand, _, _ = self.travel_times.destinations.closest(demand_loc)
 
             # Compute time and determine if less than r1
             if self.travel_times.get_time(closest_to_amb, closest_to_demand) <= self.r1:

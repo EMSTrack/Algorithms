@@ -7,7 +7,8 @@ from ems.utils import parse_unheadered_csv
 class TijuanaBaseSet(KDTreeLocationSet):
 
     def __init__(self, filename):
-        super().__init__(self.read_bases(filename))
+        latitudes, longitudes = self.read_bases(filename)
+        super().__init__(latitudes, longitudes)
 
     def read_bases(self, filename):
         # Read bases from an unheadered CSV into a pandas dataframe
@@ -16,9 +17,10 @@ class TijuanaBaseSet(KDTreeLocationSet):
         bases_df = parse_unheadered_csv(filename, base_col_positions, base_headers)
 
         # Generate list of models from dataframe
-        bases = []
+        latitudes = []
+        longitudes = []
         for index, row in bases_df.iterrows():
-            base = Point(row["lat"], row["long"])
-            bases.append(base)
+            latitudes.append(row["lat"])
+            longitudes.append(row["long"])
 
-        return bases
+        return latitudes, longitudes

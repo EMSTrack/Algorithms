@@ -1,42 +1,52 @@
 from ems.config_reader.loaders import UserArguments
-
-
-# TODO: Goal of this file is to abstract out a lot of the run.py in the above directory.
-# TODO: user inputs from CLI args (parse_args) and configurations stored in the files.
+import importlib
 
 def read_user_input():
+    """ Sets up the command line interface to ask for config file location """
+    # TODO If we don't want to support optional command line args, UserArgument's implementation can go here.
+
     usr_args = UserArguments()
     return usr_args.get_sim_args()
 
-class UserInput: # TODO Request for comments (RFC) on name
-    """ Returns the configuration as the initial condition. The CLI overrides the config files."""
-    # do parse_arg stuff here
+def instantiate_simulator(d):
+    """
+    For each item in the YAML file that has a classpath and classname, instantiate the
+    respective module and class object. This method uses recursion to traverse the nested
+    yaml file.
 
-    def __init__(self):
-        """
-        This class reads from two sources of truth and resolves them
-        Command line arguments always overrides file configurations
-        """
+    :param d: an object in the yaml file, which could be a list, dict, or value (string or number)
+    :return: the python object representation of the object
+    """
+    cname = cpath = None
+    params = {}
 
-        simulator_arguments = UserArguments()
+    for key, value in d.items():
+        # Class
+        if key == "class":
+            cname = value
 
-        # settings = ResolveConfigs(debug=command_line_args.debug, args=command_line_args)
-        # self.args = settings
+        # Classpath
+        elif key == "classpath":
+            cpath = value
 
-    # do read files for stored data here. command line should always override files
-    # YAML reduces syntax hell
+        # Nested object param
+        elif isinstance(value, dict):
+            params[key] = instantiate_simulator(value)
 
+        # Nested list param
+        elif isinstance(value, list):
+            a = []
+            for ele in value:
+                if isinstance(ele, dict):
+                    a.append(instantiate_simulator(ele))
+                else:
+                    a.append(ele)
+            params[key] = a
 
+        # Primitive param
+        else:
+            params[key] = value
 
-# TODO: pre-simulator computation setup like kd-trees and polygon
-    # TODO Or should the polygon computation be in another folder?
-class SetupPrecondition:
-    """  """
-    pass
-
-
-# TODO: Simulator
-class SimulatorRunner:
-    """  """
-    pass
-
+    c = getattr(importlib.import_module(cpath), cname)
+    instance = c(**params)
+    return instance
