@@ -1,5 +1,5 @@
 from ems.config_reader.loaders import UserArguments
-
+import importlib
 
 # TODO: Goal of this file is to abstract out a lot of the run.py in the above directory.
 # TODO: user inputs from CLI args (parse_args) and configurations stored in the files.
@@ -8,35 +8,37 @@ def read_user_input():
     usr_args = UserArguments()
     return usr_args.get_sim_args()
 
-class UserInput: # TODO Request for comments (RFC) on name
-    """ Returns the configuration as the initial condition. The CLI overrides the config files."""
-    # do parse_arg stuff here
+def instantiate_simulator(d):
+    cname = cpath = None
+    params = {}
 
-    def __init__(self):
-        """
-        This class reads from two sources of truth and resolves them
-        Command line arguments always overrides file configurations
-        """
+    for key, value in d.items():
+        # Class
+        if key == "class":
+            cname = value
 
-        simulator_arguments = UserArguments()
+        # Classpath
+        elif key == "classpath":
+            cpath = value
 
-        # settings = ResolveConfigs(debug=command_line_args.debug, args=command_line_args)
-        # self.args = settings
+        # Nested object param
+        elif isinstance(value, dict):
+            params[key] = instantiate_simulator(value)
 
-    # do read files for stored data here. command line should always override files
-    # YAML reduces syntax hell
+        # Nested list param
+        elif isinstance(value, list):
+            a = []
+            for ele in value:
+                if isinstance(ele, dict):
+                    a.append(instantiate_simulator(ele))
+                else:
+                    a.append(ele)
+            params[key] = a
 
+        # Primitive param
+        else:
+            params[key] = value
 
-
-# TODO: pre-simulator computation setup like kd-trees and polygon
-    # TODO Or should the polygon computation be in another folder?
-class SetupPrecondition:
-    """  """
-    pass
-
-
-# TODO: Simulator
-class SimulatorRunner:
-    """  """
-    pass
-
+    c = getattr(importlib.import_module(cpath), cname)
+    instance = c(**params)
+    return instance

@@ -1,53 +1,31 @@
-# TODO RFC: Naming
-import pprint as pp
-
-from ems.driver import read_user_input
-
-pprint = pp.PrettyPrinter(indent=2, compact=False).pprint
+from ems.driver import read_user_input, instantiate_simulator
 
 # Initialize configurations
 sim_args = read_user_input()
-
-import importlib
-
-def generate_object(d):
-    cname = cpath = None
-    params = {}
-
-    for key, value in d.items():
-        # Class
-        if key == "class":
-            cname = value
-
-        # Classpath
-        elif key == "classpath":
-            cpath = value
-
-        # Nested object param
-        elif isinstance(value, dict):
-            params[key] = generate_object(value)
-
-        # Nested list param
-        elif isinstance(value, list):
-            a = []
-            for ele in value:
-                if isinstance(ele, dict):
-                    a.append(generate_object(ele))
-                else:
-                    a.append(ele)
-            params[key] = a
-
-        # Primitive param
-        else:
-            params[key] = value
-
-    c = getattr(importlib.import_module(cpath), cname)
-    instance = c(**params)
-    return instance
-
-
-sim = generate_object(sim_args["simulator"])
+sim = instantiate_simulator(sim_args["simulator"])
 case_record_set, metric_aggregator = sim.run()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # # Initialize datasets
 # demand_set = TijuanaDemandSet(filename=settings.demands_file)
