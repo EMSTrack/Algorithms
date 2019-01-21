@@ -17,8 +17,8 @@ class UserArguments:
 
         cli_args = self._command_line_args()
         file_contents = yaml.load(open("./configurations/" + cli_args.config_file, 'r'))
-        self._resolve_files(file_contents['files'])
-        self._resolve_init(cli_args, file_contents['init'])
+        # self._resolve_files(file_contents['files'])
+        # self._resolve_init(cli_args, file_contents['init'])
         self.sim_args = file_contents
 
     def get_sim_args(self):

@@ -38,7 +38,57 @@ pprint = pp.PrettyPrinter(indent=4, compact=False).pprint
 
 # Initialize configurations
 sim_args = read_user_input()
-pprint(sim_args)
+
+import importlib
+
+def recurse(d):
+    cname = cpath = None
+    params = {}
+
+    for key, value in d.items():
+        # Class
+        if key == "class":
+            cname = value
+
+        # Classpath
+        elif key == "classpath":
+            cpath = value
+
+        # Nested object param
+        elif isinstance(value, dict):
+            params[key] = recurse(value)
+
+        # Nested list param
+        elif isinstance(value, list):
+            a = []
+            for ele in value:
+                if isinstance(ele, dict):
+                    a.append(recurse(ele))
+                else:
+                    a.append(ele)
+            params[key] = a
+
+        # Primitive param
+        else:
+            params[key] = value
+
+    c = getattr(importlib.import_module(cpath), cname)
+    instance = c(**params)
+
+    return instance
+
+sim = recurse(sim_args["simulator"])
+case_record_set, metric_aggregator = sim.run()
+
+#
+#
+# o = sim_args["simulator"]["ambulance_selector"]["travel_times"]["origins"]
+#
+# c = getattr(, o["class"])
+#
+# instance = c(o)
+#
+# print(instance)
 
 exit(1) # TODO. Program should only work up to here. ########################################################
 
@@ -181,7 +231,7 @@ ambulance_set = CustomAmbulanceSet(count=settings.num_ambulances,
                                    base_selector=base_selector)
 
 # Initialize simulator
-sim = EventDispatcherSimulator(ambulance_set=ambulance_set,
+sim = EventDispatcherSimulator(ambulances=ambulance_set,
                                cases=case_set,
                                ambulance_selector=ambulance_select,
                                metric_aggregator=metric_aggregator)

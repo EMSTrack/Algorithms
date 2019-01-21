@@ -13,11 +13,11 @@ from ems.models.ambulances.ambulance import Ambulance
 class Simulator:
 
     def __init__(self,
-                 ambulance_set: AmbulanceSet,
+                 ambulances: AmbulanceSet,
                  cases: CaseSet,
                  ambulance_selector: AmbulanceSelector,
                  metric_aggregator: MetricAggregator):
-        self.ambulance_set = ambulance_set
+        self.ambulances = ambulances
         self.cases = cases
         self.ambulance_selector = ambulance_selector
         self.metric_aggregator = metric_aggregator

@@ -12,8 +12,11 @@ from ems.generators.case.time.time import CaseTimeGenerator
 class PoissonCaseTimeGenerator(CaseTimeGenerator):
 
     def __init__(self,
-                 lmda: float):
-        self.lmda = lmda
+                 quantity: int,
+                 duration: float):
+        self.quantity = quantity
+        self.duration = duration
+        self.lmda = quantity / duration
 
     def generate(self,
                  time: datetime):

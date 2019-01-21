@@ -18,14 +18,12 @@ class RandomCaseSet(CaseSet):
                  initial_time: datetime,
                  case_time_generator: CaseTimeGenerator,
                  case_location_generator: LocationGenerator,
-                 event_generator: EventGenerator,
-                 hospital_selector: HospitalSelector):
+                 event_generator: EventGenerator):
         self.num_cases = quantity
         self.initial_time = initial_time
         self.case_time_generator = case_time_generator
         self.location_generator = case_location_generator
         self.event_generator = event_generator
-        self.hospital_selector = hospital_selector
 
     def iterator(self):
         k = 1

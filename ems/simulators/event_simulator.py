@@ -37,15 +37,15 @@ class CaseState:
 class EventDispatcherSimulator(Simulator):
 
     def __init__(self,
-                 ambulance_set: AmbulanceSet,
+                 ambulances: AmbulanceSet,
                  cases: CaseSet,
                  ambulance_selector: AmbulanceSelector,
                  metric_aggregator: MetricAggregator):
-        super().__init__(ambulance_set, cases, ambulance_selector, metric_aggregator)
+        super().__init__(ambulances, cases, ambulance_selector, metric_aggregator)
 
     def run(self):
 
-        ambulances = self.ambulance_set.ambulances
+        ambulances = self.ambulances.ambulances
         case_record_set = CaseRecordSet()
         case_iterator = self.cases.iterator()
         pending_cases = []
