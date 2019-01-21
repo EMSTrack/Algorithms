@@ -34,7 +34,7 @@ from ems.driver import SetupPrecondition
 from ems.driver import SimulatorRunner
 
 import pprint as pp
-pprint = pp.PrettyPrinter(indent=4, compact=False).pprint
+pprint = pp.PrettyPrinter(indent=2, compact=False).pprint
 
 # Initialize configurations
 sim_args = read_user_input()

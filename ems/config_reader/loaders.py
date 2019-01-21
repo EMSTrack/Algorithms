@@ -24,13 +24,13 @@ class UserArguments:
     def get_sim_args(self):
         return self.sim_args
 
-    def _resolve_files(self, file):
-        """ make the path strings callable by open  """
-
-        dir = file['filepath']
-        del file['filepath']
-        for k in file:
-            file[k] = dir + '/' + file[k]
+    # def _resolve_files(self, file):
+    #     """ make the path strings callable by open  """
+    #
+    #     dir = file['filepath']
+    #     del file['filepath']
+    #     for k in file:
+    #         file[k] = dir + '/' + file[k]
 
     def _resolve_init(self, cli, file):
         if cli.ambulances: file['num_ambulances'] = cli.ambulances
@@ -44,34 +44,34 @@ class UserArguments:
                         "the events are output to a csv file for replay.")
 
         parser.add_argument('config_file',
-                                 help="The simulator needs a configuration to begin the computaiton.",
+                                 help="The simulator needs a configuration to begin the computation.",
                                  type=str,
                                  )
 
-        parser.add_argument('--ambulances',
-                                 help="Number of ambulances",
-                                 type=int,
-                                 required=False)
-
-        parser.add_argument('--bases',
-                                 help='Number of bases',
-                                 type=int,
-                                 required=False)
-
-        parser.add_argument('--slices',
-                                 help="Number of cases to simulate",
-                                 type=int,
-                                 required=False)
-
-        parser.add_argument('--output-file',
-                                 help="Output filename for simulator info",
-                                 type=str,
-                                 required=False)
-
-        parser.add_argument('--debug',
-                                 help="Whether the simulator should run in debug-mode.",
-                                 type=bool,
-                                 required=False,
-                                 default=True)
+        # parser.add_argument('--ambulances',
+        #                          help="Number of ambulances",
+        #                          type=int,
+        #                          required=False)
+        #
+        # parser.add_argument('--bases',
+        #                          help='Number of bases',
+        #                          type=int,
+        #                          required=False)
+        #
+        # parser.add_argument('--slices',
+        #                          help="Number of cases to simulate",
+        #                          type=int,
+        #                          required=False)
+        #
+        # parser.add_argument('--output-file',
+        #                          help="Output filename for simulator info",
+        #                          type=str,
+        #                          required=False)
+        #
+        # parser.add_argument('--debug',
+        #                          help="Whether the simulator should run in debug-mode.",
+        #                          type=bool,
+        #                          required=False,
+        #                          default=True)
 
         return parser.parse_args()
