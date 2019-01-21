@@ -13,8 +13,9 @@ from ems.generators.case.location.location import LocationGenerator
 class PolygonLocationGenerator(LocationGenerator):
 
     def __init__(self,
+                 vertices_longitude: List[float],
                  vertices_latitude: List[float],
-                 vertices_longitude: List[float]):
+                 ):
 
         self.vertices_latitude = vertices_latitude
         self.vertices_longitude = vertices_longitude
@@ -30,5 +31,8 @@ class PolygonLocationGenerator(LocationGenerator):
         a, b = sorted([random.random(), random.random()])
 
         coords = t.exterior.coords
-        return Point(longitude=a * coords[0][0] + (b - a) * coords[1][0] + (1 - b) * coords[2][0],
-                     latitude=a * coords[0][1] + (b - a) * coords[1][1] + (1 - b) * coords[2][1])
+
+        lat = a * coords[0][0] + (b - a) * coords[1][0] + (1 - b) * coords[2][0]
+        long  = a * coords[0][1] + (b - a) * coords[1][1] + (1 - b) * coords[2][1]
+
+        return Point(latitude=lat, longitude=long)
