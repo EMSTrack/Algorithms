@@ -35,7 +35,7 @@ simulator:
     classpath: ems.datasets.case.random_case_set
 
     # Number of cases to generate
-    quantity: 150
+    quantity: 20
 
     # Starting time
     initial_time: 2001-12-15T02:59:43.1Z
@@ -46,10 +46,11 @@ simulator:
       classpath: ems.generators.case.time.poisson_time
 
       # Duration in minutes that the cases will be generated in
-      duration: 900
+      duration: 10
 
       # Number of cases to generate
-      quantity: 150
+      # TODO This quantity is the same as the one a few lines above. Need to fix the redundancy.
+      quantity: 20
 
     # Defines method on where cases are randomly generated
     case_location_generator:
