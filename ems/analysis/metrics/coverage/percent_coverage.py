@@ -19,7 +19,7 @@ class PercentCoverage(Metric):
         super().__init__(tag=tag)
         self.demands = demands
         self.travel_times = travel_times
-        self.r1 = timedelta(r1)
+        self.r1 = timedelta(seconds=r1)
 
         # Caching for better performance
         self.coverage_state = PercentCoverageState(ambulances=set(),
