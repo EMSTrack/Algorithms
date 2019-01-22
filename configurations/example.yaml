@@ -13,7 +13,7 @@ simulator:
     classpath: ems.datasets.ambulance.custom_ambulance_set
 
     # Number of ambulances to generate
-    count: 10
+    count: 17
 
     # Determines which base each generated ambulance will reside
     base_selector:
@@ -46,9 +46,10 @@ simulator:
       classpath: ems.generators.case.time.poisson_time
 
       # Duration in minutes that the cases will be generated in
-      duration: 900
+      duration: 400
 
       # Number of cases to generate
+      # TODO This quantity is the same as the one a few lines above. Need to fix the redundancy.
       quantity: 150
 
     # Defines method on where cases are randomly generated
