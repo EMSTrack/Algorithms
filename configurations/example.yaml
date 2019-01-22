@@ -22,12 +22,39 @@ simulator:
 
       # Defines the bases to be selecting from
       base_set:
-        class: TijuanaBaseSet
-        classpath: ems.datasets.location.base.tijuana_base_set
+        class: FilteredTijuanaBaseSet
+        classpath: ems.datasets.location.base.filtered_tijuana_base_set
 
         # Location of bases file
         filename: ../data-cruz-roja/bases.csv
 
+        # Number of bases to filter
+        count: 10
+
+        # Minimum travel time required in seconds
+        required_travel_time: 600
+
+        # Travel times for computation
+        travel_times:
+          class: TijuanaTravelTimes
+          classpath: ems.datasets.travel_times.tijuana_travel_times
+
+          # Defines filename to read the travel times
+          filename: ../data-cruz-roja/times.csv
+
+          # Defines the origin points of the travel times
+          origins:
+            class: TijuanaBaseSet
+            classpath: ems.datasets.location.base.tijuana_base_set
+
+            filename: ../data-cruz-roja/bases.csv
+
+          # Defines the destination points of the travel times
+          destinations:
+            class: TijuanaDemandSet
+            classpath: ems.datasets.location.demand.tijuana_demand_set
+
+            filename: ../data-cruz-roja/demand_points.csv
 
   # Defines the cases to be used in the simulation
   cases:

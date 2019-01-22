@@ -1,12 +1,10 @@
-from geopy import Point
-
 from ems.datasets.location.kd_tree_location_set import KDTreeLocationSet
 from ems.utils import parse_unheadered_csv
 
 
 class TijuanaBaseSet(KDTreeLocationSet):
 
-    def __init__(self, filename):
+    def __init__(self, filename: str):
         latitudes, longitudes = self.read_bases(filename)
         super().__init__(latitudes, longitudes)
 
