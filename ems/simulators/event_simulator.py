@@ -184,7 +184,7 @@ class EventDispatcherSimulator(Simulator):
             print("Destination: {}, {}".format(new_event.destination.latitude, new_event.destination.longitude))
             print("Duration: {}".format(new_event.duration))
             err = "{}%".format(round(new_event.error, 2)) if new_event.error else None
-            print("Distance Accuracy: {}".format(err))
+            print("Distance Difference: {}".format(err))
 
             # Update case state with new info
             case_state.next_event_time = new_event_finish_datetime

@@ -29,7 +29,7 @@ class TravelTimeDurationGenerator(EventDurationGenerator):
         # Calculate the error as a percentage between the sim dist and the real dist
         sim_dist  = distance(closest_loc_to_dest, closest_loc_to_orig)
         real_dist = distance(destination, ambulance.location)
-        difference = sim_dist/real_dist*100
+        difference = sim_dist/real_dist * 100 - 100
 
         # Return time lookup
         return {'duration': self.travel_times.get_time(closest_loc_to_orig, closest_loc_to_dest),
