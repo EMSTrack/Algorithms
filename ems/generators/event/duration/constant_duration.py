@@ -15,4 +15,5 @@ class ConstantDurationGenerator(EventDurationGenerator):
                  ambulance: Ambulance,
                  destination: Point,
                  timestamp: datetime):
-        return self.constant
+
+        return {'duration': self.constant}

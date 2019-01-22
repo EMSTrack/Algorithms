@@ -125,7 +125,7 @@ class EventDispatcherSimulator(Simulator):
             for metric_tag, value in metrics.items():
                 print(colored("{}: {}".format(metric_tag, value), "magenta"))
 
-            print("----------------------------------------------------------")
+            print("=" * 90)
 
         return case_record_set, self.metric_aggregator
 
@@ -144,9 +144,12 @@ class EventDispatcherSimulator(Simulator):
         case_next_event = next(case_event_iterator)
         case_event_finish_datetime = current_time + case_next_event.duration
 
+        # TODO quite a bit of repeated code for print statements
         print("Started new event: {}".format(case_next_event.event_type.value))
         print("Destination: {}, {}".format(case_next_event.destination.latitude, case_next_event.destination.longitude))
         print("Duration: {}".format(case_next_event.duration))
+        err = "{}%".format(round(case_next_event.error, 2)) if case_next_event.error else None
+        print("Distance Accuracy: {}".format(err))
 
         case_record = CaseRecord(case=case,
                                  ambulance=selected_ambulance,
@@ -175,10 +178,13 @@ class EventDispatcherSimulator(Simulator):
         # Generate new Case State pointing to the next event
         if new_event:
 
+            # TODO quite a bit of repeated code for print statements
             new_event_finish_datetime = current_time + new_event.duration
             print("Started new event: {}".format(new_event.event_type.value))
             print("Destination: {}, {}".format(new_event.destination.latitude, new_event.destination.longitude))
             print("Duration: {}".format(new_event.duration))
+            err = "{}%".format(round(new_event.error, 2)) if new_event.error else None
+            print("Distance Accuracy: {}".format(err))
 
             # Update case state with new info
             case_state.next_event_time = new_event_finish_datetime

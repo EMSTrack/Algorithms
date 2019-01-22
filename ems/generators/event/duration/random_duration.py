@@ -25,4 +25,4 @@ class RandomDurationGenerator(EventDurationGenerator):
 
         duration_in_seconds = random.randint(seconds_lower_bound, seconds_upper_bound)
 
-        return timedelta(seconds=duration_in_seconds)
+        return {'duration': timedelta(seconds=duration_in_seconds)}

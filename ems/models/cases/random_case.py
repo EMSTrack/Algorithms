@@ -25,6 +25,7 @@ class RandomCase(Case):
         hospital_location = None
         for event_type in [EventType.TO_INCIDENT, EventType.AT_INCIDENT, EventType.TO_HOSPITAL, EventType.AT_HOSPITAL,
                            EventType.TO_BASE]:
+
             event = self.event_generator.generate(ambulance=ambulance,
                                                   incident_location=self.incident_location,
                                                   timestamp=current_time,

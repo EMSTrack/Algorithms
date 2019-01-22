@@ -1,10 +1,9 @@
-from datetime import datetime
-from typing import List
+from datetime   import datetime
+from typing     import List
+from geopy      import Point
 
-from geopy import Point
-
-from ems.models.cases.case import Case
-from ems.models.events.event import Event
+from ems.models.cases.case      import Case
+from ems.models.events.event    import Event
 
 
 class DefinedCase(Case):
@@ -15,6 +14,7 @@ class DefinedCase(Case):
                  incident_location: Point,
                  events: List[Event],
                  priority: float = None):
+
         super().__init__(id, date_recorded, incident_location, priority)
         self.events = events
 
