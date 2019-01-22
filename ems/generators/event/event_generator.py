@@ -66,5 +66,6 @@ class EventGenerator:
             # TODO -- other
             pass
         return Event(destination=destination,
-                     duration=duration,
+                     duration=duration['duration'],
+                     error=duration['error'] if 'error' in duration else None,
                      event_type=event_type)

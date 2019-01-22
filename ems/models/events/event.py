@@ -10,7 +10,9 @@ class Event:
     def __init__(self,
                  destination: Point,
                  event_type: EventType,
-                 duration: timedelta=None):
+                 duration: timedelta=None,
+                 error=None):
         self.destination = destination
         self.event_type = event_type
         self.duration = duration
+        self.error = error
