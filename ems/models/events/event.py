@@ -11,8 +11,11 @@ class Event:
                  destination: Point,
                  event_type: EventType,
                  duration: timedelta=None,
-                 error=None):
+                 error=None,
+                 sim_dest=None):
+
         self.destination = destination
         self.event_type = event_type
         self.duration = duration
         self.error = error
+        self.sim_dest = sim_dest

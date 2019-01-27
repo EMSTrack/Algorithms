@@ -1,4 +1,6 @@
 from ems.driver import read_user_input, instantiate_simulator
+from IPython import embed
+
 # Initialize configurations
 sim_args = read_user_input()
 sim = instantiate_simulator(sim_args["simulator"])
@@ -6,7 +8,18 @@ case_record_set, metric_aggregator = sim.run()
 
 
 
+polygon_coordinates = {
+    'latitude': sim_args['simulator']['cases']['case_location_generator']['vertices_latitude'] ,
+    'longitude': sim_args['simulator']['cases']['case_location_generator']['vertices_longitude']
+}
 
+
+events = [event for case_record in case_record_set.case_records for event in case_record.event_history]
+
+real_dests = [event.destination for event in events]
+sim_dests  = [event.sim_dest for event in events if event]
+
+embed()
 
 
 
