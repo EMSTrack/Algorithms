@@ -21,6 +21,8 @@ def read_data(filename):
 def preconfigurations():
 	# plt.xlim(0, 75)
 	# plt.ylim(-1, 1)
+	img = plt.imread("tijuana.png")
+	plt.imshow(img, extent=[-117.124533, -116.804590, 32.405490, 32.563261])
 	pass
 
 def set_polygon(coordinates):
