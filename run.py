@@ -14,12 +14,40 @@ polygon_coordinates = {
 }
 
 
+
 events = [event for case_record in case_record_set.case_records for event in case_record.event_history]
 
+# lat, lon
 real_dests = [event.destination for event in events]
-sim_dests  = [event.sim_dest for event in events if event]
+real_lats = [e.latitude for e in real_dests]
+real_lons = [e.longitude for e in real_dests]
 
-embed()
+real_locations = {
+    'latitude': real_lats,
+    'longitude': real_lons,
+}
+
+
+sim_dests  = [event.sim_dest for event in events if event.sim_dest]
+sim_lats = [e.latitude for e in sim_dests]
+sim_lons = [e.longitude for e in sim_dests]
+
+sim_locations = {
+    'latitude': sim_lats,
+    'longitude': sim_lons,
+}
+
+import yaml
+
+info = {
+    "polygon": polygon_coordinates ,
+    "real_locs": real_locations ,
+    "sim_locs" : sim_locations
+}
+
+with open ("./error-analysis/error-data.yaml", 'w') as error_file:
+    info_yaml = yaml.dump(info)
+    error_file.write(info_yaml)
 
 
 
