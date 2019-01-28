@@ -33,4 +33,5 @@ class TravelTimeDurationGenerator(EventDurationGenerator):
 
         # Return time lookup
         return {'duration': self.travel_times.get_time(closest_loc_to_orig, closest_loc_to_dest),
-                'error'   : difference }
+                'error'   : difference,
+                'sim_dest': closest_loc_to_dest}

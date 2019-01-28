@@ -68,4 +68,5 @@ class EventGenerator:
         return Event(destination=destination,
                      duration=duration['duration'],
                      error=duration['error'] if 'error' in duration else None,
+                     sim_dest=duration['sim_dest'] if 'sim_dest' in duration else None,
                      event_type=event_type)
