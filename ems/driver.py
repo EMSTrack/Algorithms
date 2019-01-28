@@ -19,13 +19,13 @@ class Driver:
     # If key in d already exists in self.objects, overwrites it
     def create_objects(self, d):
 
+        # Parse objects and store
         for key, value in d.items():
-            if key == "name":
-                print("Parsing YAML: {}".format(value))
+            object = self.create(d[key])
+            self.objects[key] = object
 
-            else:
-                object = self.create(d[key])
-                self.objects[key] = object
+        if "name" in self.objects:
+            print(self.objects["name"])
 
     def create(self, o):
         """
