@@ -7,7 +7,6 @@ from ems.algorithms.selection.ambulance_selection import AmbulanceSelector
 from ems.analysis.metrics.metric_aggregator import MetricAggregator
 from ems.datasets.ambulance.ambulance_set import AmbulanceSet
 from ems.datasets.case.case_set import CaseSet
-from ems.models.ambulances.ambulance import Ambulance
 
 
 class Simulator:

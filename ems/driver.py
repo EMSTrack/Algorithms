@@ -8,45 +8,63 @@ def read_user_input():
     usr_args = UserArguments()
     return usr_args.get_sim_args()
 
-def instantiate_simulator(d):
-    """
-    For each item in the YAML file that has a classpath and classname, instantiate the
-    respective module and class object. This method uses recursion to traverse the nested
-    yaml file.
 
-    :param d: an object in the yaml file, which could be a list, dict, or value (string or number)
-    :return: the python object representation of the object
-    """
-    cname = cpath = None
-    params = {}
+class Driver:
 
-    for key, value in d.items():
-        # Class
-        if key == "class":
-            cname = value
+    def __init__(self, objects=None):
+        if objects is None:
+            objects = {}
+        self.objects = objects
 
-        # Classpath
-        elif key == "classpath":
-            cpath = value
+    # If key in d already exists in self.objects, overwrites it
+    def create_objects(self, d):
 
-        # Nested object param
-        elif isinstance(value, dict):
-            params[key] = instantiate_simulator(value)
+        # Parse objects and store
+        for key, value in d.items():
+            self.objects[key] = self.create(d[key])
 
-        # Nested list param
-        elif isinstance(value, list):
-            a = []
-            for ele in value:
-                if isinstance(ele, dict):
-                    a.append(instantiate_simulator(ele))
+        if "name" in self.objects:
+            print("Finished parsing: {}".format(self.objects["name"]))
+
+    def create(self, o):
+        """
+        For each item in the YAML file that has a classpath and classname, instantiate the
+        respective module and class object. This method uses recursion to traverse the nested
+        yaml file.
+
+        :param o: an object in the yaml file, which could be a list, dict, or value (string or number)
+        :return: the python object representation of the object
+        """
+
+        # Dictionary (nest object)
+        if isinstance(o, dict):
+            params = {}
+            cname = cpath = None
+            for key, value in o.items():
+                # Class
+                if key == "class":
+                    cname = value
+
+                # Classpath
+                elif key == "classpath":
+                    cpath = value
+
+                # Parameter: recurse to create object for parameter
                 else:
-                    a.append(ele)
-            params[key] = a
+                    params[key] = self.create(value)
 
-        # Primitive param
+            c = getattr(importlib.import_module(cpath), cname)
+            instance = c(**params)
+            return instance
+
+        # List of objects
+        elif isinstance(o, list):
+            return [self.create(ele) for ele in o]
+
+        # If key pointing to existing object
+        elif o in self.objects:
+            return self.objects[o]
+
+        # Primitive
         else:
-            params[key] = value
-
-    c = getattr(importlib.import_module(cpath), cname)
-    instance = c(**params)
-    return instance
+            return o
