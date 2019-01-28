@@ -2,12 +2,14 @@
 name:
   Random Cases, Preset Bases, Preset Travel Times
 
+# Define demand set for usage in travel times and percent coverage metric
 demands:
   class: TijuanaDemandSet
   classpath: ems.datasets.location.demand.tijuana_demand_set
 
   filename: ../data-cruz-roja/demand_points.csv
 
+# Define travel times for estimating travel times in various simulation algorithms
 tt:
   class: TijuanaTravelTimes
   classpath: ems.datasets.travel_times.tijuana_travel_times

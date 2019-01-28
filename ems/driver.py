@@ -27,51 +27,45 @@ class Driver:
                 object = self.create(d[key])
                 self.objects[key] = object
 
-    def create(self, d):
+    def create(self, o):
         """
         For each item in the YAML file that has a classpath and classname, instantiate the
         respective module and class object. This method uses recursion to traverse the nested
         yaml file.
 
-        :param d: an object in the yaml file, which could be a list, dict, or value (string or number)
+        :param o: an object in the yaml file, which could be a list, dict, or value (string or number)
         :return: the python object representation of the object
         """
-        cname = cpath = id = None
-        params = {}
 
-        for key, value in d.items():
-            # Class
-            if key == "class":
-                cname = value
+        # Dictionary (nest object)
+        if isinstance(o, dict):
+            params = {}
+            cname = cpath = None
+            for key, value in o.items():
+                # Class
+                if key == "class":
+                    cname = value
 
-            # Classpath
-            elif key == "classpath":
-                cpath = value
+                # Classpath
+                elif key == "classpath":
+                    cpath = value
 
-            # Nested object param
-            elif isinstance(value, dict):
-                params[key] = self.create(value)
+                # Parameter: recurse to create object for parameter
+                else:
+                    params[key] = self.create(value)
 
-            # Nested list param
-            elif isinstance(value, list):
-                a = []
-                for ele in value:
-                    if isinstance(ele, dict):
-                        a.append(self.create(ele))
-                    else:
-                        a.append(ele)
-                params[key] = a
+            c = getattr(importlib.import_module(cpath), cname)
+            instance = c(**params)
+            return instance
 
-            # Potential key pointing to existing object
-            elif value in self.objects:
-                params[key] = self.objects[value]
+        # List of objects
+        elif isinstance(o, list):
+            return [self.create(ele) for ele in o]
 
-            # Primitive parameter
-            else:
-                params[key] = value
+        # If key pointing to existing object
+        elif o in self.objects:
+            return self.objects[o]
 
-        c = getattr(importlib.import_module(cpath), cname)
-        instance = c(**params)
-        return instance
-
-
+        # Primitive
+        else:
+            return o
