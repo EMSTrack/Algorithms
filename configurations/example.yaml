@@ -2,6 +2,9 @@
 name:
   Random Cases, Preset Bases, Preset Travel Times
 
+# Defines the number of cases to generate
+case_quantity: 20
+
 # Define demand set for usage in travel times and percent coverage metric
 demands:
   class: TijuanaDemandSet
@@ -69,7 +72,7 @@ simulator:
     classpath: ems.datasets.case.random_case_set
 
     # Number of cases to generate
-    quantity: 20
+    quantity: case_quantity
 
     # Starting time
     initial_time: 2001-12-15T02:59:43.1Z
@@ -83,8 +86,7 @@ simulator:
       duration: 10
 
       # Number of cases to generate
-      # TODO This quantity is the same as the one a few lines above. Need to fix the redundancy.
-      quantity: 20
+      quantity: case_quantity
 
     # Defines method on where cases are randomly generated
     case_location_generator:

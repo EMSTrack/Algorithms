@@ -21,11 +21,10 @@ class Driver:
 
         # Parse objects and store
         for key, value in d.items():
-            object = self.create(d[key])
-            self.objects[key] = object
+            self.objects[key] = self.create(d[key])
 
         if "name" in self.objects:
-            print(self.objects["name"])
+            print("Finished parsing: {}".format(self.objects["name"]))
 
     def create(self, o):
         """
