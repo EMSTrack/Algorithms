@@ -1,7 +1,10 @@
-from ems.driver import read_user_input, instantiate_simulator
+from ems.driver import read_user_input, Driver
 # Initialize configurations
 sim_args = read_user_input()
-sim = instantiate_simulator(sim_args["simulator"])
+
+driver = Driver()
+driver.create_objects(sim_args)
+sim = driver.objects["simulator"]
 case_record_set, metric_aggregator = sim.run()
 
 

@@ -8,45 +8,70 @@ def read_user_input():
     usr_args = UserArguments()
     return usr_args.get_sim_args()
 
-def instantiate_simulator(d):
-    """
-    For each item in the YAML file that has a classpath and classname, instantiate the
-    respective module and class object. This method uses recursion to traverse the nested
-    yaml file.
 
-    :param d: an object in the yaml file, which could be a list, dict, or value (string or number)
-    :return: the python object representation of the object
-    """
-    cname = cpath = None
-    params = {}
+class Driver:
 
-    for key, value in d.items():
-        # Class
-        if key == "class":
-            cname = value
+    def __init__(self, objects=None):
+        if objects is None:
+            objects = {}
+        self.objects = objects
 
-        # Classpath
-        elif key == "classpath":
-            cpath = value
+    # If key in d already exists in self.objects, overwrites it
+    def create_objects(self, d):
 
-        # Nested object param
-        elif isinstance(value, dict):
-            params[key] = instantiate_simulator(value)
+        for key, value in d.items():
+            if key == "name":
+                print("Parsing YAML: {}".format(value))
 
-        # Nested list param
-        elif isinstance(value, list):
-            a = []
-            for ele in value:
-                if isinstance(ele, dict):
-                    a.append(instantiate_simulator(ele))
-                else:
-                    a.append(ele)
-            params[key] = a
+            else:
+                object = self.create(d[key])
+                self.objects[key] = object
 
-        # Primitive param
-        else:
-            params[key] = value
+    def create(self, d):
+        """
+        For each item in the YAML file that has a classpath and classname, instantiate the
+        respective module and class object. This method uses recursion to traverse the nested
+        yaml file.
 
-    c = getattr(importlib.import_module(cpath), cname)
-    instance = c(**params)
-    return instance
+        :param d: an object in the yaml file, which could be a list, dict, or value (string or number)
+        :return: the python object representation of the object
+        """
+        cname = cpath = id = None
+        params = {}
+
+        for key, value in d.items():
+            # Class
+            if key == "class":
+                cname = value
+
+            # Classpath
+            elif key == "classpath":
+                cpath = value
+
+            # Nested object param
+            elif isinstance(value, dict):
+                params[key] = self.create(value)
+
+            # Nested list param
+            elif isinstance(value, list):
+                a = []
+                for ele in value:
+                    if isinstance(ele, dict):
+                        a.append(self.create(ele))
+                    else:
+                        a.append(ele)
+                params[key] = a
+
+            # Potential key pointing to existing object
+            elif value in self.objects:
+                params[key] = self.objects[value]
+
+            # Primitive parameter
+            else:
+                params[key] = value
+
+        c = getattr(importlib.import_module(cpath), cname)
+        instance = c(**params)
+        return instance
+
+

@@ -2,6 +2,30 @@
 name:
   Random Cases, Preset Bases, Preset Travel Times
 
+demands:
+  class: TijuanaDemandSet
+  classpath: ems.datasets.location.demand.tijuana_demand_set
+
+  filename: ../data-cruz-roja/demand_points.csv
+
+tt:
+  class: TijuanaTravelTimes
+  classpath: ems.datasets.travel_times.tijuana_travel_times
+
+  # Defines filename to read the travel times
+  filename: ../data-cruz-roja/times.csv
+
+  # Defines the origin points of the travel times
+  origins:
+    class: TijuanaBaseSet
+    classpath: ems.datasets.location.base.tijuana_base_set
+
+    filename: ../data-cruz-roja/bases.csv
+
+  # Defines the destination points of the travel times
+  destinations: demands
+
+
 # Defines the simulator to be used
 simulator:
   class: EventDispatcherSimulator
@@ -35,26 +59,7 @@ simulator:
         required_travel_time: 600
 
         # Travel times for computation
-        travel_times:
-          class: TijuanaTravelTimes
-          classpath: ems.datasets.travel_times.tijuana_travel_times
-
-          # Defines filename to read the travel times
-          filename: ../data-cruz-roja/times.csv
-
-          # Defines the origin points of the travel times
-          origins:
-            class: TijuanaBaseSet
-            classpath: ems.datasets.location.base.tijuana_base_set
-
-            filename: ../data-cruz-roja/bases.csv
-
-          # Defines the destination points of the travel times
-          destinations:
-            class: TijuanaDemandSet
-            classpath: ems.datasets.location.demand.tijuana_demand_set
-
-            filename: ../data-cruz-roja/demand_points.csv
+        travel_times: tt
 
   # Defines the cases to be used in the simulation
   cases:
@@ -110,26 +115,7 @@ simulator:
 
         # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
         # any point in B
-        travel_times:
-          class: TijuanaTravelTimes
-          classpath: ems.datasets.travel_times.tijuana_travel_times
-
-          # Defines filename to read the travel times
-          filename: ../data-cruz-roja/times.csv
-
-          # Defines the origin points of the travel times
-          origins:
-            class: TijuanaBaseSet
-            classpath: ems.datasets.location.base.tijuana_base_set
-
-            filename: ../data-cruz-roja/bases.csv
-
-          # Defines the destination points of the travel times
-          destinations:
-            class: TijuanaDemandSet
-            classpath: ems.datasets.location.demand.tijuana_demand_set
-
-            filename: ../data-cruz-roja/demand_points.csv
+        travel_times: tt
 
       # Defines the duration of the stay at an incident location
       incident_duration_generator:
@@ -175,26 +161,7 @@ simulator:
 
         # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
         # any point in B
-        travel_times:
-          class: TijuanaTravelTimes
-          classpath: ems.datasets.travel_times.tijuana_travel_times
-
-          # Defines filename to read the travel times
-          filename: ../data-cruz-roja/times.csv
-
-          # Defines the origin points of the travel times
-          origins:
-            class: TijuanaBaseSet
-            classpath: ems.datasets.location.base.tijuana_base_set
-
-            filename: ../data-cruz-roja/bases.csv
-
-          # Defines the destination points of the travel times
-          destinations:
-            class: TijuanaDemandSet
-            classpath: ems.datasets.location.demand.tijuana_demand_set
-
-            filename: ../data-cruz-roja/demand_points.csv
+        travel_times: tt
 
   # Defines algorithm for selecting ambulances during dispatch
   ambulance_selector:
@@ -203,26 +170,7 @@ simulator:
 
     # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
     # any point in B
-    travel_times:
-      class: TijuanaTravelTimes
-      classpath: ems.datasets.travel_times.tijuana_travel_times
-
-      # Defines filename to read the travel times
-      filename: ../data-cruz-roja/times.csv
-
-      # Defines the origin points of the travel times
-      origins:
-        class: TijuanaBaseSet
-        classpath: ems.datasets.location.base.tijuana_base_set
-
-        filename: ../data-cruz-roja/bases.csv
-
-      # Defines the destination points of the travel times
-      destinations:
-        class: TijuanaDemandSet
-        classpath: ems.datasets.location.demand.tijuana_demand_set
-
-        filename: ../data-cruz-roja/demand_points.csv
+    travel_times: tt
 
   # Defines the metrics to be computed during the simulation
   metric_aggregator:
@@ -237,34 +185,11 @@ simulator:
         r1: 600
 
         # Demands to cover
-        demands:
-          class: TijuanaDemandSet
-          classpath: ems.datasets.location.demand.tijuana_demand_set
-
-          filename: ../data-cruz-roja/demand_points.csv
+        demands: demands
 
         # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
         # any point in B
-        travel_times:
-          class: TijuanaTravelTimes
-          classpath: ems.datasets.travel_times.tijuana_travel_times
-
-          # Defines filename to read the travel times
-          filename: ../data-cruz-roja/times.csv
-
-          # Defines the origin points of the travel times
-          origins:
-            class: TijuanaBaseSet
-            classpath: ems.datasets.location.base.tijuana_base_set
-
-            filename: ../data-cruz-roja/bases.csv
-
-          # Defines the destination points of the travel times
-          destinations:
-            class: TijuanaDemandSet
-            classpath: ems.datasets.location.demand.tijuana_demand_set
-
-            filename: ../data-cruz-roja/demand_points.csv
+        travel_times: tt
 
       - class: TotalDelay
         classpath: ems.analysis.metrics.total_delay
