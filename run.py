@@ -2,6 +2,8 @@ from ems.driver import read_user_input, instantiate_simulator
 from IPython import embed
 
 # Initialize configurations
+from ems.models.events.event_type import EventType
+
 sim_args = read_user_input()
 sim = instantiate_simulator(sim_args["simulator"])
 case_record_set, metric_aggregator = sim.run()
@@ -18,13 +20,33 @@ polygon_coordinates = {
 events = [event for case_record in case_record_set.case_records for event in case_record.event_history]
 
 # lat, lon
-real_dests = [event.destination for event in events]
-real_lats = [e.latitude for e in real_dests]
-real_lons = [e.longitude for e in real_dests]
+incident_dests = [event.destination for event in events if event.event_type == EventType.TO_INCIDENT]
+incident_lats = [e.latitude for e in incident_dests]
+incident_lons = [e.longitude for e in incident_dests]
 
-real_locations = {
-    'latitude': real_lats,
-    'longitude': real_lons,
+incident_locations = {
+    'latitude': incident_lats,
+    'longitude': incident_lons,
+}
+
+# lat, lon
+hospital_dests = [event.destination for event in events if event.event_type == EventType.TO_HOSPITAL]
+hospital_lats = [e.latitude for e in hospital_dests]
+hospital_lons = [e.longitude for e in hospital_dests]
+
+hospital_locations = {
+    'latitude': hospital_lats,
+    'longitude': hospital_lons,
+}
+
+# lat, lon
+base_dests = [event.destination for event in events if event.event_type == EventType.TO_BASE]
+base_lats = [e.latitude for e in base_dests]
+base_lons = [e.longitude for e in base_dests]
+
+base_locations = {
+    'latitude': base_lats,
+    'longitude': base_lons,
 }
 
 
@@ -41,8 +63,10 @@ import yaml
 
 info = {
     "polygon": polygon_coordinates ,
-    "real_locs": real_locations ,
-    "sim_locs" : sim_locations
+    "incident_locs": incident_locations ,
+    "hospital_locs": hospital_locations,
+    "sim_locs" : sim_locations,
+    "base_locs": base_locations
 }
 
 with open ("./error-analysis/error-data.yaml", 'w') as error_file:

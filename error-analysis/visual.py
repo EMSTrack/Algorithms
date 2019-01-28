@@ -22,6 +22,7 @@ def preconfigurations():
 	# plt.xlim(0, 75)
 	# plt.ylim(-1, 1)
 	img = plt.imread("tijuana.png")
+	plt.figure(figsize=(10, 8))
 	plt.imshow(img, extent=[-117.124533, -116.804590, 32.405490, 32.563261])
 	pass
 
@@ -34,12 +35,12 @@ def set_polygon(coordinates):
 
 	plt.plot(xs, ys, 'black')
 
-def set_points(coordinates, style='b'):
+def set_points(coordinates, label, style='b'):
 	""" Use with real points as well as sim points"""
 	ys = coordinates['latitude']
 	xs = coordinates['longitude']
 
-	plt.plot(xs, ys, style)
+	plt.plot(xs, ys, style, label=label)
 
 
 
@@ -52,9 +53,12 @@ def main():
 	preconfigurations()									# Rectangle, xlim, name, etc
 	set_polygon(data['polygon'])						# Read the polygon coordinates into the vis
 
-	set_points(data['real_locs'],  style="bo")
-	set_points(data['sim_locs'], style="ro")
+	set_points(data['incident_locs'], "Incidents",  style="bo")
+	set_points(data['sim_locs'], "Travel Time Points", style="ro")
+	set_points(data["hospital_locs"], "Hospitals", style="go")
+	set_points(data["base_locs"], "Bases", style="yo")
 
+	plt.legend(loc="upper right")
 	plt.show()							# Go.
 
 if __name__ == "__main__" : 
