@@ -17,8 +17,8 @@ lon2 = -116.777
 
 # Number of bases and demands
 cpu = cpu_count()
-bases_num   = 2000
-demands_num = 200
+bases_num   = 7000
+demands_num = 7000
 
 # assume kilometer per second is at 60 MPH
 kmps = 0.0268224
@@ -38,7 +38,7 @@ def generate_times(bases):
     global demand_locations
 
     dists = [[distance(base, dest).km for dest in demand_locations] for base in bases]
-    times = [[str(dist//kmps) for dist in base_list] for base_list in dists]
+    times = [[str(int(dist//kmps)) for dist in base_list] for base_list in dists]
 
     return times
 
