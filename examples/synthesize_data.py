@@ -17,8 +17,8 @@ lon2 = -116.777
 
 # Number of bases and demands
 cpu = cpu_count()
-bases_num = 250
-demands_num = 250
+bases_num   = 2000
+demands_num = 200
 
 # assume kilometer per second is at 60 MPH
 kmps = 0.0268224
@@ -38,11 +38,11 @@ def generate_times(bases):
     global demand_locations
 
     dists = [[distance(base, dest).km for dest in demand_locations] for base in bases]
-    times = [[str(int(dist/kmps)) for dist in base_list] for base_list in dists]
+    times = [[str(dist//kmps) for dist in base_list] for base_list in dists]
 
     return times
 
-
+# Flatten a list of lists to a list.
 def flatten(l_of_l):
     return reduce(lambda l1, l2: l1 + l2, l_of_l)
 

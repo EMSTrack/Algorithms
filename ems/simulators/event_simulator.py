@@ -131,7 +131,7 @@ class EventDispatcherSimulator(Simulator):
             for metric_tag, value in metrics.items():
                 self.print(colored("{}: {}".format(metric_tag, value), "magenta"))
 
-            self.print("=" * 90)
+            self.print("=" * 80)
 
         return case_record_set, self.metric_aggregator
 
