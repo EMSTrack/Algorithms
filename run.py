@@ -17,6 +17,15 @@ polygon_coordinates = {
 
 events = [event for case_record in case_record_set.case_records for event in case_record.event_history]
 
+import numpy as np
+errors = [event.error for event in events if event.error is not None]
+
+print("Count:  {}".format(len(errors)))
+print("Mean:   {}".format(np.mean(errors)))
+print("Min:    {}".format(np.min(errors)))
+print("Max:    {}".format(np.max(errors)))
+print("Median: {}".format(np.median(errors)))
+
 # lat, lon
 real_dests = [event.destination for event in events]
 real_lats = [e.latitude for e in real_dests]
@@ -45,7 +54,7 @@ info = {
     "sim_locs" : sim_locations
 }
 
-with open ("./error-analysis/error-data.yaml", 'w') as error_file:
+with open ("./error-analysis/error-data2.yaml", 'w') as error_file:
     info_yaml = yaml.dump(info)
     error_file.write(info_yaml)
 
