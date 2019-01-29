@@ -48,7 +48,7 @@ def main():
 
 	if test_figs: test()
 
-	data = read_data('./error-data.yaml')
+	data = read_data('./error-coordinates.yaml')
 
 	preconfigurations()									# Rectangle, xlim, name, etc
 	set_polygon(data['polygon'])						# Read the polygon coordinates into the vis

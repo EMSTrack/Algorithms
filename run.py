@@ -1,6 +1,8 @@
 from ems.driver import read_user_input, Driver
 from ems.models.events.event_type import EventType
 
+import yaml
+
 # Initialize configurations
 sim_args = read_user_input()
 driver = Driver()
@@ -21,6 +23,9 @@ events = [event for case_record in case_record_set.case_records for event in cas
 
 import numpy as np
 errors = [event.error for event in events if event.error is not None]
+
+with open('./error-analysis/error-dists.yaml', 'w') as error_dists:
+    error_dists.write(yaml.dump(errors))
 
 print("Count:  {}".format(len(errors)))
 print("Mean:   {}".format(np.mean(errors)))
@@ -68,7 +73,7 @@ sim_locations = {
     'longitude': sim_lons,
 }
 
-import yaml
+
 
 info = {
     "polygon": polygon_coordinates ,
@@ -78,7 +83,7 @@ info = {
     "base_locs": base_locations
 }
 
-with open ("./error-analysis/error-data2.yaml", 'w') as error_file:
+with open ("./error-analysis/error-coordinates.yaml", 'w') as error_file:
     info_yaml = yaml.dump(info)
     error_file.write(info_yaml)
 

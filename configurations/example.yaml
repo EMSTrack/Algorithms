@@ -3,7 +3,7 @@ name:
   Random Cases, Preset Bases, Preset Travel Times
 
 # Defines the number of cases to generate
-case_quantity: 20
+case_quantity: 300
 
 # Define demand set for usage in travel times and percent coverage metric
 demands:
@@ -83,7 +83,7 @@ simulator:
       classpath: ems.generators.case.time.poisson_time
 
       # Duration in minutes that the cases will be generated in
-      duration: 18000
+      duration: 1800
 
       # Number of cases to generate
       quantity: case_quantity
