@@ -7,6 +7,8 @@ simulator:
   class: EventDispatcherSimulator
   classpath: ems.simulators.event_simulator
 
+  debug: True
+
   # Defines the ambulances to be used in the simulation
   ambulances:
     class: CustomAmbulanceSet

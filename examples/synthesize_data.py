@@ -1,98 +1,80 @@
-#!/Users/vectflux/Documents/EMSTrack/Algorithms/venv/bin/python
+
 from geopy.distance import distance
 import random
-from multiprocessing import Process
 from multiprocessing import cpu_count
+from multiprocessing import Pool
+from functools import reduce
 
+from IPython import embed
+
+multicpu = True
+
+# Coordinate range for Tijuana, Mexico
 lat1 = 32.4008
 lat2 = 32.5534
 lon1 = -117.1233
 lon2 = -116.777
 
-bases = 100
-demands = 100
+# Number of bases and demands
+cpu = cpu_count()
+bases_num = 250
+demands_num = 250
 
 # assume kilometer per second is at 60 MPH
 kmps = 0.0268224
 
-cpus = cpu_count()
 
-bases = int(bases/cpus)
-
-
+# Functions that generate new points, and new lists of points , and the times between the points.
+# Outputs a pair of doubles as a coordinate point.
 def new_point():
-    return random.uniform(lat1, lat2), random.uniform(lon1, lon2)
+    return (random.uniform(lat1, lat2), random.uniform(lon1, lon2))
 
-print('demands')
-demand_locations =[new_point() for _ in range(demands)]
+# Returns a size num list of new points
+def generate_points(num):
+    return [new_point() for _ in range(num)]
 
+# Map all possible bases to all destinations, resulting in a list of list of times as ints.
+def generate_times(bases):
+    global demand_locations
 
+    dists = [[distance(base, dest).km for dest in demand_locations] for base in bases]
+    times = [[str(int(dist/kmps)) for dist in base_list] for base_list in dists]
 
-def generate_base_and_times(demand_locs, base_locs_arr, distances_arr, i):
-    print("bases")
-    for _ in range(bases):
-        base_locs_arr[i].append(new_point())
-        print(base_locs_arr[i])
-    # base_locations = [new_point() for _ in range(bases)]
-
-    print('dists')
-    temp_dists = [[distance(base2, demand2).km for demand2 in demand_locs] for base2 in base_locs_arr[i]]
-
-    for dist in temp_dists:
-        distances_arr[i].append(dist)
+    return times
 
 
-
-base_locations_array = [[] for _ in range(cpus)]
-dists_array = [[] for _ in range(cpus)]
-
+def flatten(l_of_l):
+    return reduce(lambda l1, l2: l1 + l2, l_of_l)
 
 
-processes = []
-for i in range(cpus):
-    processes.append(Process(target=generate_base_and_times, args=(demand_locations,
-                                                                   base_locations_array,
-                                                                   dists_array,
-                                                                   i)))
-for i in range(cpus):
-    processes[i].start()
+def main():
 
-for i in range(cpus):
-    processes[i].join()
+    global demand_locations, bases_num
 
-from IPython import embed; embed()
-base_locations = []
-for b in base_locations_array:
-    base_locations += b
+    demand_locations =      generate_points(demands_num)
 
-dists = []
-for d in dists_array:
-    dists += d
+    if not multicpu:
+        base_locations =    generate_points(bases_num)
+        times =             generate_times(base_locations)
 
-# from IPython import embed; embed()
+    else:
+        list_base_locations = [generate_points(bases_num // cpu) for _ in range(cpu)]
 
-print('times')
-times = list(map(lambda b: list(map(lambda dist: str(int(dist/kmps)), b)) , dists))
-# print()
-# print(times)
+        with Pool(cpu) as p:
+            list_of_times = p.map(generate_times, list_base_locations)
+
+        times =             flatten(list_of_times)
+        base_locations =    flatten(list_base_locations)
+
+    baseline = "'id','name','type','vics',"
+    bases_string = ["{}{},{}\n".format(baseline, b[0], b[1]) for b in base_locations]
+    demands_string = ["{},{}\n".format(d[0], d[1]) for d in demand_locations]
+    times_string = [",".join(b) + "\n" for b in times]
 
 
-print('strings')
-baseline = "'id','name','type','vics',"
-bases_string = ["{}{},{}\n".format(baseline, b[0], b[1]) for b in base_locations]
-demands_string = ["{},{}\n".format(d[0], d[1]) for d in demand_locations]
+    with open('bases.csv', 'w') as file:            file.writelines(bases_string)
+    with open('demand_points.csv', 'w') as file:    file.writelines(demands_string)
+    with open('times.csv', 'w') as file:            file.writelines(times_string)
 
-times_string = [",".join(b) + "\n" for b in times]
 
-# print(times_string)
-
-print('write to file')
-
-with open('bases.csv', 'w') as file:
-    file.writelines(bases_string)
-
-with open('demand_points.csv', 'w') as file:
-    file.writelines(demands_string)
-
-with open('times.csv', 'w') as file:
-    file.writelines(times_string)
+if __name__ == "__main__": main()
