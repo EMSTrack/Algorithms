@@ -130,6 +130,8 @@ simulator:
         # any point in B
         travel_times: tt
 
+        epsilon: 0.001
+
       # Defines the duration of the stay at an incident location
       incident_duration_generator:
         class: RandomDurationGenerator
