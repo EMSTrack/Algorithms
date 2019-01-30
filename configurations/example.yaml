@@ -3,7 +3,7 @@ name:
   Random Cases, Preset Bases, Preset Travel Times
 
 # Defines the number of cases to generate
-case_quantity: 300
+case_quantity: 500
 
 # Define demand set for usage in travel times and percent coverage metric
 demands:
@@ -35,6 +35,8 @@ tt:
 simulator:
   class: EventDispatcherSimulator
   classpath: ems.simulators.event_simulator
+
+  debug: False
 
   # Defines the ambulances to be used in the simulation
   ambulances:
@@ -83,7 +85,7 @@ simulator:
       classpath: ems.generators.case.time.poisson_time
 
       # Duration in minutes that the cases will be generated in
-      duration: 1800
+      duration: 3000
 
       # Number of cases to generate
       quantity: case_quantity
@@ -97,14 +99,20 @@ simulator:
       # Vertices of the polygon
       vertices_latitude:
         - 32.533696
-        - 32.554803
+#        - 32.554803
+        - 32.53
+#        - 32.469300
         - 32.469300
-        - 32.439235
+#        - 32.439235
+        - 32.45
         - 32.530337
       vertices_longitude:
         - -117.123506
+#        - -116.876454
         - -116.876454
-        - -116.789148
+#        - -116.789148
+        - -116.82
+#        - -116.967181
         - -116.967181
         - -117.123475
 
