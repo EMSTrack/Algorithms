@@ -37,3 +37,15 @@ We use yaml to read configurations from files into the simulator. Take a look
 at `configurations/example.yaml` for an example.
 
 
+### Generating bases and demands
+
+You can generate data by going to `./examples`. Run: 
+
+`python synthesize_data.py` 
+
+It will produce sample bases, demand points, and the times 
+between them. 
+
+To use these, go up one directory. 
+
+`python run.py simple.yaml`
