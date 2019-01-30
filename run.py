@@ -24,8 +24,24 @@ events = [event for case_record in case_record_set.case_records for event in cas
 import numpy as np
 errors = [event.error for event in events if event.error is not None]
 
-# with open('./error-analysis/error-dists.yaml', 'w') as error_dists:
-#     error_dists.write(yaml.dump(errors))
+# i = 0
+# for event in events:
+#     if event.error is not None and event.error > 100:
+#         print("BEFORE!!")
+#         print(events[i - 1].event_type)
+#         print(events[i - 1].destination.latitude)
+#         print(events[i - 1].destination.longitude)
+#         print(events[i - 1].sim_dest)
+#
+#         print("AFTER!!")
+#         print(event.event_type)
+#         print(event.destination.latitude)
+#         print(event.destination.longitude)
+#         print(event.sim_dest.latitude)
+#         print(event.sim_dest.longitude)
+#         print(event.error)
+#         print()
+#     i += 1
 
 
 print("-- Error Summary -- ")
