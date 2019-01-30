@@ -27,6 +27,8 @@ errors = [event.error for event in events if event.error is not None]
 # with open('./error-analysis/error-dists.yaml', 'w') as error_dists:
 #     error_dists.write(yaml.dump(errors))
 
+
+print("-- Error Summary -- ")
 print("Count:  {}".format(len(errors)))
 print("Mean:   {}".format(np.mean(errors)))
 print("Median: {}".format(np.median(errors)))

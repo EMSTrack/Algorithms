@@ -17,8 +17,8 @@ lon2 = -116.777
 
 # Number of bases and demands
 cpu = cpu_count()
-bases_num   = 7000
-demands_num = 7000
+bases_num   = 50
+demands_num = 10
 
 # assume kilometer per second is at 60 MPH
 kmps = 0.0268224
