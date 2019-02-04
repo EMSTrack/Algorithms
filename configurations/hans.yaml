@@ -80,7 +80,7 @@ simulator:
     # Defines method on when cases are randomly generated
     case_time_generator:
       class: PoissonCaseTimeGenerator
-      classpath: ems.generators.case.time.poisson_time
+      classpath: ems.generators.time.poisson_time
 
       # Duration in minutes that the cases will be generated in
       duration: 1800
@@ -92,7 +92,7 @@ simulator:
     # Defines method on where cases are randomly generated
     case_location_generator:
       class: PolygonLocationGenerator
-      classpath: ems.generators.case.location.polygon
+      classpath: ems.generators.location.polygon
 
       # Vertices of the polygon
       vertices_latitude:
@@ -116,7 +116,7 @@ simulator:
       # Defines the duration of a trip from from point A to point B during an event
       travel_duration_generator:
         class: TravelTimeDurationGenerator
-        classpath: ems.generators.event.duration.travel_time_duration
+        classpath: ems.generators.duration.travel_time_duration
 
         # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
         # any point in B
@@ -125,7 +125,7 @@ simulator:
       # Defines the duration of the stay at an incident location
       incident_duration_generator:
         class: RandomDurationGenerator
-        classpath: ems.generators.event.duration.random_duration
+        classpath: ems.generators.duration.random_duration
 
         # Defines the lower bound in minutes of duration generation
         lower_bound: 5
@@ -135,7 +135,7 @@ simulator:
 
       hospital_duration_generator:
         class: RandomDurationGenerator
-        classpath: ems.generators.event.duration.random_duration
+        classpath: ems.generators.duration.random_duration
 
         # Defines the lower bound in minutes of duration generation
         lower_bound: 5

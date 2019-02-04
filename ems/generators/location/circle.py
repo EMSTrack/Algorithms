@@ -3,7 +3,7 @@ import random
 
 from geopy import Point
 
-from ems.generators.case.location.location import LocationGenerator
+from ems.generators.location.location import LocationGenerator
 
 
 # Implementation for a location generator that randomly selects a point uniformly from a circle with given

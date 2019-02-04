@@ -3,8 +3,8 @@ from typing import List
 
 from geopy import Point
 
-from ems.generators.case.location.location import LocationGenerator
-from ems.generators.case.location.polygon import PolygonLocationGenerator
+from ems.generators.location.location import LocationGenerator
+from ems.generators.location import PolygonLocationGenerator
 
 
 class MultiPolygonLocationGenerator(LocationGenerator):

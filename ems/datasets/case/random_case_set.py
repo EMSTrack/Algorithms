@@ -1,10 +1,9 @@
 from datetime import datetime
 
-from ems.algorithms.hospital_selectors.hospital_selector import HospitalSelector
 from ems.datasets.case.case_set import CaseSet
 
-from ems.generators.case.location.location import LocationGenerator
-from ems.generators.case.time.time import CaseTimeGenerator
+from ems.generators.location.location import LocationGenerator
+from ems.generators.time.time import CaseTimeGenerator
 from ems.generators.event.event_generator import EventGenerator
 
 from ems.models.cases.random_case import RandomCase

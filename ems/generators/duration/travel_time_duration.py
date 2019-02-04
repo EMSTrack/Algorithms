@@ -5,11 +5,11 @@ from geopy import Point
 from geopy.distance import distance
 
 from ems.datasets.travel_times.travel_times import TravelTimes
-from ems.generators.event.duration.duration import EventDurationGenerator
+from ems.generators.duration.duration import DurationGenerator
 from ems.models.ambulances.ambulance import Ambulance
 
 
-class TravelTimeDurationGenerator(EventDurationGenerator):
+class TravelTimeDurationGenerator(DurationGenerator):
 
     def __init__(self,
                  travel_times: TravelTimes,
