@@ -95,13 +95,3 @@ simulator:
   ambulance_selector:
     class: RandomSelector
     classpath: ems.algorithms.selection.dispatch_random
-
-  metric_aggregator:
-    class: MetricAggregator
-    classpath: ems.analysis.metrics.metric_aggregator
-
-    metrics: []
-
-
-
-
