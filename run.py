@@ -11,11 +11,11 @@ sim = driver.objects["simulator"]
 case_record_set, metric_aggregator = sim.run()
 
 
-
-polygon_coordinates = {
-    'latitude': sim_args['simulator']['cases']['case_location_generator']['vertices_latitude'] ,
-    'longitude': sim_args['simulator']['cases']['case_location_generator']['vertices_longitude']
-}
+#
+# polygon_coordinates = {
+#     'latitude': sim_args['simulator']['cases']['case_location_generator']['vertices_latitude'] ,
+#     'longitude': sim_args['simulator']['cases']['case_location_generator']['vertices_longitude']
+# }
 
 
 
@@ -95,7 +95,7 @@ sim_locations = {
 
 
 info = {
-    "polygon": polygon_coordinates ,
+    # "polygon": polygon_coordinates ,
     "incident_locs": incident_locations ,
     "hospital_locs": hospital_locations,
     "sim_locs" : sim_locations,
