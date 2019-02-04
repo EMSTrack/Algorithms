@@ -23,6 +23,8 @@ class Driver:
         for key, value in d.items():
             self.objects[key] = self.create(d[key])
 
+        print(self.objects)
+
         if "name" in self.objects:
             print("Finished parsing: {}".format(self.objects["name"]))
 

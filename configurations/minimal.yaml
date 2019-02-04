@@ -60,7 +60,7 @@ simulator:
     initial_time: 2019-1-31T00:00:00.1Z
 
     # Number of cases to generate
-    quantity: 500
+    quantity: 50
 
     # Defines method on when cases are randomly generated
     case_time_generator:

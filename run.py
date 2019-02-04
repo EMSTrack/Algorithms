@@ -10,6 +10,7 @@ driver.create_objects(sim_args)
 sim = driver.objects["simulator"]
 case_record_set, metric_aggregator = sim.run()
 
+# case_record_set.write_to_file('./')
 
 #
 # polygon_coordinates = {
@@ -17,40 +18,19 @@ case_record_set, metric_aggregator = sim.run()
 #     'longitude': sim_args['simulator']['cases']['case_location_generator']['vertices_longitude']
 # }
 
-
-
 events = [event for case_record in case_record_set.case_records for event in case_record.event_history]
 
-import numpy as np
-errors = [event.error for event in events if event.error is not None]
-
-# i = 0
-# for event in events:
-#     if event.error is not None and event.error > 100:
-#         print("BEFORE!!")
-#         print(events[i - 1].event_type)
-#         print(events[i - 1].destination.latitude)
-#         print(events[i - 1].destination.longitude)
-#         print(events[i - 1].sim_dest)
+# import numpy as np
+# errors = [event.error for event in events if event.error is not None]
 #
-#         print("AFTER!!")
-#         print(event.event_type)
-#         print(event.destination.latitude)
-#         print(event.destination.longitude)
-#         print(event.sim_dest.latitude)
-#         print(event.sim_dest.longitude)
-#         print(event.error)
-#         print()
-#     i += 1
-
-
-print("-- Error Summary -- ")
-print("Count:  {}".format(len(errors)))
-print("Mean:   {}".format(np.mean(errors)))
-print("Median: {}".format(np.median(errors)))
-print()
-print("Min:    {}".format(np.min(errors)))
-print("Max:    {}".format(np.max(errors)))
+#
+# print("-- Error Summary -- ")
+# print("Count:  {}".format(len(errors)))
+# print("Mean:   {}".format(np.mean(errors)))
+# print("Median: {}".format(np.median(errors)))
+# print()
+# print("Min:    {}".format(np.min(errors)))
+# print("Max:    {}".format(np.max(errors)))
 
 # lat, lon
 incident_dests = [event.destination for event in events if event.event_type == EventType.TO_INCIDENT]
@@ -81,7 +61,6 @@ base_locations = {
     'latitude': base_lats,
     'longitude': base_lons,
 }
-
 
 sim_dests  = [event.sim_dest for event in events if event.sim_dest]
 sim_lats = [e.latitude for e in sim_dests]
