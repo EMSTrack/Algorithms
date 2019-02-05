@@ -23,6 +23,8 @@ class Driver:
         for key, value in d.items():
             self.objects[key] = self.create(d[key])
 
+        print(self.objects)
+
         if "name" in self.objects:
             print("Finished parsing: {}".format(self.objects["name"]))
 
@@ -53,6 +55,7 @@ class Driver:
                 else:
                     params[key] = self.create(value)
 
+            print("Instantiating: {}".format(cname))
             c = getattr(importlib.import_module(cpath), cname)
             instance = c(**params)
             return instance

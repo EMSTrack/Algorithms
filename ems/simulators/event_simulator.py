@@ -40,14 +40,13 @@ class EventDispatcherSimulator(Simulator):
                  ambulances: AmbulanceSet,
                  cases: CaseSet,
                  ambulance_selector: AmbulanceSelector,
-                 metric_aggregator: MetricAggregator,
+                 metric_aggregator: MetricAggregator=None,
                  debug:bool = False):
         super().__init__(ambulances, cases, ambulance_selector, metric_aggregator, debug)
 
     def print(self, o):
         if self.debug:
             print(o)
-
 
     def run(self):
 
@@ -126,10 +125,11 @@ class EventDispatcherSimulator(Simulator):
                              "ongoing_cases": [case_state.case for case_state in ongoing_case_states],
                              "pending_cases": pending_cases}
 
-            # Compute metrics
-            metrics = self.metric_aggregator.calculate(current_time, **metric_kwargs)
-            for metric_tag, value in metrics.items():
-                self.print(colored("{}: {}".format(metric_tag, value), "magenta"))
+            if self.metric_aggregator:
+                # Compute metrics
+                metrics = self.metric_aggregator.calculate(current_time, **metric_kwargs)
+                for metric_tag, value in metrics.items():
+                    self.print(colored("{}: {}".format(metric_tag, value), "magenta"))
 
             self.print("=" * 80)
 

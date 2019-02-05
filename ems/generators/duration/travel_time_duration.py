@@ -1,18 +1,21 @@
 import datetime
+import math
 
 from geopy import Point
 from geopy.distance import distance
 
 from ems.datasets.travel_times.travel_times import TravelTimes
-from ems.generators.event.duration.duration import EventDurationGenerator
+from ems.generators.duration.duration import DurationGenerator
 from ems.models.ambulances.ambulance import Ambulance
 
 
-class TravelTimeDurationGenerator(EventDurationGenerator):
+class TravelTimeDurationGenerator(DurationGenerator):
 
     def __init__(self,
-                 travel_times: TravelTimes):
+                 travel_times: TravelTimes,
+                 epsilon: float):
         self.travel_times = travel_times
+        self.epsilon = epsilon
 
     def generate(self,
                  ambulance: Ambulance,
@@ -29,7 +32,7 @@ class TravelTimeDurationGenerator(EventDurationGenerator):
         # Calculate the error as a percentage between the sim dist and the real dist
         sim_dist  = distance(closest_loc_to_dest, closest_loc_to_orig)
         real_dist = distance(destination, ambulance.location)
-        difference = sim_dist/real_dist * 100 - 100
+        difference = 100 * ((sim_dist.feet - real_dist.feet) * real_dist.feet)/(math.pow(real_dist.feet, 2) + self.epsilon)
 
         # Return time lookup
         return {'duration': self.travel_times.get_time(closest_loc_to_orig, closest_loc_to_dest),

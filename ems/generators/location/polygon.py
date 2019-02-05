@@ -7,7 +7,7 @@ from geopy import Point
 from shapely import geometry
 from shapely.ops import triangulate
 
-from ems.generators.case.location.location import LocationGenerator
+from ems.generators.location.location import LocationGenerator
 
 
 class PolygonLocationGenerator(LocationGenerator):

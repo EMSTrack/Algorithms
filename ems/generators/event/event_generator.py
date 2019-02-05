@@ -3,7 +3,7 @@ from datetime import datetime
 from geopy import Point
 
 from ems.algorithms.hospital_selectors.hospital_selector import HospitalSelector
-from ems.generators.event.duration.duration import EventDurationGenerator
+from ems.generators.duration.duration import DurationGenerator
 from ems.models.ambulances.ambulance import Ambulance
 from ems.models.events.event import Event
 from ems.models.events.event_type import EventType
@@ -12,9 +12,9 @@ from ems.models.events.event_type import EventType
 class EventGenerator:
 
     def __init__(self,
-                 travel_duration_generator: EventDurationGenerator,
-                 incident_duration_generator: EventDurationGenerator,
-                 hospital_duration_generator: EventDurationGenerator,
+                 travel_duration_generator: DurationGenerator,
+                 incident_duration_generator: DurationGenerator,
+                 hospital_duration_generator: DurationGenerator,
                  hospital_selector: HospitalSelector):
         self.hospital_selector = hospital_selector
         self.hospital_duration_generator = hospital_duration_generator
@@ -44,8 +44,9 @@ class EventGenerator:
         elif event_type == EventType.TO_BASE:
             destination = ambulance.base
             duration = self.travel_duration_generator.generate(ambulance=ambulance,
-                                                               destination=incident_location,
+                                                               destination=destination,
                                                                timestamp=timestamp)
+
         elif event_type == EventType.TO_HOSPITAL or event_type == EventType.AT_HOSPITAL:
 
             if not hospital_location:
@@ -65,6 +66,7 @@ class EventGenerator:
         else:
             # TODO -- other
             pass
+
         return Event(destination=destination,
                      duration=duration['duration'],
                      error=duration['error'] if 'error' in duration else None,

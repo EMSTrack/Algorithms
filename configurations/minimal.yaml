@@ -1,0 +1,97 @@
+# File metadata, to be printed by the simulator
+name:
+  Minimal Dispatch Example
+
+# Defines the bounds for case and ambulance random location initialization
+location_generator:
+  class: CircleLocationGenerator
+  classpath: ems.generators.location.circle
+
+  # Defines coordinates for the center of the circle
+  center_latitude: 32.880506
+  center_longitude: -117.231017
+
+  # Defines the radius of the circle (in km)
+  radius_km: 2
+
+# Defines the duration spent travelling, at incident, and at hospital
+duration_generator:
+  class: RandomDurationGenerator
+  classpath: ems.generators.duration.random_duration
+
+  # Bounds in minutes for durations
+  lower_bound: 10
+  upper_bound: 20
+
+# Predefines hospitals
+hospitals:
+  class: LocationSet
+  classpath: ems.datasets.location.location_set
+
+  # Defines latitudes
+  latitudes: [32.879802, 32.888216]
+
+  # Defines longitudes
+  longitudes: [-117.236564, -117.239697]
+
+# Defines the simulator to be used
+simulator:
+  class: EventDispatcherSimulator
+  classpath: ems.simulators.event_simulator
+
+  # Allows for progress output
+  debug: True
+
+  # Defines the ambulances to be used in the simulation
+  ambulances:
+    class: RandomAmbulanceSet
+    classpath: ems.datasets.ambulance.random_ambulance_set
+
+    # Number of ambulances to generator
+    count: 6
+    base_generator: location_generator
+
+  # Defines the cases for the simulation
+  cases:
+    class: RandomCaseSet
+    classpath: ems.datasets.case.random_case_set
+
+    # Starting time
+    initial_time: 2019-1-31T00:00:00.1Z
+
+    # Number of cases to generate
+    quantity: 50
+
+    # Defines method on when cases are randomly generated
+    case_time_generator:
+      class: RandomCaseTimeGenerator
+      classpath: ems.generators.time.random_time
+
+      # Duration in minutes between each case
+      lower_bound: 8
+      upper_bound: 18
+
+    # Bounds for case locations
+    case_location_generator: location_generator
+
+    # Defines how the events in the case should be generated (e.g. TO HOSPITAL, TO INCIDENT, etc.)
+    event_generator:
+      class: EventGenerator
+      classpath: ems.generators.event.event_generator
+
+      # Duration generators
+      travel_duration_generator: duration_generator
+      incident_duration_generator: duration_generator
+      hospital_duration_generator: duration_generator
+
+      # Hospital Selection
+      hospital_selector:
+        class: RandomHospitalSelector
+        classpath: ems.algorithms.hospital_selectors.select_random
+
+        hospital_set: hospitals
+
+  # Defines algorithm for selecting ambulances during dispatch
+  ambulance_selector:
+    class: RandomSelector
+    classpath: ems.algorithms.selection.dispatch_random

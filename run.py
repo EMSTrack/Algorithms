@@ -10,31 +10,27 @@ driver.create_objects(sim_args)
 sim = driver.objects["simulator"]
 case_record_set, metric_aggregator = sim.run()
 
+# case_record_set.write_to_file('./')
 
-
-polygon_coordinates = {
-    'latitude': sim_args['simulator']['cases']['case_location_generator']['vertices_latitude'] ,
-    'longitude': sim_args['simulator']['cases']['case_location_generator']['vertices_longitude']
-}
-
-
+#
+# polygon_coordinates = {
+#     'latitude': sim_args['simulator']['cases']['case_location_generator']['vertices_latitude'] ,
+#     'longitude': sim_args['simulator']['cases']['case_location_generator']['vertices_longitude']
+# }
 
 events = [event for case_record in case_record_set.case_records for event in case_record.event_history]
 
-import numpy as np
-errors = [event.error for event in events if event.error is not None]
-
-# with open('./error-analysis/error-dists.yaml', 'w') as error_dists:
-#     error_dists.write(yaml.dump(errors))
-
-
-print("-- Error Summary -- ")
-print("Count:  {}".format(len(errors)))
-print("Mean:   {}".format(np.mean(errors)))
-print("Median: {}".format(np.median(errors)))
-print()
-print("Min:    {}".format(np.min(errors)))
-print("Max:    {}".format(np.max(errors)))
+# import numpy as np
+# errors = [event.error for event in events if event.error is not None]
+#
+#
+# print("-- Error Summary -- ")
+# print("Count:  {}".format(len(errors)))
+# print("Mean:   {}".format(np.mean(errors)))
+# print("Median: {}".format(np.median(errors)))
+# print()
+# print("Min:    {}".format(np.min(errors)))
+# print("Max:    {}".format(np.max(errors)))
 
 # lat, lon
 incident_dests = [event.destination for event in events if event.event_type == EventType.TO_INCIDENT]
@@ -66,7 +62,6 @@ base_locations = {
     'longitude': base_lons,
 }
 
-
 sim_dests  = [event.sim_dest for event in events if event.sim_dest]
 sim_lats = [e.latitude for e in sim_dests]
 sim_lons = [e.longitude for e in sim_dests]
@@ -79,7 +74,7 @@ sim_locations = {
 
 
 info = {
-    "polygon": polygon_coordinates ,
+    # "polygon": polygon_coordinates ,
     "incident_locs": incident_locations ,
     "hospital_locs": hospital_locations,
     "sim_locs" : sim_locations,

@@ -15,7 +15,7 @@ class Simulator:
                  ambulances: AmbulanceSet,
                  cases: CaseSet,
                  ambulance_selector: AmbulanceSelector,
-                 metric_aggregator: MetricAggregator,
+                 metric_aggregator: MetricAggregator=None,
                  debug:bool = False):
 
         self.ambulances = ambulances

@@ -2,7 +2,7 @@ import math
 import random
 from datetime import datetime, timedelta
 
-from ems.generators.case.time.time import CaseTimeGenerator
+from ems.generators.time.time import CaseTimeGenerator
 
 
 # Implementation for a case time generator, where duration until next incident is drawn from the exponential
