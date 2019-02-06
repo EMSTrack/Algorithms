@@ -1,6 +1,6 @@
 # File metadata, to be printed by the simulator
 name:
-  Minimal Dispatch Example
+  "Minimal Dispatch Example"
 
 # Defines the bounds for case and ambulance random location initialization
 location_generator:
@@ -49,7 +49,7 @@ simulator:
 
     # Number of ambulances to generator
     count: 6
-    base_generator: location_generator
+    base_generator: "@location_generator"
 
   # Defines the cases for the simulation
   cases:
@@ -72,7 +72,7 @@ simulator:
       upper_bound: 18
 
     # Bounds for case locations
-    case_location_generator: location_generator
+    case_location_generator: "@location_generator"
 
     # Defines how the events in the case should be generated (e.g. TO HOSPITAL, TO INCIDENT, etc.)
     event_generator:
@@ -80,16 +80,16 @@ simulator:
       classpath: ems.generators.event.event_generator
 
       # Duration generators
-      travel_duration_generator: duration_generator
-      incident_duration_generator: duration_generator
-      hospital_duration_generator: duration_generator
+      travel_duration_generator: "@duration_generator"
+      incident_duration_generator: "@duration_generator"
+      hospital_duration_generator: "@duration_generator"
 
       # Hospital Selection
       hospital_selector:
         class: RandomHospitalSelector
         classpath: ems.algorithms.hospital_selectors.select_random
 
-        hospital_set: hospitals
+        hospital_set: "@hospitals"
 
   # Defines algorithm for selecting ambulances during dispatch
   ambulance_selector:
