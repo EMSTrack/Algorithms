@@ -1,6 +1,6 @@
 # File metadata, to be printed by the simulator
 name:
-  Simple Execution Run
+  "Simple Execution Run"
 
 # Defines the simulator to be used
 simulator:
@@ -28,7 +28,7 @@ simulator:
         classpath: ems.datasets.location.base.filtered_tijuana_base_set
 
         # Location of bases file
-        filename: ./examples/bases.csv
+        filename: "./examples/bases.csv"
 
         # Number of bases to filter
         count: 16
@@ -42,21 +42,21 @@ simulator:
           classpath: ems.datasets.travel_times.tijuana_travel_times
 
           # Defines filename to read the travel times
-          filename: ./examples/times.csv
+          filename: "./examples/times.csv"
 
           # Defines the origin points of the travel times
           origins:
             class: TijuanaBaseSet
             classpath: ems.datasets.location.base.tijuana_base_set
 
-            filename: ./examples/bases.csv
+            filename: "./examples/bases.csv"
 
           # Defines the destination points of the travel times
           destinations:
             class: TijuanaDemandSet
             classpath: ems.datasets.location.demand.tijuana_demand_set
 
-            filename: ./examples/demand_points.csv
+            filename: "./examples/demand_points.csv"
 
   # Defines the cases to be used in the simulation
   cases:
@@ -116,21 +116,21 @@ simulator:
           classpath: ems.datasets.travel_times.tijuana_travel_times
 
           # Defines filename to read the travel times
-          filename: ./examples/times.csv
+          filename: "./examples/times.csv"
 
           # Defines the origin points of the travel times
           origins:
             class: TijuanaBaseSet
             classpath: ems.datasets.location.base.tijuana_base_set
 
-            filename: ./examples/bases.csv
+            filename: "./examples/bases.csv"
 
           # Defines the destination points of the travel times
           destinations:
             class: TijuanaDemandSet
             classpath: ems.datasets.location.demand.tijuana_demand_set
 
-            filename: ./examples/demand_points.csv
+            filename: "./examples/demand_points.csv"
 
       # Defines the duration of the stay at an incident location
       incident_duration_generator:
@@ -181,21 +181,21 @@ simulator:
           classpath: ems.datasets.travel_times.tijuana_travel_times
 
           # Defines filename to read the travel times
-          filename: ./examples/times.csv
+          filename: "./examples/times.csv"
 
           # Defines the origin points of the travel times
           origins:
             class: TijuanaBaseSet
             classpath: ems.datasets.location.base.tijuana_base_set
 
-            filename: ./examples/bases.csv
+            filename: "./examples/bases.csv"
 
           # Defines the destination points of the travel times
           destinations:
             class: TijuanaDemandSet
             classpath: ems.datasets.location.demand.tijuana_demand_set
 
-            filename: ./examples/demand_points.csv
+            filename: "./examples/demand_points.csv"
 
   # Defines algorithm for selecting ambulances during dispatch
   ambulance_selector:
@@ -209,21 +209,21 @@ simulator:
       classpath: ems.datasets.travel_times.tijuana_travel_times
 
       # Defines filename to read the travel times
-      filename: ./examples/times.csv
+      filename: "./examples/times.csv"
 
       # Defines the origin points of the travel times
       origins:
         class: TijuanaBaseSet
         classpath: ems.datasets.location.base.tijuana_base_set
 
-        filename: ./examples/bases.csv
+        filename: "./examples/bases.csv"
 
       # Defines the destination points of the travel times
       destinations:
         class: TijuanaDemandSet
         classpath: ems.datasets.location.demand.tijuana_demand_set
 
-        filename: ./examples/demand_points.csv
+        filename: "./examples/demand_points.csv"
 
   # Defines the metrics to be computed during the simulation
   metric_aggregator:
@@ -242,7 +242,7 @@ simulator:
           class: TijuanaDemandSet
           classpath: ems.datasets.location.demand.tijuana_demand_set
 
-          filename: ./examples/demand_points.csv
+          filename: "./examples/demand_points.csv"
 
         # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
         # any point in B
@@ -251,21 +251,21 @@ simulator:
           classpath: ems.datasets.travel_times.tijuana_travel_times
 
           # Defines filename to read the travel times
-          filename: ./examples/times.csv
+          filename: "./examples/times.csv"
 
           # Defines the origin points of the travel times
           origins:
             class: TijuanaBaseSet
             classpath: ems.datasets.location.base.tijuana_base_set
 
-            filename: ./examples/bases.csv
+            filename: "./examples/bases.csv"
 
           # Defines the destination points of the travel times
           destinations:
             class: TijuanaDemandSet
             classpath: ems.datasets.location.demand.tijuana_demand_set
 
-            filename: ./examples/demand_points.csv
+            filename: "./examples/demand_points.csv"
 
       - class: TotalDelay
         classpath: ems.analysis.metrics.total_delay
