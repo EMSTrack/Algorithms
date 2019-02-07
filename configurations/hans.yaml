@@ -38,7 +38,7 @@ simulator:
 
   # Defines the ambulances to be used in the simulation
   ambulances:
-    class: CustomAmbulanceSet
+    class: BaseSelectedAmbulanceSet
     classpath: ems.datasets.ambulance.custom_ambulance_set
 
     # Number of ambulances to generate

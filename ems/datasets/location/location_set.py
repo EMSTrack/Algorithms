@@ -15,6 +15,12 @@ class LocationSet:
     def __len__(self):
         return len(self.locations)
 
+    def __iter__(self):
+        return iter(self.locations)
+
+    def __getitem__(self, item):
+        return self.locations[item]
+
     def closest(self, point: Point):
         raise NotImplementedError()
 
