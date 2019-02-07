@@ -1,22 +1,22 @@
 name: # File metadata, to be printed by the simulator
   "Minimal Dispatch Example"
 
-hospitals: # Defines 2 hospitals in the UCSD area
-  class: LocationSet
-  classpath: ems.datasets.location.location_set
-  latitudes: [32.879802, 32.888216]
-  longitudes: [-117.236564, -117.239697]
-
-bases: # Defines 6 bases in the UCSD area
+bases: # Initializes 6 bases in the UCSD area
   class: LocationSet
   classpath: ems.datasets.location.location_set
   latitudes: [32.877328, 32.873803, 32.876727, 32.875811, 32.884714, 32.888589]
   longitudes: [-117.234695, -117.239527, -117.242650, -117.230869, -117.236528, -117.242113]
 
-ambulances: # Defines 6 ambulances stationed at each of the 6 bases
+ambulances: # Initializes ambulances; one stationed at each of the 6 bases
   class: CustomAmbulanceSet
   classpath: ems.datasets.ambulance.custom_ambulance_set
   bases: "@bases"
+
+hospitals: # Initializes 2 hospitals in the UCSD area
+  class: LocationSet
+  classpath: ems.datasets.location.location_set
+  latitudes: [32.879802, 32.888216]
+  longitudes: [-117.236564, -117.239697]
 
 location_generator: # Generates case locations uniformly in a circle of 2 kilometers centered on UCSD
   class: CircleLocationGenerator
