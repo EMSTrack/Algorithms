@@ -43,13 +43,11 @@ class Driver:
             params = {}
             cname = cpath = None
             for key, value in o.items():
-                # Class
+                # Parse into class and classname
                 if key == "class":
-                    cname = value
-
-                # Classpath
-                elif key == "classpath":
-                    cpath = value
+                    cname_parts = value.split('.')
+                    cname = cname_parts[-1]
+                    cpath = '.'.join(cname_parts[:-1])
 
                 # Parameter: recurse to create object for parameter
                 else:
