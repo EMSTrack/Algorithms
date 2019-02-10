@@ -2,7 +2,7 @@ name: # File metadata, to be printed by the simulator
   "Minimal Dispatch Example"
 
 bases: # Initializes 6 bases in the UCSD area
-  class: ems.datasets.location.location_set.LocationSet
+  class: ems.datasets.location.base.base_set.BaseSet
   latitudes: [32.877328, 32.873803, 32.876727, 32.875811, 32.884714, 32.888589]
   longitudes: [-117.234695, -117.239527, -117.242650, -117.230869, -117.236528, -117.242113]
 
@@ -11,7 +11,7 @@ ambulances: # Initializes ambulances; one stationed at each of the 6 bases
   bases: "@bases"
 
 hospitals: # Initializes 2 hospitals in the UCSD area
-  class: ems.datasets.location.location_set.LocationSet
+  class: ems.datasets.location.hospital.hospital_set.HospitalSet
   latitudes: [32.879802, 32.888216]
   longitudes: [-117.236564, -117.239697]
 

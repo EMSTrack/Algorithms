@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 
 from ems.datasets.location.kd_tree_location_set import KDTreeLocationSet
@@ -5,18 +7,24 @@ from ems.datasets.travel_times.travel_times import TravelTimes
 from ems.utils import parse_unheadered_csv
 
 
-class FilteredTijuanaBaseSet(KDTreeLocationSet):
+class FilteredBaseSet(KDTreeLocationSet):
 
     def __init__(self,
-                 filename: str,
                  count: int,
                  required_travel_time: int,
-                 travel_times: TravelTimes):
+                 travel_times: TravelTimes,
+                 filename: str = None,
+                 latitudes: List[float] = None,
+                 longitudes: List[float] = None):
         self.filename = filename
         self.count = count
         self.required_travel_time = required_travel_time
         self.travel_times = travel_times
-        latitudes, longitudes = self.read_bases(filename)
+
+        if filename is not None:
+            latitudes, longitudes = self.read_bases(filename)
+
+        latitudes, longitudes = self.kmeans_filter(latitudes, longitudes)
         super().__init__(latitudes, longitudes)
 
     def read_bases(self, filename):
@@ -31,8 +39,6 @@ class FilteredTijuanaBaseSet(KDTreeLocationSet):
         for index, row in bases_df.iterrows():
             latitudes.append(row["lat"])
             longitudes.append(row["long"])
-
-        latitudes, longitudes = self.kmeans_filter(latitudes, longitudes)
 
         return latitudes, longitudes
 
