@@ -1,3 +1,4 @@
+import pandas as pd
 from datetime import timedelta
 
 import numpy as np
@@ -13,7 +14,8 @@ class TravelTimes:
     def __init__(self,
                  origins: LocationSet,
                  destinations: LocationSet,
-                 times: np.ndarray):
+                 filename: str = None,
+                 times: np.ndarray = None):
         """
         :param origins:
         :param destinations:
@@ -21,6 +23,10 @@ class TravelTimes:
         """
         self.origins = origins
         self.destinations = destinations
+
+        if filename is not None:
+            times = self.read_times_df(filename)
+
         self.times = times
 
     def get_time(self, location1: Point, location2: Point):
@@ -46,3 +52,9 @@ class TravelTimes:
         time = int(self.times[index1][index2])
 
         return timedelta(seconds=time)
+
+    def read_times_df(self, filename):
+        # Read travel travel_times from CSV file into a pandas dataframe
+        travel_times_df = pd.read_csv(filename)
+
+        return travel_times_df.as_matrix()

@@ -12,7 +12,7 @@ all_bases: # Read base points in Tijuana from file
   filename: "../data-cruz-roja/bases.csv"
 
 tt: # Travel times matrix between all bases and all demands
-  class: ems.datasets.travel_times.tijuana_travel_times.TijuanaTravelTimes
+  class: ems.datasets.travel_times.travel_times.TravelTimes
   filename: "../data-cruz-roja/times.csv"
   origins: "@all_bases"
   destinations: "@demands"
