@@ -1,6 +1,6 @@
 # File metadata, to be printed by the simulator
 name:
-  Random Cases, Preset Bases, Preset Travel Times
+  "Random Cases, Preset Bases, Preset Travel Times"
 
 # Defines the number of cases to generate
 case_quantity: 300
@@ -10,7 +10,7 @@ demands:
   class: TijuanaDemandSet
   classpath: ems.datasets.location.demand.tijuana_demand_set
 
-  filename: ../data-cruz-roja/demand_points.csv
+  filename: "../data-cruz-roja/demand_points.csv"
 
 # Define travel times for estimating travel times in various simulation algorithms
 tt:
@@ -18,7 +18,7 @@ tt:
   classpath: ems.datasets.travel_times.tijuana_travel_times
 
   # Defines filename to read the travel times
-  filename: ../data-cruz-roja/times.csv
+  filename: "../data-cruz-roja/times.csv"
 
   # Defines the origin points of the travel times
   origins:
@@ -28,7 +28,7 @@ tt:
     filename: ../data-cruz-roja/bases.csv
 
   # Defines the destination points of the travel times
-  destinations: demands
+  destinations: "@demands"
 
 
 # Defines the simulator to be used
@@ -38,7 +38,7 @@ simulator:
 
   # Defines the ambulances to be used in the simulation
   ambulances:
-    class: CustomAmbulanceSet
+    class: BaseSelectedAmbulanceSet
     classpath: ems.datasets.ambulance.custom_ambulance_set
 
     # Number of ambulances to generate
@@ -55,7 +55,7 @@ simulator:
         classpath: ems.datasets.location.base.filtered_tijuana_base_set
 
         # Location of bases file
-        filename: ../data-cruz-roja/bases.csv
+        filename: "../data-cruz-roja/bases.csv"
 
         # Number of bases to filter
         count: 16
@@ -64,7 +64,7 @@ simulator:
         required_travel_time: 600
 
         # Travel times for computation
-        travel_times: tt
+        travel_times: "@tt"
 
   # Defines the cases to be used in the simulation
   cases:
@@ -72,7 +72,7 @@ simulator:
     classpath: ems.datasets.case.random_case_set
 
     # Number of cases to generate
-    quantity: case_quantity
+    quantity: "@case_quantity"
 
     # Starting time
     initial_time: 2001-12-15T02:59:43.1Z
@@ -86,7 +86,7 @@ simulator:
       duration: 1800
 
       # Number of cases to generate
-      quantity: case_quantity
+      quantity: "@case_quantity"
 
 
     # Defines method on where cases are randomly generated
@@ -120,7 +120,7 @@ simulator:
 
         # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
         # any point in B
-        travel_times: tt
+        travel_times: "@tt"
 
       # Defines the duration of the stay at an incident location
       incident_duration_generator:
@@ -166,7 +166,7 @@ simulator:
 
         # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
         # any point in B
-        travel_times: tt
+        travel_times: "@tt"
 
   # Defines algorithm for selecting ambulances during dispatch
   ambulance_selector:
@@ -175,7 +175,7 @@ simulator:
 
     # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
     # any point in B
-    travel_times: tt
+    travel_times: "@tt"
 
   # Defines the metrics to be computed during the simulation
   metric_aggregator:
@@ -190,11 +190,11 @@ simulator:
         r1: 600
 
         # Demands to cover
-        demands: demands
+        demands: "@demands"
 
         # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
         # any point in B
-        travel_times: tt
+        travel_times: "@tt"
 
       - class: TotalDelay
         classpath: ems.analysis.metrics.total_delay
