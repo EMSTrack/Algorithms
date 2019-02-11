@@ -5,21 +5,21 @@ case_quantity: 500 # Generate 500 cases
 
 demands: # Read demands points in Tijuana from file
   class: ems.datasets.location.demand.demand_set.DemandSet
-  filename: "../data-cruz-roja/demand_points.csv"
+  filename: "../data-cruz-roja-clean/demand_points.csv"
 
 all_bases: # Read base points in Tijuana from file
   class: ems.datasets.location.base.base_set.BaseSet
-  filename: "../data-cruz-roja/bases.csv"
+  filename: "../data-cruz-roja-clean/bases.csv"
 
 tt: # Travel times matrix between all bases and all demands
   class: ems.datasets.travel_times.travel_times.TravelTimes
-  filename: "../data-cruz-roja/times.csv"
+  filename: "../data-cruz-roja-clean/times.csv"
   origins: "@all_bases"
   destinations: "@demands"
 
 simulation_bases: # Selects a subset of bases for usage in the simulation (K-Means filtered)
   class: ems.datasets.location.base.filtered_base_set.FilteredBaseSet
-  filename: "../data-cruz-roja/bases.csv"
+  filename: "../data-cruz-roja-clean/bases.csv"
   count: 16
   required_travel_time: 600
   travel_times: "@tt"

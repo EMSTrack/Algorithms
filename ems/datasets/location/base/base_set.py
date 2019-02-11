@@ -1,7 +1,7 @@
 from typing import List
 
 from ems.datasets.location.kd_tree_location_set import KDTreeLocationSet
-from ems.utils import parse_unheadered_csv
+from ems.utils import parse_headered_csv
 
 
 class BaseSet(KDTreeLocationSet):
@@ -16,16 +16,15 @@ class BaseSet(KDTreeLocationSet):
         super().__init__(latitudes, longitudes)
 
     def read_bases(self, filename):
-        # Read bases from an unheadered CSV into a pandas dataframe
-        base_col_positions = [4, 5]
-        base_headers = ["lat", "long"]
-        bases_df = parse_unheadered_csv(filename, base_col_positions, base_headers)
+        # Read bases from a headered CSV into a pandas dataframe
+        base_headers = ["latitude", "longitude"]
+        bases_df = parse_headered_csv(filename, base_headers)
 
         # Generate list of models from dataframe
         latitudes = []
         longitudes = []
         for index, row in bases_df.iterrows():
-            latitudes.append(row["lat"])
-            longitudes.append(row["long"])
+            latitudes.append(row["latitude"])
+            longitudes.append(row["longitude"])
 
         return latitudes, longitudes
