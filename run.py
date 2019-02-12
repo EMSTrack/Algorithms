@@ -1,6 +1,6 @@
 from ems.driver import read_user_input, Driver
 from ems.models.events.event_type import EventType
-from IPython import embed;
+from IPython import embed
 
 
 # Initialize configurations
@@ -8,17 +8,18 @@ sim_args = read_user_input()
 driver = Driver()
 driver.create_objects(sim_args)
 
-sim = driver.objects["simulator"]
-
-embed()
-case_record_set, metric_aggregator = sim.run()
-
-# Save as much information as possible.
+# Save as much information as possible BEFORE the simulator runs in case it crashes.
 
 driver.objects['simulation_bases'].write_to_file('./results/chosen_bases.csv')
 driver.objects['ambulances'].write_to_file('./results/chosen_ambulances.csv')
 driver.objects['hospitals'].write_to_file('./results/chosen_hospitals.csv')
 
+# Run the simulator.
+
+sim = driver.objects["simulator"]
+case_record_set, metric_aggregator = sim.run()
+
+# Save the finished simulator information
 
 case_record_set.write_to_file('./results/processed_cases.csv')
 metric_aggregator.write_to_file('./results/metrics.csv')

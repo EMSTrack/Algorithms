@@ -6,6 +6,7 @@ from multiprocessing import Pool
 from functools import reduce
 from timeit import default_timer as timer
 from datetime import timedelta
+import sys
 
 multicpu = True
 
@@ -15,19 +16,19 @@ lat2 = 32.5534
 lon1 = -117.1233
 lon2 = -116.777
 
-# Number of bases and demands
-cpu = cpu_count()
+try:
+    bases_num   = int(sys.argv[1])
+    demands_num = int(sys.argv[2])
+    cpu = int(sys.argv[3])
+    if cpu > cpu_count(): raise Exception()
 
-# cpu = 1
-# cpu = cpu // 2
-# cpu = cpu * 3 // 4
+except:
+    raise Exception("\n\nRequired Arguments: \n" 
+                    "1) Number of potential bases\n" 
+                    "2) Number of demand points.\n" 
+                    "3) Number of CPUs on the job. Maximum: {}\n".format(cpu_count())
+                    )
 
-cpu = int(cpu)
-
-print("Processes:", cpu)
-
-bases_num   = 969
-demands_num = 100
 
 # assume kilometer per second is at 60 MPH
 kmps = 0.0268224
@@ -92,13 +93,16 @@ def main():
     start_time = timer()
 
     demand_locations =      generate_points(demands_num)
+    base_locations =        generate_points(bases_num)
 
     if not multicpu:
         base_locations =    generate_points(bases_num)
         times =             generate_times(base_locations)
 
     else:
-        list_base_locations = [generate_points(bases_num // cpu) for _ in range(cpu)]
+        list_base_locations = [base_locations[ int(i * len(base_locations)/cpu):
+                                              int((i + 1)* len(base_locations)/cpu)]
+                               for i in range(cpu)]
 
         with Pool(cpu) as p:
             list_of_times = p.map(generate_times, list_base_locations)
@@ -112,9 +116,12 @@ def main():
 
     print("Write to files.")
 
-    with open('bases.csv', 'w') as file:            file.writelines(bases_string)
-    with open('demand_points.csv', 'w') as file:    file.writelines(demands_string)
-    with open('times.csv', 'w') as file:            file.writelines(times_string)
+    with open('/Users/hansy/Documents/Algorithms/examples/bases.csv', 'w') as file:
+        file.writelines(bases_string)
+    with open('/Users/hansy/Documents/Algorithms/examples/demand_points.csv', 'w') as file:
+        file.writelines(demands_string)
+    with open('/Users/hansy/Documents/Algorithms/examples/times.csv', 'w') as file:
+        file.writelines(times_string)
 
     end_time = timer()
 
