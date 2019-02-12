@@ -1,13 +1,16 @@
 from ems.driver import read_user_input, Driver
 from ems.models.events.event_type import EventType
 
-import yaml
 
 # Initialize configurations
 sim_args = read_user_input()
 driver = Driver()
 driver.create_objects(sim_args)
 sim = driver.objects["simulator"]
+
+# from sys import exit
+# exit(0)
+
 case_record_set, metric_aggregator = sim.run()
 
 # case_record_set.write_to_file('./')

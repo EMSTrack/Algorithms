@@ -20,13 +20,13 @@ tt: # Travel times matrix between all bases and all demands
 simulation_bases: # Selects a subset of bases for usage in the simulation (K-Means filtered)
   class: ems.datasets.location.base.filtered_base_set.FilteredBaseSet
   filename: "../data-cruz-roja-clean/bases.csv"
-  count: 16
+  count: 12
   required_travel_time: 600
   travel_times: "@tt"
 
 ambulances: # Defines ambulances and assigns bases in a round robin fashion from the simulation bases
   class: ems.datasets.ambulance.base_selected_ambulance_set.BaseSelectedAmbulanceSet
-  count: 16
+  count: 11
   base_selector:
     class: ems.algorithms.base_selectors.round_robin_selector.RoundRobinBaseSelector
     base_set: "@simulation_bases"
@@ -42,7 +42,7 @@ cases: # Random cases to be generated during simulation
   initial_time: 2001-12-15T02:59:43.1Z
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.time.poisson_time.PoissonCaseTimeGenerator
-    duration: 3000
+    duration: 4000
     quantity: "@case_quantity"
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -70,8 +70,13 @@ cases: # Random cases to be generated during simulation
 metric_aggregator: # Computes and stores any amount of metrics during the simulation
   class: ems.analysis.metrics.metric_aggregator.MetricAggregator
   metrics:
-    - class: ems.analysis.metrics.coverage.percent_coverage.PercentCoverage
+#    - class: ems.analysis.metrics.coverage.percent_coverage.PercentCoverage
+#      r1: 600
+#      demands: "@demands"
+#      travel_times: "@tt"
+    - class: ems.analysis.metrics.coverage.double_coverage.PercentDoubleCoverage
       r1: 600
+      r2: 840
       demands: "@demands"
       travel_times: "@tt"
     - class: ems.analysis.metrics.total_delay.TotalDelay
