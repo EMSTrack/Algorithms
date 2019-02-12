@@ -26,8 +26,8 @@ cpu = int(cpu)
 
 print("Processes:", cpu)
 
-bases_num   = 400
-demands_num = 400
+bases_num   = 969
+demands_num = 100
 
 # assume kilometer per second is at 60 MPH
 kmps = 0.0268224
@@ -106,9 +106,8 @@ def main():
         times =             flatten(list_of_times)
         base_locations =    flatten(list_base_locations)
 
-    baseline = "'id','name','type','vics',"
-    bases_string = ["{}{},{}\n".format(baseline, b[0], b[1]) for b in base_locations]
-    demands_string = ["{},{}\n".format(d[0], d[1]) for d in demand_locations]
+    bases_string =  ["latitude,longitude\n"] + ["{},{}\n".format(b[0], b[1]) for b in base_locations]
+    demands_string = ["latitude,longitude\n"] + ["{},{}\n".format(d[0], d[1]) for d in demand_locations]
     times_string = [",".join(b) + "\n" for b in times]
 
     print("Write to files.")
