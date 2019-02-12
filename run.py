@@ -6,6 +6,7 @@ from ems.models.events.event_type import EventType
 sim_args = read_user_input()
 driver = Driver()
 driver.create_objects(sim_args)
+import time; time.sleep(3)
 sim = driver.objects["simulator"]
 
 # from sys import exit
@@ -13,7 +14,8 @@ sim = driver.objects["simulator"]
 
 case_record_set, metric_aggregator = sim.run()
 
-# case_record_set.write_to_file('./')
+case_record_set.write_to_file('./results/processed_cases.csv')
+metric_aggregator.write_to_file('./results/metrics.csv')
 
 #
 # polygon_coordinates = {

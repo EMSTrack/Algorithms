@@ -20,7 +20,7 @@ tt: # Travel times matrix between all bases and all demands
 simulation_bases: # Selects a subset of bases for usage in the simulation (K-Means filtered)
   class: ems.datasets.location.base.filtered_base_set.FilteredBaseSet
   filename: "../data-cruz-roja-clean/bases.csv"
-  count: 10
+  count: 8
   r1: 600
   r2: 840
   travel_times: "@tt"
