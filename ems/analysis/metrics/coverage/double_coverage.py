@@ -57,15 +57,23 @@ class PercentDoubleCoverage(Metric):
 
         secondary = 0
 
-        from IPython import embed; embed()
+
 
 
         for i in range(len(self.secondary_coverage_state.locations_coverage)):
-            if len(self.secondary_coverage_state.locations_coverage[i]) > 0 and \
-                    len(self.primary_coverage_state.locations_coverage[i]) > 0:
-                secondary += 1
+            location_secondary_ambs = self.secondary_coverage_state.locations_coverage[i]
+            location_primary_ambs   = self.primary_coverage_state.locations_coverage[i]
+            if  len(location_primary_ambs) > 0:
+                if len(location_secondary_ambs) > len(location_primary_ambs):
+                    secondary += 1
+                elif len(location_secondary_ambs) == 1:
+                    if len(location_primary_ambs.intersection(location_secondary_ambs)) == 0:
+                        secondary += 1
 
+        from IPython import embed;
+        # embed()
         return "{}%, {}%".format(primary/len(self.demands)*100, secondary/len(self.demands)*100)
+
 
     def add_ambulance_coverage(self, ambulance):
 
