@@ -68,6 +68,11 @@ class FilteredBaseSet(KDTreeLocationSet):
         bases_and_coverages = bases_and_coverages[-1]
 
         print("Primary and Secondary coverages: {}, {}".format(bases_and_coverages[0], bases_and_coverages[1]))
+
+        # TODO when consistent, this won't be necessary anymore
+        with open("./results/initial_coverage.txt", 'w') as fi:
+            fi.write("{}, {}".format(bases_and_coverages[0], bases_and_coverages[1]))
+
         return bases_and_coverages[2], bases_and_coverages[3]
 
 

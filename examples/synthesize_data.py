@@ -99,7 +99,7 @@ def main():
         base_locations =    generate_points(bases_num)
         times =             generate_times(base_locations)
 
-    else:
+    else: # TODO still a problem here with off by ones.
         list_base_locations = [base_locations[ int(i * len(base_locations)/cpu):
                                               int((i + 1)* len(base_locations)/cpu)]
                                for i in range(cpu)]

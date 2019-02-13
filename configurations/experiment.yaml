@@ -20,7 +20,7 @@ tt: # Travel times matrix between all bases and all demands
 simulation_bases: # Selects a subset of bases for usage in the simulation (K-Means filtered)
   class: ems.datasets.location.base.filtered_base_set.FilteredBaseSet
   filename: "./examples/bases.csv"
-  count: 12
+  count: 10
   r1: 600
   r2: 840
   travel_times: "@tt"
@@ -44,7 +44,7 @@ cases: # Random cases to be generated during simulation
   initial_time: 2001-12-15T02:59:43.1Z
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.time.poisson_time.PoissonCaseTimeGenerator
-    duration: 5000
+    duration: 3500
     quantity: "@case_quantity"
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
