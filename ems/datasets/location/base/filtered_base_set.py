@@ -54,13 +54,12 @@ class FilteredBaseSet(KDTreeLocationSet):
         self.longitudes = longitudes
 
         indices = [i for i in range(len(latitudes))]
-        indices = indices[0: len(indices) ]
+        indices = indices[0: 50 ]
         print("Number of different combinations: ", len(indices))
         self.indices_count = len(indices)
 
 
-        with Pool(cpu_count()- 1) as p:
-            from IPython import embed; embed()
+        with Pool(cpu_count()) as p:
             bases_and_coverages = p.map(self.kmeans_filter_i, indices)
 
 
