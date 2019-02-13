@@ -60,6 +60,8 @@ class FilteredBaseSet(KDTreeLocationSet):
         bases_and_coverages = bases_and_coverages[-1]
 
         print("Primary and Secondary coverages: {}, {}".format(bases_and_coverages[0], bases_and_coverages[1]))
+
+        print("Bases: \n{}\n{}".format(bases_and_coverages[2], bases_and_coverages[3]))
         return bases_and_coverages[2], bases_and_coverages[3]
 
 
