@@ -28,6 +28,7 @@ class TravelTimes:
             times = self.read_times_df(filename)
 
         self.times = times
+        # from IPython import embed; embed()
 
     def get_time(self, location1: Point, location2: Point):
         """
@@ -55,6 +56,10 @@ class TravelTimes:
 
     def read_times_df(self, filename):
         # Read travel travel_times from CSV file into a pandas dataframe
-        travel_times_df = pd.read_csv(filename)
+        # from IPython import embed;
+        # embed()
+        travel_times_df = pd.read_csv(filename, header = None)
 
-        return travel_times_df.as_matrix()
+        travel_times_df = travel_times_df.values
+
+        return travel_times_df

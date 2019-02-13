@@ -5,7 +5,8 @@ import numpy as np
 from ems.datasets.location.kd_tree_location_set import KDTreeLocationSet
 from ems.datasets.travel_times.travel_times import TravelTimes
 from ems.utils import parse_headered_csv
-
+from multiprocessing import Pool
+from multiprocessing import cpu_count
 
 
 class FilteredBaseSet(KDTreeLocationSet):
@@ -17,12 +18,15 @@ class FilteredBaseSet(KDTreeLocationSet):
                  travel_times: TravelTimes,
                  filename: str = None,
                  latitudes: List[float] = None,
-                 longitudes: List[float] = None):
+                 longitudes: List[float] = None,
+                 debug: bool = False,
+                 ):
         self.filename = filename
         self.count = count
         self.r1 = r1
         self.r2 = r2
         self.travel_times = travel_times
+        self.debug = debug
 
         if filename is not None:
             latitudes, longitudes = self.read_bases(filename)
@@ -49,9 +53,14 @@ class FilteredBaseSet(KDTreeLocationSet):
         self.latitudes = latitudes
         self.longitudes = longitudes
 
-        indices = [i for i in range(len(latitudes)- 1)]
-        from multiprocessing import Pool
-        with Pool(8) as p:
+        indices = [i for i in range(len(latitudes))]
+        indices = indices[0: len(indices) ]
+        print("Number of different combinations: ", len(indices))
+        self.indices_count = len(indices)
+
+
+        with Pool(cpu_count()- 1) as p:
+            from IPython import embed; embed()
             bases_and_coverages = p.map(self.kmeans_filter_i, indices)
 
 
@@ -62,10 +71,17 @@ class FilteredBaseSet(KDTreeLocationSet):
         print("Primary and Secondary coverages: {}, {}".format(bases_and_coverages[0], bases_and_coverages[1]))
 
         print("Bases: \n{}\n{}".format(bases_and_coverages[2], bases_and_coverages[3]))
+        # TODO when consistent, this won't be necessary anymore
+        with open("./results/initial_coverage.txt", 'w') as fi:
+            fi.write("{}, {}".format(bases_and_coverages[0], bases_and_coverages[1]))
+
         return bases_and_coverages[2], bases_and_coverages[3]
 
 
     def kmeans_filter_i(self, i):
+
+        if i < self.indices_count and self.debug:
+            print("{} \tout of {} ".format(i, self.indices_count))
 
         # i = 0
 

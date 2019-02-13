@@ -5,25 +5,26 @@ case_quantity: 500 # Generate 500 cases
 
 demands: # Read demands points in Tijuana from file
   class: ems.datasets.location.demand.demand_set.DemandSet
-  filename: "../data-cruz-roja-clean/demand_points.csv"
+  filename: "./examples/demand_points.csv"
 
 all_bases: # Read base points in Tijuana from file
   class: ems.datasets.location.base.base_set.BaseSet
-  filename: "../data-cruz-roja-clean/bases.csv"
+  filename: "./examples/bases.csv"
 
 tt: # Travel times matrix between all bases and all demands
   class: ems.datasets.travel_times.travel_times.TravelTimes
-  filename: "../data-cruz-roja-clean/times.csv"
+  filename: "./examples/times.csv"
   origins: "@all_bases"
   destinations: "@demands"
 
 simulation_bases: # Selects a subset of bases for usage in the simulation (K-Means filtered)
   class: ems.datasets.location.base.filtered_base_set.FilteredBaseSet
-  filename: "../data-cruz-roja-clean/bases.csv"
-  count: 12
+  filename: "./examples/bases.csv"
+  count: 10
   r1: 600
   r2: 840
   travel_times: "@tt"
+  debug: True
 
 ambulances: # Defines ambulances and assigns bases in a round robin fashion from the simulation bases
   class: ems.datasets.ambulance.base_selected_ambulance_set.BaseSelectedAmbulanceSet
@@ -43,7 +44,7 @@ cases: # Random cases to be generated during simulation
   initial_time: 2001-12-15T02:59:43.1Z
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.time.poisson_time.PoissonCaseTimeGenerator
-    duration: 5000
+    duration: 3500
     quantity: "@case_quantity"
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -71,8 +72,9 @@ cases: # Random cases to be generated during simulation
 metric_aggregator: # Computes and stores any amount of metrics during the simulation
   class: ems.analysis.metrics.metric_aggregator.MetricAggregator
   metrics:
-    - class: ems.analysis.metrics.coverage.percent_coverage.PercentCoverage
+    - class: ems.analysis.metrics.coverage.double_coverage.PercentDoubleCoverage
       r1: 600
+      r2: 840
       demands: "@demands"
       travel_times: "@tt"
     - class: ems.analysis.metrics.total_delay.TotalDelay
