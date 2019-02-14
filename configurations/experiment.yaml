@@ -27,11 +27,11 @@ simulation_bases: # Selects a subset of bases for usage in the simulation (K-Mea
 #  debug: True
 
   class: ems.datasets.location.base.tijuana.TijuanaBaseSet
-  filename: "./examples/bases.csv"
+  filename: "../data-cruz-roja-clean/bases.csv"
 
 ambulances: # Defines ambulances and assigns bases in a round robin fashion from the simulation bases
   class: ems.datasets.ambulance.base_selected_ambulance_set.BaseSelectedAmbulanceSet
-  count: 11
+  count: 15
   base_selector:
     class: ems.algorithms.base_selectors.round_robin_selector.RoundRobinBaseSelector
     base_set: "@simulation_bases"
@@ -89,12 +89,12 @@ simulator: # Simulator
   ambulances: "@ambulances"
   cases: "@cases"
   ambulance_selector:
-#    class: ems.algorithms.selection.dispatch_fastest.BestTravelTime
-#    travel_times: "@tt"
+   class: ems.algorithms.selection.dispatch_fastest.BestTravelTime
+   travel_times: "@tt"
 
-    class: ems.algorithms.selection.dispatch_least_cost.LeastDisruption
-    travel_times: "@tt"
-    demands: "@demands"
-    r1: 600
+    # class: ems.algorithms.selection.dispatch_least_cost.LeastDisruption
+    # travel_times: "@tt"
+    # demands: "@demands"
+    # r1: 600
 
   metric_aggregator: "@metric_aggregator"
