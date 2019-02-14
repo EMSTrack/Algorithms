@@ -1,7 +1,7 @@
 from os import system
 
-bases = 1600
-demands = 120
+bases = 12000
+demands = 1500
 cpus = 8
 
 

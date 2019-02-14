@@ -18,17 +18,20 @@ tt: # Travel times matrix between all bases and all demands
   destinations: "@demands"
 
 simulation_bases: # Selects a subset of bases for usage in the simulation (K-Means filtered)
-  class: ems.datasets.location.base.filtered_base_set.FilteredBaseSet
-  filename: "../data-cruz-roja-clean/bases.csv"
-  count: 12
-  r1: 600
-  r2: 840
-  travel_times: "@tt"
-  debug: True
+#  class: ems.datasets.location.base.filtered_base_set.FilteredBaseSet
+#  filename: "./examples/bases.csv"
+#  count: 14
+#  r1: 600
+#  r2: 840
+#  travel_times: "@tt"
+#  debug: True
+
+  class: ems.datasets.location.base.tijuana.TijuanaBaseSet
+  filename: "./examples/bases.csv"
 
 ambulances: # Defines ambulances and assigns bases in a round robin fashion from the simulation bases
   class: ems.datasets.ambulance.base_selected_ambulance_set.BaseSelectedAmbulanceSet
-  count: 17
+  count: 11
   base_selector:
     class: ems.algorithms.base_selectors.round_robin_selector.RoundRobinBaseSelector
     base_set: "@simulation_bases"
