@@ -118,3 +118,4 @@ results/*.csv
 *.mp4
 .vscode/
 ./settings/
+results
