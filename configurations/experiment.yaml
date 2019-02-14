@@ -1,7 +1,7 @@
 name: # File metadata, to be printed by the simulator
   "Random Cases, Preset Bases, Preset Travel Times"
 
-case_quantity: 500 # Generate 500 cases
+case_quantity: 100 # Generate 500 cases
 
 demands: # Read demands points in Tijuana from file
   class: ems.datasets.location.demand.demand_set.DemandSet
@@ -44,7 +44,7 @@ cases: # Random cases to be generated during simulation
   initial_time: 2001-12-15T02:59:43.1Z
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.time.poisson_time.PoissonCaseTimeGenerator
-    duration: 3500
+    duration: 600
     quantity: "@case_quantity"
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -86,12 +86,12 @@ simulator: # Simulator
   ambulances: "@ambulances"
   cases: "@cases"
   ambulance_selector:
-    class: ems.algorithms.selection.dispatch_fastest.BestTravelTime
-    travel_times: "@tt"
-
-#    class: ems.algorithms.selection.dispatch_least_cost.LeastDisruption
+#    class: ems.algorithms.selection.dispatch_fastest.BestTravelTime
 #    travel_times: "@tt"
-#    demands: "@demands"
-#    r1: 600
-  
+
+    class: ems.algorithms.selection.dispatch_least_cost.LeastDisruption
+    travel_times: "@tt"
+    demands: "@demands"
+    r1: 600
+
   metric_aggregator: "@metric_aggregator"
