@@ -18,14 +18,6 @@ tt: # Travel times matrix between all bases and all demands
   destinations: "@demands"
 
 simulation_bases: # Selects a subset of bases for usage in the simulation (K-Means filtered)
-#  class: ems.datasets.location.base.filtered_base_set.FilteredBaseSet
-#  filename: "./examples/bases.csv"
-#  count: 14
-#  r1: 600
-#  r2: 840
-#  travel_times: "@tt"
-#  debug: True
-
   class: ems.datasets.location.base.tijuana.TijuanaBaseSet
   filename: "./examples/bases.csv"
 
