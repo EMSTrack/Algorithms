@@ -114,7 +114,12 @@ def main():
     demands_string = ["latitude,longitude\n"] + ["{},{}\n".format(d[0], d[1]) for d in demand_locations]
     times_string = [",".join(b) + "\n" for b in times]
 
+
     print("Write to files.")
+
+    if len(bases_string) != 1 + len(times_string): raise Exception("Unequal Dimensions {} {}".format(
+        len(bases_string), len(times_string)
+    ))
 
     with open('./examples/bases.csv', 'w') as file:
         file.writelines(bases_string)

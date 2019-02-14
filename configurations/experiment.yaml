@@ -5,15 +5,15 @@ case_quantity: 500 # Generate 500 cases
 
 demands: # Read demands points in Tijuana from file
   class: ems.datasets.location.demand.demand_set.DemandSet
-  filename: "./examples/demand_points.csv"
+  filename: "../data-cruz-roja-clean/demand_points.csv"
 
 all_bases: # Read base points in Tijuana from file
   class: ems.datasets.location.base.base_set.BaseSet
-  filename: "./examples/bases.csv"
+  filename: "../data-cruz-roja-clean/bases.csv"
 
 tt: # Travel times matrix between all bases and all demands
   class: ems.datasets.travel_times.travel_times.TravelTimes
-  filename: "./examples/times.csv"
+  filename: "../data-cruz-roja-clean/times.csv"
   origins: "@all_bases"
   destinations: "@demands"
 
@@ -91,4 +91,10 @@ simulator: # Simulator
   ambulance_selector:
     class: ems.algorithms.selection.dispatch_fastest.BestTravelTime
     travel_times: "@tt"
+
+#    class: ems.algorithms.selection.dispatch_least_cost.LeastDisruption
+#    travel_times: "@tt"
+#    demands: "@demands"
+#    r1: 600
+  
   metric_aggregator: "@metric_aggregator"

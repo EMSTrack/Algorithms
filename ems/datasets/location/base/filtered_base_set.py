@@ -53,13 +53,13 @@ class FilteredBaseSet(KDTreeLocationSet):
         self.latitudes = latitudes
         self.longitudes = longitudes
 
-        indices = [i for i in range(len(latitudes) - 1)]
-        indices = indices[0: len(indices) ]
+        indices = [i for i in range(len(latitudes))]
+        indices = indices[0: 50 ]
         print("Number of different combinations: ", len(indices))
         self.indices_count = len(indices)
 
 
-        with Pool(cpu_count()- 1) as p:
+        with Pool(cpu_count()) as p:
             bases_and_coverages = p.map(self.kmeans_filter_i, indices)
 
 
@@ -69,6 +69,7 @@ class FilteredBaseSet(KDTreeLocationSet):
 
         print("Primary and Secondary coverages: {}, {}".format(bases_and_coverages[0], bases_and_coverages[1]))
 
+        print("Bases: \n{}\n{}".format(bases_and_coverages[2], bases_and_coverages[3]))
         # TODO when consistent, this won't be necessary anymore
         with open("./results/initial_coverage.txt", 'w') as fi:
             fi.write("{}, {}".format(bases_and_coverages[0], bases_and_coverages[1]))
