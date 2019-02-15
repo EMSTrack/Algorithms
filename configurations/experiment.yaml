@@ -23,9 +23,9 @@ simulation_bases: # Selects a subset of bases for usage in the simulation (K-Mea
 
 ambulances: # Defines ambulances and assigns bases in a round robin fashion from the simulation bases
   class: ems.datasets.ambulance.base_selected_ambulance_set.BaseSelectedAmbulanceSet
-  count: 15
+  count: 11
   base_selector:
-    class: ems.algorithms.base_selectors.round_robin_selector.RoundRobinBaseSelector
+    class: ems.algorithms.base_selectors.tijuana.TijuanaBaseSelector
     base_set: "@simulation_bases"
 
 hospitals: # Predefines 3 hospitals in the Tijuana area
