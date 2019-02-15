@@ -95,10 +95,10 @@ class PercentDoubleCoverage(Metric):
             closest_to_demand, _, _ = self.travel_times.destinations.closest(demand_loc)
 
             # Compute time and determine if less than r1
-            if self.travel_times.get_time(closest_to_amb, closest_to_demand) <= self.r1:
+            if self.travel_times.get_time(closest_to_amb, closest_to_demand) < self.r1:
                 self.primary_coverage_state.locations_coverage[index].add(ambulance)
 
-            if self.travel_times.get_time(closest_to_amb, closest_to_demand) <= self.r2:
+            if self.travel_times.get_time(closest_to_amb, closest_to_demand) < self.r2:
                 self.secondary_coverage_state.locations_coverage[index].add(ambulance)
 
 
