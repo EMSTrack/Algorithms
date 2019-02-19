@@ -28,12 +28,12 @@ class CaseRecordSet:
         for case_record in self.case_records:
 
             d = {"id": case_record.case.id,
-                 "date_recorded": case_record.case.date_recorded,
-                 "incident_latitude": case_record.case.incident_location.latitude,
-                 "incident_longitude": case_record.case.incident_location.longitude,
+                 "date recorded": case_record.case.date_recorded,
+                 "case latitude": case_record.case.incident_location.latitude,
+                 "case longitude": case_record.case.incident_location.longitude,
                  "priority": case_record.case.priority,
                  "ambulance": case_record.ambulance.id,
-                 "start_time": case_record.start_time}
+                 "start time": case_record.start_time}
 
             total_durations_other = timedelta(minutes=0)
             for event in case_record.event_history:
@@ -42,19 +42,19 @@ class CaseRecordSet:
                     total_durations_other += event.duration
                 else:
 
-                    d[event.event_type.name + "_duration"] = event.duration
+                    d[event.event_type.name + " duration"] = event.duration
 
                     if event.event_type == EventType.TO_HOSPITAL:
-                        d["hospital_latitude"] = event.destination.latitude
-                        d["hospital_longitude"] = event.destination.longitude
+                        d["hospital latitude"] = event.destination.latitude
+                        d["hospital longitude"] = event.destination.longitude
 
-            d["OTHER_duration"] = total_durations_other
+            d["OTHER duration"] = total_durations_other
 
             a.append(d)
 
-        event_labels = [event_type.name + "_duration" for event_type in EventType]
+        event_labels = [event_type.name + " duration" for event_type in EventType]
 
-        df = pd.DataFrame(a, columns=["id", "date_recorded", "incident_latitude", "incident_longitude",
-                                      "priority", "ambulance", "start_time"] + event_labels +
-                                     ["hospital_latitude", "hospital_longitude"])
+        df = pd.DataFrame(a, columns=["id", "date recorded", "case latitude", "case longitude",
+                                      "priority", "ambulance", "start time"] + event_labels +
+                                     ["hospital latitude", "hospital longitude"])
         df.to_csv(output_filename, index=False)
