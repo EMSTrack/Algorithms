@@ -8,7 +8,7 @@ bases: # Initializes 6 bases in the UCSD area
 
 ambulances: # Initializes ambulances; one stationed at each of the 6 bases
   class: ems.datasets.ambulance.custom_ambulance_set.CustomAmbulanceSet
-  bases: "@bases"
+  bases: $bases
 
 hospitals: # Initializes 2 hospitals in the UCSD area
   class: ems.datasets.location.hospital.hospital_set.HospitalSet
@@ -28,14 +28,14 @@ duration_generator: # Generates durations spend travelling, at incident, and at 
 
 hospital_selector: # Algorithm selects a random hospital to deliver a patient after an incident
   class: ems.algorithms.hospital_selectors.select_random.RandomHospitalSelector
-  hospital_set: "@hospitals"
+  hospital_set: $hospitals
 
 event_generator: # Generates random events for each case
   class: ems.generators.event.event_generator.EventGenerator
-  travel_duration_generator: "@duration_generator"
-  incident_duration_generator: "@duration_generator"
-  hospital_duration_generator: "@duration_generator"
-  hospital_selector: "@hospital_selector"
+  travel_duration_generator: $duration_generator
+  incident_duration_generator: $duration_generator
+  hospital_duration_generator: $duration_generator
+  hospital_selector:  $hospital_selector
 
 case_time_generator: # Generates case times; interval between cases are uniformly generated between 8 to 10 minutes
   class: ems.generators.time.random_time.RandomCaseTimeGenerator
@@ -46,9 +46,9 @@ cases: # Defines 500 cases starting on January 31, 2019; randomly generated dura
   class: ems.datasets.case.random_case_set.RandomCaseSet
   initial_time: 2019-1-31T00:00:00.1Z
   quantity: 500
-  case_time_generator: "@case_time_generator"
-  case_location_generator: "@location_generator"
-  event_generator: "@event_generator"
+  case_time_generator: $case_time_generator
+  case_location_generator: $location_generator
+  event_generator: $event_generator
 
 ambulance_selector: # Algorithm to randomly select an ambulance upon dispatch to a case
   class: ems.algorithms.selection.dispatch_random.RandomSelector
@@ -56,6 +56,6 @@ ambulance_selector: # Algorithm to randomly select an ambulance upon dispatch to
 simulator: # Simulation to run
   class: ems.simulators.event_simulator.EventDispatcherSimulator
   debug: True
-  ambulances: "@ambulances"
-  cases: "@cases"
-  ambulance_selector: "@ambulance_selector"
+  ambulances: $ambulances
+  cases: $cases
+  ambulance_selector: $ambulance_selector

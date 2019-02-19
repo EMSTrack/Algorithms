@@ -63,7 +63,7 @@ class Driver:
             return [self.create(ele) for ele in o]
 
         # If key pointing to existing object
-        elif isinstance(o, str) and o[0] == "@":
+        elif isinstance(o, str) and o[0] == "$":
             return self.objects[o[1:]]
 
         # Primitive
