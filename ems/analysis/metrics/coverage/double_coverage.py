@@ -73,15 +73,7 @@ class PercentDoubleCoverage(Metric):
                     else:
                         secondary += 1
 
-                # if len(location_secondary_ambs) > len(location_primary_ambs):
-                #     secondary += 1
-                # elif len(location_secondary_ambs) == 1:
-                #     if len(location_primary_ambs.intersection(location_secondary_ambs)) == 0:
-                #         secondary += 1
-
-        # from IPython import embed;
-        # embed()
-        return "{}%, {}%".format(primary/len(self.demands)*100, secondary/len(self.demands)*100)
+        return round(primary/len(self.demands)*100, 4), round(secondary/len(self.demands)*100, 4)
 
 
     def add_ambulance_coverage(self, ambulance):

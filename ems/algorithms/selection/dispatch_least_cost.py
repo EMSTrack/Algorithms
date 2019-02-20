@@ -18,7 +18,7 @@ class LeastDisruption(BestTravelTime):
                  demands = None,
                  r1 = 600,
                  ):
-        # self.travel_times = travel_times
+        self.travel_times = travel_times
         self.coverage = PercentCoverage(
             demands=demands,
             travel_times=self.travel_times,
