@@ -1,3 +1,4 @@
+import bisect
 import heapq
 from datetime import datetime
 
@@ -74,7 +75,7 @@ class EventDispatcherSimulator(Simulator):
                 self.print(colored("Processing pending case: {}".format(case.id), "green"))
 
                 case_state_to_add = self.process_new_case(ambulances, case, current_time)
-                heapq.heappush(ongoing_case_states, case_state_to_add)
+                bisect.insort_left(ongoing_case_states, case_state_to_add)
 
             # Look at the next case
             elif next_case and next_case.date_recorded <= next_ongoing_case_state_dt:
@@ -86,7 +87,7 @@ class EventDispatcherSimulator(Simulator):
                 if available_ambulances:
                     self.print(colored("Processing new case: {}".format(next_case.id), "green", attrs=["bold"]))
                     case_state_to_add = self.process_new_case(ambulances, next_case, current_time)
-                    heapq.heappush(ongoing_case_states, case_state_to_add)
+                    bisect.insort_left(ongoing_case_states, case_state_to_add)
 
                 # Delay a case
                 else:
@@ -109,7 +110,7 @@ class EventDispatcherSimulator(Simulator):
                 # Process ongoing case
                 case_state_to_add, finished = self.process_ongoing_case(next_ongoing_case_state, current_time)
                 if not finished:
-                    heapq.heappush(ongoing_case_states, case_state_to_add)
+                    bisect.insort_left(ongoing_case_states, case_state_to_add)
                 else:
                     case_record_set.add_case_record(next_ongoing_case_state.case_record)
 

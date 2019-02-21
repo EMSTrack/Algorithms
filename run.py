@@ -10,29 +10,29 @@ sim_args = read_user_input()
 driver = Driver()
 driver.create_objects(sim_args)
 
-# Check if the results folder exists, and then if the name of the output folder (name of simulator) exists.
-output_dir = "./results/" + driver.objects['name'] + "/"
-current_dir = os.getcwd()
-if 'Algorithms' != current_dir.split('/')[-1]:
-    raise Exception("Run this simulator from the repository directory. ")
-
-subdirs = [dirs for roots, dirs, _ in os.walk('.')]
-subdirs = filter(lambda subdir: 'results' in subdir, subdirs)
-
-if not any(subdirs):
-    os.mkdir('results')
-
-results_dir = [dirs for roots, dirs, _ in os.walk('./results')]
-results_dir = filter(lambda subdir: driver.objects['name'] in subdir, results_dir)
-
-if not any(results_dir):
-    os.mkdir(output_dir)
-
-
-# Save as much information as possible BEFORE the simulator runs in case it crashes.
-driver.objects['simulation_bases'].write_to_file(output_dir + '/chosen_bases.csv')
-driver.objects['ambulances'].write_to_file(output_dir +'/chosen_ambulances.csv')
-driver.objects['hospitals'].write_to_file(output_dir +'/chosen_hospitals.csv')
+# # Check if the results folder exists, and then if the name of the output folder (name of simulator) exists.
+# output_dir = "./results/" + driver.objects['name'] + "/"
+# current_dir = os.getcwd()
+# if 'Algorithms' != current_dir.split('/')[-1]:
+#     raise Exception("Run this simulator from the repository directory. ")
+#
+# subdirs = [dirs for roots, dirs, _ in os.walk('.')]
+# subdirs = filter(lambda subdir: 'results' in subdir, subdirs)
+#
+# if not any(subdirs):
+#     os.mkdir('results')
+#
+# results_dir = [dirs for roots, dirs, _ in os.walk('./results')]
+# results_dir = filter(lambda subdir: driver.objects['name'] in subdir, results_dir)
+#
+# if not any(results_dir):
+#     os.mkdir(output_dir)
+#
+#
+# # Save as much information as possible BEFORE the simulator runs in case it crashes.
+# driver.objects['simulation_bases'].write_to_file(output_dir + '/chosen_bases.csv')
+# driver.objects['ambulances'].write_to_file(output_dir +'/chosen_ambulances.csv')
+# driver.objects['hospitals'].write_to_file(output_dir +'/chosen_hospitals.csv')
 
 # Run the simulator.
 sim = driver.objects["simulator"]
@@ -40,8 +40,8 @@ case_record_set, metric_aggregator = sim.run()
 
 # Save the finished simulator information
 
-case_record_set.write_to_file(output_dir + '/processed_cases.csv')
-metric_aggregator.write_to_file(output_dir + '/metrics.csv')
+# case_record_set.write_to_file(output_dir + '/processed_cases.csv')
+# metric_aggregator.write_to_file(output_dir + '/metrics.csv')
 
 #
 # polygon_coordinates = {
