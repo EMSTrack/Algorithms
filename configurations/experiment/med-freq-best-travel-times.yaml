@@ -1,5 +1,5 @@
 name: # File metadata, to be printed by the simulator
-  "Experimenting with Original Dibene Setup - Best Travel Times"
+  "dibene-med-freq-best-travel-times"
 
 demands: # Read demands points in Tijuana from file
   class: ems.datasets.location.demand.demand_set.DemandSet
