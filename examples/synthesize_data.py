@@ -106,8 +106,10 @@ def main():
         times =             flatten(list_of_times)
         base_locations =    flatten(list_base_locations)
 
-    baseline = "'id','name','type','vics',"
-    bases_string = ["{}{},{}\n".format(baseline, b[0], b[1]) for b in base_locations]
+    demand_locations.insert(0, ("latitude", "longitude"))
+    base_locations.insert(0, ("latitude", "longitude"))
+
+    bases_string = ["{},{}\n".format(b[0], b[1]) for b in base_locations]
     demands_string = ["{},{}\n".format(d[0], d[1]) for d in demand_locations]
     times_string = [",".join(b) + "\n" for b in times]
 

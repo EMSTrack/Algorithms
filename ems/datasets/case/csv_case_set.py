@@ -1,12 +1,10 @@
-from typing import List
+# Interface for a "set" of cases
+from datetime import datetime
 
 from geopy import Point
 
 from ems.datasets.case.case_set import CaseSet
 from ems.generators.event.event_generator import EventGenerator
-
-
-# TODO -- Generalize class to configure the header names
 from ems.models.cases.random_case import RandomCase
 from ems.utils import parse_headered_csv
 
@@ -19,7 +17,7 @@ class CSVCaseSet(CaseSet):
                  headers=None):
 
         if headers is None:
-            headers = ["id", "timestamp", "latitude", "longitude", "priority"]
+            headers = ["id", "date", "latitude", "longitude", "priority"]
 
         self.headers = headers
         self.filename = filename
@@ -37,9 +35,6 @@ class CSVCaseSet(CaseSet):
         # Read cases from CSV into a pandas dataframe
         cases_df = parse_headered_csv(self.filename, self.headers)
 
-        # Sorts all cases by their datetimes (REQUIRED BY SIMULATOR)
-        cases_df = cases_df.sort_values('datetime', ascending=True)
-
         # TODO -- Pass in dict or find another way to generalize ordering of headers
         id_key = self.headers[0]
         timestamp_key = self.headers[1]
@@ -51,11 +46,12 @@ class CSVCaseSet(CaseSet):
         cases = []
         for index, row in cases_df.iterrows():
             case = RandomCase(id=row[id_key],
-                              date_recorded=row[timestamp_key],
+                              date_recorded=datetime.strptime(row[timestamp_key], '%Y-%m-%d %H:%M:%S.%f'),
                               incident_location=Point(row[latitude_key], row[longitude_key]),
                               event_generator=self.event_generator,
                               priority=row[priority_key] if priority_key is not None else None)
             cases.append(case)
 
-        return cases
+        cases.sort(key=lambda x: x.date_recorded)
 
+        return cases
