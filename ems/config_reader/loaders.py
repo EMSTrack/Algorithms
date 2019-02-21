@@ -15,7 +15,7 @@ class UserArguments:
         """ Define the command line tool here. Use helper methods as needed. """
 
         cli_args = self._command_line_args()
-        file_contents = yaml.load(open("./configurations/" + cli_args.config_file, 'r'))
+        file_contents = yaml.load(open(cli_args.config_file, 'r'))
         self.sim_args = file_contents
 
     def get_sim_args(self):
