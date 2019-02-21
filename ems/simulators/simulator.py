@@ -1,7 +1,5 @@
 # Runs the simulation.
 
-from typing import List
-
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelector
 
 from ems.analysis.metrics.metric_aggregator import MetricAggregator

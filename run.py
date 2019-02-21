@@ -5,7 +5,6 @@ import os
 from IPython import embed
 
 
-
 # Initialize configurations
 sim_args = read_user_input()
 driver = Driver()
