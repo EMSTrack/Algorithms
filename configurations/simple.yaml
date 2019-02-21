@@ -1,274 +1,45 @@
-# File metadata, to be printed by the simulator
-name:
-  "Simple Execution Run"
+name: # File metadata, to be printed by the simulator
+  "Simple Dispatch Example"
 
-# Defines the simulator to be used
-simulator:
-  class: EventDispatcherSimulator
-  classpath: ems.simulators.event_simulator
+bases: # Initializes bases from file
+  class: ems.datasets.location.base.base_set.BaseSet
+  filename: ./examples/bases.csv
 
+ambulances: # Initializes an ambulance at each base
+  class: ems.datasets.ambulance.ambulance_set.AmbulanceSet
+  filename: ./examples/ambulances.csv
+
+hospitals: # Initializes 2 hospitals
+  class: ems.datasets.location.hospital.hospital_set.HospitalSet
+  filename: ./examples/hospitals.csv
+
+duration_generator: # Generates durations spend travelling, at incident, and at hospital uniformly within 10 to 20 minutes
+  class: ems.generators.duration.random_duration.RandomDurationGenerator
+  lower_bound: 10
+  upper_bound: 20
+
+hospital_selector: # Algorithm selects a random hospital to deliver a patient after an incident
+  class: ems.algorithms.hospital_selectors.select_random.RandomHospitalSelector
+  hospital_set: $hospitals
+
+event_generator: # Generates random events for each case
+  class: ems.generators.event.event_generator.EventGenerator
+  travel_duration_generator: $duration_generator
+  incident_duration_generator: $duration_generator
+  hospital_duration_generator: $duration_generator
+  hospital_selector:  $hospital_selector
+
+cases:
+  class: ems.datasets.case.csv_case_set.CSVCaseSet
+  filename: ./examples/cases.csv
+  event_generator: $event_generator
+
+ambulance_selector: # Algorithm to randomly select an ambulance upon dispatch to a case
+  class: ems.algorithms.selection.dispatch_random.RandomSelector
+
+simulator: # Simulation to run
+  class: ems.simulators.event_simulator.EventDispatcherSimulator
   debug: True
-
-  # Defines the ambulances to be used in the simulation
-  ambulances:
-    class: BaseSelectedAmbulanceSet
-    classpath: ems.datasets.ambulance.custom_ambulance_set
-
-    # Number of ambulances to generate
-    count: 16
-
-    # Determines which base each generated ambulance will reside
-    base_selector:
-      class: RoundRobinBaseSelector
-      classpath: ems.algorithms.base_selectors.round_robin_selector
-
-      # Defines the bases to be selecting from
-      base_set:
-        class: FilteredTijuanaBaseSet
-        classpath: ems.datasets.location.base.filtered_tijuana_base_set
-
-        # Location of bases file
-        filename: "./examples/bases.csv"
-
-        # Number of bases to filter
-        count: 16
-
-        # Minimum travel time required in seconds
-        required_travel_time: 600
-
-        # Travel times for computation
-        travel_times:
-          class: TijuanaTravelTimes
-          classpath: ems.datasets.travel_times.tijuana_travel_times
-
-          # Defines filename to read the travel times
-          filename: "./examples/times.csv"
-
-          # Defines the origin points of the travel times
-          origins:
-            class: TijuanaBaseSet
-            classpath: ems.datasets.location.base.tijuana_base_set
-
-            filename: "./examples/bases.csv"
-
-          # Defines the destination points of the travel times
-          destinations:
-            class: TijuanaDemandSet
-            classpath: ems.datasets.location.demand.tijuana_demand_set
-
-            filename: "./examples/demand_points.csv"
-
-  # Defines the cases to be used in the simulation
-  cases:
-    class: RandomCaseSet
-    classpath: ems.datasets.case.random_case_set
-
-    # Number of cases to generate
-    quantity: 300
-
-    # Starting time
-    initial_time: 2001-12-15T02:59:43.1Z
-
-    # Defines method on when cases are randomly generated
-    case_time_generator:
-      class: PoissonCaseTimeGenerator
-      classpath: ems.generators.time.poisson_time
-
-      # Duration in minutes that the cases will be generated in
-      duration: 1800
-
-      # Number of cases to generate
-      # TODO This quantity is the same as the one a few lines above. Need to fix the redundancy.
-      quantity: 300
-
-    # Defines method on where cases are randomly generated
-    case_location_generator:
-      class: PolygonLocationGenerator
-      classpath: ems.generators.location.polygon
-
-      # Vertices of the polygon
-      vertices_latitude:
-        - 32.45
-        - 32.45
-        - 32.54
-        - 32.54
-      vertices_longitude:
-        - -117.09
-        - -116.8
-        - -116.8
-        - -117.09
-
-
-    # Defines how events will be randomly generated for a case
-    event_generator:
-      class: EventGenerator
-      classpath: ems.generators.event.event_generator
-
-      # Defines the duration of a trip from from point A to point B during an event
-      travel_duration_generator:
-        class: TravelTimeDurationGenerator
-        classpath: ems.generators.event.duration.travel_time_duration
-
-        # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
-        # any point in B
-        travel_times:
-          class: TijuanaTravelTimes
-          classpath: ems.datasets.travel_times.tijuana_travel_times
-
-          # Defines filename to read the travel times
-          filename: "./examples/times.csv"
-
-          # Defines the origin points of the travel times
-          origins:
-            class: TijuanaBaseSet
-            classpath: ems.datasets.location.base.tijuana_base_set
-
-            filename: "./examples/bases.csv"
-
-          # Defines the destination points of the travel times
-          destinations:
-            class: TijuanaDemandSet
-            classpath: ems.datasets.location.demand.tijuana_demand_set
-
-            filename: "./examples/demand_points.csv"
-
-      # Defines the duration of the stay at an incident location
-      incident_duration_generator:
-        class: RandomDurationGenerator
-        classpath: ems.generators.duration.random_duration
-
-        # Defines the lower bound in minutes of duration generation
-        lower_bound: 5
-
-        # Defines the upper bound in minutes of duration generation
-        upper_bound: 10
-
-      hospital_duration_generator:
-        class: RandomDurationGenerator
-        classpath: ems.generators.duration.random_duration
-
-        # Defines the lower bound in minutes of duration generation
-        lower_bound: 5
-
-        # Defines the upper bound in minutes of duration generation
-        upper_bound: 10
-
-      hospital_selector:
-        class: FastestHospitalSelector
-        classpath: ems.algorithms.hospital_selectors.select_fastest
-
-        # Defines set of hospitals to select from
-        hospital_set:
-          class: LocationSet
-          classpath: ems.datasets.location.location_set
-
-          # Defines latitudes of the location set
-          latitudes:
-            - 32.52506901611384
-            - 32.5027
-            - 32.5180
-
-          # Defines longitudes of the location set
-          longitudes:
-            - -117.0097589492798
-            - -117.00371
-            - -117.0078
-
-        # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
-        # any point in B
-        travel_times:
-          class: TijuanaTravelTimes
-          classpath: ems.datasets.travel_times.tijuana_travel_times
-
-          # Defines filename to read the travel times
-          filename: "./examples/times.csv"
-
-          # Defines the origin points of the travel times
-          origins:
-            class: TijuanaBaseSet
-            classpath: ems.datasets.location.base.tijuana_base_set
-
-            filename: "./examples/bases.csv"
-
-          # Defines the destination points of the travel times
-          destinations:
-            class: TijuanaDemandSet
-            classpath: ems.datasets.location.demand.tijuana_demand_set
-
-            filename: "./examples/demand_points.csv"
-
-  # Defines algorithm for selecting ambulances during dispatch
-  ambulance_selector:
-    class: BestTravelTime
-    classpath: ems.algorithms.selection.dispatch_fastest
-
-    # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
-    # any point in B
-    travel_times:
-      class: TijuanaTravelTimes
-      classpath: ems.datasets.travel_times.tijuana_travel_times
-
-      # Defines filename to read the travel times
-      filename: "./examples/times.csv"
-
-      # Defines the origin points of the travel times
-      origins:
-        class: TijuanaBaseSet
-        classpath: ems.datasets.location.base.tijuana_base_set
-
-        filename: "./examples/bases.csv"
-
-      # Defines the destination points of the travel times
-      destinations:
-        class: TijuanaDemandSet
-        classpath: ems.datasets.location.demand.tijuana_demand_set
-
-        filename: "./examples/demand_points.csv"
-
-  # Defines the metrics to be computed during the simulation
-  metric_aggregator:
-    class: MetricAggregator
-    classpath: ems.analysis.metrics.metric_aggregator
-
-    metrics:
-      - class: PercentCoverage
-        classpath: ems.analysis.metrics.coverage.percent_coverage
-
-        # Radius for an ambulance
-        r1: 600
-
-        # Demands to cover
-        demands:
-          class: TijuanaDemandSet
-          classpath: ems.datasets.location.demand.tijuana_demand_set
-
-          filename: "./examples/demand_points.csv"
-
-        # Given a list of points A and a list of points B, defines the time it takes to get from any point in A to
-        # any point in B
-        travel_times:
-          class: TijuanaTravelTimes
-          classpath: ems.datasets.travel_times.tijuana_travel_times
-
-          # Defines filename to read the travel times
-          filename: "./examples/times.csv"
-
-          # Defines the origin points of the travel times
-          origins:
-            class: TijuanaBaseSet
-            classpath: ems.datasets.location.base.tijuana_base_set
-
-            filename: "./examples/bases.csv"
-
-          # Defines the destination points of the travel times
-          destinations:
-            class: TijuanaDemandSet
-            classpath: ems.datasets.location.demand.tijuana_demand_set
-
-            filename: "./examples/demand_points.csv"
-
-      - class: TotalDelay
-        classpath: ems.analysis.metrics.total_delay
-
-      - class: CountPending
-        classpath: ems.analysis.metrics.count_pending
+  ambulances: $ambulances
+  cases: $cases
+  ambulance_selector: $ambulance_selector

@@ -40,19 +40,18 @@ class PercentCoverage(Metric):
         ambulances_to_remove = [a for a in self.coverage_state.ambulances if a not in available_ambulances]
 
         for ambulance in ambulances_to_add:
-            self.add_ambulance_coverage(ambulance)
+            self._add_ambulance_coverage(ambulance)
 
         for ambulance in ambulances_to_remove:
-            self.remove_ambulance_coverage(ambulance)
+            self._remove_ambulance_coverage(ambulance)
 
         sm = 0
         for location_coverage in self.coverage_state.locations_coverage:
             if len(location_coverage) > 0:
                 sm += 1
-
         return sm/len(self.demands)
 
-    def add_ambulance_coverage(self, ambulance):
+    def _add_ambulance_coverage(self, ambulance):
 
         # Retrieve closest point from set 1 to the ambulance
         closest_to_amb, _, _ = self.travel_times.origins.closest(ambulance.location)
@@ -66,10 +65,12 @@ class PercentCoverage(Metric):
             if self.travel_times.get_time(closest_to_amb, closest_to_demand) <= self.r1:
                 self.coverage_state.locations_coverage[index].add(ambulance)
 
+
+
         # Register ambulance as covering some area
         self.coverage_state.ambulances.add(ambulance)
 
-    def remove_ambulance_coverage(self, ambulance):
+    def _remove_ambulance_coverage(self, ambulance):
 
         for location_coverage in self.coverage_state.locations_coverage:
 

@@ -3,6 +3,7 @@ from ems.datasets.location.location_set import LocationSet
 
 
 class RoundRobinBaseSelector(AmbulanceBaseSelector):
+    """ Assigned ambulances to bases in round robin order.  """
 
     def __init__(self,
                  base_set: LocationSet):
