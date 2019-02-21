@@ -1,8 +1,6 @@
 name: # File metadata, to be printed by the simulator
   "Experimenting with Original Dibene Setup - Best Travel Times"
 
-
-
 demands: # Read demands points in Tijuana from file
   class: ems.datasets.location.demand.demand_set.DemandSet
   filename: "../data-cruz-roja-clean/demand_points.csv"
@@ -14,8 +12,8 @@ all_bases: # Read base points in Tijuana from file
 tt: # Travel times matrix between all bases and all demands
   class: ems.datasets.travel_times.travel_times.TravelTimes
   filename: "../data-cruz-roja-clean/times.csv"
-  origins: "@all_bases"
-  destinations: "@demands"
+  origins: "$all_bases"
+  destinations: "$demands"
 
 simulation_bases: # Selects a subset of bases for usage in the simulation (K-Means filtered)
   class: ems.datasets.location.base.tijuana.TijuanaBaseSet
@@ -26,32 +24,33 @@ ambulances: # Defines ambulances and assigns bases in a round robin fashion from
   count: 11
   base_selector:
     class: ems.algorithms.base_selectors.tijuana.TijuanaBaseSelector
-    base_set: "@simulation_bases"
+    base_set: "$simulation_bases"
 
 hospitals: # Predefines 3 hospitals in the Tijuana area
   class: ems.datasets.location.hospital.hospital_set.HospitalSet
   latitudes: [32.52506901611384, 32.5027, 32.5180]
   longitudes: [-117.0097589492798, -117.00371, -117.0078]
 
-case_quantity: 200 # Generate 500 cases
+case_quantity: 100 # Generate 500 cases
 
 cases: # Random cases to be generated during simulation
   class: ems.datasets.case.random_case_set.RandomCaseSet
-  quantity: "@case_quantity"
+  quantity: "$case_quantity"
   initial_time: 2001-12-15T02:59:43.1Z
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.time.poisson_time.PoissonCaseTimeGenerator
     duration: 2000
-    quantity: "@case_quantity"
+    quantity: "$case_quantity"
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
     vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
     vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+
   event_generator:
     class: ems.generators.event.event_generator.EventGenerator
     travel_duration_generator: # Travel times between events estimated using travel times matrix
       class: ems.generators.duration.travel_time_duration.TravelTimeDurationGenerator
-      travel_times: "@tt"
+      travel_times: "$tt"
       epsilon: 0.001
     incident_duration_generator: # Duration at incident drawn from uniform distribution between 5 and 10 minutes
       class: ems.generators.duration.random_duration.RandomDurationGenerator
@@ -63,8 +62,8 @@ cases: # Random cases to be generated during simulation
       upper_bound: 10
     hospital_selector: # Fastest hospital chosen
       class: ems.algorithms.hospital_selectors.select_fastest.FastestHospitalSelector
-      hospital_set: "@hospitals"
-      travel_times: "@tt"
+      hospital_set: "$hospitals"
+      travel_times: "$tt"
 
 metric_aggregator: # Computes and stores any amount of metrics during the simulation
   class: ems.analysis.metrics.metric_aggregator.MetricAggregator
@@ -72,23 +71,18 @@ metric_aggregator: # Computes and stores any amount of metrics during the simula
     - class: ems.analysis.metrics.coverage.double_coverage.PercentDoubleCoverage
       r1: 600
       r2: 1380
-      demands: "@demands"
-      travel_times: "@tt"
+      demands: "$demands"
+      travel_times: "$tt"
     - class: ems.analysis.metrics.total_delay.TotalDelay
     - class: ems.analysis.metrics.count_pending.CountPending
 
 simulator: # Simulator
   class: ems.simulators.event_simulator.EventDispatcherSimulator
   debug: True
-  ambulances: "@ambulances"
-  cases: "@cases"
+  ambulances: "$ambulances"
+  cases: "$cases"
   ambulance_selector:
    class: ems.algorithms.selection.dispatch_fastest.BestTravelTime
-   travel_times: "@tt"
+   travel_times: "$tt"
 
-    # class: ems.algorithms.selection.dispatch_least_cost.LeastDisruption
-    # travel_times: "@tt"
-    # demands: "@demands"
-    # r1: 600
-
-  metric_aggregator: "@metric_aggregator"
+  metric_aggregator: "$metric_aggregator"
