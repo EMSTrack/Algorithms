@@ -1,41 +1,68 @@
 name: # File metadata, to be printed by the simulator
   "Simple Dispatch Example"
 
-bases: # Initializes bases from file
+all_bases: # Read all base points from file
   class: ems.datasets.location.base.base_set.BaseSet
   filename: ./examples/bases.csv
 
-ambulances: # Initializes an ambulance at each base
+demands: # Read all demand points from file
+  class: ems.datasets.location.demand.demand_set.DemandSet
+  filename: ./examples/demand_points.csv
+
+tt: # Travel times matrix between all bases and all demands
+  class: ems.datasets.travel_times.travel_times.TravelTimes
+  filename: ./examples/times.csv
+  origins: $all_bases
+  destinations: $demands
+
+bases: # Read 5 bases from file
+  class: ems.datasets.location.base.base_set.BaseSet
+  filename: ./examples/bases_subset.csv
+
+ambulances: # Read 5 ambulances from file (1 ambulance at each base)
   class: ems.datasets.ambulance.ambulance_set.AmbulanceSet
   filename: ./examples/ambulances.csv
 
-hospitals: # Initializes 2 hospitals
+hospitals: # Reads 3 hospitals from file
   class: ems.datasets.location.hospital.hospital_set.HospitalSet
   filename: ./examples/hospitals.csv
 
-duration_generator: # Generates durations spend travelling, at incident, and at hospital uniformly within 10 to 20 minutes
-  class: ems.generators.duration.random_duration.RandomDurationGenerator
-  lower_bound: 10
-  upper_bound: 20
+travel_duration_generator: # Travel times between events estimated using travel times matrix
+    class: ems.generators.duration.travel_time_duration.TravelTimeDurationGenerator
+    travel_times: $tt
+    epsilon: 0.001
 
-hospital_selector: # Algorithm selects a random hospital to deliver a patient after an incident
-  class: ems.algorithms.hospital_selectors.select_random.RandomHospitalSelector
+random_duration_generator: # Randomly generates durations between 5 to 10 minutes
+  class: ems.generators.duration.random_duration.RandomDurationGenerator
+  lower_bound: 5
+  upper_bound: 10
+
+hospital_selector: # Fastest hospital chosen
+  class: ems.algorithms.hospital_selectors.select_fastest.FastestHospitalSelector
   hospital_set: $hospitals
+  travel_times: $tt
 
 event_generator: # Generates random events for each case
   class: ems.generators.event.event_generator.EventGenerator
-  travel_duration_generator: $duration_generator
-  incident_duration_generator: $duration_generator
-  hospital_duration_generator: $duration_generator
+  travel_duration_generator: $travel_duration_generator
+  incident_duration_generator: $random_duration_generator
+  hospital_duration_generator: $random_duration_generator
   hospital_selector:  $hospital_selector
 
-cases:
+cases: # Reads cases from file
   class: ems.datasets.case.csv_case_set.CSVCaseSet
   filename: ./examples/cases.csv
   event_generator: $event_generator
 
-ambulance_selector: # Algorithm to randomly select an ambulance upon dispatch to a case
-  class: ems.algorithms.selection.dispatch_random.RandomSelector
+ambulance_selector: # Selects fastest ambulance
+    class: ems.algorithms.selection.dispatch_fastest.BestTravelTime
+    travel_times: $tt
+
+metric_aggregator: # Computes and stores any amount of metrics during the simulation
+  class: ems.analysis.metrics.metric_aggregator.MetricAggregator
+  metrics:
+    - class: ems.analysis.metrics.total_delay.TotalDelay
+    - class: ems.analysis.metrics.count_pending.CountPending
 
 simulator: # Simulation to run
   class: ems.simulators.event_simulator.EventDispatcherSimulator
@@ -43,3 +70,4 @@ simulator: # Simulation to run
   ambulances: $ambulances
   cases: $cases
   ambulance_selector: $ambulance_selector
+  metric_aggregator: $metric_aggregator

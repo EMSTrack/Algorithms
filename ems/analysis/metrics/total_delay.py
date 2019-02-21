@@ -17,8 +17,6 @@ class TotalDelay(Metric):
         total_delay = timedelta(seconds=0)
 
         for case in pending_cases:
-            print(timestamp)
-            print(case.date_recorded)
             total_delay += timestamp - case.date_recorded
 
         return total_delay

@@ -52,6 +52,8 @@ class EventDispatcherSimulator(Simulator):
     def run(self):
 
         ambulances = self.ambulances.ambulances
+        for ambulance in ambulances:
+            ambulance.location = ambulance.base
         case_record_set = CaseRecordSet()
         case_iterator = self.cases.iterator()
         pending_cases = []
