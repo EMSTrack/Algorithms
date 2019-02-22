@@ -35,6 +35,7 @@ driver.objects['ambulances'].write_to_file(output_dir +'/chosen_ambulances.csv')
 driver.objects['hospitals'].write_to_file(output_dir +'/chosen_hospitals.csv')
 
 # Run the simulator.
+print("Begin simulator.")
 sim = driver.objects["simulator"]
 case_record_set, metric_aggregator = sim.run()
 
@@ -117,3 +118,6 @@ info = {
 # with open ("./error-analysis/error-coordinates.yaml", 'w') as error_file:
 #     info_yaml = yaml.dump(info)
 #     error_file.write(info_yaml)
+
+
+print("Done: {}".format(driver.objects['name']))

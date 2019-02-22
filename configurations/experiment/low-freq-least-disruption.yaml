@@ -1,5 +1,5 @@
 name: # File metadata, to be printed by the simulator
-  "dibene-med-freq-least-disruption"
+  "dibene-low-freq-least-disruption"
 
 demands: # Read demands points in Tijuana from file
   class: ems.datasets.location.demand.demand_set.DemandSet
