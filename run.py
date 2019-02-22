@@ -35,7 +35,7 @@ driver.objects['ambulances'].write_to_file(output_dir +'/chosen_ambulances.csv')
 driver.objects['hospitals'].write_to_file(output_dir +'/chosen_hospitals.csv')
 
 # Run the simulator.
-print("Begin simulator.")
+print("Begin simulator: ", driver.objects['name'])
 sim = driver.objects["simulator"]
 case_record_set, metric_aggregator = sim.run()
 
