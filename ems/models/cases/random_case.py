@@ -7,6 +7,7 @@ from ems.models.cases.case import Case
 from ems.models.events.event_type import EventType
 
 
+
 # Implementation of a Case that stochastically generates random events while iterating
 # Events are currently defined in this order:
 # TO_INCIDENT -> AT_INCIDENT -> TO_HOSPITAL -> AT_HOSPITAL
@@ -17,7 +18,7 @@ class RandomCase(Case):
                  date_recorded: datetime,
                  incident_location: Point,
                  event_generator: EventGenerator,
-                 priority: float = None):
+                 priority: int = None):
         super().__init__(id, date_recorded, incident_location, priority)
         self.event_generator = event_generator
 

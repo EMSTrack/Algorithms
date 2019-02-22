@@ -25,7 +25,9 @@ class OptimalTravelTimeWithCoverage(BestTravelTime, LeastDisruption):
     def select_ambulance(self,
                          available_ambulances: List[Ambulance],
                          case: Case,
-                         current_time: datetime):
+                         current_time: datetime,
+                         priority: int = 3
+                         ):
         # This function must override the two possibly conflicting inherited method of the same name.
         # Used for determining priorities for selecting an ambulance to maximize kept coverage or
         # minimize case duration

@@ -7,6 +7,7 @@ from ems.generators.time.time import CaseTimeGenerator
 from ems.generators.event.event_generator import EventGenerator
 
 from ems.models.cases.random_case import RandomCase
+from random import randint
 
 
 # Implementation of a case set that randomly generates cases while iterating
@@ -37,7 +38,8 @@ class RandomCaseSet(CaseSet):
             case = RandomCase(id=k,
                               date_recorded=time,
                               incident_location=point,
-                              event_generator=self.event_generator)
+                              event_generator=self.event_generator,
+                              priority=randint(1, 5))
 
             k += 1
 
