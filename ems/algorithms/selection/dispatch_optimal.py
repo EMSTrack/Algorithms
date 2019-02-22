@@ -5,12 +5,13 @@ from ems.datasets.travel_times.travel_times import TravelTimes
 from ems.models.ambulances.ambulance import Ambulance
 from ems.models.cases.case import Case
 from ems.algorithms.selection.dispatch_fastest import BestTravelTime
+from ems.algorithms.selection.dispatch_least_cost import LeastDisruption
 from ems.analysis.metrics.coverage.percent_coverage import PercentCoverage
 
 
 # An implementation of a "fastest travel time" ambulance_selection from a base to
 # the demand point closest to a cas
-class OptimalTravelTimeWithCoverage(BestTravelTime):
+class OptimalTravelTimeWithCoverage(BestTravelTime, LeastDisruption):
 
     def __init__(self,
                  travel_times: TravelTimes = None):
@@ -23,7 +24,7 @@ class OptimalTravelTimeWithCoverage(BestTravelTime):
                          available_ambulances: List[Ambulance],
                          case: Case,
                          current_time: datetime):
-
+        # This function must override the two possibly conflicting inherited method of the same name.
         # Used for determining priorities for selecting an ambulance to maximize kept coverage or
         # minimize case duration
         case_priority = case.priority

@@ -33,7 +33,7 @@ hospitals: # Predefines 3 hospitals in the Tijuana area
 
 cases:
   class: ems.datasets.case.csv_case_set.CSVCaseSet
-  filename: "./results/dibene-med-freq-best-travel-times/processed_cases.csv"
+  filename: "./results/dibene-very-freq-best-travel-times/processed_cases.csv"
   event_generator:
     class: ems.generators.event.event_generator.EventGenerator
     travel_duration_generator: # Travel times between events estimated using travel times matrix
