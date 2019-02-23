@@ -56,7 +56,7 @@ class LeastDisruption(BestTravelTime):
         chosen_ambulance_set = []
         current_coverage = -1
 
-        potential_ambulances = combinations(ambulances, len(ambulances) - 1)
+        potential_ambulances = list(combinations(ambulances, len(ambulances) - 1))
 
         for ambulance_set in potential_ambulances:
             coverage = self.coverage.calculate(datetime.now(), ambulances=ambulance_set)

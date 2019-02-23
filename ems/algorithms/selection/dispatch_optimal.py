@@ -1,50 +1,92 @@
 from datetime import datetime
 from typing import List
-from datetime import timedelta
 
 from ems.datasets.travel_times.travel_times import TravelTimes
 from ems.models.ambulances.ambulance import Ambulance
 from ems.models.cases.case import Case
-from ems.algorithms.selection.dispatch_fastest import BestTravelTime
-from ems.algorithms.selection.dispatch_least_cost import LeastDisruption
+from ems.algorithms.selection.ambulance_selection import AmbulanceSelector
 from ems.analysis.metrics.coverage.percent_coverage import PercentCoverage
 
 from itertools import combinations
 
 # An implementation of a "fastest travel time" ambulance_selection from a base to
 # the demand point closest to a cas
-class OptimalTravelTimeWithCoverage(BestTravelTime, LeastDisruption):
+class OptimalTravelTimeWithCoverage(AmbulanceSelector):
 
     def __init__(self,
-                 travel_times: TravelTimes = None):
-        super().__init__(travel_times=travel_times)
+                 travel_times: TravelTimes = None,
+                 demands=None,
+                 r1=600,
+                 ):
 
+        self.travel_times = travel_times
         # This instance is used for calculating future coverages
-        self.coverage = PercentCoverage(travel_times)
+
+        self.coverage = PercentCoverage(
+            demands=demands,
+            travel_times=self.travel_times,
+            r1=r1
+        )
+
 
     def select_ambulance(self,
                          available_ambulances: List[Ambulance],
                          case: Case,
                          current_time: datetime,
-                         priority: int = 3
                          ):
-        # This function must override the two possibly conflicting inherited method of the same name.
-        # Used for determining priorities for selecting an ambulance to maximize kept coverage or
-        # minimize case duration
-        case_priority = case.priority
+        """
 
-        # TODO
-        if case_priority is None:
-            # Find ambulance that when dispatched, impacts coverage the least
-            pass
+        :param available_ambulances:
+        :param case:
+        :param current_time:
+        :return:
+        """
+
+
+        if not case.priority:
+            case.priority = 3
+            print("WARNING: Case priority was not found but optimal dispatching requires it. ")
+
+        # Optimization: if priority is 1, send fastest ambulance. If it's 5, send best coverage.
+
+        loc_set_2 = self.travel_times.destinations
+        closest_loc_to_case, _, _ = loc_set_2.closest(case.incident_location)
+
+        if case.priority == 1:
+            return self.sort_ambulances_by_traveltime(available_ambulances, closest_loc_to_case)[0][1]
+
+        elif case.priority == 5:
+            return self.sort_ambulances_by_coverage(available_ambulances)[0][1]
+
         else:
-            # Select based on best travel time
-            super().select_ambulance(available_ambulances=available_ambulances,
+
+            times = self.sort_ambulances_by_traveltime(available_ambulances, closest_loc_to_case)
+            coverages  = self.sort_ambulances_by_coverage(available_ambulances)
+
+            priorities_applied = [(
+                self.weighted_metrics(t[0], c[0], case.priority),
+                t[1])
+                for t in times for c in coverages if t[1] == c[1]]
+
+            from IPython import embed; embed()
+
+            # TODO, NOW SELECT THE AMBULANCE BASED ON THE SEVERITY
+
+        # Select based on best travel time
+        super().select_ambulance(available_ambulances=available_ambulances,
                                      case=case,
                                      current_time=current_time)
 
-    # TODO CHANGE THIS METHOD TO SORT BY FASTEST AMBULANCE
-    def find_fastest_ambulance(self, ambulances, closest_loc_to_case):
+
+    def weighted_metrics(self, time, coverage, priority):
+        return time * self.favor(1, priority) / (coverage * self.favor(5, priority))
+
+    def favor(self, priority, actual_priority):
+        """ Compute a new metric in that aims to """
+        return (4 - abs(priority - actual_priority))/4 + 0.001
+
+
+    def sort_ambulances_by_traveltime(self, ambulances, closest_loc_to_case):
         """
         Finds the ambulance with the shortest one way travel time from its base to the
         demand point
@@ -53,10 +95,9 @@ class OptimalTravelTimeWithCoverage(BestTravelTime, LeastDisruption):
         :return: The ambulance and the travel time
         """
 
-        shortest_time = timedelta.max
-        fastest_amb = None
-
         loc_set_1 = self.travel_times.origins
+
+        list_of_ambulances = []
 
         for amb in ambulances:
 
@@ -68,113 +109,40 @@ class OptimalTravelTimeWithCoverage(BestTravelTime, LeastDisruption):
 
             # Compute the time from the location point mapped to the ambulance to the location point mapped to the case
             time = self.travel_times.get_time(closest_loc_to_ambulance, closest_loc_to_case)
-            if shortest_time > time:
-                shortest_time = time
-                fastest_amb = amb
 
-        if fastest_amb is not None:
-            return fastest_amb, shortest_time
+            list_of_ambulances.append(
+                (time, amb)
+            )
+            # if shortest_time > time:
+            #     shortest_time = time
+            #     fastest_amb = amb
 
-        return None, None
+        # if fastest_amb is not None:
+        #     return fastest_amb, shortest_time
+        # list_of_ambulances.sort(key=lambda t: t[0])
+        return list_of_ambulances
+        # return None, None
 
 
     # TODO CHANGE THIS TO SORT BY LEAST DISRUPTION
-    def find_least_disruption(self, ambulances):
+    def sort_ambulances_by_coverage(self, ambulances):
         """
-        Finds the ambulance with the shortest one way travel time from its base to the
-        demand point
+
         :param ambulances:
-        :param closest_loc_to_case:
-        :return: The ambulance and the travel time
+        :return:
         """
 
         # Calculate all combinations of ambulances's coverage and return the best one.
 
 
+        potential_ambulances = list(combinations(ambulances, len(ambulances) - 1))
 
-        chosen_ambulance_set = []
-        current_coverage = -1
-
-        potential_ambulances = combinations(ambulances, len(ambulances) - 1)
+        list_of_ambulances = []
 
         for ambulance_set in potential_ambulances:
             coverage = self.coverage.calculate(datetime.now(), ambulances=ambulance_set)
-            if coverage > current_coverage:
-                current_coverage = coverage
-                chosen_ambulance_set = ambulance_set
-
-        chosen_ambulance = [ambulance for ambulance in ambulances if ambulance not in chosen_ambulance_set][0]
-
-        return chosen_ambulance, None
-
-
-
-
-
-
-    # def find_least_coverage_impact_ambulance(self, ambulances: List[Ambulance]):
-    #     for i in range(len(ambulances)):
-    #         ambulances_remaining = ambulances[:i] + ambulances[i:]
-    #         print(ambulances_remaining)
-    #
-    # def determine_coverage(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     pass
-    #
-    #
-    # def _rank_ambulances_speed(self):
-    #     """
-    #     Returns the rankings of the ambulances according to shortest to longest travel time
-    #     :return:
-    #     """
-    #     pass
-    #
-    # def _rank_ambulances_coverage(self):
-    #     """
-    #     Returns the rankings of the ambulances according to the least disruption to the worst disruption.
-    #     :return:
-    #     """
-    #     pass
-
-    # def select_ambulance(self,
-    #                      available_ambulances: List[Ambulance],
-    #                      case: Case,
-    #                      current_time: datetime):
-    #
-    #     # Compute the closest demand point to the case location
-    #     demands = self.base_demand_travel_times.loc_set_2
-    #     closest_demand, distance = demands.closest(case.location)
-    #
-    #     # Select an ambulance to attend to the given case and obtain the its duration of travel
-    #     chosen_ambulance, ambulance_travel_time = self.find_fastest_ambulance(
-    #         available_ambulances, self.base_demand_travel_times, closest_demand)
-    #
-    #     return {'choice': chosen_ambulance,
-    #             'travel_time': ambulance_travel_time}
-
-    # def find_fastest_ambulance(self, ambulances, travel_times, demand):
-    #     """
-    #     Finds the ambulance with the shortest one way travel time from its base to the
-    #     demand point
-    #     :param ambulances:
-    #     :param travel_times:
-    #     :param demand:
-    #     :return: The ambulance and the travel time
-    #     """
-    #
-    #     shortest_time = timedelta(hours=9999999)
-    #     fastest_amb = None
-    #
-    #     for amb in ambulances:
-    #         time = travel_times.get_time(amb.base, demand)
-    #         if shortest_time > time:
-    #             shortest_time = time
-    #             fastest_amb = amb
-    #
-    #     if fastest_amb is not None:
-    #         return fastest_amb, shortest_time
-    #
-    #     return None, None
+            list_of_ambulances.append(
+                (coverage, [a for a in ambulances if a not in ambulance_set][0])
+            )
+        # list_of_ambulances.sort(key=lambda t: t[0])
+        return list_of_ambulances
