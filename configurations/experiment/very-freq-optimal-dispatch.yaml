@@ -1,5 +1,5 @@
 name: # File metadata, to be printed by the simulator
-  "dibene-very-freq-least-disruption"
+  "dibene-very-freq-optimal-dispatch"
 
 demands: # Read demands points in Tijuana from file
   class: ems.datasets.location.demand.demand_set.DemandSet
@@ -71,9 +71,7 @@ simulator: # Simulator
   ambulances: "$ambulances"
   cases: "$cases"
   ambulance_selector:
-
-
-     class: ems.algorithms.selection.dispatch_least_cost.LeastDisruption
+     class: ems.algorithms.selection.dispatch_optimal.OptimalTravelTimeWithCoverage
      travel_times: "$tt"
      demands: "$demands"
      r1: 600

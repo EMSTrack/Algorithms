@@ -1,5 +1,6 @@
+
 name: # File metadata, to be printed by the simulator
-  "dibene-very-freq-least-disruption"
+  "dibene-xtreme-freq-optimal-dispatch"
 
 demands: # Read demands points in Tijuana from file
   class: ems.datasets.location.demand.demand_set.DemandSet
@@ -33,7 +34,7 @@ hospitals: # Predefines 3 hospitals in the Tijuana area
 
 cases:
   class: ems.datasets.case.csv_case_set.CSVCaseSet
-  filename: "./results/dibene-very-freq-best-travel-times/processed_cases.csv"
+  filename: "./results/dibene-xtreme-freq-best-travel-times/processed_cases.csv"
   event_generator:
     class: ems.generators.event.event_generator.EventGenerator
     travel_duration_generator: # Travel times between events estimated using travel times matrix
@@ -71,9 +72,7 @@ simulator: # Simulator
   ambulances: "$ambulances"
   cases: "$cases"
   ambulance_selector:
-
-
-     class: ems.algorithms.selection.dispatch_least_cost.LeastDisruption
+     class: ems.algorithms.selection.dispatch_optimal.OptimalTravelTimeWithCoverage
      travel_times: "$tt"
      demands: "$demands"
      r1: 600
