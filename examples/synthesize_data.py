@@ -11,10 +11,15 @@ import sys
 multicpu = True
 
 # Coordinate range for Tijuana, Mexico
-lat1 = 32.4008
-lat2 = 32.5534
-lon1 = -117.1233
-lon2 = -116.777
+# lat1 = 32.4008
+# lat2 = 32.5534
+# lon1 = -117.1233
+# lon2 = -116.777
+
+lat1 = 32.823033
+lon1 = -117.167672
+lat2 = 32.710484
+lon2 = -117.017637
 
 try:
     bases_num   = int(sys.argv[1])

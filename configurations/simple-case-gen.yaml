@@ -1,0 +1,60 @@
+name: # File metadata, to be printed by the simulator
+  "Minimal Dispatch Example"
+
+bases: # Initializes 6 bases in the UCSD area
+  class: ems.datasets.location.base.base_set.BaseSet
+  latitudes: [32.877328, 32.873803, 32.876727, 32.875811, 32.884714, 32.888589]
+  longitudes: [-117.234695, -117.239527, -117.242650, -117.230869, -117.236528, -117.242113]
+
+ambulances: # Initializes ambulances; one stationed at each of the 6 bases
+  class: ems.datasets.ambulance.custom_ambulance_set.CustomAmbulanceSet
+  bases: $bases
+
+hospitals: # Initializes 2 hospitals in the UCSD area
+  class: ems.datasets.location.hospital.hospital_set.HospitalSet
+  latitudes: [32.879802, 32.888216]
+  longitudes: [-117.236564, -117.239697]
+
+location_generator: # Cases generated uniformly in a polygon in Tijuana
+  class: ems.generators.location.polygon.PolygonLocationGenerator
+  vertices_latitude: [32.823033, 32.823033, 32.710484, 32.710484]
+  vertices_longitude: [-117.167672, -117.017637, -117.017637, -117.167672]
+
+duration_generator: # Generates durations spend travelling, at incident, and at hospital uniformly within 10 to 20 minutes
+  class: ems.generators.duration.random_duration.RandomDurationGenerator
+  lower_bound: 10
+  upper_bound: 20
+
+hospital_selector: # Algorithm selects a random hospital to deliver a patient after an incident
+  class: ems.algorithms.hospital_selectors.select_random.RandomHospitalSelector
+  hospital_set: $hospitals
+
+event_generator: # Generates random events for each case
+  class: ems.generators.event.event_generator.EventGenerator
+  travel_duration_generator: $duration_generator
+  incident_duration_generator: $duration_generator
+  hospital_duration_generator: $duration_generator
+  hospital_selector:  $hospital_selector
+
+case_time_generator: # Generates case times; interval between cases are uniformly generated between 8 to 18 minutes
+  class: ems.generators.time.random_time.RandomCaseTimeGenerator
+  lower_bound: 3
+  upper_bound: 7
+
+cases: # Defines 500 cases starting on January 31, 2019; randomly generated durations, locations, and times
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  initial_time: 2019-1-31T00:00:00.1Z
+  quantity: 500
+  case_time_generator: $case_time_generator
+  case_location_generator: $location_generator
+  event_generator: $event_generator
+
+ambulance_selector: # Algorithm to randomly select an ambulance upon dispatch to a case
+  class: ems.algorithms.selection.dispatch_random.RandomSelector
+
+simulator: # Simulation to run
+  class: ems.simulators.event_simulator.EventDispatcherSimulator
+  debug: True
+  ambulances: $ambulances
+  cases: $cases
+  ambulance_selector: $ambulance_selector
