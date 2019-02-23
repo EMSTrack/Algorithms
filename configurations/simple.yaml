@@ -3,29 +3,29 @@ name: # File metadata, to be printed by the simulator
 
 all_bases: # Read all base points from file
   class: ems.datasets.location.base.base_set.BaseSet
-  filename: ../simple-data/bases.csv
+  filename: ./examples/simple/bases.csv
 
 demands: # Read all demand points from file
   class: ems.datasets.location.demand.demand_set.DemandSet
-  filename: ../simple-data/demand_points.csv
+  filename: ./examples/simple/demand_points.csv
 
 tt: # Travel times matrix between all bases and all demands
   class: ems.datasets.travel_times.travel_times.TravelTimes
-  filename: ../simple-data/times.csv
+  filename: ./examples/simple/times.csv
   origins: $all_bases
   destinations: $demands
 
 bases: # Read 5 bases from file
   class: ems.datasets.location.base.base_set.BaseSet
-  filename: ../simple-data/bases_subset.csv
+  filename: ./examples/simple/bases_subset.csv
 
 ambulances: # Read 5 ambulances from file (1 ambulance at each base)
   class: ems.datasets.ambulance.ambulance_set.AmbulanceSet
-  filename: ../simple-data/ambulances.csv
+  filename: ./examples/simple/ambulances.csv
 
 hospitals: # Reads 3 hospitals from file
   class: ems.datasets.location.hospital.hospital_set.HospitalSet
-  filename: ../simple-data/hospitals.csv
+  filename: ./examples/simple/hospitals.csv
 
 travel_duration_generator: # Travel times between events estimated using travel times matrix
     class: ems.generators.duration.travel_time_duration.TravelTimeDurationGenerator
@@ -51,7 +51,7 @@ event_generator: # Generates random events for each case
 
 cases: # Reads cases from file
   class: ems.datasets.case.csv_case_set.CSVCaseSet
-  filename: ../simple-data/cases.csv
+  filename: ./examples/simple/cases.csv
   event_generator: $event_generator
 
 ambulance_selector: # Selects fastest ambulance
