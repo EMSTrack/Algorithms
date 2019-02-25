@@ -93,7 +93,7 @@ class OptimalTravelTimeWithCoverage(AmbulanceSelector):
 
 
     def weighted_metrics(self, time, coverage, priority):
-        more_weight = 3 # 3 showed improvement. 6 sucked.
+        more_weight = 4 # 3 showed improvement. 6 sucked.
         return time.total_seconds() * self.favor(1, priority) / (more_weight * coverage * self.favor(4, priority) + 0.000001)
 
     def favor(self, priority, actual_priority):
