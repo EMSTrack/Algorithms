@@ -31,7 +31,7 @@ hospitals: # Predefines 3 hospitals in the Tijuana area
   latitudes: [32.52506901611384, 32.5027, 32.5180]
   longitudes: [-117.0097589492798, -117.00371, -117.0078]
 
-case_quantity: 234 # Generate 500 cases
+case_quantity: 2340 # Generate 500 cases
 
 cases: # Random cases to be generated during simulation
   class: ems.datasets.case.random_case_set.RandomCaseSet
@@ -39,7 +39,7 @@ cases: # Random cases to be generated during simulation
   initial_time: 2001-12-15T02:59:43.1Z
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.time.poisson_time.PoissonCaseTimeGenerator
-    duration: 4320
+    duration: 43200
     quantity: "$case_quantity"
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -70,7 +70,7 @@ metric_aggregator: # Computes and stores any amount of metrics during the simula
   metrics:
     - class: ems.analysis.metrics.coverage.double_coverage.PercentDoubleCoverage
       r1: 600
-      r2: 1380
+      r2: 840
       demands: "$demands"
       travel_times: "$tt"
     - class: ems.analysis.metrics.total_delay.TotalDelay
