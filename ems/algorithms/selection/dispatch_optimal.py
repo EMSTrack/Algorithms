@@ -93,11 +93,11 @@ class OptimalTravelTimeWithCoverage(AmbulanceSelector):
 
 
     def weighted_metrics(self, time, coverage, priority):
-        return time.total_seconds() * self.favor(1, priority) / (coverage * self.favor(5, priority) + 0.000001)
+        return time.total_seconds() * self.favor(1, priority) / (coverage * self.favor(4, priority) + 0.000001)
 
     def favor(self, priority, actual_priority):
         """ Compute a new metric in that aims to """
-        return (4 - abs(priority - actual_priority))/4 + 0.000001
+        return (3 - abs(priority - actual_priority))/3 + 0.000001
 
 
     def sort_ambulances_by_traveltime(self, ambulances, closest_loc_to_case):
