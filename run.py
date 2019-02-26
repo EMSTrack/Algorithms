@@ -38,10 +38,6 @@ driver.create_objects(sim_args)
 sim = driver.objects["simulator"]
 case_record_set, metric_aggregator = sim.run()
 
-case_record_set.write_to_file('./examples/minimal/case_records.csv')
-driver.objects["bases"].write_to_file('./examples/minimal/bases.csv')
-driver.objects["hospitals"].write_to_file('./examples/minimal/hospitals.csv')
-
 # Save the finished simulator information
 
 # case_record_set.write_to_file(output_dir + '/processed_cases.csv')
