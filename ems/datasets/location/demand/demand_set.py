@@ -1,10 +1,10 @@
 from typing import List
 
-from ems.datasets.location.kd_tree_location_set import KDTreeLocationSet
+from ems.datasets.location.location_set import LocationSet
 from ems.utils import parse_headered_csv
 
 
-class DemandSet(KDTreeLocationSet):
+class DemandSet(LocationSet):
 
     def __init__(self,
                  filename: str = None,

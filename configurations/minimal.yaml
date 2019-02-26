@@ -17,9 +17,9 @@ hospitals: # Initializes 2 hospitals in the UCSD area
 
 location_generator: # Generates case locations uniformly in a circle of 2 kilometers centered on UCSD
   class: ems.generators.location.circle.CircleLocationGenerator
-  center_latitude: 32.881383
-  center_longitude: -117.236884
-  radius_km: 2
+  center_latitude: 32.880796
+  center_longitude: -117.237047
+  radius_km: 1.8
 
 duration_generator: # Generates durations spend travelling, at incident, and at hospital uniformly within 10 to 20 minutes
   class: ems.generators.duration.random_duration.RandomDurationGenerator
@@ -45,7 +45,7 @@ case_time_generator: # Generates case times; interval between cases are uniforml
 cases: # Defines 500 cases starting on January 31, 2019; randomly generated durations, locations, and times
   class: ems.datasets.case.random_case_set.RandomCaseSet
   initial_time: 2019-1-31T00:00:00.1Z
-  quantity: 500
+  quantity: 100
   case_time_generator: $case_time_generator
   case_location_generator: $location_generator
   event_generator: $event_generator
