@@ -1,9 +1,9 @@
 from datetime import datetime
 
 from ems.datasets.case.case_set import CaseSet
+from ems.generators.duration.duration import DurationGenerator
 
 from ems.generators.location.location import LocationGenerator
-from ems.generators.time.time import CaseTimeGenerator
 from ems.generators.event.event_generator import EventGenerator
 
 from ems.models.cases.random_case import RandomCase
@@ -15,7 +15,7 @@ class RandomCaseSet(CaseSet):
     def __init__(self,
                  quantity: int,
                  initial_time: datetime,
-                 case_time_generator: CaseTimeGenerator,
+                 case_time_generator: DurationGenerator,
                  case_location_generator: LocationGenerator,
                  event_generator: EventGenerator):
         self.num_cases = quantity
@@ -30,7 +30,7 @@ class RandomCaseSet(CaseSet):
 
         while k <= self.num_cases:
             # Compute time and location of next event via generators
-            time = self.case_time_generator.generate(time)
+            time = time + self.case_time_generator.generate(None, None, time)['duration']
             point = self.location_generator.generate(time)
 
             # Create case
