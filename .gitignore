@@ -119,3 +119,4 @@ results/*.csv
 .vscode/
 ./settings/
 results
+figures

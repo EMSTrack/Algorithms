@@ -52,38 +52,53 @@ class OptimalTravelTimeWithCoverage(AmbulanceSelector):
         loc_set_2 = self.travel_times.destinations
         closest_loc_to_case, _, _ = loc_set_2.closest(case.incident_location)
 
-        if case.priority == 1:
-            return self.sort_ambulances_by_traveltime(available_ambulances, closest_loc_to_case)[0][1]
+        # if case.priority == 1:
+        #     return self.sort_ambulances_by_traveltime(available_ambulances, closest_loc_to_case)[0][1]
+        #
+        # elif case.priority == 5:
+        #     return self.sort_ambulances_by_coverage(available_ambulances)[0][1]
+        #
+        # else:
 
-        elif case.priority == 5:
-            return self.sort_ambulances_by_coverage(available_ambulances)[0][1]
+        times = self.sort_ambulances_by_traveltime(available_ambulances, closest_loc_to_case)
+        coverages  = self.sort_ambulances_by_coverage(available_ambulances)
 
-        else:
+        priorities_applied = [(
+            self.weighted_metrics(t[0], c[0], case.priority),
+            t[1])
+            for t in times for c in coverages if t[1] == c[1]]
 
-            times = self.sort_ambulances_by_traveltime(available_ambulances, closest_loc_to_case)
-            coverages  = self.sort_ambulances_by_coverage(available_ambulances)
+        # from IPython import embed; embed()
 
-            priorities_applied = [(
-                self.weighted_metrics(t[0], c[0], case.priority),
-                t[1])
-                for t in times for c in coverages if t[1] == c[1]]
+        # lists = times,coverages,priorities_applied
+        # for l in lists:
+        #     l.sort(key=lambda t: t[0])
 
-            from IPython import embed; embed()
+        # from pprint import PrettyPrinter
+        # pprint = PrettyPrinter(indent=2).pprint
+        # print("Case priority: {}".format(case.priority))
+        # pprint(times)
+        # pprint(coverages)
+        # pprint(priorities_applied)
+        # TODO, NOW SELECT THE AMBULANCE BASED ON THE SEVERITY
 
-            # TODO, NOW SELECT THE AMBULANCE BASED ON THE SEVERITY
+        priorities_applied.sort(key=lambda t: t[0])
+        return priorities_applied[0][1]
+
 
         # Select based on best travel time
-        super().select_ambulance(available_ambulances=available_ambulances,
-                                     case=case,
-                                     current_time=current_time)
+        # super().select_ambulance(available_ambulances=available_ambulances,
+        #                              case=case,
+        #                              current_time=current_time)
 
 
     def weighted_metrics(self, time, coverage, priority):
-        return time * self.favor(1, priority) / (coverage * self.favor(5, priority))
+        more_weight = 4 # 3 showed improvement. 6 sucked.
+        return time.total_seconds() * self.favor(1, priority) / (more_weight * coverage * self.favor(4, priority) + 0.000001)
 
     def favor(self, priority, actual_priority):
         """ Compute a new metric in that aims to """
-        return (4 - abs(priority - actual_priority))/4 + 0.001
+        return (3 - abs(priority - actual_priority))/3 + 0.000001
 
 
     def sort_ambulances_by_traveltime(self, ambulances, closest_loc_to_case):

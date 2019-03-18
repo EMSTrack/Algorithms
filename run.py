@@ -10,6 +10,25 @@ sim_args = read_user_input()
 driver = Driver()
 driver.create_objects(sim_args)
 
+# # Check if the figures folder exists, and then if the name of the output folder (name of simulator) exists.
+output_dir = "./figures/" + driver.objects['name'] + "/"
+current_dir = os.getcwd()
+if 'Algorithms' != current_dir.split('/')[-1]:
+    raise Exception("Run this simulator from the repository directory. ")
+
+subdirs = [dirs for roots, dirs, _ in os.walk('.')]
+subdirs = filter(lambda subdir: 'figures' in subdir, subdirs)
+
+if not any(subdirs):
+    os.mkdir('figures')
+
+results_dir = [dirs for roots, dirs, _ in os.walk('./figures')]
+results_dir = filter(lambda subdir: driver.objects['name'] in subdir, results_dir)
+
+if not any(results_dir):
+    os.mkdir(output_dir)
+
+
 # # Check if the results folder exists, and then if the name of the output folder (name of simulator) exists.
 output_dir = "./results/" + driver.objects['name'] + "/"
 current_dir = os.getcwd()

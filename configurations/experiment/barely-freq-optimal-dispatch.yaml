@@ -71,8 +71,6 @@ simulator: # Simulator
   ambulances: "$ambulances"
   cases: "$cases"
   ambulance_selector:
-
-
      class: ems.algorithms.selection.dispatch_optimal.OptimalTravelTimeWithCoverage
      travel_times: "$tt"
      demands: "$demands"

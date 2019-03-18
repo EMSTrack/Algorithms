@@ -59,7 +59,7 @@ metric_aggregator: # Computes and stores any amount of metrics during the simula
   metrics:
     - class: ems.analysis.metrics.coverage.double_coverage.PercentDoubleCoverage
       r1: 600
-      r2: 1380
+      r2: 840
       demands: "$demands"
       travel_times: "$tt"
     - class: ems.analysis.metrics.total_delay.TotalDelay

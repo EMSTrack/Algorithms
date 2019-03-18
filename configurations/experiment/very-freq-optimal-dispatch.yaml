@@ -1,6 +1,5 @@
-
 name: # File metadata, to be printed by the simulator
-  "dibene-xtreme-freq-best-travel-times"
+  "dibene-very-freq-optimal-dispatch"
 
 demands: # Read demands points in Tijuana from file
   class: ems.datasets.location.demand.demand_set.DemandSet
@@ -32,21 +31,9 @@ hospitals: # Predefines 3 hospitals in the Tijuana area
   latitudes: [32.52506901611384, 32.5027, 32.5180]
   longitudes: [-117.0097589492798, -117.00371, -117.0078]
 
-case_quantity: 3240 # Generate 500 cases
-
-cases: # Random cases to be generated during simulation
-  class: ems.datasets.case.random_case_set.RandomCaseSet
-  quantity: "$case_quantity"
-  initial_time: 2001-12-15T02:59:43.1Z
-  case_time_generator: # Cases arise based on a Poisson distribution
-    class: ems.generators.time.poisson_time.PoissonCaseTimeGenerator
-    duration: 43200
-    quantity: "$case_quantity"
-  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    class: ems.generators.location.polygon.PolygonLocationGenerator
-    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
-    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
-
+cases:
+  class: ems.datasets.case.csv_case_set.CSVCaseSet
+  filename: "./results/dibene-very-freq-best-travel-times/processed_cases.csv"
   event_generator:
     class: ems.generators.event.event_generator.EventGenerator
     travel_duration_generator: # Travel times between events estimated using travel times matrix
@@ -66,6 +53,7 @@ cases: # Random cases to be generated during simulation
       hospital_set: "$hospitals"
       travel_times: "$tt"
 
+
 metric_aggregator: # Computes and stores any amount of metrics during the simulation
   class: ems.analysis.metrics.metric_aggregator.MetricAggregator
   metrics:
@@ -83,7 +71,9 @@ simulator: # Simulator
   ambulances: "$ambulances"
   cases: "$cases"
   ambulance_selector:
-   class: ems.algorithms.selection.dispatch_fastest.BestTravelTime
-   travel_times: "$tt"
+     class: ems.algorithms.selection.dispatch_optimal.OptimalTravelTimeWithCoverage
+     travel_times: "$tt"
+     demands: "$demands"
+     r1: 600
 
   metric_aggregator: "$metric_aggregator"
