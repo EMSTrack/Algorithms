@@ -22,7 +22,7 @@ class PolygonLocationGenerator(LocationGenerator):
         self.polygon = geometry.Polygon([(latitude, longitude) for latitude, longitude in
                                          zip(vertices_latitude, vertices_longitude)])
 
-    def generate(self, timestamp):
+    def generate(self, timestamp=None):
         triangles = triangulate(self.polygon)
         areas = [triangle.area for triangle in triangles]
         areas_normalized = [triangle.area / sum(areas) for triangle in triangles]

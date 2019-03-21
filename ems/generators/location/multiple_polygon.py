@@ -25,7 +25,7 @@ class MultiPolygonLocationGenerator(LocationGenerator):
 
         self.polygon_generators = self.create_generators(polygons)
 
-    def generate(self, timestamp):
+    def generate(self, timestamp=None):
         generator = choice(self.polygon_generators, 1, p=self.densities)[0]
         return generator.generate(timestamp)
 

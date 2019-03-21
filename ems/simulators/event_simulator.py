@@ -1,5 +1,4 @@
 import bisect
-import heapq
 from datetime import datetime
 
 from termcolor import colored
