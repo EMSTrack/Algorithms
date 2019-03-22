@@ -38,7 +38,7 @@ driver.create_objects(sim_args)
 sim = driver.objects["simulator"]
 case_record_set, metric_aggregator = sim.run()
 
-# case_record_set
+case_record_set.write_to_file('../processed_cases.csv')
 
 # Save the finished simulator information
 
