@@ -18,7 +18,7 @@ class CircleLocationGenerator(LocationGenerator):
         self.radius_km = radius_km
         self.radius_degrees = self.convert_radius(radius_km)
 
-    def generate(self, timestamp):
+    def generate(self, timestamp=None):
         direction = random.uniform(0, 2 * math.pi)
         magnitude = self.radius_degrees * math.sqrt(random.uniform(0, 1))
 

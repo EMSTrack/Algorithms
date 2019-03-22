@@ -18,38 +18,37 @@ class AmbulanceTrip:
         """ A single trip of an ambulance has any number of lines.
         Alternates between stationary and traveling. """
 
-        self.row = {k: row[k].values[0] for k in row} # TODO Don't save this in the object
-        self.ambulances = ambulances # TODO also dont keep this in the object
+        self.row = {k: row[k].values[0] for k in row}  # TODO Don't save this in the object
+        self.ambulances = ambulances  # TODO also dont keep this in the object
 
         # cast the appropriate types
-        self.__location()
         self.__duration()
-        self._dots_and_lines() # TODO Make clear what is being saved to self
-
-    def __location(self):
-        """ Using regexs to convert lat, lons from doubles into geopy.Points """
-
-        # Match all non-BASE location points.
-        names = set()
-        for k in self.row:
-            if any([
-                re.match("[A-Z]*[a-z]*_latitude", k),
-                re.match("[A-Z]*[a-z]*_longitude", k)]
-            ):
-                names.add(k.split("_")[0])
-
-        # Recreate them as geopy.Points
-        for location_name in names:
-            lat = self.row[location_name + "_latitude"]
-            lon = self.row[location_name + "_longitude"]
-            self.row[location_name + "_point"] = Point(lat, lon) # TODO Don't save this in self.
-            del self.row[location_name + "_latitude"]
-            del self.row[location_name + "_longitude"]
+        self._dots_and_lines()  # TODO Make clear what is being saved to self
+    #
+    # def __location(self):
+    #     """ Using regexs to convert lat, lons from doubles into geopy.Points """
+    #
+    #     # Match all non-BASE location points.
+    #     names = set()
+    #     for k in self.row:
+    #         if any([
+    #             re.match("[A-Z]*[a-z]*_latitude", k),
+    #             re.match("[A-Z]*[a-z]*_longitude", k)]
+    #         ):
+    #             names.add(k.split("_")[0])
+    #
+    #     # Recreate them as geopy.Points
+    #     for location_name in names:
+    #         lat = self.row[location_name + "_latitude"]
+    #         lon = self.row[location_name + "_longitude"]
+    #         self.row[location_name + "_point"] = Point(lat, lon)  # TODO Don't save this in self.
+    #         del self.row[location_name + "_latitude"]
+    #         del self.row[location_name + "_longitude"]
 
     def __duration(self):
         """ For each ___duration, convert into timedelta.  """
 
-        self.row['start_time'] = pd.to_datetime(self.row['start_time']) # TODO Don't save this in self.
+        self.row['start_time'] = pd.to_datetime(self.row['start_time'])  # TODO Don't save this in self.
 
         for k in self.row:
             if "_duration" in k:
@@ -66,10 +65,13 @@ class AmbulanceTrip:
         self.ambulance_id = self.row['ambulance']
         events = []
 
+        incident_point = Point(self.row["latitude"], self.row["longitude"])
+        hospital_point = Point(self.row["hospital_latitude"], self.row["hospital_longitude"])
+
         # Travel from base to incident
         l1 = Line(
             self.ambulances[self.ambulance_id],
-            self.row["incident_point"],
+            incident_point,
             self.row['start_time'],
             self.row["TO_INCIDENT_duration"]
         )
@@ -77,7 +79,7 @@ class AmbulanceTrip:
 
         # Stationary time at incident
         d1 = Dot(
-            self.row['incident_point'],
+            incident_point,
             events[-1].end_time(),
             self.row['AT_INCIDENT_duration']
         )
@@ -85,15 +87,15 @@ class AmbulanceTrip:
 
         # From incident to hospital
         l2 = Line(
-            self.row['incident_point'],
-            self.row['hospital_point'],
+            incident_point,
+            hospital_point,
             events[-1].end_time(),
             self.row['TO_HOSPITAL_duration'])
         events.append(l2)
 
         # Time at hospital
         d2 = Dot(
-            self.row['hospital_point'],
+            hospital_point,
             events[-1].end_time(),
             self.row['AT_INCIDENT_duration']
         )
@@ -101,15 +103,15 @@ class AmbulanceTrip:
 
         # From hospital to base
         l3 = Line(
-            self.row['hospital_point'],
+            hospital_point,
             self.ambulances[self.ambulance_id],
             events[-1].end_time(),
             self.row['TO_BASE_duration']
         )
         events.append(l3)
 
-        self.events = events # TODO DO SAVE THIS IN SELF. Just od it up there.
-        self.end_time = events[-1].end_time() + self.row['TO_BASE_duration'] # TODO same with this one
+        self.events = events  # TODO DO SAVE THIS IN SELF. Just od it up there.
+        self.end_time = events[-1].end_time() + self.row['TO_BASE_duration']  # TODO same with this one
 
         # Time at base should be calculate from this endtime and next start_time
 

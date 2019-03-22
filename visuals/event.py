@@ -13,6 +13,7 @@ class Event:
 
 class Dot(Event):
     """ Represents the location of the ambulance over time."""
+
     def __init__(self, location, starting_time, duration):
         """
 
@@ -43,7 +44,7 @@ class Dot(Event):
             "starting_time": self.starting_time,
             "duration": self.duration,
             "ending_time": self.ending_time,
-            "paths": self.dots # TODO I know, this is technically a list of the same point.
+            "paths": self.dots  # TODO I know, this is technically a list of the same point.
         })
 
 
@@ -70,13 +71,13 @@ class Line(Event):
         # if delta < 1: delta = 1
         dist_lat = self.ending_point.latitude - self.starting_point.latitude
         dist_lon = self.ending_point.longitude - self.starting_point.longitude
-        d_lat, d_lon = dist_lat/delta, dist_lon/delta
+        d_lat, d_lon = dist_lat / delta, dist_lon / delta
 
         # List of [minutes] points between start and end
         return [Point(
             self.starting_point.latitude + time_slice * d_lat,
             self.starting_point.longitude + time_slice * d_lon)
-                for time_slice in range(delta)]
+            for time_slice in range(delta)]
 
     def end_time(self):
         return self.ending_time
@@ -91,4 +92,3 @@ class Line(Event):
             'ending_time': self.ending_time,
             'path': self.dots
         })
-
