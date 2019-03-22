@@ -9,6 +9,8 @@ from ems.models.cases.case import Case
 from ems.analysis.metrics.coverage.percent_coverage import PercentCoverage
 from ems.algorithms.selection.dispatch_fastest import BestTravelTime
 
+from itertools import combinations
+
 # An implementation of a "fastest travel time" ambulance_selection from a base to
 # the demand point closest to a case
 class LeastDisruption(BestTravelTime):
@@ -48,13 +50,13 @@ class LeastDisruption(BestTravelTime):
         """
 
         # Calculate all combinations of ambulances's coverage and return the best one.
-        from itertools import combinations
+
 
 
         chosen_ambulance_set = []
         current_coverage = -1
 
-        potential_ambulances = combinations(ambulances, len(ambulances) - 1)
+        potential_ambulances = list(combinations(ambulances, len(ambulances) - 1))
 
         for ambulance_set in potential_ambulances:
             coverage = self.coverage.calculate(datetime.now(), ambulances=ambulance_set)

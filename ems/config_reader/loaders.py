@@ -31,6 +31,7 @@ class UserArguments:
         parser.add_argument('config_file',
                                  help="The simulator needs a configuration to begin the computation.",
                                  type=str,
+                                 # nargs='*'
                                  )
 
         return parser.parse_args()
