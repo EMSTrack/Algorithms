@@ -15,11 +15,8 @@ from ems.models.ambulances.ambulance import Ambulance
 class PoissonDurationGenerator(DurationGenerator):
 
     def __init__(self,
-                 quantity: int,
-                 duration: float):
-        self.quantity = quantity
-        self.duration = duration
-        self.lmda = quantity / duration
+                 lmda: float):
+        self.lmda = lmda
 
     def generate(self,
                  ambulance: Ambulance = None,
