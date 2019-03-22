@@ -16,6 +16,7 @@ class Jan2017CaseSet(CaseSet):
                  filename: str):
         self.filename = filename
         self.cases = self.read_cases(filename)
+        super().__init__(self.cases[0].date_recorded)
 
     def iterator(self):
         return iter(self.cases)

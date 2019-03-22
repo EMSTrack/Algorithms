@@ -9,7 +9,7 @@ class DurationGenerator:
 
     # TODO -- use kwargs to support generation of durations w/o ambulance and destination
     def generate(self,
-                 ambulance: Ambulance,
-                 destination: Point,
-                 timestamp: datetime):
+                 ambulance: Ambulance = None,
+                 destination: Point = None,
+                 timestamp: datetime = None):
         raise NotImplementedError()

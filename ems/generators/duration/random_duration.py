@@ -17,9 +17,9 @@ class RandomDurationGenerator(DurationGenerator):
         self.upper_bound = timedelta(minutes=upper_bound)
 
     def generate(self,
-                 ambulance: Ambulance,
-                 destination: Point,
-                 timestamp: datetime):
+                 ambulance: Ambulance = None,
+                 destination: Point = None,
+                 timestamp: datetime = None):
         seconds_lower_bound = self.lower_bound.total_seconds()
         seconds_upper_bound = self.upper_bound.total_seconds()
 
