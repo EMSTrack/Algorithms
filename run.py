@@ -58,6 +58,8 @@ print("Begin simulator: ", driver.objects['name'])
 sim = driver.objects["simulator"]
 case_record_set, metric_aggregator = sim.run()
 
+case_record_set.write_to_file('../processed_cases.csv')
+
 # Save the finished simulator information
 
 case_record_set.write_to_file(output_dir + '/processed_cases.csv')

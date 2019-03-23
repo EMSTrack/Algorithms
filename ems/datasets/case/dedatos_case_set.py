@@ -16,6 +16,7 @@ class DeDatosCaseSet(CaseSet):
         self.filename = filename
         self.event_generator = event_generator
         self.cases = self.read_cases()
+        super().__init__(self.cases[0].date_recorded)
 
     def iterator(self):
         return iter(self.cases)

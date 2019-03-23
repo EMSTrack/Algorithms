@@ -15,29 +15,29 @@ from numpy.random import choice
 class RandomCaseSet(CaseSet):
 
     def __init__(self,
-                 quantity: int,
-                 initial_time: datetime,
+                 time: datetime,
                  case_time_generator: DurationGenerator,
                  case_location_generator: LocationGenerator,
-                 event_generator: EventGenerator):
-        self.num_cases = quantity
-        self.initial_time = initial_time
+                 event_generator: EventGenerator,
+                 quantity: int = None):
+        super().__init__(time)
+        self.time = time
         self.case_time_generator = case_time_generator
         self.location_generator = case_location_generator
         self.event_generator = event_generator
+        self.quantity = quantity
 
     def iterator(self):
         k = 1
-        time = self.initial_time
 
-        while k <= self.num_cases:
+        while self.quantity is None or k <= self.quantity:
             # Compute time and location of next event via generators
-            time = time + self.case_time_generator.generate(None, None, time)['duration']
-            point = self.location_generator.generate(time)
+            self.time = self.time + self.case_time_generator.generate(timestamp=self.time)['duration']
+            point = self.location_generator.generate(self.time)
 
             # Create case
             case = RandomCase(id=k,
-                              date_recorded=time,
+                              date_recorded=self.time,
                               incident_location=point,
                               event_generator=self.event_generator,
                               # TODO TEMPORARY CASE PRIORITY GENERATOR CODE. Actually, this might not be an issue?

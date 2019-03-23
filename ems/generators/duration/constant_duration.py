@@ -12,8 +12,8 @@ class ConstantDurationGenerator(DurationGenerator):
         self.constant = constant
 
     def generate(self,
-                 ambulance: Ambulance,
-                 destination: Point,
-                 timestamp: datetime):
+                 ambulance: Ambulance = None,
+                 destination: Point = None,
+                 timestamp: datetime = None):
 
         return {'duration': self.constant}

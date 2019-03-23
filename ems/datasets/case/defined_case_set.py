@@ -9,6 +9,7 @@ class DefinedCaseSet(CaseSet):
 
     def __init__(self, cases: List[Case]):
         self.cases = cases
+        super().__init__(self.cases[0].date_recorded)
 
     def __len__(self):
         return len(self.cases)

@@ -18,9 +18,9 @@ class TravelTimeDurationGenerator(DurationGenerator):
         self.epsilon = epsilon
 
     def generate(self,
-                 ambulance: Ambulance,
-                 destination: Point,
-                 timestamp: datetime):
+                 ambulance: Ambulance = None,
+                 destination: Point = None,
+                 timestamp: datetime = None):
         # Compute the point from first location set to the ambulance location
         loc_set_1 = self.travel_times.origins
         closest_loc_to_orig, _, _ = loc_set_1.closest(ambulance.location)
