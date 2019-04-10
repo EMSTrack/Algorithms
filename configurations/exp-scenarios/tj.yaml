@@ -2,7 +2,7 @@
 # Define name of the simulation. Used in file system naming.
 #
 name: tijuana-multi-scenario
-case_quantity: 500
+case_quantity: 1200
 
 
 #
@@ -37,6 +37,7 @@ simulation_bases: # Selects a subset of bases for usage in the simulation (K-Mea
 ambulances:
   class: ems.datasets.ambulance.base_selected_ambulance_set.BaseSelectedAmbulanceSet
   count: 12
+
   base_selector:
     class: ems.algorithms.base_selectors.round_robin_selector.RoundRobinBaseSelector
     base_set: $simulation_bases
@@ -48,18 +49,22 @@ hospitals:
 
 event_gen:
   class: ems.generators.event.event_generator.EventGenerator
+
   travel_duration_generator: # Travel times between events estimated using travel times matrix
     class: ems.generators.duration.travel_time_duration.TravelTimeDurationGenerator
     travel_times: $tt
     epsilon: 0.001
+
   incident_duration_generator: # Duration at incident drawn from uniform distribution between 5 and 10 minutes
     class: ems.generators.duration.random_duration.RandomDurationGenerator
     lower_bound: 5
     upper_bound: 10
+
   hospital_duration_generator: # Duration at hospital drawn from uniform distribution between 5 and 10 minutes
     class: ems.generators.duration.random_duration.RandomDurationGenerator
     lower_bound: 5
     upper_bound: 10
+
   hospital_selector: # Fastest hospital chosen
     class: ems.algorithms.hospital_selectors.select_fastest.FastestHospitalSelector
     hospital_set: $hospitals
@@ -71,25 +76,31 @@ event_gen:
 case_set_def:
   class: ems.datasets.case.random_case_set.RandomCaseSet
   time: 2019-03-22T00:00:00Z
+
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.1
+    lmda: 0.5
+
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
     vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
     vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+
   event_generator: $event_gen
 
 case_set_s1:
   class: ems.datasets.case.random_case_set.RandomCaseSet
   time: 2019-03-22T00:00:00Z
+
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
     lmda: 0.2
+
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
     vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
     vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+
   event_generator: $event_gen
 
 #
@@ -98,17 +109,20 @@ case_set_s1:
 cases:
   class: ems.datasets.case.scenario_case_set.ScenarioCaseSet
   time: 2019-03-22T00:00:00Z
-  quantity: 400
+  quantity: $case_quantity
+
   scenarios:
     - class: ems.scenarios.scenario.Scenario
       label: scenario1
       priority: 1
       case_set: $case_set_s1
+
       triggers:
         - class: ems.triggers.time.TimeTrigger
           start_time: 2019-03-22T02:00:00.0Z
-          duration: 6 # in hours
+          duration: 12 # in hours
           modulus: 24 # in hours
+
     - class: ems.scenarios.scenario.Scenario
       label: default
       priority: 2
@@ -121,6 +135,7 @@ cases:
 #
 metric_aggregator:
   class: ems.analysis.metrics.metric_aggregator.MetricAggregator
+
   metrics:
     - class: ems.analysis.metrics.coverage.percent_coverage.PercentCoverage
       r1: 600
@@ -134,7 +149,9 @@ simulator:
   debug: True
   ambulances: $ambulances
   cases: $cases
+
   ambulance_selector:
     class: ems.algorithms.selection.dispatch_fastest.BestTravelTime
     travel_times: $tt
+
   metric_aggregator: $metric_aggregator
