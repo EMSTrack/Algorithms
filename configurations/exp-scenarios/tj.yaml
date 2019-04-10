@@ -2,8 +2,7 @@
 # Define name of the simulation. Used in file system naming.
 #
 name: tijuana-multi-scenario
-case_quantity: 1200
-
+case_quantity: 1000
 
 #
 # Define how the source data is used:
@@ -73,13 +72,13 @@ event_gen:
 #
 # Define each scenario
 #
-case_set_def:
+night:
   class: ems.datasets.case.random_case_set.RandomCaseSet
   time: 2019-03-22T00:00:00Z
 
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.5
+    lmda: 0.1
 
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -88,13 +87,43 @@ case_set_def:
 
   event_generator: $event_gen
 
-case_set_s1:
+morning:
   class: ems.datasets.case.random_case_set.RandomCaseSet
   time: 2019-03-22T00:00:00Z
 
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.2
+    lmda: 0.3
+
+  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
+    class: ems.generators.location.polygon.PolygonLocationGenerator
+    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
+    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+
+  event_generator: $event_gen
+
+afternoon:
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  time: 2019-03-22T00:00:00Z
+
+  case_time_generator: # Cases arise based on a Poisson distribution
+    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
+    lmda: 0.7
+
+  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
+    class: ems.generators.location.polygon.PolygonLocationGenerator
+    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
+    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+
+  event_generator: $event_gen
+
+evening:
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  time: 2019-03-22T00:00:00Z
+
+  case_time_generator: # Cases arise based on a Poisson distribution
+    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
+    lmda: 0.55
 
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -113,22 +142,47 @@ cases:
 
   scenarios:
     - class: ems.scenarios.scenario.Scenario
-      label: scenario1
+      label: night
+      priority: 2
+      case_set: $night
+
+      triggers:
+        - class: ems.triggers.default.DefaultTrigger
+
+    - class: ems.scenarios.scenario.Scenario
+      label: morning
       priority: 1
-      case_set: $case_set_s1
+      case_set: $morning
 
       triggers:
         - class: ems.triggers.time.TimeTrigger
-          start_time: 2019-03-22T02:00:00.0Z
-          duration: 12 # in hours
+          start_time: 2019-03-22T06:00:00.0Z
+          duration: 6 # in hours
           modulus: 24 # in hours
 
     - class: ems.scenarios.scenario.Scenario
-      label: default
-      priority: 2
-      case_set: $case_set_def
+      label: afternoon
+      priority: 1
+      case_set: $afternoon
+
       triggers:
-        - class: ems.triggers.default.DefaultTrigger
+        - class: ems.triggers.time.TimeTrigger
+          start_time: 2019-03-22T12:00:00.0Z
+          duration: 6 # in hours
+          modulus: 24 # in hours
+
+    - class: ems.scenarios.scenario.Scenario
+      label: evening
+      priority: 1
+      case_set: $evening
+
+      triggers:
+        - class: ems.triggers.time.TimeTrigger
+          start_time: 2019-03-22T18:00:00.0Z
+          duration: 6 # in hours
+          modulus: 24 # in hours
+
+
 
 #
 # Simulator configurations: How data is accumulated and how the simulator is run.
