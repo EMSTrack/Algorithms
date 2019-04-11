@@ -1,8 +1,8 @@
 #
 # Define name of the simulation. Used in file system naming.
 #
-name: tijuana-multi-scenario
-case_quantity: 50
+name: tijuana-multi-scenario-weekend
+case_quantity: 40
 
 #
 # Define how the source data is used:
@@ -88,7 +88,7 @@ night:
 
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.010833333333333334
+    lmda: 0.017055555555555553
 
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -103,7 +103,7 @@ morning:
 
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.02275
+    lmda: 0.02511111111111111
 
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -118,7 +118,7 @@ afternoon:
 
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.026972222222222224
+    lmda: 0.027944444444444445
 
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -133,7 +133,7 @@ evening:
 
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.024138888888888887
+    lmda: 0.029361111111111112
 
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator

@@ -1,8 +1,8 @@
 #
 # Define name of the simulation. Used in file system naming.
 #
-name: tijuana-multi-scenario
-case_quantity: 50
+name: tijuana-multi-scenario-disaster
+case_quantity: 75
 
 #
 # Define how the source data is used:
@@ -142,6 +142,21 @@ evening:
 
   event_generator: $event_gen
 
+disaster:
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  time: 2019-03-22T00:00:00Z
+
+  case_time_generator: # Cases arise based on a Poisson distribution
+    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
+    lmda: 1.3
+
+  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
+    class: ems.generators.location.polygon.PolygonLocationGenerator
+    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
+    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+
+  event_generator: $event_gen
+
 #
 # Define the hierarchy for each scenario
 #
@@ -161,7 +176,7 @@ cases:
 
     - class: ems.scenarios.scenario.Scenario
       label: morning
-      priority: 1
+      priority: 2
       case_set: $morning
 
       triggers:
@@ -172,7 +187,7 @@ cases:
 
     - class: ems.scenarios.scenario.Scenario
       label: afternoon
-      priority: 1
+      priority: 2
       case_set: $afternoon
 
       triggers:
@@ -183,7 +198,7 @@ cases:
 
     - class: ems.scenarios.scenario.Scenario
       label: evening
-      priority: 1
+      priority: 2
       case_set: $evening
 
       triggers:
@@ -191,6 +206,17 @@ cases:
           start_time: 2019-03-22T18:00:00.0Z
           duration: 6 # in hours
           modulus: 24 # in hours
+
+    - class: ems.scenarios.scenario.Scenario
+      label: disaster
+      priority: 1
+      case_set: $disaster
+
+      triggers:
+        - class: ems.triggers.time.TimeTrigger
+          start_time: 2019-03-22T13:30:00.0Z
+          duration: 1 # in hours
+          modulus: 7200 # in hours
 
 
 
