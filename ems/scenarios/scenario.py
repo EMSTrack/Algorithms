@@ -15,3 +15,6 @@ class Scenario:
         self.triggers = triggers
         self.priority = priority
         self.case_set = case_set
+
+    def __eq__(self, other):
+        return other.label == self.label
