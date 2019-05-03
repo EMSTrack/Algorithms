@@ -201,7 +201,7 @@ cases:
 
         - class: ems.triggers.time.TimeTrigger
           start_time: 2019-03-22T14:30:00.0Z
-          duration: 2.5 # in hours
+          duration: 3.5 # in hours
           interval: 24 # in hours
 
         - class: ems.triggers.time.TimeTrigger

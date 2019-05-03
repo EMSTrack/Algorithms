@@ -18,3 +18,6 @@ class Scenario:
 
     def __eq__(self, other):
         return other.label == self.label
+
+    def __lt__(self, other):
+        return self.priority < other.priority

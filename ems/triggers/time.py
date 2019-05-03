@@ -9,81 +9,55 @@ class TimeTrigger(Trigger):
     def __init__(self, start_time: datetime,
                  duration: int,
                  interval: int = None):
+        super(TimeTrigger, self).__init__()
         self.start_time = start_time
         self.duration = timedelta(hours=duration)
         self.interval = timedelta(hours=interval) if interval else None
 
         # Time trigger needs a state
-        self.interval_count = 0
-        self.was_active = False
+        self.trigger_count = 0
 
-    # Returns whether the trigger is active and if so, when the scenario should set the time to
-    # TODO -- can outsource the time computation to scenario case set?
-    def is_active(self,
-                  time: datetime):
+    # Must return a tuple of (boolean, datetime) to represent (has started?, time of start?)
+    def has_started(self,
+                    time: datetime,
+                    **kwargs):
 
-        if time < self.start_time:
+        # Time from start of scenario
+        diff = time - self.start_time
+
+        if self.interval:
+            diff = diff - (self.trigger_count * self.interval)
+
+        # Time is before the start of the scenario
+        if diff < timedelta(seconds=0):
             return False, None
+
+        # If scenario does not repeat and it has already been triggered once
+        if self.interval is None:
+            if self.trigger_count != 0:
+                return False, None
+            else:
+                return True, self.start_time
+
+        return True, self.start_time + self.interval * self.trigger_count
+
+    # Can assume that this only gets invoked when the scenario is currently active
+    # Returns bool for should end
+    def has_ended(self,
+                  time: datetime,
+                  **kwargs):
 
         diff = time - self.start_time
 
         if self.interval:
-            # diff = diff % self.modulus
-            diff = diff - (self.interval * self.interval_count)
+            diff -= self.interval * self.trigger_count
 
-        # The trigger has not happened yet
-        if diff < timedelta(seconds=0):
-            return False, None
+        # Time is before the end of scenario
+        if diff < self.duration:
+            return False
 
-        # Two possibilities
-        # 1. Scenario has just started and we must rewind back to the start of the time frame
-        # 2. Scenario has already been going on and we continue to return True
-        #
-        # 'Was active' flag helps differentiate
-        elif diff <= self.duration:
+        # Time is after the end of scenario
+        return True
 
-            # Situation 2
-            if self.was_active:
-                return True, time
-
-            # Situation 1
-            else:
-                if self.interval is None:
-
-                    if self.interval_count >= 1:
-                        print("this hppnd")
-                        return False, None
-
-                    print("not hppnd")
-
-                    return True, self.start_time
-                return True, self.start_time + self.interval * self.interval_count
-
-        # Two possibilities
-        # 1. Trigger has just ended
-        # 2. Given time has jumped too far and skipped this trigger completely; must rewind to start of the
-        # time frame
-        #
-        # Differentiate between situation 1 and 2 with the 'was_active' flag
-        elif diff > self.duration:
-
-            # Situation 1
-            if self.was_active:
-                self.interval_count += 1
-                return False, None
-
-            # Situation 2 - Jump back
-            else:
-                # Must ensure that interval count doesn't repeat on subsequent runs if no interval
-                if self.interval is None:
-
-                    if self.interval_count >= 1:
-                        print("this hppnd")
-                        return False, None
-
-                    print("not hppnd")
-
-                    return True, self.start_time
-                return True, self.start_time + self.interval * self.interval_count
-
-        return True, self.start_time if diff <= self.duration else False, None
+    def mark_ended(self):
+        self.trigger_count += 1
