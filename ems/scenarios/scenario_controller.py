@@ -68,7 +68,7 @@ class ScenarioController:
     # Returns the next scenario and the new time
     def retrieve_next_scenario(self, time: datetime):
 
-        self.set_times(time)
+        # self.set_times(time)
 
         fired_triggers = self._check_start_triggers(time)
         fired_triggers = sorted(fired_triggers, key=lambda x: x.time)
@@ -113,7 +113,7 @@ class ScenarioController:
         # Return scenario with highest priority
         self.active_triggers = sorted(self.active_triggers, key=lambda x: x.tt.scenario.priority)
 
-        return self.active_triggers[0].tt.scenario, self.active_triggers[0].time
+        return self.active_triggers[0].tt.scenario, time
 
     def set_times(self, time):
         for active_trigger in self.active_triggers:

@@ -45,13 +45,13 @@ class ScenarioCaseSet(CaseSet):
 
             while new_scenario:
 
-                print("Temp Time: {}".format(self.time))
-                print("Temp Current scenario: {}".format(self.current_scenario.label))
+                # print("Temp Time: {}".format(self.time))
+                # print("Temp Current scenario: {}".format(self.current_scenario.label))
 
                 # Step 1: Generate case with the current scenario's iterator
                 new_case = next(self.scenario_iterators[self.current_scenario.label])
 
-                print("Temp next case time: {}".format(new_case.date_recorded))
+                # print("Temp next case time: {}".format(new_case.date_recorded))
 
                 self.scenario_controller.flush_inactive()
 
@@ -76,7 +76,7 @@ class ScenarioCaseSet(CaseSet):
             # self.scenario_controller.set_times(time=self.time)
 
             print("Next Scenario: {}".format(self.current_scenario.label))
-            print("Next case time: {}".format(new_case.date_recorded))
+            # print("Next case time: {}".format(new_case.date_recorded))
 
             new_case.id = k
             k += 1
