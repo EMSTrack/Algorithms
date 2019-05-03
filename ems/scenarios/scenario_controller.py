@@ -73,9 +73,9 @@ class ScenarioController:
         fired_triggers = self._check_start_triggers(time)
         fired_triggers = sorted(fired_triggers, key=lambda x: x.time)
 
-        print("Fired triggers")
-        for p in fired_triggers:
-            print(p)
+        # print("Fired triggers")
+        # for p in fired_triggers:
+        #     print(p)
 
         preactive_triggers = []
         for fired in fired_triggers:
@@ -87,24 +87,23 @@ class ScenarioController:
             # Priority comparison portion
             has_highest_priority = True
             for active_trigger in self.active_triggers:
-                if active_trigger.tt.scenario.priority >= fired.tt.scenario.priority:
+                if active_trigger.tt.scenario.priority < fired.tt.scenario.priority:
                     has_highest_priority = False
 
             if has_highest_priority:
-                print("Trumping")
                 self.active_triggers += preactive_triggers
                 return fired.tt.scenario, fired.time
 
         self.active_triggers, inactive_triggers = self._check_end_triggers(time)
         self.active_triggers += preactive_triggers
 
-        print("Active triggers")
-        for p in self.active_triggers:
-            print(p)
-
-        print("Ended triggers")
-        for p in self.inactive_trigger_buffer:
-            print(p)
+        # print("Active triggers")
+        # for p in self.active_triggers:
+        #     print(p)
+        #
+        # print("Ended triggers")
+        # for p in self.inactive_trigger_buffer:
+        #     print(p)
 
         self.inactive_trigger_buffer += inactive_triggers
 
@@ -112,7 +111,7 @@ class ScenarioController:
             raise Exception("No scenario can be chosen")
 
         # Return scenario with highest priority
-        self.active_triggers = sorted(self.active_triggers, key=lambda x: x.tt.scenario.priority, reverse=True)
+        self.active_triggers = sorted(self.active_triggers, key=lambda x: x.tt.scenario.priority)
 
         return self.active_triggers[0].tt.scenario, self.active_triggers[0].time
 
