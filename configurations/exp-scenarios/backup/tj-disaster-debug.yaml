@@ -177,6 +177,7 @@ cases:
           duration: 6 # in hours
           interval: 24 # in hours
 
+
     - class: ems.scenarios.scenario.Scenario
       label: morning
       priority: 2
@@ -188,6 +189,7 @@ cases:
           duration: 6 # in hours
           interval: 24 # in hours
 
+
     - class: ems.scenarios.scenario.Scenario
       label: afternoon
       priority: 2
@@ -198,16 +200,7 @@ cases:
           start_time: 2019-03-22T12:00:00.0Z
           duration: 6 # in hours
           interval: 24 # in hours
-#
-#        - class: ems.triggers.time.TimeTrigger
-#          start_time: 2019-03-22T14:30:00.0Z
-#          duration: 3.5 # in hours
-#          interval: 24 # in hours
-#
-#        - class: ems.triggers.time.TimeTrigger
-#          start_time: 2019-03-23T12:00:00.0Z
-#          duration: 6 # in hours
-#          interval: 24 # in hours
+
 
     - class: ems.scenarios.scenario.Scenario
       label: evening
@@ -219,6 +212,7 @@ cases:
           start_time: 2019-03-22T18:00:00.0Z
           duration: 6 # in hours
           interval: 24 # in hours
+
 
     - class: ems.scenarios.scenario.Scenario
       label: disaster
