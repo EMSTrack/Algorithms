@@ -1,7 +1,7 @@
 #
 # Define name of the simulation. Used in file system naming.
 #
-name: tj-disaster-best-travel
+name: tijuana-multi-scenario-disaster
 case_quantity: 100
 
 #
@@ -73,7 +73,7 @@ event_gen:
 #
 # Define each scenario
 # Below is night, morning, afternoon, evening. Weekday and then weekend.
- # [0.010833333333333334,
+# [0.010833333333333334,
   # 0.02275,
   # 0.026972222222222224,
   # 0.024138888888888887,
@@ -89,7 +89,7 @@ night:
 
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.010833333333333334
+    lmda: 0.017055555555555553
 
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -104,7 +104,7 @@ morning:
 
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.02275
+    lmda: 0.02511111111111111
 
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -119,7 +119,7 @@ afternoon:
 
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.026972222222222224
+    lmda: 0.027944444444444445
 
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -134,7 +134,7 @@ evening:
 
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.024138888888888887
+    lmda: 0.029361111111111112
 
   case_location_generator: # Cases generated uniformly in a polygon in Tijuana
     class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -143,20 +143,6 @@ evening:
 
   event_generator: $event_gen
 
-disaster:
-  class: ems.datasets.case.random_case_set.RandomCaseSet
-  time: 2019-03-22T00:00:00Z
-
-  case_time_generator: # Cases arise based on a Poisson distribution
-    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 1
-
-  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    class: ems.generators.location.polygon.PolygonLocationGenerator
-    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
-    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
-
-  event_generator: $event_gen
 
 #
 # Define the hierarchy for each scenario
@@ -214,16 +200,6 @@ cases:
           duration: 6 # in hours
           interval: 24 # in hours
 
-
-    - class: ems.scenarios.scenario.Scenario
-      label: disaster
-      priority: 1
-      case_set: $disaster
-
-      triggers:
-        - class: ems.triggers.time.TimeTrigger
-          start_time: 2019-03-22T13:30:00.0Z
-          duration: 1 # in hours
 
 
 

@@ -1,7 +1,7 @@
 #
 # Define name of the simulation. Used in file system naming.
 #
-name: tj-disaster-best-travel
+name: tijuana-multi-scenario-disaster
 case_quantity: 100
 
 #
