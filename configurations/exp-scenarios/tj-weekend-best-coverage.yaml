@@ -1,7 +1,7 @@
 #
 # Define name of the simulation. Used in file system naming.
 #
-name: tijuana-multi-scenario-disaster
+name: tj-weekend-best-coverage
 case_quantity: 100
 
 #
@@ -70,137 +70,14 @@ event_gen:
     hospital_set: $hospitals
     travel_times: $tt
 
-#
-# Define each scenario
-# Below is night, morning, afternoon, evening. Weekday and then weekend.
-# [0.010833333333333334,
-  # 0.02275,
-  # 0.026972222222222224,
-  # 0.024138888888888887,
-
-  # 0.017055555555555553,
-  # 0.02511111111111111,
-  # 0.027944444444444445,
-  # 0.029361111111111112]
-#
-night:
-  class: ems.datasets.case.random_case_set.RandomCaseSet
-  time: 2019-03-22T00:00:00Z
-
-  case_time_generator: # Cases arise based on a Poisson distribution
-    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.017055555555555553
-
-  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    class: ems.generators.location.polygon.PolygonLocationGenerator
-    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
-    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
-
-  event_generator: $event_gen
-
-morning:
-  class: ems.datasets.case.random_case_set.RandomCaseSet
-  time: 2019-03-22T00:00:00Z
-
-  case_time_generator: # Cases arise based on a Poisson distribution
-    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.02511111111111111
-
-  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    class: ems.generators.location.polygon.PolygonLocationGenerator
-    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
-    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
-
-  event_generator: $event_gen
-
-afternoon:
-  class: ems.datasets.case.random_case_set.RandomCaseSet
-  time: 2019-03-22T00:00:00Z
-
-  case_time_generator: # Cases arise based on a Poisson distribution
-    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.027944444444444445
-
-  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    class: ems.generators.location.polygon.PolygonLocationGenerator
-    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
-    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
-
-  event_generator: $event_gen
-
-evening:
-  class: ems.datasets.case.random_case_set.RandomCaseSet
-  time: 2019-03-22T00:00:00Z
-
-  case_time_generator: # Cases arise based on a Poisson distribution
-    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.029361111111111112
-
-  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    class: ems.generators.location.polygon.PolygonLocationGenerator
-    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
-    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
-
-  event_generator: $event_gen
-
 
 #
-# Define the hierarchy for each scenario
+#
 #
 cases:
-  class: ems.datasets.case.scenario_case_set.ScenarioCaseSet
-  time: 2019-03-22T00:00:00Z
-  quantity: $case_quantity
-
-  scenarios:
-    - class: ems.scenarios.scenario.Scenario
-      label: night
-      priority: 2
-      case_set: $night
-
-      triggers:
-        - class: ems.triggers.time.TimeTrigger
-          start_time: 2019-03-22T00:00:00.0Z
-          duration: 6 # in hours
-          interval: 24 # in hours
-
-
-    - class: ems.scenarios.scenario.Scenario
-      label: morning
-      priority: 2
-      case_set: $morning
-
-      triggers:
-        - class: ems.triggers.time.TimeTrigger
-          start_time: 2019-03-22T06:00:00.0Z
-          duration: 6 # in hours
-          interval: 24 # in hours
-
-
-    - class: ems.scenarios.scenario.Scenario
-      label: afternoon
-      priority: 2
-      case_set: $afternoon
-
-      triggers:
-        - class: ems.triggers.time.TimeTrigger
-          start_time: 2019-03-22T12:00:00.0Z
-          duration: 6 # in hours
-          interval: 24 # in hours
-
-
-    - class: ems.scenarios.scenario.Scenario
-      label: evening
-      priority: 2
-      case_set: $evening
-
-      triggers:
-        - class: ems.triggers.time.TimeTrigger
-          start_time: 2019-03-22T18:00:00.0Z
-          duration: 6 # in hours
-          interval: 24 # in hours
-
-
+  class: ems.datasets.case.csv_case_set.CSVCaseSet
+  filename: ./results/tj-weekend-best-travel/processed_cases.csv
+  event_generator: $event_gen
 
 
 #
@@ -224,7 +101,8 @@ simulator:
   cases: $cases
 
   ambulance_selector:
-    class: ems.algorithms.selection.dispatch_fastest.BestTravelTime
+    class: ems.algorithms.selection.dispatch_least_cost.LeastDisruption
     travel_times: $tt
+    demands: $demands
 
   metric_aggregator: $metric_aggregator

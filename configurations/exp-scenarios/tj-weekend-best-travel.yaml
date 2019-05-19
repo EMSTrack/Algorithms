@@ -1,7 +1,7 @@
 #
 # Define name of the simulation. Used in file system naming.
 #
-name: tj-weekend-best-travel.yaml
+name: tj-weekend-best-travel
 case_quantity: 100
 
 #
