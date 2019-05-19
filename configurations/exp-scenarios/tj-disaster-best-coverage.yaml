@@ -73,6 +73,7 @@ event_gen:
 
 #
 # The scenarios simply replay from the previously generated data.
+#
 cases:
   class: ems.datasets.case.csv_case_set.CSVCaseSet
   filename: ./results/tj-disaster-best-travel/processed_cases.csv
@@ -100,7 +101,8 @@ simulator:
   cases: $cases
 
   ambulance_selector:
-    class: ems.algorithms.selection.dispatch_fastest.BestTravelTime
+    class: ems.algorithms.selection.dispatch_least_cost.LeastDisruption
     travel_times: $tt
+    demands: $demands
 
   metric_aggregator: $metric_aggregator
