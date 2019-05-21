@@ -2,7 +2,7 @@
 # Define name of the simulation. Used in file system naming.
 #
 name: tj-disaster-best-coverage
-case_quantity: 100
+case_quantity: 85
 
 #
 # Define how the source data is used:
@@ -78,7 +78,7 @@ cases:
   class: ems.datasets.case.csv_case_set.CSVCaseSet
   filename: ./results/tj-disaster-best-travel/processed_cases.csv
   event_generator: $event_gen
-  
+
 
 #
 # Simulator configurations: How data is accumulated and how the simulator is run.
