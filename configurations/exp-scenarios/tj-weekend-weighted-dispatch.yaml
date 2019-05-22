@@ -95,7 +95,7 @@ metric_aggregator:
 
 simulator:
   class: ems.simulators.event_simulator.EventDispatcherSimulator
-  debug: True
+  debug: False
   ambulances: $ambulances
   cases: $cases
 
