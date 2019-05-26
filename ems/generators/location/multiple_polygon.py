@@ -30,11 +30,11 @@ class MultiPolygonLocationGenerator(LocationGenerator):
 
         if not each_polygons_longitudes:
             with open(longitudes_file, 'r') as lons_file:
-                each_polygons_longitudes = yaml.load(lons_file)
+                each_polygons_longitudes = yaml.full_load(lons_file)
 
         if not each_polygons_latitudes:
             with open(latitudes_file, 'r') as lats_file:
-                each_polygons_latitudes = yaml.load(lats_file)
+                each_polygons_latitudes = yaml.full_load(lats_file)
 
         # Check all the assumptions in the beginning of the function.
         assert len(each_polygons_longitudes) == len(each_polygons_latitudes)

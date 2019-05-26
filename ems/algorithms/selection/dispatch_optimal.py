@@ -56,11 +56,11 @@ class OptimalTravelTimeWithCoverage(AmbulanceSelector):
         # t0 is always favorable because t0/t0 = 100%. 
 
         times = [(t[0].total_seconds(), t[1]) for t in times] 
-        times = [(t[0]/times[0][0], t[1]) for t in times]
+        times = [(times[0][0]/t[0], t[1]) for t in times]
 
         # Do the same thing with coverage. Divide each worse coverage by the best coverage 
         # to get a < 100% score.
-        coverages = [(c[0]/(coverages[0][0] + 0.00001), c[1]) for c in coverages]
+        coverages = [(c[0]/(coverages[0][0] + 0.0000001), c[1]) for c in coverages]
 
         # We are only concerned about combining the same ambulance's travel time and coverage. 
         # It is not useful to weigh together different ambulance's rankings. Hence the condition.
@@ -68,7 +68,7 @@ class OptimalTravelTimeWithCoverage(AmbulanceSelector):
         for t in times for c in coverages if t[1] == c[1]]
 
         priorities_applied.sort(key=lambda t: t[0])
-        priorities_applied
+        priorities_applied.reverse()
 
         # print("Chosen ambulance: ", priorities_applied[0])
         # print()
@@ -83,7 +83,7 @@ class OptimalTravelTimeWithCoverage(AmbulanceSelector):
         """ Weighted dispatch as ambulance selection policy, version 2. """
 
         # Amplifiers for each of the weights
-        alpha = 5
+        alpha = 50
         beta = 1
 
         # Calculate each term
@@ -141,7 +141,7 @@ class OptimalTravelTimeWithCoverage(AmbulanceSelector):
 
         # Sort by the travel time.
         list_of_ambulances.sort(key=lambda t: t[0])
-        list_of_ambulances.reverse()
+        # list_of_ambulances.reverse()
         return list_of_ambulances
 
 
