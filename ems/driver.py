@@ -25,8 +25,8 @@ class Driver:
 
         # print(self.objects)
 
-        if "name" in self.objects:
-            print("Finished parsing: {}".format(self.objects["name"]))
+        # if "name" in self.objects:
+            # print("Finished parsing: {}".format(self.objects["name"]))
 
     def create(self, o):
         """
