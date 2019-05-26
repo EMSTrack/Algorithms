@@ -60,8 +60,7 @@ class OptimalTravelTimeWithCoverage(AmbulanceSelector):
 
         # Do the same thing with coverage. Divide each worse coverage by the best coverage 
         # to get a < 100% score.
-
-        # TODO
+        coverages = [(c[0]/(coverages[0][0] + 0.00001), c[1]) for c in coverages]
 
         # We are only concerned about combining the same ambulance's travel time and coverage. 
         # It is not useful to weigh together different ambulance's rankings. Hence the condition.
@@ -69,7 +68,7 @@ class OptimalTravelTimeWithCoverage(AmbulanceSelector):
         for t in times for c in coverages if t[1] == c[1]]
 
         priorities_applied.sort(key=lambda t: t[0])
-        priorities_applied.reverse()
+        priorities_applied
 
         # print("Chosen ambulance: ", priorities_applied[0])
         # print()

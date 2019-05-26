@@ -2,7 +2,7 @@
 # Define name of the simulation. Used in file system naming.
 #
 name: tj-disaster-weighted-dispatch
-case_quantity: 100
+
 
 #
 # Define how the source data is used:
