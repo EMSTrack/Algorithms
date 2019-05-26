@@ -26,7 +26,13 @@ simulation_bases:
   class: ems.datasets.location.base.tijuana.TijuanaBaseSet
   filename: "../data-cruz-roja-clean/bases.csv"
 
-
+#
+# Define the zones for multi-polygon case generation 
+#
+tj-zones: 
+  class: ems.generators.location.multiple_polygon.MultiPolygonLocationGenerator
+  longitudes_file: "./configurations/exp-scenarios/longitudes.yaml"
+  latitudes_file: "./configurations/exp-scenarios/latitudes.yaml"
 
 #
 # Define how EMS agents are selected

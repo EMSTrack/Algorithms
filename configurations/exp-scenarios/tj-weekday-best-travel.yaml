@@ -26,7 +26,13 @@ simulation_bases:
   class: ems.datasets.location.base.tijuana.TijuanaBaseSet
   filename: "../data-cruz-roja-clean/bases.csv"
 
-
+#
+# Define the zones for multi-polygon case generation 
+#
+tj-zones: 
+  class: ems.generators.location.multiple_polygon.MultiPolygonLocationGenerator
+  longitudes_file: "./configurations/exp-scenarios/longitudes.yaml"
+  latitudes_file: "./configurations/exp-scenarios/latitudes.yaml"
 
 #
 # Define how EMS agents are selected
@@ -90,10 +96,11 @@ night:
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
     lmda: 0.010833333333333334
 
-  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    class: ems.generators.location.polygon.PolygonLocationGenerator
-    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
-    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+  # case_location_generator: # Cases generated uniformly in a polygon in Tijuana
+    # class: ems.generators.location.polygon.PolygonLocationGenerator
+    # vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
+    # vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+  case_location_generator: $tj-zones
 
   event_generator: $event_gen
 
@@ -105,10 +112,12 @@ morning:
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
     lmda: 0.02275
 
-  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    class: ems.generators.location.polygon.PolygonLocationGenerator
-    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
-    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+  # case_location_generator: # Cases generated uniformly in a polygon in Tijuana
+  #   class: ems.generators.location.polygon.PolygonLocationGenerator
+  #   vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
+  #   vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+
+  case_location_generator: $tj-zones
 
   event_generator: $event_gen
 
@@ -120,10 +129,12 @@ afternoon:
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
     lmda: 0.026972222222222224
 
-  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    class: ems.generators.location.polygon.PolygonLocationGenerator
-    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
-    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+  # case_location_generator: # Cases generated uniformly in a polygon in Tijuana
+  #   class: ems.generators.location.polygon.PolygonLocationGenerator
+  #   vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
+  #   vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+
+  case_location_generator: $tj-zones
 
   event_generator: $event_gen
 
@@ -135,11 +146,14 @@ evening:
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
     lmda: 0.024138888888888887
 
-  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    class: ems.generators.location.polygon.PolygonLocationGenerator
-    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
-    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+  # case_location_generator: # Cases generated uniformly in a polygon in Tijuana
+  #   class: ems.generators.location.polygon.PolygonLocationGenerator
+  #   vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
+  #   vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
 
+  case_location_generator: $tj-zones
+
+  
   event_generator: $event_gen
 
 
