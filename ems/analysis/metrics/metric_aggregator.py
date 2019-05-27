@@ -57,7 +57,6 @@ class MetricAggregator:
             if calculation is not None:
                 if isinstance(metric.tag, list):
                     for i in range(len(metric.tag)):
-                        print("{}: {}".format(metric.tag[i], calculation[i]))
                         d[metric.tag[i]] = calculation[i]
                 else:
                     d[metric.tag] = calculation

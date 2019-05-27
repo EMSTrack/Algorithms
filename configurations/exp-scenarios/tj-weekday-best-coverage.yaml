@@ -95,8 +95,9 @@ metric_aggregator:
   class: ems.analysis.metrics.metric_aggregator.MetricAggregator
 
   metrics:
-    - class: ems.analysis.metrics.coverage.percent_coverage.PercentCoverage
+    - class: ems.analysis.metrics.coverage.double_coverage.PercentDoubleCoverage
       r1: 600
+      r2: 840
       demands: $demands
       travel_times: $tt
     - class: ems.analysis.metrics.total_delay.TotalDelay
