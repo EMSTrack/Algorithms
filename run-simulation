@@ -54,7 +54,7 @@ driver.objects['ambulances'].write_to_file(output_dir +'/chosen_ambulances.csv')
 driver.objects['hospitals'].write_to_file(output_dir +'/chosen_hospitals.csv')
 
 # Run the simulator.
-print("Begin simulator: ", driver.objects['name'])
+print("Initiated Simulation: ", driver.objects['name'])
 sim = driver.objects["simulator"]
 case_record_set, metric_aggregator = sim.run()
 
@@ -141,4 +141,4 @@ info = {
 #     error_file.write(info_yaml)
 
 
-print("Done: {}".format(driver.objects['name']))
+print("Concluded Simulation: {}".format(driver.objects['name']))

@@ -84,7 +84,7 @@ class OptimalTravelTimeWithCoverage(AmbulanceSelector):
         """ Weighted dispatch as ambulance selection policy, version 2. """
 
         # Amplifiers for each of the weights
-        alpha = 50
+        alpha = 1
         beta = 1
 
         # Calculate each term

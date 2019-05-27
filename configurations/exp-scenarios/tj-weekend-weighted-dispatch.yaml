@@ -31,8 +31,8 @@ simulation_bases:
 #
 tj-zones: 
   class: ems.generators.location.multiple_polygon.MultiPolygonLocationGenerator
-  longitudes_file: "./configurations/exp-scenarios/longitudes.yaml"
-  latitudes_file: "./configurations/exp-scenarios/latitudes.yaml"
+  longitudes_file: "../longitudes.yaml"
+  latitudes_file: "../latitudes.yaml"
 
 #
 # Define how EMS agents are selected
@@ -92,7 +92,7 @@ metric_aggregator:
   class: ems.analysis.metrics.metric_aggregator.MetricAggregator
 
   metrics:
-    - class: ems.analysis.metrics.coverage.percent_coverage.PercentCoverage
+    - class: ems.analysis.metrics.coverage.double_coverage.PercentDoubleCoverage
       r1: 600
       demands: $demands
       travel_times: $tt
