@@ -5,7 +5,7 @@ from ems.datasets.travel_times.travel_times import TravelTimes
 from ems.models.ambulances.ambulance import Ambulance
 from ems.models.cases.case import Case
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelector
-from ems.analysis.metrics.coverage.percent_coverage import PercentCoverage
+from ems.analysis.metrics.coverage.double_coverage import PercentDoubleCoverage
 
 from itertools import combinations
 
@@ -18,15 +18,17 @@ class OptimalTravelTimeWithCoverage(AmbulanceSelector):
                  travel_times: TravelTimes = None,
                  demands=None,
                  r1=600,
+                 r2=840,
                  ):
 
         self.travel_times = travel_times
         # This instance is used for calculating future coverages
 
-        self.coverage = PercentCoverage(
+        self.coverage = PercentDoubleCoverage(
             demands=demands,
             travel_times=self.travel_times,
-            r1=r1
+            r1=r1,
+            r2=r2,
         )
 
 
@@ -55,25 +57,24 @@ class OptimalTravelTimeWithCoverage(AmbulanceSelector):
         # if t0 = 9 minutes and t1 = 10 minutes, then t1 is 9/10 or 90% favorable. 
         # t0 is always favorable because t0/t0 = 100%. 
 
-        times = [(t[0].total_seconds(), t[1]) for t in times] 
-        times = [(times[0][0]/t[0], t[1]) for t in times]
+        times_ranked = [(t[0].total_seconds(), t[1]) for t in times] 
+        times_ranked = [(times[0][0]/t[0], t[1]) for t in times]
 
         # Do the same thing with coverage. Divide each worse coverage by the best coverage 
         # to get a < 100% score.
-        coverages = [(c[0]/(coverages[0][0] + 0.0000001), c[1]) for c in coverages]
+
+
+        best_cov = coverages[0][0]
+        # Make the primary coverage worth 100x more than the secondary coverage. 
+        coverages_ranked = [((c[0][0]*100 + c[0][1])/(best_cov[0]*100 + best_cov[1] + 0.0000001), c[1]) for c in coverages]
 
         # We are only concerned about combining the same ambulance's travel time and coverage. 
         # It is not useful to weigh together different ambulance's rankings. Hence the condition.
         priorities_applied = [(self.weighted_metrics2(t[0], c[0], case.priority), t[1]) \
-        for t in times for c in coverages if t[1] == c[1]]
+        for t in times_ranked for c in coverages_ranked if t[1] == c[1]]
 
         priorities_applied.sort(key=lambda t: t[0])
-        priorities_applied.reverse()
-
-        # print("Chosen ambulance: ", priorities_applied[0])
-        # print()
-
-        # import IPython; IPython.embed()
+        priorities_applied.reverse()   
 
         return priorities_applied[0][1]
 
@@ -91,10 +92,7 @@ class OptimalTravelTimeWithCoverage(AmbulanceSelector):
         c = beta * coverage * abs(1 - priority)/3
 
         score = t + c
-        # print("Priority: ", priority)
-        # print("[{}], [{}]. ".format(time, coverage))
-        # print("[{}], [{}], [{}].".format(t, c, score))
-        # print()
+  
 
         return score 
 
@@ -161,6 +159,7 @@ class OptimalTravelTimeWithCoverage(AmbulanceSelector):
 
         list_of_ambulances.sort(key=lambda t: t[0])
         list_of_ambulances.reverse()
+
         return list_of_ambulances
 
 
