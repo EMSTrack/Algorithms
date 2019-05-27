@@ -54,4 +54,5 @@ To use these, go up one directory.
 # Simpler execution
 
 `chmod +x run-simulator`
+
 `./run-simulator configurations/example.yaml`  
