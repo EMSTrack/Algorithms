@@ -1,3 +1,5 @@
+#TODO PYDOC
+
 from datetime import datetime
 from typing import List
 
@@ -7,23 +9,32 @@ import pandas as pd
 
 
 class MetricAggregator:
-
+    """ TODO """ 
     def __init__(self,
                  metrics: List[Metric] = None):
 
         if metrics is None:
             metrics = []
 
-        tags = set()
+        tags = []
         for metric in metrics:
-            if metric.tag in tags:
-                raise Exception("Metric with tag '{}' already exists".format(metric.tag))
-            tags.add(metric.tag)
+            # Allow for a tag to be a list of tags.
+            if isinstance(metric.tag, list):
+                for each_tag in metric.tag:
+                    if each_tag in tags: 
+                        raise Exception("Metric with tag '{}' already exists".format(each_tag))
+                    tags.append(each_tag) 
+            else:
+                if metric.tag in tags:
+                    raise Exception("Metric with tag '{}' already exists".format(metric.tag))
+                tags.append(metric.tag)
 
+        self.tags = tags # The flattened list of tag strings.
         self.metrics = metrics
         self.results = []
 
     def add_metric(self, metric: Metric):
+        """TODO"""
 
         if metric in self.metrics:
             # TODO custom exception
@@ -32,21 +43,29 @@ class MetricAggregator:
         self.metrics.append(metric)
 
     def remove_metric(self, metric: Metric):
+        """TODO"""
         self.metrics.remove(metric)
 
     def calculate(self,
                   timestamp: datetime,
                   **kwargs):
-
+        #TODO 
         d = {"timestamp": timestamp}
         for metric in self.metrics:
             calculation = metric.calculate(timestamp, **kwargs)
+            # If a calculation is returned, at least one metric exists.
             if calculation is not None:
-                d[metric.tag] = calculation
+                if isinstance(metric.tag, list):
+                    for i in range(len(metric.tag)):
+                        print("{}: {}".format(metric.tag[i], calculation[i]))
+                        d[metric.tag[i]] = calculation[i]
+                else:
+                    d[metric.tag] = calculation
 
         self.results.append(d)
         return d
 
     def write_to_file(self, output_filename):
-        df = pd.DataFrame(self.results, columns=["timestamp"] + [metric.tag for metric in self.metrics])
+        #TODO 
+        df = pd.DataFrame(self.results, columns=["timestamp"] + self.tags)
         df.to_csv(output_filename, index=False)

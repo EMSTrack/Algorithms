@@ -1,4 +1,8 @@
 # Framework for using algorithms and allowing for replacement
+"""
+TODO
+"""
+
 from datetime import timedelta, datetime
 
 from ems.analysis.metrics.metric import Metric
@@ -7,16 +11,15 @@ from ems.datasets.travel_times.travel_times import TravelTimes
 
 
 # Computes a percent coverage given a radius
-
-
 class PercentDoubleCoverage(Metric):
+    """ """
 
     def __init__(self,
                  demands: LocationSet,
                  travel_times: TravelTimes,
                  r1: int = 600,
                  r2: int = 840,
-                 tag = 'percent_coverage'):
+                 tag = ['primary_coverage', 'secondary_coverage']):
         super().__init__(tag=tag)
         self.demands = demands
         self.travel_times = travel_times
@@ -33,7 +36,7 @@ class PercentDoubleCoverage(Metric):
     def calculate(self,
                   timestamp: datetime,
                   **kwargs):
-
+        """ TODO """ 
         if "ambulances" not in kwargs:
             return None
 
@@ -57,9 +60,7 @@ class PercentDoubleCoverage(Metric):
 
         secondary = 0
 
-
-
-
+        # Generate both the coverages # TODO update this comment if it's wrong
         for i in range(len(self.secondary_coverage_state.locations_coverage)):
             location_secondary_ambs = self.secondary_coverage_state.locations_coverage[i]
             location_primary_ambs   = self.primary_coverage_state.locations_coverage[i]
@@ -73,7 +74,9 @@ class PercentDoubleCoverage(Metric):
                     else:
                         secondary += 1
 
-        return round(primary/len(self.demands)*100, 4), round(secondary/len(self.demands)*100, 4)
+        result = round(primary/len(self.demands)*100, 4), round(secondary/len(self.demands)*100, 4)
+        return result 
+
 
 
     def add_ambulance_coverage(self, ambulance):

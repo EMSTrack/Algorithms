@@ -1,8 +1,8 @@
+#!/usr/local/bin/python3
+
 from ems.driver import read_user_input, Driver
 from ems.models.events.event_type import EventType
 import os
-
-from IPython import embed
 
 
 # Initialize configurations
