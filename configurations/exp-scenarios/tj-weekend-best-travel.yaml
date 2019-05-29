@@ -2,7 +2,7 @@
 # Define name of the simulation. Used in file system naming.
 #
 name: tj-weekend-best-travel
-case_quantity: 1500
+case_quantity: 95
 
 #
 # Define how the source data is used:
