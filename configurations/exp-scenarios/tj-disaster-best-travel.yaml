@@ -2,7 +2,7 @@
 # Define name of the simulation. Used in file system naming.
 #
 name: tj-disaster-best-travel
-case_quantity: 95
+case_quantity: 2000
 
 #
 # Define how the source data is used:
@@ -234,6 +234,7 @@ cases:
         - class: ems.triggers.time.TimeTrigger
           start_time: 2019-03-22T13:30:00.0Z
           duration: 1 # in hours
+          interval: 24 # Repeat the disaster so that we can flesh out the data with many cases.
 
 #
 # Multizone: 100 zones of varying sizes, each with 0.01 probability. 
