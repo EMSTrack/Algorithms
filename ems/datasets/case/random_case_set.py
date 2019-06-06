@@ -43,7 +43,7 @@ class RandomCaseSet(CaseSet):
             # severity cases occur.
 
             # TODO I am wondering if something is wrong with the way the below
-            # TODO severity code has with the above self.time and generator code. 
+            # TODO severity code has with the above self.time and generator code.
 
             if disaster:
                 severity = choice(
