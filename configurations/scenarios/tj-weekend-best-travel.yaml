@@ -1,8 +1,8 @@
 #
 # Define name of the simulation. Used in file system naming.
 #
-name: tj-weekday-best-travel
-case_quantity: 200
+name: tj-weekend-best-travel
+case_quantity: 100
 
 #
 # Define how the source data is used:
@@ -83,6 +83,7 @@ event_gen:
   # 0.02275,
   # 0.026972222222222224,
   # 0.024138888888888887,
+
   # 0.017055555555555553,
   # 0.02511111111111111,
   # 0.027944444444444445,
@@ -94,12 +95,13 @@ night:
 
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.010833333333333334
+    lmda: 0.017055555555555553
 
   # case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    # class: ems.generators.location.polygon.PolygonLocationGenerator
-    # vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
+  #   class: ems.generators.location.polygon.PolygonLocationGenerator
+  #   vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
     # vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+
   case_location_generator: $tj-zones
 
   event_generator: $event_gen
@@ -110,7 +112,7 @@ morning:
 
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.02275
+    lmda: 0.02511111111111111
 
   # case_location_generator: # Cases generated uniformly in a polygon in Tijuana
   #   class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -127,7 +129,7 @@ afternoon:
 
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.026972222222222224
+    lmda: 0.027944444444444445
 
   # case_location_generator: # Cases generated uniformly in a polygon in Tijuana
   #   class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -144,7 +146,7 @@ evening:
 
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.024138888888888887
+    lmda: 0.029361111111111112
 
   # case_location_generator: # Cases generated uniformly in a polygon in Tijuana
   #   class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -153,7 +155,6 @@ evening:
 
   case_location_generator: $tj-zones
 
-  
   event_generator: $event_gen
 
 
@@ -225,7 +226,6 @@ metric_aggregator:
   metrics:
     - class: ems.analysis.metrics.coverage.double_coverage.PercentDoubleCoverage
       r1: 600
-      r2: 840
       demands: $demands
       travel_times: $tt
     - class: ems.analysis.metrics.total_delay.TotalDelay
