@@ -42,6 +42,9 @@ class RandomCaseSet(CaseSet):
             # A high lambda signifies a disaster scenario. This means higher
             # severity cases occur.
 
+            # TODO I am wondering if something is wrong with the way the below
+            # TODO severity code has with the above self.time and generator code. 
+
             if disaster:
                 severity = choice(
                                   [1,2,3,4],

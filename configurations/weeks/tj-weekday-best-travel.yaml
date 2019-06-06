@@ -1,7 +1,7 @@
 #
 # Define name of the simulation. Used in file system naming.
 #
-name: tj-weekday-best-travel
+name: scaling-weeks-best-travel
 case_quantity: 100
 
 #

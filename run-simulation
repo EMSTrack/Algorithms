@@ -2,7 +2,7 @@
 
 from ems.driver import read_user_input, Driver
 from ems.models.events.event_type import EventType
-import os
+import os, sys
 
 
 # Initialize configurations
@@ -54,7 +54,7 @@ driver.objects['ambulances'].write_to_file(output_dir +'/chosen_ambulances.csv')
 driver.objects['hospitals'].write_to_file(output_dir +'/chosen_hospitals.csv')
 
 # Run the simulator.
-print("Initiated Simulation:", driver.objects['name'])
+print("Initiated Simulation:", driver.objects['name'], file=sys.stderr)
 sim = driver.objects["simulator"]
 case_record_set, metric_aggregator = sim.run()
 
@@ -65,7 +65,7 @@ case_record_set.write_to_file('../processed_cases.csv')
 case_record_set.write_to_file(output_dir + '/processed_cases.csv')
 metric_aggregator.write_to_file(output_dir + '/metrics.csv')
 
-print("Concluded Simulation: {}".format(driver.objects['name']))
+print("Concluded Simulation: {}".format(driver.objects['name']), file=sys.stderr)
 
 
 # TODO I think the rest are useless code from previous handwavy data analysis.

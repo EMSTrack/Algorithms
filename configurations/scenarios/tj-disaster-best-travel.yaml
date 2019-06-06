@@ -158,7 +158,7 @@ disaster:
 
   case_time_generator: # Cases arise based on a Poisson distribution
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 0.3
+    lmda: 0.99
 
   # case_location_generator: # Cases generated uniformly in a polygon in Tijuana
   #   class: ems.generators.location.polygon.PolygonLocationGenerator
@@ -233,7 +233,7 @@ cases:
       triggers:
         - class: ems.triggers.time.TimeTrigger
           start_time: 2019-03-22T14:30:00.0Z
-          duration: 0.5 # in hours
+          duration: 0.3 # in hours
           interval: 24 # Repeat the disaster so that we can flesh out the data with many cases.
 
 #
