@@ -1,9 +1,9 @@
-/depleting-disaster-best-travel/processed_cases.csv:
-- TO_INCIDENT_duration: 8.860833333333334
-- AT_INCIDENT_duration: 7.438222222222221
-- TO_HOSPITAL_duration: 15.79566666666667
-- AT_HOSPITAL_duration: 7.536833333333334
-- TO_BASE_duration: 12.913944444444445
+/depleting-until-zero/processed_cases.csv:
+- TO_INCIDENT_duration: 9.801055555555555
+- AT_INCIDENT_duration: 7.4478888888888894
+- TO_HOSPITAL_duration: 16.044777777777774
+- AT_HOSPITAL_duration: 7.469722222222223
+- TO_BASE_duration: 12.705055555555555
 - OTHER_duration: 0.0
 /scaling-weeks-best-coverage/processed_cases.csv:
 - TO_INCIDENT_duration: 17.959666666666667
@@ -82,7 +82,7 @@ tj-weekend-weighted-dispatch/processed_cases.csv:
 - AT_HOSPITAL_duration: 7.471166666666668
 - TO_BASE_duration: 11.727666666666664
 - OTHER_duration: 0.0
-/depleting-disaster-best-travel/processed_cases.csv: 52.545500000000004
+/depleting-until-zero/processed_cases.csv: 53.46849999999999
 /scaling-weeks-best-coverage/processed_cases.csv: 60.570541666666664
 /scaling-weeks-best-travel/processed_cases.csv: 52.801624999999994
 tj-disaster-best-coverage/processed_cases.csv: 58.73666666666668

@@ -1,7 +1,7 @@
 #
 # Define name of the simulation. Used in file system naming.
 #
-name: depleting-disaster-best-travel
+name: depleting-until-zero
 case_quantity: 300
 
 #
