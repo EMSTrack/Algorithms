@@ -1,0 +1,1 @@
+Compare the 3 scenarios and the 3 dispatch policies. 
