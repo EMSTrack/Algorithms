@@ -1,8 +1,8 @@
 #
 # Define name of the simulation. Used in file system naming.
 #
-name: tijuana-multi-scenario-disaster
-case_quantity: 150
+name: tj-weekday-best-travel
+case_quantity: 200
 
 #
 # Define how the source data is used:
@@ -26,7 +26,13 @@ simulation_bases:
   class: ems.datasets.location.base.tijuana.TijuanaBaseSet
   filename: "../data-cruz-roja-clean/bases.csv"
 
-
+#
+# Define the zones for multi-polygon case generation 
+#
+tj-zones: 
+  class: ems.generators.location.multiple_polygon.MultiPolygonLocationGenerator
+  longitudes_file: "../longitudes.yaml"
+  latitudes_file: "../latitudes.yaml"
 
 #
 # Define how EMS agents are selected
@@ -90,10 +96,11 @@ night:
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
     lmda: 0.010833333333333334
 
-  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    class: ems.generators.location.polygon.PolygonLocationGenerator
-    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
-    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+  # case_location_generator: # Cases generated uniformly in a polygon in Tijuana
+    # class: ems.generators.location.polygon.PolygonLocationGenerator
+    # vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
+    # vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+  case_location_generator: $tj-zones
 
   event_generator: $event_gen
 
@@ -105,10 +112,12 @@ morning:
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
     lmda: 0.02275
 
-  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    class: ems.generators.location.polygon.PolygonLocationGenerator
-    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
-    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+  # case_location_generator: # Cases generated uniformly in a polygon in Tijuana
+  #   class: ems.generators.location.polygon.PolygonLocationGenerator
+  #   vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
+  #   vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+
+  case_location_generator: $tj-zones
 
   event_generator: $event_gen
 
@@ -120,10 +129,12 @@ afternoon:
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
     lmda: 0.026972222222222224
 
-  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    class: ems.generators.location.polygon.PolygonLocationGenerator
-    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
-    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+  # case_location_generator: # Cases generated uniformly in a polygon in Tijuana
+  #   class: ems.generators.location.polygon.PolygonLocationGenerator
+  #   vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
+  #   vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+
+  case_location_generator: $tj-zones
 
   event_generator: $event_gen
 
@@ -135,27 +146,16 @@ evening:
     class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
     lmda: 0.024138888888888887
 
-  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    class: ems.generators.location.polygon.PolygonLocationGenerator
-    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
-    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
+  # case_location_generator: # Cases generated uniformly in a polygon in Tijuana
+  #   class: ems.generators.location.polygon.PolygonLocationGenerator
+  #   vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
+  #   vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
 
+  case_location_generator: $tj-zones
+
+  
   event_generator: $event_gen
 
-disaster:
-  class: ems.datasets.case.random_case_set.RandomCaseSet
-  time: 2019-03-22T00:00:00Z
-
-  case_time_generator: # Cases arise based on a Poisson distribution
-    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
-    lmda: 1
-
-  case_location_generator: # Cases generated uniformly in a polygon in Tijuana
-    class: ems.generators.location.polygon.PolygonLocationGenerator
-    vertices_latitude: [32.533696, 32.53, 32.469300, 32.45, 32.530337]
-    vertices_longitude: [-117.123506, -116.876454, -116.82, -116.967181, -117.123475]
-
-  event_generator: $event_gen
 
 #
 # Define the hierarchy for each scenario
@@ -177,6 +177,7 @@ cases:
           duration: 6 # in hours
           interval: 24 # in hours
 
+
     - class: ems.scenarios.scenario.Scenario
       label: morning
       priority: 2
@@ -188,6 +189,7 @@ cases:
           duration: 6 # in hours
           interval: 24 # in hours
 
+
     - class: ems.scenarios.scenario.Scenario
       label: afternoon
       priority: 2
@@ -196,18 +198,9 @@ cases:
       triggers:
         - class: ems.triggers.time.TimeTrigger
           start_time: 2019-03-22T12:00:00.0Z
-          duration: 1.5 # in hours
-          interval: 24 # in hours
-
-        - class: ems.triggers.time.TimeTrigger
-          start_time: 2019-03-22T14:30:00.0Z
-          duration: 2.5 # in hours
-          interval: 24 # in hours
-
-        - class: ems.triggers.time.TimeTrigger
-          start_time: 2019-03-23T12:00:00.0Z
           duration: 6 # in hours
           interval: 24 # in hours
+
 
     - class: ems.scenarios.scenario.Scenario
       label: evening
@@ -220,15 +213,6 @@ cases:
           duration: 6 # in hours
           interval: 24 # in hours
 
-    - class: ems.scenarios.scenario.Scenario
-      label: disaster
-      priority: 1
-      case_set: $disaster
-
-      triggers:
-        - class: ems.triggers.time.TimeTrigger
-          start_time: 2019-03-22T13:30:00.0Z
-          duration: 1 # in hours
 
 
 
@@ -239,8 +223,9 @@ metric_aggregator:
   class: ems.analysis.metrics.metric_aggregator.MetricAggregator
 
   metrics:
-    - class: ems.analysis.metrics.coverage.percent_coverage.PercentCoverage
+    - class: ems.analysis.metrics.coverage.double_coverage.PercentDoubleCoverage
       r1: 600
+      r2: 840
       demands: $demands
       travel_times: $tt
     - class: ems.analysis.metrics.total_delay.TotalDelay
@@ -248,7 +233,7 @@ metric_aggregator:
 
 simulator:
   class: ems.simulators.event_simulator.EventDispatcherSimulator
-  debug: True
+  debug: False
   ambulances: $ambulances
   cases: $cases
 

@@ -27,9 +27,9 @@ Install the dependencies via the following command:
 
 If all is well, the simulator library should be runnable now. 
 
-`python run.py --help`
+`python run-simulator --help`
 
-`python run.py example.yaml`
+`python run-simulator example.yaml`
 
 ### yaml configuration files
 
@@ -48,4 +48,11 @@ between them.
 
 To use these, go up one directory. 
 
-`python run.py simple.yaml`
+`python run-simulator simple.yaml`
+
+
+# Simpler execution
+
+`chmod +x run-simulator`
+
+`./run-simulation configurations/example.yaml`  

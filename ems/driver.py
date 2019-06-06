@@ -25,8 +25,8 @@ class Driver:
 
         # print(self.objects)
 
-        if "name" in self.objects:
-            print("Finished parsing: {}".format(self.objects["name"]))
+        # if "name" in self.objects:
+            # print("Finished parsing: {}".format(self.objects["name"]))
 
     def create(self, o):
         """
@@ -53,7 +53,7 @@ class Driver:
                 else:
                     params[key] = self.create(value)
 
-            print("Instantiating: {}".format(cname))
+            # print("Instantiating: {}".format(cname)) # TODO Change to log
             c = getattr(importlib.import_module(cpath), cname)
             instance = c(**params)
             return instance
