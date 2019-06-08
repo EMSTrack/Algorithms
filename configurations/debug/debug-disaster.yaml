@@ -1,0 +1,172 @@
+#
+# Define name of the simulation. Used in file system naming.
+#
+name: debug-disaster-randomness
+case_quantity: 50
+
+#
+# Define how the source data is used:
+#
+demands:
+  class: ems.datasets.location.demand.demand_set.DemandSet
+  filename: ../data-cruz-roja-clean/demand_points.csv
+
+all_bases:
+  class: ems.datasets.location.base.base_set.BaseSet
+  filename: ../data-cruz-roja-clean/bases.csv
+
+tt:
+  class: ems.datasets.travel_times.travel_times.TravelTimes
+  filename: ../data-cruz-roja-clean/times.csv
+  origins: $all_bases
+  destinations: $demands
+
+# Selects a subset of bases for usage in the simulation (K-Means filtered)
+simulation_bases:
+  class: ems.datasets.location.base.tijuana.TijuanaBaseSet
+  filename: "../data-cruz-roja-clean/bases.csv"
+
+#
+# Define the zones for multi-polygon case generation 
+#
+tj-zones: 
+  class: ems.generators.location.multiple_polygon.MultiPolygonLocationGenerator
+  longitudes_file: "../longitudes.yaml"
+  latitudes_file: "../latitudes.yaml"
+
+#
+# Define how EMS agents are selected
+#
+ambulances:
+  class: ems.datasets.ambulance.base_selected_ambulance_set.BaseSelectedAmbulanceSet
+  count: 12
+
+  base_selector:
+    class: ems.algorithms.base_selectors.round_robin_selector.RoundRobinBaseSelector
+    base_set: $simulation_bases
+
+hospitals:
+  class: ems.datasets.location.hospital.hospital_set.HospitalSet
+  latitudes: [32.52506901611384, 32.5027, 32.5180]
+  longitudes: [-117.0097589492798, -117.00371, -117.0078]
+
+event_gen:
+  class: ems.generators.event.event_generator.EventGenerator
+
+  # Travel times between events estimated using travel times matrix
+  travel_duration_generator:
+    class: ems.generators.duration.travel_time_duration.TravelTimeDurationGenerator
+    travel_times: $tt
+    epsilon: 0.001
+
+  # Duration at incident drawn from uniform distribution between 5 and 10 minutes
+  incident_duration_generator:
+    class: ems.generators.duration.random_duration.RandomDurationGenerator
+    lower_bound: 5
+    upper_bound: 10
+
+  # Duration at hospital drawn from uniform distribution between 5 and 10 minutes
+  hospital_duration_generator:
+    class: ems.generators.duration.random_duration.RandomDurationGenerator
+    lower_bound: 5
+    upper_bound: 10
+
+  hospital_selector: # Fastest hospital chosen
+    class: ems.algorithms.hospital_selectors.select_fastest.FastestHospitalSelector
+    hospital_set: $hospitals
+    travel_times: $tt
+
+
+# Regular and disaster scenarios. Only for debugging.
+
+night:
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  time: 2019-03-22T00:00:00Z
+
+  case_time_generator: # Cases arise based on a Poisson distribution
+    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
+    lmda: 0.010833333333333334
+
+  case_location_generator: $tj-zones
+  event_generator: $event_gen
+
+disaster:
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  time: 2019-03-22T00:00:00Z
+
+  case_time_generator: # Cases arise based on a Poisson distribution
+    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
+    lmda: 0.3
+
+  case_location_generator: $tj-zones
+  event_generator: $event_gen
+
+
+#
+# Define the hierarchy for each scenario
+#
+cases:
+  class: ems.datasets.case.scenario_case_set.ScenarioCaseSet
+  time: 2019-03-22T00:00:00Z
+  quantity: $case_quantity
+
+  scenarios:
+    - class: ems.scenarios.scenario.Scenario
+      label: night
+      priority: 2
+      case_set: $night
+
+      triggers:
+        - class: ems.triggers.time.TimeTrigger
+          start_time: 2019-03-22T00:00:00.0Z
+          duration: 3 # in hours
+          interval: 3 # in hours
+
+
+#
+# Why are the disasters occurring so randomly?
+#
+
+    - class: ems.scenarios.scenario.Scenario
+      label: disaster
+      priority: 1
+      case_set: $disaster
+
+      triggers:
+        - class: ems.triggers.time.TimeTrigger
+          start_time: 2019-03-22T01:00:00.0Z
+          duration: 1 # in hours
+          interval: 3
+
+
+#
+# Multizone: 100 zones of varying sizes, each with 0.01 probability. 
+#
+
+
+
+#
+# Simulator configurations: How data is accumulated and how the simulator is run.
+#
+metric_aggregator:
+  class: ems.analysis.metrics.metric_aggregator.MetricAggregator
+
+  metrics:
+    - class: ems.analysis.metrics.coverage.double_coverage.PercentDoubleCoverage
+      r1: 600
+      demands: $demands
+      travel_times: $tt
+    - class: ems.analysis.metrics.total_delay.TotalDelay
+    - class: ems.analysis.metrics.count_pending.CountPending
+
+simulator:
+  class: ems.simulators.event_simulator.EventDispatcherSimulator
+  debug: True
+  ambulances: $ambulances
+  cases: $cases
+
+  ambulance_selector:
+    class: ems.algorithms.selection.dispatch_fastest.BestTravelTime
+    travel_times: $tt
+
+  metric_aggregator: $metric_aggregator
