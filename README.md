@@ -19,7 +19,7 @@ Use the new environment:
 
 Install the dependencies via the following command:
 
-`pip install -r requirements.txt` 
+`pip3 install -r requirements.txt` 
 
 
 
@@ -27,9 +27,9 @@ Install the dependencies via the following command:
 
 If all is well, the simulator library should be runnable now. 
 
-`python run-simulator --help`
+`python3 run-simulation --help`
 
-`python run-simulator example.yaml`
+`python3 run-simulation configurations/example.yaml`
 
 ### yaml configuration files
 
@@ -41,14 +41,14 @@ at `configurations/example.yaml` for an example.
 
 You can generate data by going to `./examples`. Run: 
 
-`python synthesize_data.py` 
+`python3 synthesize_data.py` 
 
 It will produce sample bases, demand points, and the times 
 between them. 
 
 To use these, go up one directory. 
 
-`python run-simulator simple.yaml`
+`python run-simulator configurations/simple.yaml`
 
 
 # Simpler execution
