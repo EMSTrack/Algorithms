@@ -39,21 +39,8 @@ at `configurations/example.yaml` for an example. To run it:
 
 ### Simple Example
 
-`./run-simulation configurations/example.yaml`  
+`python3 run-simulation configurations/example.yaml`  
 
 ### Custom Simulation
 
 To run a custom simulation, create a new YAML file and specify the requirements for the simulation (look to the other YAMLs for an example). Additional extensions for the framework can also be specified here.
-
-### Generating bases and demands
-
-You can generate data by going to `./examples`. Run: 
-
-`python3 synthesize_data.py` 
-
-It will produce sample bases, demand points, and the times 
-between them. 
-
-To use these, go up one directory. 
-
-`python run-simulator configurations/simple.yaml`
