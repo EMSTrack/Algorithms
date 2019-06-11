@@ -2,7 +2,7 @@
 
 A library to do ambulance dispatch simulation and analysis.
 
-## Install and Run
+## Installation
 
 ### A virtual environment
 
@@ -22,20 +22,28 @@ Install the dependencies via the following command:
 `pip3 install -r requirements.txt` 
 
 
-
-### Run the code! 
+## Run
 
 If all is well, the simulator library should be runnable now. 
 
+`chmod +x run-simulator`
+
 `python3 run-simulation --help`
+
+### YAML Configuration Files
+
+We use yaml to read configurations from files into the simulator. Take a look 
+at `configurations/example.yaml` for an example. To run it:
 
 `python3 run-simulation configurations/example.yaml`
 
-### yaml configuration files
+### Simple Example
 
-We use yaml to read configurations from files into the simulator. Take a look 
-at `configurations/example.yaml` for an example.
+`./run-simulation configurations/example.yaml`  
 
+### Custom Simulation
+
+To run a custom simulation, create a new YAML file and specify the requirements for the simulation (look to the other YAMLs for an example). Additional extensions for the framework can also be specified here.
 
 ### Generating bases and demands
 
@@ -49,10 +57,3 @@ between them.
 To use these, go up one directory. 
 
 `python run-simulator configurations/simple.yaml`
-
-
-# Simpler execution
-
-`chmod +x run-simulator`
-
-`./run-simulation configurations/example.yaml`  
