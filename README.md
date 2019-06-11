@@ -39,7 +39,7 @@ at `configurations/example.yaml` for an example. To run it:
 
 ### Simple Example
 
-`python3 run-simulation configurations/example.yaml`  
+`python3 run-simulation configurations/simple.yaml`  
 
 ### Custom Simulation
 
