@@ -1,0 +1,72 @@
+tj-disaster-best-coverage/processed_cases.csv:
+- TO_INCIDENT_duration: 18.115650000000002
+- AT_INCIDENT_duration: 7.469883333333334
+- TO_HOSPITAL_duration: 16.014091666666666
+- AT_HOSPITAL_duration: 7.521633333333333
+- TO_BASE_duration: 12.444550000000003
+- OTHER_duration: 0.0
+tj-disaster-best-travel/processed_cases.csv:
+- TO_INCIDENT_duration: 14.910616666666666
+- AT_INCIDENT_duration: 7.403158333333333
+- TO_HOSPITAL_duration: 16.014091666666666
+- AT_HOSPITAL_duration: 7.458375
+- TO_BASE_duration: 12.89131666666667
+- OTHER_duration: 0.0
+tj-disaster-weighted-dispatch/processed_cases.csv:
+- TO_INCIDENT_duration: 16.88295
+- AT_INCIDENT_duration: 7.48505
+- TO_HOSPITAL_duration: 16.014091666666666
+- AT_HOSPITAL_duration: 7.527983333333333
+- TO_BASE_duration: 12.548733333333333
+- OTHER_duration: 0.0
+tj-weekday-best-coverage/processed_cases.csv:
+- TO_INCIDENT_duration: 17.82250833333333
+- AT_INCIDENT_duration: 7.515183333333333
+- TO_HOSPITAL_duration: 16.119616666666666
+- AT_HOSPITAL_duration: 7.5267333333333335
+- TO_BASE_duration: 11.419233333333336
+- OTHER_duration: 0.0
+tj-weekday-best-travel/processed_cases.csv:
+- TO_INCIDENT_duration: 8.826075000000001
+- AT_INCIDENT_duration: 7.552766666666667
+- TO_HOSPITAL_duration: 16.119616666666666
+- AT_HOSPITAL_duration: 7.529391666666666
+- TO_BASE_duration: 12.520441666666667
+- OTHER_duration: 0.0
+tj-weekday-weighted-dispatch/processed_cases.csv:
+- TO_INCIDENT_duration: 15.262516666666668
+- AT_INCIDENT_duration: 7.504183333333333
+- TO_HOSPITAL_duration: 16.119616666666666
+- AT_HOSPITAL_duration: 7.493924999999999
+- TO_BASE_duration: 11.579933333333335
+- OTHER_duration: 0.0
+tj-weekend-best-coverage/processed_cases.csv:
+- TO_INCIDENT_duration: 17.875074999999995
+- AT_INCIDENT_duration: 7.4636499999999995
+- TO_HOSPITAL_duration: 16.004266666666666
+- AT_HOSPITAL_duration: 7.452291666666668
+- TO_BASE_duration: 11.584950000000001
+- OTHER_duration: 0.0
+tj-weekend-best-travel/processed_cases.csv:
+- TO_INCIDENT_duration: 9.017733333333334
+- AT_INCIDENT_duration: 7.457858333333333
+- TO_HOSPITAL_duration: 16.004266666666666
+- AT_HOSPITAL_duration: 7.521716666666667
+- TO_BASE_duration: 12.5381
+- OTHER_duration: 0.0
+tj-weekend-weighted-dispatch/processed_cases.csv:
+- TO_INCIDENT_duration: 15.576150000000002
+- AT_INCIDENT_duration: 7.529466666666667
+- TO_HOSPITAL_duration: 16.004266666666666
+- AT_HOSPITAL_duration: 7.508383333333334
+- TO_BASE_duration: 11.531975000000003
+- OTHER_duration: 0.0
+tj-disaster-best-coverage/processed_cases.csv: 61.56580833333334
+tj-disaster-best-travel/processed_cases.csv: 58.67755833333334
+tj-disaster-weighted-dispatch/processed_cases.csv: 60.45880833333333
+tj-weekday-best-coverage/processed_cases.csv: 60.403275
+tj-weekday-best-travel/processed_cases.csv: 52.54829166666667
+tj-weekday-weighted-dispatch/processed_cases.csv: 57.960175
+tj-weekend-best-coverage/processed_cases.csv: 60.38023333333333
+tj-weekend-best-travel/processed_cases.csv: 52.539675
+tj-weekend-weighted-dispatch/processed_cases.csv: 58.15024166666667

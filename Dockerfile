@@ -5,6 +5,7 @@ from ubuntu:19.04
 # Copy the working directory here 
 WORKDIR /ReEMS/Algorithms
 COPY . /ReEMS/Algorithms
+COPY ./data-cruz-roja-clean /ReEMS/data-cruz-roja-clean
 
 # Download python3.7 and use the requirements
 RUN apt-get upgrade -y && \

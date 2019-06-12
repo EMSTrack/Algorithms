@@ -1,5 +1,5 @@
 # Parameters for docker build
-version: '3.2'
+version: '3'
 services:
   simulator:
 
@@ -8,13 +8,9 @@ services:
       dockerfile: Dockerfile
 
     volumes: # Mount both the repo and the data
-      - type: bind
-        source: '.'
-        target: /ReEMS/Algorithms
-        
-      - type: bind
-        source: ../data-cruz-roja-clean/
-        target: /ReEMS/data-cruz-roja-clean 
+      - '.:/ReEMS/Algorithms'
+
+
 
   # volumes:
   #   - '.'

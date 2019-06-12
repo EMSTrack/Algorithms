@@ -2,7 +2,7 @@
 # Define name of the simulation. Used in file system naming.
 #
 name: scaling-weeks-best-travel
-case_quantity: 400
+case_quantity: 40
 
 #
 # Define how the source data is used:

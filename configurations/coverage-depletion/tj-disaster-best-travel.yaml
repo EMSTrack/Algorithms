@@ -2,7 +2,7 @@
 # Define name of the simulation. Used in file system naming.
 #
 name: depleting-until-zero
-case_quantity: 300
+case_quantity: 30
 
 #
 # Define how the source data is used:
