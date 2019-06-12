@@ -3,7 +3,9 @@ none:
 	Either run 'make docker' or 'make local'". 
 
 install-docker: 
-	echo "Yo be implemented."
+	docker-compose up 
+	docker cp ../data-cruz-roja-clean 
+# 	docker run 
 
 install-mac:
 	brew install python3  

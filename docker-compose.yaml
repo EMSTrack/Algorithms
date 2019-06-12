@@ -1,0 +1,20 @@
+# Parameters for docker build
+version: '3.2'
+services:
+  simulator:
+
+    build: # the OS, PL, and Libs required are specified in the Dockerfile
+      context: .
+      dockerfile: Dockerfile
+
+    volumes: # Mount both the repo and the data
+      - type: bind
+        source: '.'
+        target: /ReEMS/Algorithms
+        
+      - type: bind
+        source: ../data-cruz-roja-clean/
+        target: /ReEMS/data-cruz-roja-clean 
+
+  # volumes:
+  #   - '.'
