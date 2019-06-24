@@ -50,7 +50,7 @@ On successful simulation, you will find the results saved under `./results/`
 
 You will find that this fails! That's because this particular configuration uses certain historical data files that do not exist **yet**. 
 
-You will need to run one of our scripts to produce some input data. These inputs are examples of well-formatted CSV files that EMS organizations can export their historical data to. 
+You will need to run one of our scripts to produce some synthetic input data. These inputs are examples of well-formatted CSV files that EMS organizations can export their historical data to. 
 
 `[Insert command for script here.]`
 
