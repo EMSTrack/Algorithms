@@ -37,12 +37,11 @@ If you got an error like `results does not exist`, make a new subdirectory:
 
 `mkdir results`
 
+Don't worry about accidentally pushing your own results. This folder is in the `.gitignore` file. 
+
 On successful simulation, you will find the results saved under `./results/`
 
 `ls ./results/`
-
-
-
 
 
 # Run a simple simulation
