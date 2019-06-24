@@ -13,9 +13,10 @@ Highly suggested to use a UNIX-based operating system like Mac OS or Linux.
 - Windows - use one of Microsoft's Linux subsystems. We are working on Docker containerizing
 the simulator but there are no guarantees. 
 
-Required programming language: Python 3. Python 2 will not work. 
-
-Suggested programming language: Python 3.7
+#### Programming language: 
+- Python 3. At least Python 3.5 should be good.
+- Python 2 will not work. 
+- Suggested: Python 3.7
 
 
 ### A virtual environment
