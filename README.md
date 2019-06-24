@@ -6,7 +6,7 @@ A library to do ambulance dispatch simulation and analysis.
 
 There are many ways to get the simulator to work. See [The Installation Instructions](INSTALL.md).
 
-# See the help message
+# Learning how to run the simulator
 
 `python3 run-simulation --help`
 
@@ -14,14 +14,14 @@ Among other things, you will see this:
 
 `usage: run-simulation [-h] config_file` 
 
-The program expects you to configure the specifications of the simulation. 
+The program expects you to configure the specifications of the simulation and state where those specifications are. 
 
-# YAML Configuration Files
+## YAML Configuration Files
 
 The configuration file is in YAML format, and it contains user specifications for how the simulation runs. For specification details, an upcoming paper will detail that. For now, take a look 
 at `configurations/example.yaml`. 
 
-# Run an example simulation
+## Run an example simulation
 
 The simulation currently must be run from the repository itself. 
 
@@ -44,7 +44,7 @@ On successful simulation, you will find the results saved under `./results/`
 `ls ./results/`
 
 
-# Run a simple simulation
+## Run a simple simulation
 
 `python3 run-simulation configurations/simple.yaml`  
 
@@ -58,7 +58,7 @@ Now if you run the simulation again, the historical data is read into the simula
 
 `python3 run-simulation configurations/simple.yaml`  
 
-# Custom Simulation
+## Custom Simulation
 
 - To run a custom simulation, create a new YAML file or copy an existing one. 
 
