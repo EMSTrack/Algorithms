@@ -2,7 +2,7 @@
 
 A library to do ambulance dispatch simulation and analysis.
 
-## Install and Run
+## Installation
 
 ### A virtual environment
 
@@ -19,33 +19,28 @@ Use the new environment:
 
 Install the dependencies via the following command:
 
-`pip install -r requirements.txt` 
+`pip3 install -r requirements.txt` 
 
 
-
-### Run the code! 
+## Run
 
 If all is well, the simulator library should be runnable now. 
 
-`python run.py --help`
+`chmod +x run-simulator`
 
-`python run.py example.yaml`
+`python3 run-simulation --help`
 
-### yaml configuration files
+### YAML Configuration Files
 
 We use yaml to read configurations from files into the simulator. Take a look 
-at `configurations/example.yaml` for an example.
+at `configurations/example.yaml` for an example. To run it:
 
+`python3 run-simulation configurations/example.yaml`
 
-### Generating bases and demands
+### Simple Example
 
-You can generate data by going to `./examples`. Run: 
+`python3 run-simulation configurations/simple.yaml`  
 
-`python synthesize_data.py` 
+### Custom Simulation
 
-It will produce sample bases, demand points, and the times 
-between them. 
-
-To use these, go up one directory. 
-
-`python run.py simple.yaml`
+To run a custom simulation, create a new YAML file and specify the requirements for the simulation (look to the other YAMLs for an example). Additional extensions for the framework can also be specified here.

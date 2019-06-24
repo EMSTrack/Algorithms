@@ -1,7 +1,7 @@
 name: # File metadata, to be printed by the simulator
   Random Cases, Preset Bases, Preset Travel Times
 
-case_quantity: 500 # Generate 500 cases
+case_quantity: 45 # Generate 500 cases
 
 demands: # Read demands points in Tijuana from file
   class: ems.datasets.location.demand.demand_set.DemandSet

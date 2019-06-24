@@ -35,16 +35,34 @@ class RandomCaseSet(CaseSet):
             self.time = self.time + self.case_time_generator.generate(timestamp=self.time)['duration']
             point = self.location_generator.generate(self.time)
 
+            lmda = self.case_time_generator.lmda
+
+            disaster = True if lmda > 0.3 else False
+
+            # A high lambda signifies a disaster scenario. This means higher
+            # severity cases occur.
+
+            # TODO I am wondering if something is wrong with the way the below
+            # TODO severity code has with the above self.time and generator code.
+
+            if disaster:
+                severity = choice(
+                                  [1,2,3,4],
+                                  p=[0.6, 0.2, 0.1, 0.1]
+                              )
+            else:
+                severity = choice(
+                    [1, 2, 3, 4],
+                    p=[0.03397097625329815, 0.03781882145998241,
+                       0.1994283201407212, 0.7287818821459983]
+                )
+
             # Create case
             case = RandomCase(id=k,
                               date_recorded=self.time,
                               incident_location=point,
                               event_generator=self.event_generator,
-                              # TODO TEMPORARY CASE PRIORITY GENERATOR CODE. Actually, this might not be an issue?
-                              priority=choice(
-                                  [1,2,3,4],
-                                  p=[0.03397097625329815, 0.03781882145998241, 0.1994283201407212, 0.7287818821459983]
-                              )
+                              priority=severity
                               )
 
             k += 1

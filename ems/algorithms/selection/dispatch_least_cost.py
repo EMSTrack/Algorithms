@@ -6,7 +6,7 @@ from ems.algorithms.selection.ambulance_selection import AmbulanceSelector
 from ems.datasets.travel_times.travel_times import TravelTimes
 from ems.models.ambulances.ambulance import Ambulance
 from ems.models.cases.case import Case
-from ems.analysis.metrics.coverage.percent_coverage import PercentCoverage
+from ems.analysis.metrics.coverage.double_coverage import PercentDoubleCoverage
 from ems.algorithms.selection.dispatch_fastest import BestTravelTime
 
 from itertools import combinations
@@ -19,13 +19,20 @@ class LeastDisruption(BestTravelTime):
                  travel_times: TravelTimes = None,
                  demands = None,
                  r1 = 600,
+                 r2 = 840, 
                  ):
         self.travel_times = travel_times
-        self.coverage = PercentCoverage(
-            demands=demands,
+        # self.coverage = PercentCoverage(
+            # demands=demands,
+            # travel_times=self.travel_times,
+            # r1=r1
+        # )
+        self.coverage = PercentDoubleCoverage(
+            demands=demands, 
             travel_times=self.travel_times,
-            r1=r1
-        )
+            r1=r1, 
+            r2=r2,
+            )
         super().__init__(travel_times=travel_times)
 
     def select_ambulance(self,
@@ -38,7 +45,6 @@ class LeastDisruption(BestTravelTime):
         # Select an ambulance that disrupts the coverage the least regardless of travel time.
         chosen_ambulance, ambulance_travel_time = self.find_least_disruption(available_ambulances)
         return chosen_ambulance
-
 
     def find_least_disruption(self, ambulances):
         """
@@ -54,15 +60,32 @@ class LeastDisruption(BestTravelTime):
 
 
         chosen_ambulance_set = []
-        current_coverage = -1
+        current_primary = -1
+        current_secondary = -1
 
         potential_ambulances = list(combinations(ambulances, len(ambulances) - 1))
 
+        # Primary coverage considered first. In the event of a tie, update the seconday coverage.
         for ambulance_set in potential_ambulances:
-            coverage = self.coverage.calculate(datetime.now(), ambulances=ambulance_set)
-            if coverage > current_coverage:
-                current_coverage = coverage
+            primary, secondary = self.coverage.calculate(datetime.now(), ambulances=ambulance_set)
+            
+            # If the primary is larger, this clearly wins. 
+            if primary > current_primary:
+                current_primary = primary 
+                current_secondary = secondary
+
                 chosen_ambulance_set = ambulance_set
+
+
+            # If the primaries are the same, then consider the larger of the secondaries.
+            elif primary == current_primary: 
+                if secondary > current_secondary:
+                    current_secondary = secondary 
+                    # TODO A future implementation of this would simply use a list and recursion. 
+                    chosen_ambulance_set = ambulance_set 
+
+
+
 
         chosen_ambulance = [ambulance for ambulance in ambulances if ambulance not in chosen_ambulance_set][0]
 
