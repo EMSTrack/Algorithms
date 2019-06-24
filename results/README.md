@@ -1,0 +1,1 @@
+Empty results folder for simulation outputs. 
