@@ -60,7 +60,7 @@ You will need to run one of our scripts to produce some synthetic input data. Th
 
 `python3 run-simulation configurations/simple.yaml`  
 
-#### On successful simulation, you will find the results saved under ./results/ under a different name.
+#### On successful simulation, you will find the results saved under `./results/` under a different name.
 
 `ls ./results/`
 
