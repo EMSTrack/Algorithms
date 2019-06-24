@@ -1,0 +1,1 @@
+Scale the severity of the disaster to measure against the coverage.

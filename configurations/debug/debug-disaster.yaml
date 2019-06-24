@@ -1,8 +1,8 @@
 #
 # Define name of the simulation. Used in file system naming.
 #
-name: tj-weekend-weighted-dispatch
-
+name: debug-disaster-randomness
+case_quantity: 50
 
 #
 # Define how the source data is used:
@@ -77,13 +77,73 @@ event_gen:
     travel_times: $tt
 
 
+# Regular and disaster scenarios. Only for debugging.
+
+night:
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  time: 2019-03-22T00:00:00Z
+
+  case_time_generator: # Cases arise based on a Poisson distribution
+    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
+    lmda: 0.010833333333333334
+
+  case_location_generator: $tj-zones
+  event_generator: $event_gen
+
+disaster:
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  time: 2019-03-22T00:00:00Z
+
+  case_time_generator: # Cases arise based on a Poisson distribution
+    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
+    lmda: 0.3
+
+  case_location_generator: $tj-zones
+  event_generator: $event_gen
+
+
 #
 # Define the hierarchy for each scenario
 #
 cases:
-  class: ems.datasets.case.csv_case_set.CSVCaseSet
-  filename: ./results/tj-weekend-best-travel/processed_cases.csv
-  event_generator: $event_gen
+  class: ems.datasets.case.scenario_case_set.ScenarioCaseSet
+  time: 2019-03-22T00:00:00Z
+  quantity: $case_quantity
+
+  scenarios:
+    - class: ems.scenarios.scenario.Scenario
+      label: night
+      priority: 2
+      case_set: $night
+
+      triggers:
+        - class: ems.triggers.time.TimeTrigger
+          start_time: 2019-03-22T00:00:00.0Z
+          duration: 3 # in hours
+          interval: 3 # in hours
+
+
+#
+# Why are the disasters occurring so randomly?
+#
+
+    - class: ems.scenarios.scenario.Scenario
+      label: disaster
+      priority: 1
+      case_set: $disaster
+
+      triggers:
+        - class: ems.triggers.time.TimeTrigger
+          start_time: 2019-03-22T01:00:00.0Z
+          duration: 1 # in hours
+          interval: 3
+
+
+#
+# Multizone: 100 zones of varying sizes, each with 0.01 probability. 
+#
+
+
 
 #
 # Simulator configurations: How data is accumulated and how the simulator is run.
@@ -101,13 +161,12 @@ metric_aggregator:
 
 simulator:
   class: ems.simulators.event_simulator.EventDispatcherSimulator
-  debug: False
+  debug: True
   ambulances: $ambulances
   cases: $cases
 
   ambulance_selector:
-    class: ems.algorithms.selection.dispatch_optimal.OptimalTravelTimeWithCoverage
+    class: ems.algorithms.selection.dispatch_fastest.BestTravelTime
     travel_times: $tt
-    demands: $demands
 
   metric_aggregator: $metric_aggregator

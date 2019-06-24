@@ -1,8 +1,7 @@
 #
 # Define name of the simulation. Used in file system naming.
 #
-name: tj-weekday-weighted-dispatch
-
+name: scaling-weeks-best-coverage
 
 #
 # Define how the source data is used:
@@ -76,14 +75,97 @@ event_gen:
     hospital_set: $hospitals
     travel_times: $tt
 
+#
+# WEEKDAY TIME PERIODS SCENARIOS
+#
+weekday-night:
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  time: 2019-03-22T00:00:00Z
+  case_time_generator: # Cases arise based on a Poisson distribution
+    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
+    lmda: 0.010833333333333334
+  case_location_generator: $tj-zones
+  event_generator: $event_gen
 
+weekday-morning:
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  time: 2019-03-22T00:00:00Z
+  case_time_generator: # Cases arise based on a Poisson distribution
+    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
+    lmda: 0.02275
+  case_location_generator: $tj-zones
+  event_generator: $event_gen
+
+weekday-afternoon:
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  time: 2019-03-22T00:00:00Z
+  case_time_generator: # Cases arise based on a Poisson distribution
+    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
+    lmda: 0.026972222222222224
+  case_location_generator: $tj-zones
+  event_generator: $event_gen
+
+
+weekday-evening:
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  time: 2019-03-22T00:00:00Z
+  case_time_generator: # Cases arise based on a Poisson distribution
+    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
+    lmda: 0.024138888888888887
+  case_location_generator: $tj-zones
+  event_generator: $event_gen
+
+#
+# WEEKEND SCENARIOS
+#
+weekend-night:
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  time: 2019-03-22T00:00:00Z
+  case_time_generator: # Cases arise based on a Poisson distribution
+    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
+    lmda: 0.017055555555555553
+  case_location_generator: $tj-zones
+  event_generator: $event_gen
+
+weekend-morning:
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  time: 2019-03-22T00:00:00Z
+  case_time_generator: # Cases arise based on a Poisson distribution
+    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
+    lmda: 0.02511111111111111
+  case_location_generator: $tj-zones
+  event_generator: $event_gen
+
+weekend-afternoon:
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  time: 2019-03-22T00:00:00Z
+  case_time_generator: # Cases arise based on a Poisson distribution
+    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
+    lmda: 0.027944444444444445
+  case_location_generator: $tj-zones
+  event_generator: $event_gen
+
+weekend-evening:
+  class: ems.datasets.case.random_case_set.RandomCaseSet
+  time: 2019-03-22T00:00:00Z
+  case_time_generator: # Cases arise based on a Poisson distribution
+    class: ems.generators.duration.poisson_duration.PoissonDurationGenerator
+    lmda: 0.029361111111111112
+  case_location_generator: $tj-zones
+
+  event_generator: $event_gen
+
+
+#
+# Define the hierarchy for each scenario
+#
 
 #
 # Define the hierarchy for each scenario
 #
 cases:
   class: ems.datasets.case.csv_case_set.CSVCaseSet
-  filename: ./results/tj-weekday-best-travel/processed_cases.csv
+  filename: ./results/scaling-weeks-best-travel/processed_cases.csv
   event_generator: $event_gen
 
 
@@ -105,12 +187,12 @@ metric_aggregator:
 
 simulator:
   class: ems.simulators.event_simulator.EventDispatcherSimulator
-  debug: False
+  debug: True
   ambulances: $ambulances
   cases: $cases
 
   ambulance_selector:
-    class: ems.algorithms.selection.dispatch_optimal.OptimalTravelTimeWithCoverage
+    class: ems.algorithms.selection.dispatch_least_cost.LeastDisruption
     travel_times: $tt
     demands: $demands
 

@@ -1,7 +1,7 @@
 #
 # Define name of the simulation. Used in file system naming.
 #
-name: tj-disaster-weighted-dispatch
+name: tj-weekend-weighted-dispatch
 
 
 #
@@ -25,6 +25,7 @@ tt:
 simulation_bases:
   class: ems.datasets.location.base.tijuana.TijuanaBaseSet
   filename: "../data-cruz-roja-clean/bases.csv"
+
 #
 # Define the zones for multi-polygon case generation 
 #
@@ -32,7 +33,6 @@ tj-zones:
   class: ems.generators.location.multiple_polygon.MultiPolygonLocationGenerator
   longitudes_file: "../longitudes.yaml"
   latitudes_file: "../latitudes.yaml"
-
 
 #
 # Define how EMS agents are selected
@@ -78,13 +78,12 @@ event_gen:
 
 
 #
-# The scenarios simply replay from the previously generated data.
+# Define the hierarchy for each scenario
 #
 cases:
   class: ems.datasets.case.csv_case_set.CSVCaseSet
-  filename: ./results/tj-disaster-best-travel/processed_cases.csv
-  event_generator: $event_gen 
-
+  filename: ./results/tj-weekend-best-travel/processed_cases.csv
+  event_generator: $event_gen
 
 #
 # Simulator configurations: How data is accumulated and how the simulator is run.
@@ -102,7 +101,7 @@ metric_aggregator:
 
 simulator:
   class: ems.simulators.event_simulator.EventDispatcherSimulator
-  debug: False
+  debug: True
   ambulances: $ambulances
   cases: $cases
 
