@@ -14,7 +14,7 @@ Among other things, you will see this:
 
 `usage: run-simulation [-h] config_file` 
 
-The program expects a configuration file with the simulation. 
+The program expects you to configure the specifications of the simulation. 
 
 # YAML Configuration Files
 
