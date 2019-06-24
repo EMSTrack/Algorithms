@@ -58,9 +58,9 @@ Now if you run the simulation again, the historical data is read into the simula
 
 `python3 run-simulation configurations/simple.yaml`  
 
-On successful simulation, you will find the results saved under ./results/ under a different name
+On successful simulation, you will find the results saved under ./results/ under a different name.
 
-ls ./results/
+`ls ./results/`
 
 ## Custom Simulation
 
