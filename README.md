@@ -10,8 +10,6 @@ There are many ways to get the simulator to work. See [The Installation Instruct
 
 If all is well, the simulator library should be runnable now. 
 
-`chmod +x run-simulator`
-
 `python3 run-simulation --help`
 
 ### YAML Configuration Files
