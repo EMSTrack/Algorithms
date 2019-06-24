@@ -2,40 +2,9 @@
 
 A library to do ambulance dispatch simulation and analysis.
 
-## Installation
+# Installation
 
-Highly suggested to use a UNIX-based operating system like Mac OS or Linux. 
-
-#### Suggested operating systems: 
-
-- Ubuntu 16 or higher or MacOS Sierra or higher
-
-- Windows - use one of Microsoft's Linux subsystems. We are working on Docker containerizing
-the simulator but there are no guarantees. 
-
-#### Programming language: 
-- Python 3. At least Python 3.5 should be good.
-- Python 2 will not work. 
-- Suggested: Python 3.7
-
-
-### A virtual environment
-
-Create a new environment with Python 3: 
-
-`virtualenv -p python3 venv`
-
-Use the new environment:
-
-`source venv/bin/activate`
-
-
-### Libraries
-
-Install the dependencies via the following command:
-
-`pip3 install -r requirements.txt` 
-
+There are many ways to get the simulator to work. See [The Installation Instructions](INSTALL.md).
 
 ## Run
 
