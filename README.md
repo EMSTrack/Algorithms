@@ -4,10 +4,12 @@ A library to do ambulance dispatch simulation and analysis.
 
 ## Installation
 
-
 Suggested operating systems: Ubuntu 16 or higher or MacOS Sierra or higher
+
 Required programming language: Python 3. Python 2 will not work. 
+
 Suggested programming language: Python 3.7
+
 
 ### A virtual environment
 
