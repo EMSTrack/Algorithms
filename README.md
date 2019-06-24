@@ -58,6 +58,10 @@ Now if you run the simulation again, the historical data is read into the simula
 
 `python3 run-simulation configurations/simple.yaml`  
 
+On successful simulation, you will find the results saved under ./results/ under a different name
+
+ls ./results/
+
 ## Custom Simulation
 
 - To run a custom simulation, create a new YAML file or copy an existing one. 
