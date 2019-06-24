@@ -23,13 +23,13 @@ at `configurations/example.yaml`.
 
 ## Run an example simulation
 
-The simulation currently must be run from the repository itself. 
+#### The simulation currently must be run from the repository itself. 
 
 `pwd` should return your directory and `/Algorithms/`. For example, here's mine: 
 
 `/Users/vectflux/ReEMS/Algorithms`
 
-Let's run the simulation.
+#### Let's run the simulation.
 
 `python3 run-simulation configurations/example.yaml`
 
@@ -39,7 +39,7 @@ If you got an error like `results does not exist`, make a new subdirectory:
 
 Don't worry about accidentally pushing your own results. This folder is in the `.gitignore` file. 
 
-On successful simulation, you will find the results saved under `./results/`
+#### On successful simulation, you will find the results saved under `./results/`
 
 `ls ./results/`
 
@@ -48,17 +48,19 @@ On successful simulation, you will find the results saved under `./results/`
 
 `python3 run-simulation configurations/simple.yaml`  
 
-You will find that this fails! That's because this particular configuration uses certain historical data files that do not exist **yet**. 
+#### You will find that this fails! 
+
+That's because this particular configuration uses certain historical data files that do not exist **yet**. 
 
 You will need to run one of our scripts to produce some synthetic input data. These inputs are examples of well-formatted CSV files that EMS organizations can export their historical data to. Alternatively, another data reader can be implemented that accepts data in a different way. 
 
 `[Insert command for script here.]`
 
-Now if you run the simulation again, the historical data is read into the simulation. 
+#### Now if you run the simulation again, the historical data is read into the simulation. 
 
 `python3 run-simulation configurations/simple.yaml`  
 
-On successful simulation, you will find the results saved under ./results/ under a different name.
+#### On successful simulation, you will find the results saved under ./results/ under a different name.
 
 `ls ./results/`
 
