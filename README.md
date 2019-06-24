@@ -23,7 +23,27 @@ at `configurations/example.yaml`.
 
 # Run an example simulation
 
+The simulation currently must be run from the repository itself. 
+
+`pwd` should return your directory and `/Algorithms/`. For example, here's mine: 
+
+`/Users/vectflux/ReEMS/Algorithms`
+
+Let's run the simulation.
+
 `python3 run-simulation configurations/example.yaml`
+
+If you got an error like `results does not exist`, make a new subdirectory:
+
+`mkdir results`
+
+On successful simulation, you will find the results saved under `./results/`
+
+`ls ./results/`
+
+
+
+
 
 # Run a simple simulation
 
