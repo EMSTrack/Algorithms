@@ -29,6 +29,18 @@ at `configurations/example.yaml`.
 
 `python3 run-simulation configurations/simple.yaml`  
 
+You will find that this fails! That's because this particular configuration uses certain historical data files that do not exist *yet*. 
+
+You will need to run one of our scripts to produce some input data. These inputs are examples of well-formatted CSV files that EMS organizations can export their historical data to. 
+
+`[Insert command for script here.]`
+
+Now if you run the simulation again, the historical data is read into the simulation. 
+
+`python3 run-simulation configurations/simple.yaml`  
+
 # Custom Simulation
 
-To run a custom simulation, create a new YAML file and specify the requirements for the simulation (look to the other YAMLs for an example). Additional extensions for the framework can also be specified here.
+- To run a custom simulation, create a new YAML file or copy an existing one. 
+
+- Specify the requirements for the simulation (look to the other YAMLs for an example). Additional extensions for the framework can also be specified here.
