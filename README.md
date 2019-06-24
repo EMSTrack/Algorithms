@@ -21,7 +21,7 @@ The program expects you to configure the specifications of the simulation and st
 The configuration file is in YAML format, and it contains user specifications for how the simulation runs. For specification details, an upcoming paper will detail that. For now, take a look 
 at `configurations/example.yaml`. 
 
-## Run an example simulation
+# Run an example simulation
 
 #### The simulation currently must be run from the repository itself. 
 
@@ -44,7 +44,7 @@ Don't worry about accidentally pushing your own results. This folder is in the `
 `ls ./results/`
 
 
-## Run a simple simulation
+# Run a simple simulation
 
 `python3 run-simulation configurations/simple.yaml`  
 
@@ -64,7 +64,7 @@ You will need to run one of our scripts to produce some synthetic input data. Th
 
 `ls ./results/`
 
-## Custom Simulation
+# Custom Simulation
 
 - To run a custom simulation, create a new YAML file or copy an existing one. 
 
