@@ -4,7 +4,14 @@ A library to do ambulance dispatch simulation and analysis.
 
 ## Installation
 
-Suggested operating systems: Ubuntu 16 or higher or MacOS Sierra or higher
+Highly suggested to use a UNIX-based operating system like Mac OS or Linux. 
+
+#### Suggested operating systems: 
+
+- Ubuntu 16 or higher or MacOS Sierra or higher
+
+- Windows - use one of Microsoft's Linux subsystems. We are working on Docker containerizing
+the simulator but there are no guarantees. 
 
 Required programming language: Python 3. Python 2 will not work. 
 
