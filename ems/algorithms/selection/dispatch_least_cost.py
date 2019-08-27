@@ -1,15 +1,13 @@
 from datetime import datetime
-from datetime import timedelta
+from itertools import combinations
 from typing import List
 
-from ems.algorithms.selection.ambulance_selection import AmbulanceSelector
 from ems.datasets.travel_times.travel_times import TravelTimes
 from ems.models.ambulances.ambulance import Ambulance
 from ems.models.cases.case import Case
 from ems.analysis.metrics.coverage.double_coverage import PercentDoubleCoverage
 from ems.algorithms.selection.dispatch_fastest import BestTravelTime
 
-from itertools import combinations
 
 # An implementation of a "fastest travel time" ambulance_selection from a base to
 # the demand point closest to a case
@@ -17,9 +15,9 @@ class LeastDisruption(BestTravelTime):
 
     def __init__(self,
                  travel_times: TravelTimes = None,
-                 demands = None,
-                 r1 = 600,
-                 r2 = 840, 
+                 demands=None,
+                 r1=600,
+                 r2=840,
                  ):
         self.travel_times = travel_times
         # self.coverage = PercentCoverage(
@@ -40,10 +38,10 @@ class LeastDisruption(BestTravelTime):
                          case: Case,
                          current_time: datetime):
 
-        case_priority = case.priority
+        # case_priority = case.priority
 
         # Select an ambulance that disrupts the coverage the least regardless of travel time.
-        chosen_ambulance, ambulance_travel_time = self.find_least_disruption(available_ambulances)
+        chosen_ambulance, _ = self.find_least_disruption(available_ambulances)
         return chosen_ambulance
 
     def find_least_disruption(self, ambulances):

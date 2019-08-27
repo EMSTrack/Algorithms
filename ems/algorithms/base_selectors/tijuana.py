@@ -25,23 +25,4 @@ class TijuanaBaseSelector(AmbulanceBaseSelector):
         if len(bases) != num_ambulances:
             raise Exception("Wrong number of bases were being assigned to ambulances.")
 
-            # To map the 8 bases.
-        from matplotlib import pyplot as plt
-        import numpy as np
-
-        # latitudes = [i.latitude for i in bases]
-        # longitudes = [i.longitude for i in bases]
-        # print("len: " , len(latitudes))
-
-        # lat2 = [self.base_set.locations[i].latitude for i in two_ambulances]
-        # lon2 = [self.base_set.locations[i].longitude for i in two_ambulances]
-        #
-        # print(np.array([(latitudes, longitudes) ]))
-        # print("Length chosen: ", len(latitudes))
-        # print("Length doubled: ", len(lat2))
-        # plt.plot(longitudes, latitudes, "o")
-        # plt.plot(lon2, lat2, '*')
-        # plt.plot()
-        # plt.show()
-
         return bases

@@ -2,8 +2,6 @@ from numpy.random import choice
 from typing import List
 import yaml
 
-from geopy import Point
-
 from ems.generators.location.location import LocationGenerator
 from ems.generators.location.polygon import PolygonLocationGenerator
 
@@ -71,17 +69,3 @@ class MultiPolygonLocationGenerator(LocationGenerator):
         return generator.generate(timestamp)
 
 
-    @staticmethod # Why is this a static method?
-    def create_generators(list_lons, list_lats):
-        """
-        One uniform distribution random location generator per region.
-
-        :param polygons:
-        :return:
-        """
-        return
-        # polygon_generators = []
-        # for points in polygons:
-        #     polygon_generator = PolygonLocationGenerator(points)
-        #     polygon_generators.append(polygon_generator)
-        # return polygon_generators

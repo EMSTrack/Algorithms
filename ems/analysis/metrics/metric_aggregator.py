@@ -9,7 +9,7 @@ import pandas as pd
 
 
 class MetricAggregator:
-    """ TODO """ 
+    """ TODO """
     def __init__(self,
                  metrics: List[Metric] = None):
 

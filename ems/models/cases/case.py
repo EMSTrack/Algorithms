@@ -6,11 +6,11 @@ class Case:
 
     # Include events
     def __init__(self,
-                 id: int,
+                 identifier: int,
                  date_recorded: datetime,
                  incident_location: Point,
                  priority: float = None):
-        self.id = id
+        self.identifier = identifier
         self.date_recorded = date_recorded
         self.incident_location = incident_location
         self.priority = priority
@@ -22,4 +22,4 @@ class Case:
         return self.date_recorded < other.date_recorded
 
     def __eq__(self, other):
-        return type(other) is Case and self.id == other.id
+        return type(other) is Case and self.identifier == other.id

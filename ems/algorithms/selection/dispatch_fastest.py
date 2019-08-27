@@ -26,8 +26,7 @@ class BestTravelTime(AmbulanceSelector):
         closest_loc_to_case, _, _ = loc_set_2.closest(case.incident_location)
 
         # Select an ambulance to attend to the given case and obtain the its duration of travel
-        chosen_ambulance, ambulance_travel_time = self.find_fastest_ambulance(
-            available_ambulances, closest_loc_to_case)
+        chosen_ambulance, _ = self.find_fastest_ambulance(available_ambulances, closest_loc_to_case)
 
         return chosen_ambulance
 

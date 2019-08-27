@@ -4,9 +4,6 @@ class CaseSet:
     def __init__(self, time):
         self.time = time
 
-    def __len__(self):
-        raise NotImplementedError()
-
     def iterator(self):
         raise NotImplementedError()
 

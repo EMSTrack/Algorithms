@@ -19,7 +19,7 @@ class PercentDoubleCoverage(Metric):
                  travel_times: TravelTimes,
                  r1: int = 600,
                  r2: int = 840,
-                 tag = ['primary_coverage', 'secondary_coverage']):
+                 tag = ('primary_coverage', 'secondary_coverage')):
         super().__init__(tag=tag)
         self.demands = demands
         self.travel_times = travel_times

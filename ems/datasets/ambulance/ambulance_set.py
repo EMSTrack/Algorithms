@@ -28,7 +28,7 @@ class AmbulanceSet:
         return len(self.ambulances)
 
     def write_to_file(self, output_filename):
-        a = [{"id": ambulance.id,
+        a = [{"id": ambulance.identifier,
               "base_latitude": ambulance.base.latitude,
               "base_longitude": ambulance.base.longitude,
               "capability": ambulance.capability.name} for ambulance in self.ambulances]
@@ -48,10 +48,10 @@ class AmbulanceSet:
 
         # Generate list of models from dataframe
         a = []
-        for index, row in ambulances_df.iterrows():
+        for _, row in ambulances_df.iterrows():
             base = Point(row[b_latitude_key],
                          row[b_longitude_key])
-            ambulance = Ambulance(id=row[id_key],
+            ambulance = Ambulance(identifier=row[id_key],
                                   base=base,
                                   capability=Capability[row[capability_key]])
             a.append(ambulance)

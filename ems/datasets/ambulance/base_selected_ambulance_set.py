@@ -14,7 +14,7 @@ class BaseSelectedAmbulanceSet(AmbulanceSet):
 
     def initialize_ambulances(self):
         bases = self.base_selector.select(self.count)
-        ambulances = [Ambulance(id=str(i),
+        ambulances = [Ambulance(identifier=str(i),
                                 base=bases[i],
                                 location=bases[i]) for i in range(self.count)]
 

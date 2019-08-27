@@ -26,12 +26,12 @@ class CaseRecordSet:
         a = []
         for case_record in self.case_records:
 
-            d = {"id": case_record.case.id,
+            d = {"id": case_record.case.identifier,
                  "date": case_record.case.date_recorded,
                  "latitude": case_record.case.incident_location.latitude,
                  "longitude": case_record.case.incident_location.longitude,
                  "priority": case_record.case.priority,
-                 "ambulance": case_record.ambulance.id,
+                 "ambulance": case_record.ambulance.identifier,
                  "start_time": case_record.start_time}
 
             total_durations_other = timedelta(minutes=0)

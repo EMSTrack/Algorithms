@@ -73,7 +73,7 @@ class EventDispatcherSimulator(Simulator):
                 case = pending_cases.pop(0)
 
                 self.print(colored("Current Time: {}".format(current_time), "cyan", attrs=["bold"]))
-                self.print(colored("Processing pending case: {}".format(case.id), "green"))
+                self.print(colored("Processing pending case: {}".format(case.identifier), "green"))
 
                 case_state_to_add = self.process_new_case(ambulances, case, current_time)
                 bisect.insort_left(ongoing_case_states, case_state_to_add)
@@ -86,7 +86,7 @@ class EventDispatcherSimulator(Simulator):
 
                 # Process a new case
                 if available_ambulances:
-                    self.print(colored("Processing new case: {}".format(next_case.id), "green", attrs=["bold"]))
+                    self.print(colored("Processing new case: {}".format(next_case.identifier), "green", attrs=["bold"]))
                     case_state_to_add = self.process_new_case(ambulances, next_case, current_time)
                     bisect.insort_left(ongoing_case_states, case_state_to_add)
 
@@ -105,7 +105,7 @@ class EventDispatcherSimulator(Simulator):
                 current_time = next_ongoing_case_state.next_event_time
 
                 self.print(colored("Current Time: {}".format(current_time), "cyan", attrs=["bold"]))
-                self.print(colored("Processing ongoing case: {}".format(next_ongoing_case_state.case.id),
+                self.print(colored("Processing ongoing case: {}".format(next_ongoing_case_state.case.identifier),
                               "green"))
 
                 # Process ongoing case
@@ -115,11 +115,11 @@ class EventDispatcherSimulator(Simulator):
                 else:
                     case_record_set.add_case_record(next_ongoing_case_state.case_record)
 
-            self.print(colored("Busy ambulances: {}".format(sorted([amb.id for amb in ambulances if amb.deployed])),
+            self.print(colored("Busy ambulances: {}".format(sorted([amb.identifier for amb in ambulances if amb.deployed])),
                           "yellow"))
-            self.print(colored("Ongoing cases: {}".format([case_state.case.id for case_state in ongoing_case_states]),
+            self.print(colored("Ongoing cases: {}".format([case_state.case.identifier for case_state in ongoing_case_states]),
                           "yellow"))
-            self.print(colored("Pending cases: {}".format([case.id for case in pending_cases]), "red"))
+            self.print(colored("Pending cases: {}".format([case.identifier for case in pending_cases]), "red"))
             self.print("")
             self.print(colored("Metrics", "magenta", attrs=["bold"]))
 
@@ -145,7 +145,7 @@ class EventDispatcherSimulator(Simulator):
         selected_ambulance = self.select_ambulance(ambulances, case, current_time)
         selected_ambulance.deployed = True
 
-        self.print("Selected ambulance: {}".format(selected_ambulance.id))
+        self.print("Selected ambulance: {}".format(selected_ambulance.identifier))
 
         # Add new case to ongoing cases
         case_event_iterator = case.iterator(selected_ambulance, current_time)

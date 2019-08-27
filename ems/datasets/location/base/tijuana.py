@@ -8,8 +8,8 @@ class TijuanaBaseSet(BaseSet):
         latitudes, longitudes = self.read_bases(filename)
 
         # To map the 8 bases.
-        from matplotlib import pyplot as plt
-        import numpy as np
+        # from matplotlib import pyplot as plt
+        # import numpy as np
 
         # print(np.array([(latitudes[i], longitudes[i]) for i in range(-8, 0)]))
         # plt.plot(longitudes[-8: ], latitudes[-8: ], "o")

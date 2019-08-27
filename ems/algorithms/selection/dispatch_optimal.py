@@ -1,4 +1,5 @@
 from datetime import datetime
+from itertools import combinations
 from typing import List
 
 from ems.datasets.travel_times.travel_times import TravelTimes
@@ -6,8 +7,6 @@ from ems.models.ambulances.ambulance import Ambulance
 from ems.models.cases.case import Case
 from ems.algorithms.selection.ambulance_selection import AmbulanceSelector
 from ems.analysis.metrics.coverage.double_coverage import PercentDoubleCoverage
-
-from itertools import combinations
 
 
 # An implementation of a "fastest travel time" ambulance_selection from a base 
@@ -88,10 +87,10 @@ class OptimalTravelTimeWithCoverage(AmbulanceSelector):
         beta = 4
 
         # Calculate each term
-        t = alpha * time * abs(4 - priority)/3
-        c = beta * coverage * abs(1 - priority)/3
+        time = alpha * time * abs(4 - priority)/3
+        coverage = beta * coverage * abs(1 - priority)/3
 
-        score = t + c
+        score = time + coverage
   
 
         return score 

@@ -22,7 +22,7 @@ class HospitalSet(KDTreeLocationSet):
         # Generate list of models from dataframe
         latitudes = []
         longitudes = []
-        for index, row in hospitals_df.iterrows():
+        for _, row in hospitals_df.iterrows():
             latitudes.append(row["latitude"])
             longitudes.append(row["longitude"])
 

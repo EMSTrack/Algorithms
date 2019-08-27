@@ -1,13 +1,12 @@
-from typing import List
 
+from multiprocessing import Pool
+from multiprocessing import cpu_count
 import numpy as np
+from typing import List
 
 from ems.datasets.location.kd_tree_location_set import KDTreeLocationSet
 from ems.datasets.travel_times.travel_times import TravelTimes
 from ems.utils import parse_headered_csv
-from multiprocessing import Pool
-from multiprocessing import cpu_count
-
 
 class FilteredBaseSet(KDTreeLocationSet):
 
@@ -42,7 +41,7 @@ class FilteredBaseSet(KDTreeLocationSet):
         # Generate list of models from dataframe
         latitudes = []
         longitudes = []
-        for index, row in bases_df.iterrows():
+        for _, row in bases_df.iterrows():
             latitudes.append(row["latitude"])
             longitudes.append(row["longitude"])
 
@@ -133,7 +132,6 @@ class FilteredBaseSet(KDTreeLocationSet):
 
         for demand_id in range(len(new_matrix[0])):
             # Determine if there is a primary coverage and a secondary coverage < r2
-            primary = None
 
             # I want the minimum primary time. If there are more than one, then secondary coverage is true if
             # it has more elements that this.

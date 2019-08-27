@@ -9,13 +9,13 @@ from ems.models.events.event    import Event
 class DefinedCase(Case):
 
     def __init__(self,
-                 id: int,
+                 identifier: int,
                  date_recorded: datetime,
                  incident_location: Point,
                  events: List[Event],
                  priority: float = None):
 
-        super().__init__(id, date_recorded, incident_location, priority)
+        super().__init__(identifier, date_recorded, incident_location, priority)
         self.events = events
 
     def iterator(self, ambulance, current_time):

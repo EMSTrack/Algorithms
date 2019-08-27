@@ -10,9 +10,9 @@ class LocationSet:
     def __init__(self,
                  latitudes: List[float],
                  longitudes: List[float]):
-            self.locations = [Point(latitude=latitude, longitude=longitude)
+        self.locations = [Point(latitude=latitude, longitude=longitude)
                               for latitude, longitude in zip(latitudes, longitudes)]
-            self.kd_tree = self._initialize_kd_tree()
+        self.kd_tree = self._initialize_kd_tree()
 
     def __len__(self):
         return len(self.locations)

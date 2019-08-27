@@ -41,8 +41,8 @@ class DeDatosCaseSet(CaseSet):
 
         # Generate list of models from dataframe
         cases = []
-        for index, row in cases_df.iterrows():
-            case = RandomCase(id=row["id"],
+        for _, row in cases_df.iterrows():
+            case = RandomCase(identifier=row["id"],
                               date_recorded=row["datetime"],
                               incident_location=Point(row["latitud"], row["longitud"]),
                               event_generator=self.event_generator,

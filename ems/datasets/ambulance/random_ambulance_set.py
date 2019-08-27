@@ -21,7 +21,7 @@ class RandomAmbulanceSet(AmbulanceSet):
         for index in range(self.count):
             base = self.base_generator.generate(None)
             capability = random.choice(list(Capability))
-            ambulances.append(Ambulance(id=str(index),
+            ambulances.append(Ambulance(identifier=str(index),
                                         base=base,
                                         capability=capability,
                                         deployed=False,

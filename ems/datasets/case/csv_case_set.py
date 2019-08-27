@@ -45,8 +45,8 @@ class CSVCaseSet(CaseSet):
 
         # Generate list of models from dataframe
         cases = []
-        for index, row in cases_df.iterrows():
-            case = RandomCase(id=row[id_key],
+        for _, row in cases_df.iterrows():
+            case = RandomCase(identifier=row[id_key],
                               date_recorded=datetime.strptime(row[timestamp_key], '%Y-%m-%d %H:%M:%S.%f'),
                               incident_location=Point(row[latitude_key], row[longitude_key]),
                               event_generator=self.event_generator,

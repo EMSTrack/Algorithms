@@ -14,12 +14,12 @@ from ems.models.events.event_type import EventType
 class RandomCase(Case):
 
     def __init__(self,
-                 id: int,
+                 identifier: int,
                  date_recorded: datetime,
                  incident_location: Point,
                  event_generator: EventGenerator,
                  priority: int = None):
-        super().__init__(id, date_recorded, incident_location, priority)
+        super().__init__(identifier, date_recorded, incident_location, priority)
         self.event_generator = event_generator
 
     def iterator(self, ambulance, current_time):

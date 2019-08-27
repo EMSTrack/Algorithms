@@ -1,3 +1,6 @@
+"""
+CLI and config parsing and reorganization.
+"""
 import argparse
 import yaml
 
@@ -19,19 +22,24 @@ class UserArguments:
         self.sim_args = file_contents
 
     def get_sim_args(self):
+        """ Getter """
         return self.sim_args
 
     def _command_line_args(self):
-
+        """
+        Basic argparse for a positional argument, the string representing the location of the
+        configuration file
+        :return: Namespace(cli arguments)
+        """
         parser = argparse.ArgumentParser(
             description="Load configurations, data, preprocess models. Run simulator on "
                         "ambulance dispatch. Decisions are made during the simulation, but "
                         "the events are output to a csv file for replay.")
 
         parser.add_argument('config_file',
-                                 help="The simulator needs a configuration to begin the computation.",
-                                 type=str,
-                                 # nargs='*'
-                                 )
+                            help="The simulator needs a configuration to begin the computation.",
+                            type=str,
+                            # nargs='*'
+        )
 
         return parser.parse_args()

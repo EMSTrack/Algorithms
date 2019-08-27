@@ -23,7 +23,7 @@ class BaseSet(LocationSet):
         # Generate list of models from dataframe
         latitudes = []
         longitudes = []
-        for index, row in bases_df.iterrows():
+        for _, row in bases_df.iterrows():
             latitudes.append(row["latitude"])
             longitudes.append(row["longitude"])
 

@@ -96,7 +96,7 @@ class Jan2017CaseSet(CaseSet):
                 events.append(incident_to_base_event)
 
             # Generate a case from events
-            case = DefinedCase(id=index,
+            case = DefinedCase(identifier=index,
                                date_recorded=base_depart_dt,
                                incident_location=Point(latitude=row["Latitud llegada incidente"],
                                                        longitude=row["Longitud llegada incidente"]),

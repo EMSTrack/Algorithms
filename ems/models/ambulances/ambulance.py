@@ -7,12 +7,12 @@ from ems.models.ambulances.capability import Capability
 class Ambulance:
 
     def __init__(self,
-                 id: str,
+                 identifier: str,
                  base: Point,
                  capability: Capability = Capability.BASIC,
                  deployed: bool = False,
                  location: Point = None):
-        self.id = id
+        self.identifier = identifier
         self.base = base
         self.capability = capability
         self.deployed = deployed
@@ -24,10 +24,10 @@ class Ambulance:
         :return: True if objects are equal; else False
         """
 
-        return type(other) is Ambulance and self.id == other.id
+        return type(other) is Ambulance and self.identifier == other.identifier
 
     def __hash__(self):
-        return hash(self.id)
+        return hash(self.identifier)
 
     def __str__(self):
-        return self.id
+        return self.identifier

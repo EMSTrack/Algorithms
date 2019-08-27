@@ -12,8 +12,8 @@ class Trigger:
     def has_ended(self, time: datetime, **kwargs):
         raise NotImplementedError
 
-    def set_id(self, id):
-        self.id = id
+    def set_id(self, identity):
+        self.id = identity
 
     def get_id(self):
         return self.id

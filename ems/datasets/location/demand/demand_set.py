@@ -22,7 +22,7 @@ class DemandSet(LocationSet):
         # Generate list of models from dataframe
         latitudes = []
         longitudes = []
-        for index, row in demands_df.iterrows():
+        for _, row in demands_df.iterrows():
             latitudes.append(row["latitude"])
             longitudes.append(row["longitude"])
 

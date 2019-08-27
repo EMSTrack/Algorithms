@@ -7,7 +7,6 @@ from ems.generators.location.location import LocationGenerator
 from ems.generators.event.event_generator import EventGenerator
 
 from ems.models.cases.random_case import RandomCase
-from random import randint
 from numpy.random import choice
 
 
@@ -58,7 +57,7 @@ class RandomCaseSet(CaseSet):
                 )
 
             # Create case
-            case = RandomCase(id=k,
+            case = RandomCase(identifier=k,
                               date_recorded=self.time,
                               incident_location=point,
                               event_generator=self.event_generator,
@@ -68,6 +67,3 @@ class RandomCaseSet(CaseSet):
             k += 1
 
             yield case
-
-    def __len__(self):
-        return self.num_cases

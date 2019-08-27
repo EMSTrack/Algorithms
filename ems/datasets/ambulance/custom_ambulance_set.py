@@ -11,7 +11,7 @@ class CustomAmbulanceSet(AmbulanceSet):
         super().__init__(ambulances=self.initialize_ambulances())
 
     def initialize_ambulances(self):
-        ambulances = [Ambulance(id=str(i),
+        ambulances = [Ambulance(identifier=str(i),
                                 base=self.bases[i],
                                 location=self.bases[i]) for i in range(len(self.bases))]
         return ambulances

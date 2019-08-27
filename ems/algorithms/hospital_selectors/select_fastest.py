@@ -1,3 +1,7 @@
+"""
+Implementation to select the fastest ambulance.
+"""
+
 from datetime import datetime, timedelta
 
 from ems.algorithms.hospital_selectors.hospital_selector import HospitalSelector
@@ -7,7 +11,9 @@ from ems.models.ambulances.ambulance import Ambulance
 
 
 class FastestHospitalSelector(HospitalSelector):
-
+    """
+    Implementation to select the fastest ambulance.
+    """
     def __init__(self,
                  hospital_set: LocationSet,
                  travel_times: TravelTimes):
@@ -17,17 +23,23 @@ class FastestHospitalSelector(HospitalSelector):
     def select(self,
                timestamp: datetime,
                ambulance: Ambulance):
+        """
+        Implementation to select a hospital
+        """
 
         # Compute the closest point in set 2 to the ambulance
         loc_set_1 = self.travel_times.origins
         closest_loc_to_ambulance, _, _ = loc_set_1.closest(ambulance.location)
 
         # Select an ambulance to attend to the given case and obtain the its duration of travel
-        chosen_hospital, travel_time = self.find_fastest_hospital(closest_loc_to_ambulance)
+        chosen_hospital, _ = self.find_fastest_hospital(closest_loc_to_ambulance)
 
         return chosen_hospital
 
     def find_fastest_hospital(self, location):
+        """
+        Helper method to select the fastest ambulance.
+        """
 
         shortest_time = timedelta.max
         fastest_hosp = None
