@@ -4,7 +4,7 @@ A library to do ambulance dispatch simulation and analysis.
 
 # Installation
 
-There are many ways to get the simulator to work. See [The Installation Instructions](INSTALL.md).
+There are many ways to get the simulator to work. See [The Installation Instructions](docs/INSTALL.md).
 
 # Learning how to run the simulator
 
@@ -59,7 +59,8 @@ That's because this particular configuration uses certain historical data files 
 
 You will need to run one of our scripts to produce some synthetic input data. These inputs are examples of well-formatted CSV files that EMS organizations can export their historical data to. Alternatively, another data reader can be implemented that accepts data in a different way. 
 
-`[Insert command for script here.]`
+`python3 examples/synthesize_data.py` 
+
 
 #### Now if you run the simulation again, the historical data is read into the simulation. 
 
