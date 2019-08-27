@@ -126,11 +126,11 @@ def main():
         len(bases_string), len(times_string)
     ))
 
-    with open('./examples/bases.csv', 'w') as file:
+    with open('./bases.csv', 'w') as file:
         file.writelines(bases_string)
-    with open('./examples/demand_points.csv', 'w') as file:
+    with open('./demand_points.csv', 'w') as file:
         file.writelines(demands_string)
-    with open('./examples/times.csv', 'w') as file:
+    with open('./times.csv', 'w') as file:
         file.writelines(times_string)
 
     end_time = timer()
