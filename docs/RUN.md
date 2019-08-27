@@ -1,0 +1,63 @@
+# Getting Familiar
+
+`python3 run-simulation --help`
+
+Among other things, you will see this:
+
+`usage: run-simulation [-h] config_file` 
+
+The program expects you to configure the specifications of the simulation and state where those specifications are. 
+
+## YAML Configuration Files
+
+The configuration file is in YAML format, and it contains user specifications for how the simulation runs. For specification details, an upcoming paper will detail that. For now, take a look 
+at `configurations/example.yaml`. 
+
+# Run an example simulation
+
+#### The simulation currently must be run from the repository itself. 
+
+`pwd` should return your directory and `/Algorithms/`. For example, here's mine: 
+
+`/Users/vectflux/ReEMS/Algorithms`
+
+#### Let's run the simulation.
+
+`python3 run-simulation configurations/example.yaml`
+
+If you got an error like `results does not exist`, make a new subdirectory:
+
+`mkdir results`
+
+Don't worry about accidentally pushing your own results. This folder is in the `.gitignore` file. 
+
+
+
+#### On successful simulation, you will find the results saved under `./results/`
+
+`ls ./results/`
+
+**Note**: If you found other errors, you might have an older library. See Installation above.  
+
+
+
+# Run a simple simulation
+
+`python3 run-simulation configurations/simple.yaml`  
+
+#### You will find that this fails! 
+
+That's because this particular configuration uses certain historical data files that do not exist **yet**. 
+
+You will need to run one of our scripts to produce some synthetic input data. These inputs are examples of well-formatted CSV files that EMS organizations can export their historical data to. Alternatively, another data reader can be implemented that accepts data in a different way. 
+
+`python3 examples/synthesize_data.py` 
+
+
+#### Now if you run the simulation again, the historical data is read into the simulation. 
+
+`python3 run-simulation configurations/simple.yaml`  
+
+#### On successful simulation, you will find the results saved under `./results/` under a different name.
+
+`ls ./results/`
