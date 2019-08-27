@@ -35,6 +35,11 @@ If all is well, the simulator library should be runnable now. If you get a help 
 
 `python3 run-simulation --help`
 
+If you're running into other errors that might be related to the libraries, you may need to
+ upgrade them. 
+ 
+ `python3 -m pip3 install -r requirements.txt --upgrade` 
+
 ## A virtual environment (optional)
 
 Create a new environment with Python 3: 
