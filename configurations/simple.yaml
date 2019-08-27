@@ -15,7 +15,7 @@ tt: # Travel times matrix between all bases and all demands
   origins: $all_bases
   destinations: $demands
 
-bases: # Read 5 bases from file
+simulation_bases: # Read 5 bases from file
   class: ems.datasets.location.base.base_set.BaseSet
   filename: ./examples/simple/bases_subset.csv
 

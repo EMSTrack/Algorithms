@@ -5,7 +5,7 @@ geopy
 termcolor
 matplotlib
 shapely
-pyyaml
+pyyaml>=5.1
 IPython
 pprint
 pyre-check
