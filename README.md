@@ -39,9 +39,14 @@ If you got an error like `results does not exist`, make a new subdirectory:
 
 Don't worry about accidentally pushing your own results. This folder is in the `.gitignore` file. 
 
+
+
 #### On successful simulation, you will find the results saved under `./results/`
 
 `ls ./results/`
+
+**Note**: If you found other errors, you might have an older library. See Installation above.  
+
 
 
 # Run a simple simulation
