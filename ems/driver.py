@@ -3,7 +3,8 @@ import importlib
 
 def read_user_input():
     """ Sets up the command line interface to ask for config file location """
-    # TODO If we don't want to support optional command line args, UserArgument's implementation can go here.
+    # TODO If we don't want to support optional command line args,
+    # TODO UserArgument's implementation can go here.
 
     usr_args = UserArguments()
     return usr_args.get_sim_args()
@@ -34,7 +35,7 @@ class Driver:
         respective module and class object. This method uses recursion to traverse the nested
         yaml file.
 
-        :param o: an object in the yaml file, which could be a list, dict, or value (string or number)
+        :param o: an object in the yaml file, could be a list, dict, or value (string or number)
         :return: the python object representation of the object
         """
 
