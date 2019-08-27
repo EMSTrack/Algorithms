@@ -1,7 +1,11 @@
+"""
+Allows both headered and non-headered CSV files to be used.
+"""
+
 import pandas as pd
 
 
-def parse_headered_csv (file: str, desired_keys: list):
+def parse_headered_csv(file: str, desired_keys: list):
     """
     Takes a headered CSV file and extracts the columns with the desired keys
     :param file: CSV filename
@@ -12,8 +16,7 @@ def parse_headered_csv (file: str, desired_keys: list):
     if file is None:
         return None
 
-    raw = pd.read_csv (file)
-
+    raw = pd.read_csv(file)
     keys_read = raw.keys()
 
     for key in desired_keys:
@@ -23,7 +26,7 @@ def parse_headered_csv (file: str, desired_keys: list):
     return raw[desired_keys]
 
 
-def parse_unheadered_csv (file: str, positions: list, header_names: list):
+def parse_unheadered_csv(file: str, positions: list, header_names: list):
 
     """
     Takes an unheadered CSV file, extracts the columns based on given positions,
@@ -37,11 +40,10 @@ def parse_unheadered_csv (file: str, positions: list, header_names: list):
     if file is None:
         return None
 
-    raw = pd.read_csv (file)
+    raw = pd.read_csv(file)
     headered_df = pd.DataFrame()
 
     for pos, header in zip(positions, header_names):
         headered_df[header] = raw.iloc[:, pos]
 
     return headered_df
-
