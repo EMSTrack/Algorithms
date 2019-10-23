@@ -49,3 +49,13 @@ between them.
 To use these, go up one directory. 
 
 `python run.py simple.yaml`
+
+
+## Run on binder
+
+# notebooks
+A variety of demo notebooks
+
+These notebooks can be run online on [binder](https://mybinder.org). Just click on the binder logo:
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/EMSTrack/Algorithms/master)
