@@ -74,9 +74,8 @@ You will need to run one of our scripts to produce some synthetic input data. Th
 
 ## Run on binder
 
-# notebooks
-A variety of demo notebooks
+Demo notebooks can be run online on [binder](https://mybinder.org). 
 
-These notebooks can be run online on [binder](https://mybinder.org). Just click on the binder logo:
+Just click on the binder logo:
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/EMSTrack/Algorithms/master)
