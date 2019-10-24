@@ -32,16 +32,20 @@ class RandomCaseSet(CaseSet):
 
         while self.quantity is None or k <= self.quantity:
             # Compute time and location of next event via generators
-            self.time = self.time + self.case_time_generator.generate(timestamp=self.time)['duration']
+
+            time = self.case_time_generator.generate(timestamp=self.time)
+            duration = time['duration']
+            disaster = time.get('disaster', False)
+
+            self.time = self.time + duration
             point = self.location_generator.generate(self.time)
 
-            lmda = self.case_time_generator.lmda
-
-            disaster = True if lmda > 0.3 else False
-
+            # MAURICIO: THIS MUST BE DONE AT THE GENERATORS!
+            # TODO: SEE IF I MADE SOMETHING REALLY BAD
+            # disaster = self.case_time_generator.lmda
+            # disaster = True if lmda > 0.3 else False
             # A high lambda signifies a disaster scenario. This means higher
             # severity cases occur.
-
             # TODO I am wondering if something is wrong with the way the below
             # TODO severity code has with the above self.time and generator code.
 

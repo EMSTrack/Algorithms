@@ -40,7 +40,7 @@ case_time_generator: # Generates case durations uniformly.
 
 cases: # Cases defined with above objects and basic configurations
   class: ems.datasets.case.random_case_set.RandomCaseSet
-  initial_time: 2019-1-31T00:00:00.1Z # in Python's datetime format
+  time: 2019-1-31T00:00:00.1Z # in Python's datetime format
   quantity: 100
   case_time_generator: $case_time_generator
   case_location_generator: $location_generator

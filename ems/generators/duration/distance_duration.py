@@ -17,4 +17,4 @@ class DistanceDurationGenerator(DurationGenerator):
                  destination: Point = None,
                  timestamp: datetime = None):
         distance_km = distance(ambulance.location, destination).km
-        return timedelta(seconds=int(distance_km/self.velocity))
+        return {'duration': timedelta(seconds=int(distance_km/self.velocity))}
