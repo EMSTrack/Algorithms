@@ -1,4 +1,4 @@
-from ems.driver import read_user_input, Driver
+from ems.run import read_user_input, Driver
 from ems.models.events.event_type import EventType
 import os
 
@@ -8,7 +8,7 @@ from IPython import embed
 # Initialize configurations
 sim_args = read_user_input()
 driver = Driver()
-driver.create_objects(sim_args)
+driver._create_objects(sim_args)
 
 # # Check if the figures folder exists, and then if the name of the output folder (name of simulator) exists.
 output_dir = "./figures/" + driver.objects['name'] + "/"

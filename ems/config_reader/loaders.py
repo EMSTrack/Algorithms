@@ -1,6 +1,7 @@
 import argparse
 import yaml
 
+
 class UserArguments:
     """
     This class reads the arguments from the user from two sources of truth:
