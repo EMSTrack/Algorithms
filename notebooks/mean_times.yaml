@@ -1,0 +1,96 @@
+/depleting-until-zero/processed_cases.csv:
+- TO_INCIDENT_duration: 9.344555555555557
+- AT_INCIDENT_duration: 7.527666666666668
+- TO_HOSPITAL_duration: 15.916944444444443
+- AT_HOSPITAL_duration: 7.452833333333333
+- TO_BASE_duration: 12.774722222222223
+- OTHER_duration: 0.0
+/scaling-weeks-best-coverage/processed_cases.csv:
+- TO_INCIDENT_duration: 17.497083333333332
+- AT_INCIDENT_duration: 7.600958333333335
+- TO_HOSPITAL_duration: 15.485416666666666
+- AT_HOSPITAL_duration: 7.551041666666666
+- TO_BASE_duration: 11.097000000000001
+- OTHER_duration: 0.0
+/scaling-weeks-best-travel/processed_cases.csv:
+- TO_INCIDENT_duration: 8.790750000000001
+- AT_INCIDENT_duration: 7.461333333333334
+- TO_HOSPITAL_duration: 15.485416666666666
+- AT_HOSPITAL_duration: 7.469541666666666
+- TO_BASE_duration: 12.176375
+- OTHER_duration: 0.0
+tj-disaster-best-coverage/processed_cases.csv:
+- TO_INCIDENT_duration: 18.0061
+- AT_INCIDENT_duration: 7.4721
+- TO_HOSPITAL_duration: 16.197216666666666
+- AT_HOSPITAL_duration: 7.489116666666667
+- TO_BASE_duration: 12.039350000000002
+- OTHER_duration: 0.0
+tj-disaster-best-travel/processed_cases.csv:
+- TO_INCIDENT_duration: 11.566216666666667
+- AT_INCIDENT_duration: 7.524366666666666
+- TO_HOSPITAL_duration: 16.197216666666666
+- AT_HOSPITAL_duration: 7.462666666666667
+- TO_BASE_duration: 12.708800000000002
+- OTHER_duration: 0.0
+tj-disaster-weighted-dispatch/processed_cases.csv:
+- TO_INCIDENT_duration: 15.186683333333335
+- AT_INCIDENT_duration: 7.455916666666666
+- TO_HOSPITAL_duration: 16.197216666666666
+- AT_HOSPITAL_duration: 7.499383333333333
+- TO_BASE_duration: 12.052850000000003
+- OTHER_duration: 0.0
+tj-weekday-best-coverage/processed_cases.csv:
+- TO_INCIDENT_duration: 18.2515
+- AT_INCIDENT_duration: 7.689016666666666
+- TO_HOSPITAL_duration: 16.208433333333335
+- AT_HOSPITAL_duration: 7.502866666666667
+- TO_BASE_duration: 11.333333333333336
+- OTHER_duration: 0.0
+tj-weekday-best-travel/processed_cases.csv:
+- TO_INCIDENT_duration: 8.782350000000001
+- AT_INCIDENT_duration: 7.551033333333333
+- TO_HOSPITAL_duration: 16.208433333333335
+- AT_HOSPITAL_duration: 7.589716666666667
+- TO_BASE_duration: 12.76895
+- OTHER_duration: 0.0
+tj-weekday-weighted-dispatch/processed_cases.csv:
+- TO_INCIDENT_duration: 15.712866666666667
+- AT_INCIDENT_duration: 7.452716666666666
+- TO_HOSPITAL_duration: 16.208433333333335
+- AT_HOSPITAL_duration: 7.453049999999999
+- TO_BASE_duration: 11.450716666666667
+- OTHER_duration: 0.0
+tj-weekend-best-coverage/processed_cases.csv:
+- TO_INCIDENT_duration: 18.1971
+- AT_INCIDENT_duration: 7.499633333333334
+- TO_HOSPITAL_duration: 15.998566666666665
+- AT_HOSPITAL_duration: 7.48125
+- TO_BASE_duration: 11.644000000000004
+- OTHER_duration: 0.0
+tj-weekend-best-travel/processed_cases.csv:
+- TO_INCIDENT_duration: 9.069833333333332
+- AT_INCIDENT_duration: 7.569533333333333
+- TO_HOSPITAL_duration: 15.998566666666665
+- AT_HOSPITAL_duration: 7.544033333333333
+- TO_BASE_duration: 12.875983333333334
+- OTHER_duration: 0.0
+tj-weekend-weighted-dispatch/processed_cases.csv:
+- TO_INCIDENT_duration: 15.618866666666666
+- AT_INCIDENT_duration: 7.584783333333333
+- TO_HOSPITAL_duration: 15.998566666666665
+- AT_HOSPITAL_duration: 7.481016666666666
+- TO_BASE_duration: 11.767
+- OTHER_duration: 0.0
+/depleting-until-zero/processed_cases.csv: 53.01672222222222
+/scaling-weeks-best-coverage/processed_cases.csv: 59.231500000000004
+/scaling-weeks-best-travel/processed_cases.csv: 51.38341666666667
+tj-disaster-best-coverage/processed_cases.csv: 61.20388333333334
+tj-disaster-best-travel/processed_cases.csv: 55.45926666666667
+tj-disaster-weighted-dispatch/processed_cases.csv: 58.39205
+tj-weekday-best-coverage/processed_cases.csv: 60.985150000000004
+tj-weekday-best-travel/processed_cases.csv: 52.90048333333334
+tj-weekday-weighted-dispatch/processed_cases.csv: 58.27778333333333
+tj-weekend-best-coverage/processed_cases.csv: 60.82055000000001
+tj-weekend-best-travel/processed_cases.csv: 53.05794999999999
+tj-weekend-weighted-dispatch/processed_cases.csv: 58.45023333333333
