@@ -8,7 +8,7 @@ case_quantity: 30
 # Define how the source data is used:
 #
 demands:
-  class: ems.datasets.location.demand.demand_set.DemandSet
+  class: ems.datasets.demand.demand_set.DemandSet
   filename: ../data-cruz-roja-clean/demand_points.csv
 
 all_bases:
