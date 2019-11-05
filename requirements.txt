@@ -4,3 +4,4 @@ pprint
 pyre-check
 flake8
 pylint
+jupyter
