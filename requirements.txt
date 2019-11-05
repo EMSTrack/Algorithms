@@ -1,11 +1,4 @@
-pandas
-scipy
-numpy
-geopy
-termcolor
-matplotlib
-shapely
-pyyaml
+ems-simulator
 IPython
 pprint
 pyre-check
